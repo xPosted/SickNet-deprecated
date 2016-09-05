@@ -1,0 +1,10 @@
+file where stored session(ipAddr, NET) data
+view net activity graph
+what ip or net data must be sniffed
+how much data must be stored in fast mem (count of memory that app can use)
+save data to hd
+open dump file for analyzing
+jpcap buffer capacity
+arpspoof window
+TCP flood window
+udp icmp sniffing 

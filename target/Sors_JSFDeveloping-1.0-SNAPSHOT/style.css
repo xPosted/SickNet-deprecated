@@ -1,0 +1,19 @@
+@CHARSET "UTF-8";
+
+.text1 { /* Стиль для элементов с class="text1" */
+	font-size: 12pt; /* Размер шрифта */
+	color: red; /* Цвет текста */
+	font-family: Arial /* Название шрифта */
+}
+
+font { /* Стиль для всех тегов FONT */
+	font-size: 12pt; /* Размер шрифта */
+	color: green; /* Цвет текста */
+	font-family: Arial /* Название шрифта */
+}
+
+font.text2 { /* Стиль для тегов FONT c class="text2" */
+	font-size: 12pt; /* Размер шрифта */
+	color: blue; /* Цвет текста */
+	font-family: Arial /* Название шрифта */
+}

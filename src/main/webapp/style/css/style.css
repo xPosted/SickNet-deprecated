@@ -1,0 +1,46 @@
+.mainLogo_signed {
+    position: relative;
+    left: 925px;
+    width: 110px;
+    padding: 0;
+    margin: 0;
+    z-index: 9;
+}
+.nodeTable {
+    width: 100%;
+}
+
+.closeIcon {
+    visibility: hidden;
+    border-radius: 50;
+    border: 0;
+}
+
+table.nodeTable td {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid black;
+}
+
+table.nodeTable th {
+    text-align: center;
+    padding: 10px;
+}
+
+ .selected{
+     background: #c4e3f3 ;
+ }
+.btn btn-primary{
+    background: white;
+}
+
+
+#d1{
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+
+
+}
+
