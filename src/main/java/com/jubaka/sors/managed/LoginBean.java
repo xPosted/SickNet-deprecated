@@ -22,6 +22,8 @@ public class LoginBean implements Serializable {
     private boolean linked;
     private User user;
 
+
+
     @Inject
     private UserService userService;
 
@@ -50,6 +52,13 @@ public class LoginBean implements Serializable {
         this.linked = linked;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public boolean loginAction() {
 

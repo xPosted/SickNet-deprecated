@@ -36,7 +36,7 @@ public class Auth extends HttpServlet {
 		String signout = (String) request.getParameter("signout");
 		if (signout != null) {
 			request.getSession().removeAttribute("user");
-			request.getRequestDispatcher("sors.jsp").forward(request, response);
+			request.getRequestDispatcher("sors.xhtml").forward(request, response);
 			return;
 		}
 		String user = request.getParameter("user");
@@ -45,7 +45,7 @@ public class Auth extends HttpServlet {
 		User uObj = ub.getUser(user);
 		if (uObj.getPass().equals(pass)) {
 			request.getSession().setAttribute("user", user);
-			request.getRequestDispatcher("sors.jsp").forward(request, response);
+			request.getRequestDispatcher("sors.xhtml").forward(request, response);
 		}
 		
 

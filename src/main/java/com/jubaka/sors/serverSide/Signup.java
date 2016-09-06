@@ -66,7 +66,7 @@ public class Signup extends HttpServlet {
 		 boolean res = UserBase.getInstance().addUser(u);
 		 if (!res) request.getRequestDispatcher("NullHandler.jsp").forward(request, response);
 		request.getSession().setAttribute("user", u.getNickName());
-		request.getRequestDispatcher("sors.jsp").forward(request, response);
+		request.getRequestDispatcher("sors.xhtml").forward(request, response);
 		
 	}
 

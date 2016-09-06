@@ -34,7 +34,7 @@ public class Nodes extends HttpServlet {
 		String pub = (String) request.getParameter("public");
 		if (pub==null) pub="false";
 		if (userName==null) {
-			request.getRequestDispatcher("sors.jsp").forward(request, response);
+			request.getRequestDispatcher("sors.xhtml").forward(request, response);
 			return;
 		}
 		if (pub.equals("true")) {

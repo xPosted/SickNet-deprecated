@@ -3,6 +3,7 @@ package com.jubaka.sors.service;
 import com.jubaka.sors.serverSide.User;
 import com.jubaka.sors.serverSide.UserBase;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -11,6 +12,7 @@ import javax.inject.Named;
  */
 
 @Named
+@ApplicationScoped
 public class UserService {
 
     public User checkUser(String nickName, String pass) {
