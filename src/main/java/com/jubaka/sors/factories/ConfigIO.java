@@ -1,11 +1,12 @@
 package com.jubaka.sors.factories;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.HashSet;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -141,6 +142,12 @@ public class ConfigIO {
 			usersPoliciesTmp.add(new SecPolicy("*"));
 
 			try {
+				JFileChooser chooser = new JFileChooser();
+				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				chooser.showOpenDialog(null);
+				chooser.setToolTipText("Select home folder");
+				chooser.setName("Select home folder");
+				home = chooser.getSelectedFile().getAbsolutePath();
 				li = new LoadLimits(home, status,unid, homeMaxRemote, ipPoliciesTmp,
 						usersPoliciesTmp);
 			} catch (Exception e) {

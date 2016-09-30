@@ -833,6 +833,7 @@ public class Node {
 
 			info.setPubAddr(s.getInetAddress());
 			info.setConnectedDate(createTime);
+			info.setUnid(unid);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

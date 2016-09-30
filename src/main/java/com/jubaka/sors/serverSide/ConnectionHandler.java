@@ -11,6 +11,7 @@ import java.util.Observable;
 import java.util.Properties;
 
 import com.jubaka.sors.beans.AutorisationBean;
+import com.jubaka.sors.entities.User;
 import com.jubaka.sors.serverSide.bean.StreamTransportBean;
 import com.jubaka.sors.serverSide.dbManagement.DBManager;
 
@@ -21,6 +22,7 @@ public class ConnectionHandler  extends Observable {
 	private ConnectionListener listener = null;
 	private SecurityVisor sv = new SecurityVisor();
 	private HashMap<String, Node> nodeList = new HashMap<String, Node>();
+	private HashMap<Long, Node> idNodeList = new HashMap<Long, Node>();
 	private UserBase ub;
 	
 	
@@ -46,6 +48,10 @@ public class ConnectionHandler  extends Observable {
 	
 	public Node getNode(String nodeName) {
 		return nodeList.get(nodeName);
+	}
+
+	public Node getNode(Long id) {
+		return idNodeList.get(id);
 	}
 	
 	public void initConnectionListener() {
@@ -104,6 +110,7 @@ public class ConnectionHandler  extends Observable {
 				if ( ! uObj.getPass().equals(auth.getNodeUserPass()))  {node.loginIncorrect(); return;}
 				
 				nodeList.put(node.getFullName(), node);
+				idNodeList.put(node.getUnid(),node);
 				sv.handleNewNode(node);
 		
 	}

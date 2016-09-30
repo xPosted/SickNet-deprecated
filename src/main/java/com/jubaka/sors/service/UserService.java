@@ -1,6 +1,6 @@
 package com.jubaka.sors.service;
 
-import com.jubaka.sors.serverSide.User;
+import com.jubaka.sors.entities.User;
 import com.jubaka.sors.serverSide.UserBase;
 
 import javax.enterprise.context.ApplicationScoped;

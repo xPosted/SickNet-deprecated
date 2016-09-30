@@ -1,5 +1,7 @@
 package com.jubaka.sors.serverSide;
 
+import com.jubaka.sors.entities.User;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.Set;
@@ -61,7 +63,7 @@ public class Signup extends HttpServlet {
 		u.setEmail(request.getParameter("emailff"));
 		u.setPhone(request.getParameter("phoneff"));
 		u.setJoinDate(new Date());
-		u.setLastLogin(new Date());
+		//u.setLastLogin(new Date());
 		u.setImage(request.getParameter("imageff"));
 		 boolean res = UserBase.getInstance().addUser(u);
 		 if (!res) request.getRequestDispatcher("NullHandler.jsp").forward(request, response);

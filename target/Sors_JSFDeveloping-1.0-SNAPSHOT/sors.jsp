@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <%@page import="com.jubaka.sors.serverSide.UserBase"%>
-<%@page import="com.jubaka.sors.serverSide.User"%>
+<%@page import="com.jubaka.sors.entities.User"%>
 <%@page import="java.util.Date"%>
 <html lang="en">
 <head>
@@ -751,7 +751,7 @@ document.forms["hiddenForm"].submit();
 								String user = (String) session.getAttribute("user");
 								User uObj = UserBase.getInstance().getUser(user);
 								if (uObj!=null)
-									uObj.setLastLogin(new Date());
+								//	uObj.setLastLogin(new Date());
 						
 						%>
 							<li><a href="BranchList">Processing</a></li>

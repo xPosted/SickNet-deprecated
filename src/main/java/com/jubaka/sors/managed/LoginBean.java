@@ -1,11 +1,14 @@
 package com.jubaka.sors.managed;
 
-import com.jubaka.sors.serverSide.User;
+
+import com.jubaka.sors.entities.User;
 import com.jubaka.sors.service.UserService;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.IOException;
 import java.io.Serializable;
 
 /**
@@ -60,11 +63,14 @@ public class LoginBean implements Serializable {
         this.user = user;
     }
 
-    public boolean loginAction() {
+    public void loginAction() throws IOException {
 
         user = userService.checkUser(login,pass);
-        if (user != null) return true;
-        else return false;
+        if (user != null) {
+            linked = true;
+            FacesContext.getCurrentInstance().getExternalContext().redirect("NodesView.xhtml");
+        }
+
     }
 
 }

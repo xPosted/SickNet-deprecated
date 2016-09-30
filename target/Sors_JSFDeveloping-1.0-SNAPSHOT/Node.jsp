@@ -280,6 +280,9 @@
 				</div>
 			</div>
 		</div>
+
+
+
 		<div style="width: 1000px; margin-left: auto; margin-right: auto;">
 			<div style="display: inline-block; width: 500px; float: left;">
 				<table style="" class="tableNodeProp table">

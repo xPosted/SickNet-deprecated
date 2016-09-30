@@ -1,8 +1,8 @@
 package com.jubaka.sors.serverSide.dbManagement;
 
 import com.jubaka.sors.beans.InfoBean;
+import com.jubaka.sors.entities.User;
 import com.jubaka.sors.serverSide.Node;
-import com.jubaka.sors.serverSide.User;
 import com.jubaka.sors.serverSide.UserBase;
 
 import java.io.FileInputStream;
@@ -44,7 +44,7 @@ public class DBManager {
 	public int addUser(User u) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
 		String joinDate = sdf.format(u.getJoinDate());
-		String lastLogin = sdf.format(u.getLastLogin());
+		String lastLogin = "Deprecated";
 		try {
 			PreparedStatement pStat = dbCon
 					.prepareStatement(
@@ -105,13 +105,9 @@ public class DBManager {
 				u.setPhone(res.getString("phone"));
 				u.setPass(res.getString("pass"));
 				u.setJoinDate(sdf.parse(res.getString("joinDate")));
-				u.setLastLogin(sdf.parse(res.getString("lastLogin")));
+
 				u.setImage(res.getString("image"));
 				String online = res.getString("online");
-				if (online.equals("1"))
-					u.setOnline(true);
-				if (online.equals("0"))
-					u.setOnline(true);
 				stat.close();
 				return u;
 			}

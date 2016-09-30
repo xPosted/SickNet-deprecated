@@ -25,8 +25,14 @@ public class InfoBean extends Bean implements Serializable {
 	private InetAddress pubAddr =null;
 	private Integer status=null;
 	private Date connectedDate=null;
-	
-	
+	private Long unid;
+
+	public Long getUnid() {
+		return unid;
+	}
+	public void setUnid(Long unid) {
+		this.unid = unid;
+	}
 	public String getNodeName() {
 		return nodeName;
 	}

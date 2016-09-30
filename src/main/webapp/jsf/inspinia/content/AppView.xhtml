@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+<head>
+    <base href="http://localhost:8080/Sors_JSFDeveloping-1.0-SNAPSHOT/"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>INSPINIA | Dashboard v.3</title>
+
+    <link href="jsf/inspinia/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="jsf/inspinia/font-awesome/css/font-awesome.css" rel="stylesheet"/>
+
+    <link href="jsf/inspinia/css/animate.css" rel="stylesheet"/>
+    <link href="jsf/inspinia/css/style.css" rel="stylesheet"/>
+
+    <!-- Mainly scripts -->
+    <script src="jsf/inspinia/js/jquery-2.1.1.js"></script>
+    <script src="jsf/inspinia/js/bootstrap.min.js"></script>
+    <script src="jsf/inspinia/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="jsf/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Flot -->
+    <script src="jsf/inspinia/js/plugins/flot/jquery.flot.js"></script>
+    <script src="jsf/inspinia/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+    <script src="jsf/inspinia/js/plugins/flot/jquery.flot.spline.js"></script>
+    <script src="jsf/inspinia/js/plugins/flot/jquery.flot.resize.js"></script>
+    <script src="jsf/inspinia/js/plugins/flot/jquery.flot.pie.js"></script>
+    <script src="jsf/inspinia/js/plugins/flot/jquery.flot.symbol.js"></script>
+    <script src="jsf/inspinia/js/plugins/flot/curvedLines.js"></script>
+
+    <!-- Peity -->
+    <script src="jsf/inspinia/js/plugins/peity/jquery.peity.min.js"></script>
+    <script src="jsf/inspinia/js/demo/peity-demo.js"></script>
+
+
+    <!-- Custom and plugin javascript -->
+    <script src="jsf/inspinia/js/inspinia.js"></script>
+    <script src="jsf/inspinia/js/plugins/pace/pace.min.js"></script>
+
+    <!-- jQuery UI -->
+    <script src="jsf/inspinia/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+
+    <!-- Jvectormap -->
+    <script src="jsf/inspinia/js/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>
+    <script src="jsf/inspinia/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+
+    <!-- Sparkline -->
+    <script src="jsf/inspinia/js/plugins/sparkline/jquery.sparkline.min.js"></script>
+
+    <!-- Sparkline demo data  -->
+    <script src="jsf/inspinia/js/demo/sparkline-demo.js"></script>
+
+    <!-- ChartJS-->
+    <script src="jsf/inspinia/js/plugins/chartJs/Chart.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            var lineData = {
+                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                datasets: [
+                    {
+                        label: "Example dataset",
+                        fillColor: "rgba(220,220,220,0.5)",
+                        strokeColor: "rgba(220,220,220,1)",
+                        pointColor: "rgba(220,220,220,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(220,220,220,1)",
+                        data: [65, 59, 80, 81, 56, 55, 40]
+                    },
+                    {
+                        label: "Example dataset",
+                        fillColor: "rgba(26,179,148,0.5)",
+                        strokeColor: "rgba(26,179,148,0.7)",
+                        pointColor: "rgba(26,179,148,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(26,179,148,1)",
+                        data: [28, 48, 40, 19, 86, 27, 90]
+                    }
+                ]
+            };
+
+            var lineOptions = {
+                scaleShowGridLines: true,
+                scaleGridLineColor: "rgba(0,0,0,.05)",
+                scaleGridLineWidth: 1,
+                bezierCurve: true,
+                bezierCurveTension: 0.4,
+                pointDot: true,
+                pointDotRadius: 4,
+                pointDotStrokeWidth: 1,
+                pointHitDetectionRadius: 20,
+                datasetStroke: true,
+                datasetStrokeWidth: 2,
+                datasetFill: true,
+                responsive: true,
+            };
+
+            $('.line').peity('line',{height: 30, width: 100, fill: '#5791BC'});
+            var ctx = document.getElementById("lineChart").getContext("2d");
+            var myNewChart = new Chart(ctx).Line(lineData, lineOptions);
+
+
+
+
+        });
+    </script>
+</head>
+<body class="fixed-navigation">
+<div id="wrapper">
+
+    <ui:include src="LeftNavbar.xhtml"/>
+
+    <div id="page-wrapper" class="gray-bg sidebar-content">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                    <form role="search" class="navbar-form-custom" action="../search_results.html">
+                        <div class="form-group">
+                            <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search"/>
+                        </div>
+                    </form>
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li>
+                        <span class="m-r-sm text-muted welcome-message">Welcome to INSPINIA+ Admin Theme.</span>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-messages">
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="../profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/a7.jpg"/>
+                                    </a>
+                                    <div class="media-body">
+                                        <small class="pull-right">46h ago</small>
+                                        <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br/>
+                                        <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="../profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/a4.jpg"/>
+                                    </a>
+                                    <div class="media-body ">
+                                        <small class="pull-right text-navy">5h ago</small>
+                                        <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br/>
+                                        <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="../profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/profile.jpg"/>
+                                    </a>
+                                    <div class="media-body ">
+                                        <small class="pull-right">23h ago</small>
+                                        <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br/>
+                                        <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="../mailbox.html">
+                                        <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <a href="../mailbox.html">
+                                    <div>
+                                        <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="../profile.html">
+                                    <div>
+                                        <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                        <span class="pull-right text-muted small">12 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="../grid_options.html">
+                                    <div>
+                                        <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="../notifications.html">
+                                        <strong>See All Alerts</strong>
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li>
+                        <a href="../login.html">
+                            <i class="fa fa-sign-out"></i> Log out
+                        </a>
+                    </li>
+                </ul>
+
+            </nav>
+        </div>
+        <div style="margin-left: 15px;" class="row">
+
+            <div style="padding: 5px;" class="widget col-md-4">
+                <div class="ibox">
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">Config option 1</a>
+                            </li>
+                            <li><a href="#">Config option 2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                    <div class="ibox-content" style="padding: 5px;">
+                        <div class="row">
+                            <div class="col-md-5" style="padding: 10px;">
+                                <h3 class="text-center" >0.0.0.0/0</h3>
+                                <h3 class="text-center"><small> subnet </small> </h3>
+
+                                <div style="padding: 15px;">
+                                    <span class="line">5,3,9,6,5,9,7,3,5,2,4,5,7,9,7,8,7,6,4,4,3</span>
+                                </div>
+
+
+                            </div>
+                            <div style="float: left; padding: 5px;">
+                                <table class="table no-padding">
+                                    <tbody >
+
+                                    <tr>
+                                        <td class="col-xs-4 no-top-border">
+                                            <span style="margin-top: 5px;"  class="pull-right" ><small>Sessions</small></span>
+                                        </td>
+                                        <td class="no-top-border">
+                                            <span class="text-center" style="font-weight: 600; font-size: 16px;">14</span>
+                                            <small>all</small>
+                                            <span class="text-center" style="font-weight: 600; font-size: 16px;">6</span>
+                                            <small>active</small>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-xs-4">
+                                            <span style="margin-top: 5px;"  class="pull-right" ><small>Addresses</small></span>
+                                        </td>
+                                        <td>
+                                            <span class="text-center" style="font-weight: 600; font-size: 16px;">14</span>
+                                            <small>all</small>
+                                            <span class="text-center" style="font-weight: 600; font-size: 16px; "> 6</span>
+                                            <small>active</small>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-xs-4">
+                                            <span style="margin-top: 5px;"  class="pull-right" ><small>Traffic</small></span>
+                                        </td>
+                                        <td>
+
+                                            <span class="text-center" style="font-weight: 600; font-size: 16px;">140</span>
+                                            <small> MB download</small>
+                                            <br/>
+                                            <span class="text-center" style="font-weight: 600; font-size: 16px;"> 85 </span>
+                                            <small>MB upload</small>
+
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+
+                </div>
+
+            </div>
+            <div style="padding: 5px;" class="col-md-4 widget">
+                <div class="ibox">
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">Config option 1</a>
+                            </li>
+                            <li><a href="#">Config option 2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                    <div class="ibox-content">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td colspan="2" class="text-center no-top-border">
+
+                                        <h2 class="no-padding no-margins">178.159.225.244</h2>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                       <small>data down/up (kb)</small>
+                                    </td>
+                                    <td style="font-weight: 600;">
+                                        1.06 MB / 20.02 KB
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <small> ses (act/svd)  </small>
+                                    </td>
+                                    <td style="font-weight: 600;">
+                                        31/9
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <small> conn-s (in/out) </small>
+                                    </td>
+                                    <td style="font-weight: 600;">
+                                        41/3
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div style="padding: 5px;" class="col-md-4 widget">
+                <div class="ibox">
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">Config option 1</a>
+                            </li>
+                            <li><a href="#">Config option 2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                    <div class="ibox-content">
+                        <div>
+                            <table id="sessionViewGrid" style=" font-size:11pt; width:100%; height: 90px;" class=" table-condensed">
+                                <tr style=" border-bottom: 1px solid #ddd;">
+                                    <td>06.08 12:44:35</td>
+                                    <td style="font-weight:bold;">178.159.225.244</td>
+                                    <td> <img style="border-radius: 7px; margin:0px; padding: 0px; width: 40px; height: 15px;" src="../img/http.jpg"/> </td>
+                                    <td style="font-weight:bold; text-align: right;">178.159.225.244</td>
+                                </tr>
+                                <tr>
+                                    <td>Online</td>
+                                    <td colspan="2"> 1.06 MB / 20.02 KB </td>
+
+
+                                    <td colspan="2" style="width:100%; text-align: right;">TCP (src/dst): 32763 / 80</td>
+                                </tr>
+
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+</body>
+</html>
