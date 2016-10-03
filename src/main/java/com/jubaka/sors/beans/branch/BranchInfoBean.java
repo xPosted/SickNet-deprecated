@@ -7,6 +7,7 @@ import java.util.Date;
 
 public class BranchInfoBean extends Bean implements Serializable {
 	private Integer id;
+	private Long nodeId;
 	private String nodeName;
 	private String branchName;
 	private long uploadSize = 0;
@@ -18,6 +19,7 @@ public class BranchInfoBean extends Bean implements Serializable {
 	private Date time;
 	private String desc="SORS branch description";
 	private int state= 0;
+
 	
 	public Integer getId() {
 		return id;
@@ -91,5 +93,14 @@ public class BranchInfoBean extends Bean implements Serializable {
 	public void setState(int state) {
 		this.state = state;
 	}
+
+	public Long getNodeId() {
+		return nodeId;
+	}
+
+	public void setNodeId(Long nodeId) {
+		this.nodeId = nodeId;
+	}
+
 
 }

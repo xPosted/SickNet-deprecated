@@ -15,6 +15,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.sql.Connection;
 import java.util.Map;
 
 /**
@@ -84,8 +85,10 @@ public class NodeInfoBean implements Serializable   {
         this.nodeUserBranchStat = nodeUserBranchStat;
     }
 
-    public String getMaxMemCount() {
-                return ConnectionHandler.processSize(infoBean.getMaxMem(),2);
+
+    public String sizeToStr(double size,Integer afterDot) {
+        return ConnectionHandler.processSize(size,afterDot);
+
     }
 
 

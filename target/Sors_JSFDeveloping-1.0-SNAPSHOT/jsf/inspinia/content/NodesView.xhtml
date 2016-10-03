@@ -279,7 +279,7 @@
                         <ui:repeat value="#{nodesBean.infoBeans}" var="infoBean">
                         <tr onmouseenter="mouseEnter(event);" onmouseleave="mouseLeave(event);">
                             <div >
-                                <td class="col1_data"><a href="NodeView?nodeName=capricornus@sors_production">#{infoBean.nodeName}</a></td>
+                                <td class="col1_data"><a href="app/jsf/inspinia/content/NodeInfo.xhtml?nodeId=#{infoBean.unid}">#{infoBean.nodeName}</a></td>
                                 <td class="col3_data">#{infoBean.status}</td>
 
                                 <td class="col4_data">#{infoBean.connectedDate}</td>
@@ -295,8 +295,6 @@
 
                         </tr>
                         </ui:repeat>
-
-
 
                         </tbody>
 

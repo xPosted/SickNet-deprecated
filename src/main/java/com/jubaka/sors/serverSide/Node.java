@@ -966,7 +966,7 @@ public class Node {
 		if  (checkConnection()==false) {
 			return null;
 		}
-		Set<BranchInfoBean> bib = null;
+		Set<BranchInfoBean> bibSet = null;
 		try {
 			String[] command = new String[2];
 			command[0] = "getBranchInfoSet_";
@@ -981,7 +981,11 @@ public class Node {
 			oos.flush();
 			Bean response = getResponse(requestId);
 			if (response.getObject() instanceof Set) {
-				bib = (Set<BranchInfoBean>) response.getObject();
+				bibSet = (Set<BranchInfoBean>) response.getObject();
+				for (BranchInfoBean bib : bibSet) {
+					bib.setNodeId(unid);
+				}
+
 			}
 
 		} catch (IOException e) {
@@ -990,7 +994,7 @@ public class Node {
 			disconnect();
 		}
 
-		return bib;
+		return bibSet;
 	}
 	
 	public  void createStream(Integer id) {
@@ -1041,6 +1045,7 @@ public class Node {
 
 			if (response instanceof BranchInfoBean) {
 				bib = (BranchInfoBean) response;
+				bib.setNodeId(unid);
 			}
 
 		} catch (IOException e) {

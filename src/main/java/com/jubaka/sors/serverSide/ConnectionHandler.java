@@ -103,15 +103,14 @@ public class ConnectionHandler  extends Observable {
 				node.setS(s);
 				node.setOwner(auth.getNodeUserName());
 				node.setNodeName(auth.getNodeName());
-				node.setUnid(auth.getUnid());
 				node.createStreams(ois);
 				
 				if (uObj==null) { node.loginIncorrect(); return;}
 				if ( ! uObj.getPass().equals(auth.getNodeUserPass()))  {node.loginIncorrect(); return;}
-				
+
+				sv.handleNewNode(node); 				 // here is unid creates
 				nodeList.put(node.getFullName(), node);
 				idNodeList.put(node.getUnid(),node);
-				sv.handleNewNode(node);
 		
 	}
 	public SecurityVisor getSv() {

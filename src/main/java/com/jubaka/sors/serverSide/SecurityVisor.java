@@ -25,6 +25,17 @@ public class SecurityVisor {
 			dbm.addNewNode(n);
 		}
 		*/
+
+
+		//  temporary unid procesing
+		Long unid = n.getUnid();
+		if (unid==null)  {
+				unid = getNewUNID();
+				n.updateUnid(unid);
+
+		}
+
+
 		SecPolicyBean scb = n.getSecPolicyBean();
 		 HashMap<String, SecPolicy> userPolicy =  scb.getUserPolicy();
 		 for (String user: userPolicy.keySet()) {
