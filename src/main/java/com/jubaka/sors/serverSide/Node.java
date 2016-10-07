@@ -22,7 +22,7 @@ import com.jubaka.sors.serverSide.bean.StreamTransportBean;
 import com.mysql.fabric.Server;
 import org.jfree.data.time.TimeSeries;
 
-public class Node {
+public class Node extends Observable {
 	private InfoBean info = null;
 	private String nodeName = null;
 	private Socket s = null;
@@ -905,7 +905,101 @@ public class Node {
 
 		return false;
 	}
-	
+
+	public synchronized BranchLightBean getBranchLight(Integer id) {
+		if  (checkConnection()==false) {
+			return null;
+		}
+		BranchLightBean bb = null;
+		try {
+			String[] command = new String[2];
+			command[0] = "getBranchLight_";
+			command[1] = id.toString();
+
+			Long requestId = random.nextLong();
+			RequestObject request = new RequestObject();
+			request.setRequestId(requestId);
+			request.setRequestStr(command);
+
+			oos.writeObject(request);
+			oos.flush();
+			Bean response = getResponse(requestId);
+			if (response instanceof BranchLightBean) {
+				bb = (BranchLightBean) response;
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			disconnect();
+		}
+
+		return bb;
+	}
+
+	public synchronized IPItemBean getIpItemBean(Integer id, String ip) {
+		if  (checkConnection()==false) {
+			return null;
+		}
+		IPItemBean ipBean = null;
+		try {
+			String[] command = new String[3];
+			command[0] = "getIpBean_";
+			command[1] = id.toString();
+			command[2] = ip;
+
+			Long requestId = random.nextLong();
+			RequestObject request = new RequestObject();
+			request.setRequestId(requestId);
+			request.setRequestStr(command);
+
+			oos.writeObject(request);
+			oos.flush();
+			Bean response = getResponse(requestId);
+			if (response instanceof IPItemBean) {
+				ipBean = (IPItemBean) response;
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			disconnect();
+		}
+
+		return ipBean;
+	}
+
+	public synchronized SubnetLightBean getSubnetLight(Integer id,String subnet) {
+		if  (checkConnection()==false) {
+			return null;
+		}
+		SubnetLightBean subnetLight = null;
+		try {
+			String[] command = new String[3];
+			command[0] = "getSubnetLight_";
+			command[1] = id.toString();
+			command[2] = subnet;
+
+			Long requestId = random.nextLong();
+			RequestObject request = new RequestObject();
+			request.setRequestId(requestId);
+			request.setRequestStr(command);
+
+			oos.writeObject(request);
+			oos.flush();
+			Bean response = getResponse(requestId);
+			if (response instanceof SubnetLightBean) {
+				subnetLight = (SubnetLightBean) response;
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			disconnect();
+		}
+
+		return subnetLight;
+	}
 
 	public synchronized BranchBean getBranch(Integer id) {
 		if  (checkConnection()==false) {

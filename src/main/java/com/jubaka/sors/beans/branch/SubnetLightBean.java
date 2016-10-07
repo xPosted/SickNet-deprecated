@@ -4,6 +4,7 @@ import com.jubaka.sors.beans.Bean;
 
 import java.io.Serializable;
 import java.net.InetAddress;
+import java.util.HashSet;
 
 /**
  * Created by root on 30.08.16.
@@ -20,6 +21,9 @@ public class SubnetLightBean extends Bean implements Serializable {
     protected int subnetMask;
     public boolean selected= false;
     protected Integer brId;
+
+    private HashSet<IPItemLightBean> ips = new HashSet<IPItemLightBean>();	// all captured ips
+    private HashSet<IPItemLightBean> liveIps = new HashSet<IPItemLightBean>();	// ips that are online
 
     public Long getDataSend() {
         return dataSend;
@@ -81,4 +85,21 @@ public class SubnetLightBean extends Bean implements Serializable {
     public void setAddrCnt(Integer addrCnt) {
         this.addrCnt = addrCnt;
     }
+
+    public HashSet<IPItemLightBean> getLightIps() {
+        return ips;
+    }
+
+    public void setLightIps(HashSet<IPItemLightBean> ips) {
+        this.ips = ips;
+    }
+
+    public HashSet<IPItemLightBean> getLightLiveIps() {
+        return liveIps;
+    }
+
+    public void setLightLiveIps(HashSet<IPItemLightBean> liveIps) {
+        this.liveIps = liveIps;
+    }
+
 }

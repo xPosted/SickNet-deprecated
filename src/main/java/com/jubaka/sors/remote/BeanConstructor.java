@@ -48,7 +48,7 @@ public class BeanConstructor {
     }
 
 
-    public IPItemLightBean prepareIPItemLightBean(IPaddr ipaddr, IPItemLightBean item) {
+    public IPItemLightBean prepareIPItemLightBean(Integer brId, IPaddr ipaddr, IPItemLightBean item) {
         IPItemLightBean bean;
         if (item == null) bean = new IPItemLightBean(); else
             bean = item;
@@ -62,6 +62,7 @@ public class BeanConstructor {
         bean.setInputCount(ipaddr.getInSessionCount());
         bean.setOutputCount(ipaddr.getOutSessionCount());
         bean.setSavedCount(ipaddr.getSavedSesCount());
+        bean.setBrId(brId);
         return bean;
 
     }
@@ -76,7 +77,7 @@ public class BeanConstructor {
             IPaddr ipaddr = ip;
             String ipStr = ip.getAddr().getHostAddress();
 
-            ipInfo = (IPItemBean) prepareIPItemLightBean(ip,ipInfo);
+            ipInfo = (IPItemBean) prepareIPItemLightBean(branch_id, ip,ipInfo);
 
             ipInfo.setActiveOutSes(translateSessionSet(cntr
                     .getOutputActiveSes(ipStr)));
@@ -106,6 +107,12 @@ public class BeanConstructor {
     }
 
 
+    public SubnetLightBean prepareSubnetLightBean(Integer brId, String subnetStr, SubnetLightBean subnetBean) {
+        SessionsAPI sApi = ClassFactory.getInstance().getSesionInstance(brId);
+        Subnet subnet =  sApi.getNetByName(subnetStr);
+        return prepareSubnetLightBean(subnet,subnetBean);
+    }
+
     public SubnetLightBean prepareSubnetLightBean(Subnet net, SubnetLightBean subnetBean) {
 
         SubnetLightBean sb;
@@ -122,6 +129,19 @@ public class BeanConstructor {
         sb.setAddrCnt(net.getIps().size());
         sb.setActiveSesCnt(net.getLiveSesCount());
         sb.setSesCnt(net.getSesCount());
+
+        HashSet<IPItemLightBean> ipBeans = new HashSet<IPItemLightBean>();
+        HashSet<IPItemLightBean> liveIpBeans = new HashSet<IPItemLightBean>();
+        for (IPaddr ip : net.getIps()) {
+            ipBeans.add(prepareIPItemLightBean(net.getId(),ip,null));
+        }
+
+        for (IPaddr ip : net.getLiveIps()) {
+            liveIpBeans.add(prepareIPItemLightBean(net.getId(),ip,null));
+        }
+
+        sb.setLightIps(ipBeans);
+        sb.setLightLiveIps(liveIpBeans);
 
         return sb;
     }
@@ -238,6 +258,22 @@ public class BeanConstructor {
         bb.setSubnets(netBeanSet);
         return bb;
     }
+
+    public BranchLightBean prepareLightBranchBean(Integer id) {
+        Branch br = ClassFactory.getInstance().getBranch(id);
+        SessionsAPI sApi = ClassFactory.getInstance().getSesionInstance(id);
+        BranchLightBean bb = new BranchLightBean();
+        bb.setBib(prepareBranchInfoBean(br));
+        HashSet<SubnetLightBean> netBeanSet = new HashSet<SubnetLightBean>();
+        for (Subnet net : sApi.getAllSubnets()) {
+            netBeanSet.add(prepareSubnetLightBean(net,null));
+        }
+        bb.setSubnetsLight(netBeanSet);
+        return bb;
+    }
+
+
+
 
     public SubnetBean prepareSubnetBean(Integer id, Subnet net) {
 

@@ -6,17 +6,10 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.HashSet;
 
-public class BranchBean extends Bean implements Serializable {
-	private BranchInfoBean bib =null;
+public class BranchBean extends BranchLightBean implements Serializable {
+
 	private HashSet<SubnetBean> subnets = new HashSet<SubnetBean>();
-	
-	
-	public BranchInfoBean getBib() {
-		return bib;
-	}
-	public void setBib(BranchInfoBean bib) {
-		this.bib = bib;
-	}
+
 	public SubnetBean getSubnetByAddr(InetAddress addr) {
 		for (SubnetBean sb : subnets) {
 			if (sb.getSubnet().equals(addr))

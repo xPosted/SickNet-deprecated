@@ -628,6 +628,46 @@ public class ConnectionHandler implements Runnable, Observer {
 					continue;
 				}
 
+
+				if (command[0].startsWith("getSubnetLight_")) {
+					if (command.length == 3) {
+						Integer id = Integer.parseInt(command[1]);
+						String subnetStr = command[2];
+
+						SubnetLightBean bean = beanConstructor.prepareSubnetLightBean(id,subnetStr,null);
+						bean.setRequestId(ro.getRequestId());
+						oos.writeObject(bean);
+						oos.flush();
+					}
+					continue;
+				}
+
+				if (command[0].startsWith("getIpBean_")) {
+					if (command.length == 3) {
+						Integer id = Integer.parseInt(command[1]);
+						String ipStr = command[2];
+
+						IPItemBean bean = beanConstructor.prepareIpBean(id,ipStr);
+						bean.setRequestId(ro.getRequestId());
+						oos.writeObject(bean);
+						oos.flush();
+					}
+					continue;
+				}
+
+
+				if (command[0].startsWith("getBranchLight_")) {
+					if (command.length == 2) {
+						Integer id = Integer.parseInt(command[1]);
+
+						BranchLightBean bean = beanConstructor.prepareLightBranchBean(id);
+						bean.setRequestId(ro.getRequestId());
+						oos.writeObject(bean);
+						oos.flush();
+					}
+					continue;
+				}
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -663,7 +703,8 @@ public class ConnectionHandler implements Runnable, Observer {
 			}
 			if (o instanceof  IPaddr) {
 				IPaddr ipaddr = (IPaddr) o;
-				IPItemLightBean bean = beanConstructor.prepareIPItemLightBean(ipaddr,null);
+				Integer brId = ipaddr.getNet().getId();
+				IPItemLightBean bean = beanConstructor.prepareIPItemLightBean(brId,ipaddr,null);
 				oos.writeObject(bean);
 				oos.flush();
 			}

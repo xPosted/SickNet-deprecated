@@ -19,7 +19,4 @@ public class SessionBean extends SessionLightBean implements Serializable {
 
 	private List<HTTP> httpBuf = null;
 	
-
-	
-	
 }

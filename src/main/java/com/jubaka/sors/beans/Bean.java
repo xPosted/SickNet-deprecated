@@ -8,6 +8,7 @@ import java.io.Serializable;
 public class Bean implements Serializable {
 
     private Long requestId = (long)-1;
+    private Object object = null;
 
     public Object getObject() {
         return object;
@@ -16,8 +17,6 @@ public class Bean implements Serializable {
     public void setObject(Object object) {
         this.object = object;
     }
-
-    private Object object = null;
 
     public Long getRequestId() {
         return requestId;

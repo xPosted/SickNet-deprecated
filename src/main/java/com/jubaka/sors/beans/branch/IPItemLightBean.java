@@ -19,6 +19,7 @@ public class IPItemLightBean extends Bean implements Serializable {
     protected Integer outputCount=0;
     protected Integer activeCount=0;
     protected Integer savedCount=0;
+    protected Integer brId=null;
 
     public synchronized Long getDataDown() {
         return dataDown;
@@ -74,4 +75,12 @@ public class IPItemLightBean extends Bean implements Serializable {
     public synchronized void setDnsName(String dnsName) {
         this.dnsName = dnsName;
     }
+    public Integer getBrId() {
+        return brId;
+    }
+
+    public void setBrId(Integer brId) {
+        this.brId = brId;
+    }
+
 }
