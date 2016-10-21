@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.table.DefaultTableModel;
@@ -36,6 +37,7 @@ public class Node extends Observable {
 	private HashMap<Long, Bean> responseMap = new HashMap<>();
 	private Random random = new Random();
 	private static ExecutorService executor = Executors.newCachedThreadPool();
+	private ReentrantLock lock = new ReentrantLock();
 
 
 	public void createStreams(ObjectInputStream ois) {
@@ -63,7 +65,7 @@ public class Node extends Observable {
 				response = responseMap.get(requestId);
 				if (response == null)
 					synchronized (responseMap) {
-						responseMap.wait();
+						responseMap.wait(10000);
 					}
 
 			}
@@ -74,7 +76,7 @@ public class Node extends Observable {
 		return response;
 	}
 
-	public synchronized SecPolicyBean getSecPolicyBean() {
+	public  SecPolicyBean getSecPolicyBean() {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -88,9 +90,10 @@ public class Node extends Observable {
 
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 
 			Bean response = getResponse(requestId);
 
@@ -108,7 +111,7 @@ public class Node extends Observable {
 	}
 	
 	
-	public synchronized  boolean createLiveBranch(String ifsName,String byUser,String branchName,String ip) {
+	public   boolean createLiveBranch(String ifsName,String byUser,String branchName,String ip) {
 		if  (checkConnection()==false) {
 			return false;
 		}
@@ -125,9 +128,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 
 
 			
@@ -141,7 +145,7 @@ public class Node extends Observable {
 		return true;
 	}
 	
-	public synchronized  boolean createBranch(String pathToFile,String byUser,String fileName,String branchName) {
+	public   boolean createBranch(String pathToFile,String byUser,String fileName,String branchName) {
 		if  (checkConnection()==false) {
 			return false;
 		}
@@ -160,9 +164,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 
 				if (response.getObject().equals("getPcap")) {
@@ -193,6 +198,7 @@ public class Node extends Observable {
 		} catch (IOException e) {
 			
 			e.printStackTrace();
+			if (lock.isLocked()) lock.unlock();
 			disconnect();
 			return false;
 		}
@@ -200,7 +206,7 @@ public class Node extends Observable {
 		return true;
 	}
 	
-	public synchronized void startBranch(Integer brId) {
+	public  void startBranch(Integer brId) {
 		if  (checkConnection()==false) {
 			return;
 		}
@@ -214,9 +220,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -224,8 +231,37 @@ public class Node extends Observable {
 			disconnect();
 		}
 	}
+
+
+	public  void removeObserver(Integer brId,String obj) {
+		if  (checkConnection()==false) {
+			return;
+		}
+		try {
+			String[] command = new String[3];
+			command[0] = "removeObserver_";
+			command[1] = brId.toString();
+			command[2] = obj;
+
+			Long requestId = random.nextLong();
+			RequestObject request = new RequestObject();
+			request.setRequestId(requestId);
+			request.setRequestStr(command);
+			lock.lock();
+			oos.writeObject(request);
+			oos.flush();
+			lock.unlock();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			disconnect();
+		}
+	}
+
+
 	
-	public synchronized void stopBranch(Integer brId) {
+	public  void stopBranch(Integer brId) {
 		if  (checkConnection()==false) {
 			return;
 		}
@@ -240,8 +276,10 @@ public class Node extends Observable {
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
 
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -251,7 +289,7 @@ public class Node extends Observable {
 	}
 	
 	
-	public synchronized FileListBean getDir(Integer brId, String sorsPath) {
+	public  FileListBean getDir(Integer brId, String sorsPath) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -266,9 +304,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 			
 			if (response instanceof FileListBean) {
@@ -284,7 +323,7 @@ public class Node extends Observable {
 		return flb;
 	}
 	
-	public synchronized void delete(Integer brId, String sorsPath) {
+	public  void delete(Integer brId, String sorsPath) {
 		if  (checkConnection()==false) {
 			return;
 		}
@@ -298,9 +337,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -311,7 +351,7 @@ public class Node extends Observable {
 		return;
 	}
 	
-	public synchronized DefaultTableModel getBaseTModel(Integer brId) {
+	public  DefaultTableModel getBaseTModel(Integer brId) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -325,9 +365,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 
 				if (response.getObject() instanceof DefaultTableModel) {
@@ -345,7 +386,7 @@ public class Node extends Observable {
 	}
 	
 	
-	public synchronized TimeSeries getDataInChart(Integer brId) {
+	public  TimeSeries getDataInChart(Integer brId) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -359,9 +400,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 			if (response.getObject() instanceof TimeSeries) {
 				ts = (TimeSeries) response.getObject();
@@ -375,23 +417,27 @@ public class Node extends Observable {
 		return ts;
 	}
 	
-	public synchronized TimeSeries getDataOutChart(Integer brId) {
+	public  TimeSeries getDataOutChart(Integer brId, Long timeFrom, Long timeTo) {
 		if  (checkConnection()==false) {
 			return null;
 		}
 		TimeSeries ts = new TimeSeries("NULL");
 		try {
-			String[] command = new String[2];
+			String[] command = new String[4];
 			command[0] = "getDataOutChart_";
 			command[1] = brId.toString();
-
+			command[2] = timeFrom.toString();
+			command[3] = timeTo.toString();
 			Long requestId = random.nextLong();
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
 
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
+
 			Bean response = getResponse(requestId);
 
 			if (response.getObject() instanceof TimeSeries) {
@@ -406,23 +452,28 @@ public class Node extends Observable {
 		return ts;
 	}
 	
-	public synchronized TimeSeries getNetworkDataInChart(Integer brId,String netStr) {
+	public  TimeSeries getNetworkDataInChart(Integer brId,String netStr, Long timeFrom, Long timeTo) {
 		if  (checkConnection()==false) {
 			return null;
 		}
 		TimeSeries ts = new TimeSeries("NULL");
 		try {
-			String[] command = new String[3];
+			String[] command = new String[5];
 			command[0] = "getNetworkDataInChart_";
 			command[1] = brId.toString();
 			command[2] = netStr;
+			command[3] = timeFrom.toString();
+			command[4] = timeTo.toString();
 			Long requestId = random.nextLong();
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
 
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
+
 			Bean response = getResponse(requestId);
 			if (response.getObject() instanceof TimeSeries) {
 				ts = (TimeSeries) response.getObject();
@@ -435,7 +486,7 @@ public class Node extends Observable {
 		return ts;
 	}
 	
-	public synchronized TimeSeries getNetworkDataOutChart(Integer brId,String netStr) {
+	public  TimeSeries getNetworkDataOutChart(Integer brId,String netStr) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -449,9 +500,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 			if (response.getObject() instanceof TimeSeries) {
 				ts = (TimeSeries) response.getObject();
@@ -465,7 +517,7 @@ public class Node extends Observable {
 		return ts;
 	}
 	
-	public synchronized TimeSeries getIpDataInChart(Integer brId,String ipStr) {
+	public  TimeSeries getIpDataInChart(Integer brId,String ipStr) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -479,9 +531,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 			if (response.getObject() instanceof TimeSeries) {
 				ts = (TimeSeries) response.getObject();
@@ -495,7 +548,7 @@ public class Node extends Observable {
 		return ts;
 	}
 	
-	public synchronized TimeSeries getIpDataOutChart(Integer brId,String ipStr) {
+	public  TimeSeries getIpDataOutChart(Integer brId,String ipStr) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -509,9 +562,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 			if (response.getObject() instanceof TimeSeries) {
 				ts = (TimeSeries) response.getObject();
@@ -525,7 +579,7 @@ public class Node extends Observable {
 		return ts;
 	}
 	
-	public synchronized DefaultTableModel getSubnetTModel(Integer brId,String subnet) {
+	public  DefaultTableModel getSubnetTModel(Integer brId,String subnet) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -540,9 +594,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 			if (response.getObject() instanceof DefaultTableModel) {
 				tableResult = (DefaultTableModel) response.getObject();
@@ -556,7 +611,7 @@ public class Node extends Observable {
 		return tableResult;
 	}
 	
-	public synchronized DefaultTableModel getIpTModel(Integer brId,String ip) {
+	public  DefaultTableModel getIpTModel(Integer brId,String ip) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -571,9 +626,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 			if (response.getObject() instanceof DefaultTableModel) {
 				tableResult = (DefaultTableModel) response.getObject();
@@ -587,7 +643,7 @@ public class Node extends Observable {
 		return tableResult;
 	}
 	
-	public synchronized  void updateUnid(Long unid) {
+	public   void updateUnid(Long unid) {
 		if  (checkConnection()==false) {
 			return;
 		}
@@ -600,9 +656,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 
 			setUnid(unid);
 
@@ -615,7 +672,7 @@ public class Node extends Observable {
 		return;
 	}
 	
-	public synchronized  List<String> getIfsList(String byUser) {
+	public   List<String> getIfsList(String byUser) {
 		List<String> ifs = new ArrayList<String>();
 		if  (checkConnection()==false) {
 			return null;
@@ -630,9 +687,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 			if (response.getObject() instanceof List<?>) {
 				ifs = (List<String>) response.getObject();
@@ -648,7 +706,7 @@ public class Node extends Observable {
 	}
 	
 	
-	public synchronized SessionDataBean getSessionData(Integer brId, String net, Long tm) {
+	public  SessionDataBean getSessionData(Integer brId, String net, Long tm) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -664,9 +722,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 			
 			if (response instanceof SessionDataBean) {
@@ -682,7 +741,7 @@ public class Node extends Observable {
 		return sdb;
 	}
 	
-	public synchronized void getFile(Integer brId, String sorsPath, HttpServletResponse response) {
+	public  void getFile(Integer brId, String sorsPath, HttpServletResponse response) {
 		if  (checkConnection()==false) {
 			return;
 		}
@@ -741,7 +800,7 @@ public class Node extends Observable {
 	
 	
 	
-	public synchronized SubnetBeanList getSubnetBeanList(Integer brId) {
+	public  SubnetBeanList getSubnetBeanList(Integer brId) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -755,9 +814,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 			
 			if (response instanceof SubnetBeanList) {
@@ -773,7 +833,7 @@ public class Node extends Observable {
 		return sbl;
 	}
 	
-	public synchronized SesDataCapBean getSesDataCaptureInfo(String target, Integer brId) {
+	public  SesDataCapBean getSesDataCaptureInfo(String target, Integer brId) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -790,9 +850,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 			
 			if (response instanceof SesDataCapBean) {
@@ -809,7 +870,7 @@ public class Node extends Observable {
 	}
 
 	
-	public synchronized InfoBean getInfo() {
+	public  InfoBean getInfo() {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -821,9 +882,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 			///
 
@@ -846,7 +908,7 @@ public class Node extends Observable {
 	
 	
 	
-	public synchronized boolean recoverSessionData(Integer brID) {
+	public  boolean recoverSessionData(Integer brID) {
 		if  (checkConnection()==false) {
 			return false;
 		}
@@ -859,9 +921,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 			return (boolean) response.getObject();
 
@@ -875,7 +938,7 @@ public class Node extends Observable {
 		
 	}
 	
-	public synchronized  boolean setCapture(Integer brId, String obj, String in, String out) {
+	public   boolean setCapture(Integer brId, String obj, String in, String out) {
 		if  (checkConnection()==false) {
 			return false;
 		}
@@ -891,9 +954,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 			return (boolean) response.getObject();
 
@@ -906,7 +970,7 @@ public class Node extends Observable {
 		return false;
 	}
 
-	public synchronized BranchLightBean getBranchLight(Integer id) {
+	public  BranchLightBean getBranchLight(Integer id) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -920,9 +984,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 			if (response instanceof BranchLightBean) {
 				bb = (BranchLightBean) response;
@@ -937,24 +1002,26 @@ public class Node extends Observable {
 		return bb;
 	}
 
-	public synchronized IPItemBean getIpItemBean(Integer id, String ip) {
+	public  IPItemBean getIpItemBean(Integer id, String ip, boolean observe) {
 		if  (checkConnection()==false) {
 			return null;
 		}
 		IPItemBean ipBean = null;
 		try {
-			String[] command = new String[3];
+			String[] command = new String[4];
 			command[0] = "getIpBean_";
 			command[1] = id.toString();
 			command[2] = ip;
+			command[3] = Boolean.toString(observe);
 
 			Long requestId = random.nextLong();
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 			if (response instanceof IPItemBean) {
 				ipBean = (IPItemBean) response;
@@ -969,24 +1036,26 @@ public class Node extends Observable {
 		return ipBean;
 	}
 
-	public synchronized SubnetLightBean getSubnetLight(Integer id,String subnet) {
+	public  SubnetLightBean getSubnetLight(Integer id,String subnet, boolean observe) {
 		if  (checkConnection()==false) {
 			return null;
 		}
 		SubnetLightBean subnetLight = null;
 		try {
-			String[] command = new String[3];
+			String[] command = new String[4];
 			command[0] = "getSubnetLight_";
 			command[1] = id.toString();
 			command[2] = subnet;
+			command[3] = Boolean.toString(observe);
 
 			Long requestId = random.nextLong();
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 			if (response instanceof SubnetLightBean) {
 				subnetLight = (SubnetLightBean) response;
@@ -1001,7 +1070,7 @@ public class Node extends Observable {
 		return subnetLight;
 	}
 
-	public synchronized BranchBean getBranch(Integer id) {
+	public  BranchBean getBranch(Integer id) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -1015,9 +1084,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 			if (response instanceof BranchBean) {
 				bb = (BranchBean) response;
@@ -1032,7 +1102,7 @@ public class Node extends Observable {
 		return bb;
 	}
 	
-	public synchronized void loginIncorrect() {
+	public  void loginIncorrect() {
 		if  (checkConnection()==false) {
 			return;
 		}
@@ -1044,9 +1114,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 			
 		} catch (IOException e) {
@@ -1056,7 +1127,7 @@ public class Node extends Observable {
 		}
 	}
 
-	public synchronized Set<BranchInfoBean> getBranchInfoSet(String byUser) {
+	public  Set<BranchInfoBean> getBranchInfoSet(String byUser) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -1070,9 +1141,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 			if (response.getObject() instanceof Set) {
 				bibSet = (Set<BranchInfoBean>) response.getObject();
@@ -1091,7 +1163,7 @@ public class Node extends Observable {
 		return bibSet;
 	}
 	
-	public  void createStream(Integer id) {
+	public    void createStream(Integer id) {
 		if  (checkConnection()==false) {
 			return;
 		}
@@ -1104,9 +1176,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -1116,7 +1189,7 @@ public class Node extends Observable {
 		
 	}
 	
-	public synchronized BranchInfoBean getBranchInfo(String byUser,Integer brid) {
+	public  BranchInfoBean getBranchInfo(String byUser,Integer brid) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -1132,9 +1205,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 
 			if (response instanceof BranchInfoBean) {
@@ -1151,7 +1225,7 @@ public class Node extends Observable {
 		return bib;
 	}
 
-	public synchronized BranchStatBean getBranchStat(String byUser) {
+	public BranchStatBean getBranchStat(String byUser) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -1165,9 +1239,10 @@ public class Node extends Observable {
 			RequestObject request = new RequestObject();
 			request.setRequestId(requestId);
 			request.setRequestStr(command);
-
+			lock.lock();
 			oos.writeObject(request);
 			oos.flush();
+			lock.unlock();
 			Bean response = getResponse(requestId);
 			if (response instanceof BranchStatBean) {
 				bsb = (BranchStatBean) response;
@@ -1191,7 +1266,6 @@ public class Node extends Observable {
 		}
 		return true;
 	}
-
 
 
 	public void setInfo(InfoBean info) {
@@ -1259,10 +1333,12 @@ public class Node extends Observable {
 
 		@Override
 		public void run() {
-			try {
+
 				while(true) {
+					try {
 					Object input = ois.readObject();
 					if (input instanceof Bean) {
+
 						Bean bean = (Bean) input;
 						if (bean.getRequestId()!=-1) {
 							synchronized (responseMap) {
@@ -1270,12 +1346,17 @@ public class Node extends Observable {
 								responseMap.notifyAll();
 							}
 
+						}else {
+							setChanged();
+							notifyObservers(bean);
 						}
 					} else System.err.println("not a bean instance handled!!");
+					} catch (Exception e) {
+						e.printStackTrace();
+						break;
+					}
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+
 
 
 		}

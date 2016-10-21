@@ -186,14 +186,8 @@ public class StatisticLogic {
 				if (index >= 0) {
 					Integer val = (Integer) ts.getValue(index);
 					val += dataTimeBinding.get(key);
-					if (val == null) {
-						System.out.println("alert !!!");
-					}
 					ts.update(s, val);
 				} else {
-					if (dataTimeBinding.get(key) == null) {
-						System.out.println("alert !!!");
-					}
 					ts.add(s, dataTimeBinding.get(key));
 				}
 			}
@@ -205,14 +199,18 @@ public class StatisticLogic {
 	}
 	
 	public static void fillTSwithZero(TimeSeries ts) {
+		Date started = new Date();
+		Second currentSec = null;
+		Second previousSec = null;
 		for (int item =1;item<ts.getItemCount();item++) {
-			Second currentSec = (Second) ts.getTimePeriod(item);
-			Second previousSec = (Second) ts.getTimePeriod(item-1);
+			 currentSec = (Second) ts.getTimePeriod(item);
+			 previousSec = (Second) ts.getTimePeriod(item-1);
 			while ( ! previousSec.next().equals(currentSec)) {
 				previousSec = (Second) previousSec.next();
 				if (ts.getIndex(previousSec)<0) ts.add(previousSec, new Integer(0));
 			}
 		}
+		System.out.println("fillTSwithZero time "+(new Date().getTime() - started.getTime()));
 	}
 
 	public static DefaultTableModel getIPTableModel(IPaddr ip) {

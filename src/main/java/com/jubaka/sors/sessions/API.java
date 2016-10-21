@@ -12,7 +12,7 @@ import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Semaphore;
+//import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.JTextArea;
@@ -142,6 +142,7 @@ public class API extends Observable implements PcapPacketHandler<String>, Serial
 
 	@Override
 	public void nextPacket(PcapPacket arg0, String arg1) {
+		System.out.println("-");
 		queue.add(new PcapPacket(arg0));
 		
 		if (!mutex.isLocked()) {
@@ -173,7 +174,7 @@ class CaptureThread implements Runnable {
 	String fileName;
 	API api;
 	ReentrantLock lock = new ReentrantLock();
-	Semaphore sem = new Semaphore(1);
+	//Semaphore sem = new Semaphore(1);
 	StringBuilder errbuf = new StringBuilder();
 
 	public CaptureThread(Pcap captor, String dev, String pcapExp,
@@ -183,23 +184,24 @@ class CaptureThread implements Runnable {
 		this.pcapExp = pcapExp;
 		this.fileName = fileName;
 		this.api = api;
-		try {
+	/*	try {
 			sem.acquire();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+	*/
 	}
 
 	public Pcap getCaptor() {
-		try {
+	/*	try {
 			sem.acquire();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		sem.release();
+		*/
 		return captor;
 	}
 	
@@ -211,7 +213,7 @@ class CaptureThread implements Runnable {
 
 			else
 				captor = Pcap.openOffline(fileName,errbuf);
-			sem.release();
+	//		sem.release();
 			
 			if (pcapExp != null) {
 				captor.compile(bpf, pcapExp, 0, 0);

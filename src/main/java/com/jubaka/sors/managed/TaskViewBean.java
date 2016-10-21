@@ -5,6 +5,7 @@ import com.jubaka.sors.beans.branch.*;
 import com.jubaka.sors.serverSide.ConnectionHandler;
 import com.jubaka.sors.serverSide.Node;
 import com.jubaka.sors.serverSide.SecurityVisor;
+import org.jfree.data.time.TimeSeries;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -12,6 +13,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import java.io.Serializable;
 import java.net.InetAddress;
@@ -24,33 +26,41 @@ import java.util.*;
 
 @Named
 @SessionScoped
-
 public class TaskViewBean implements Serializable, Observer {
+
+
     @Inject
     private LoginBean loginBean;
 
+    @Inject
+    private WebSocketHandler webSocketHandler;
 
     private BranchLightBean blb = null;
     private SubnetLightBean sbl = null;
     private IPItemBean ipBean = null;
+    private List<IPItemLightBean> onlineIps = null;
+    private List<IPItemLightBean> allIps = null;
+    private List<SessionBean> sessionList = new ArrayList<>();
 
     private boolean sessionInFilter = false;
     private boolean sessionOutFilter = true;
     private boolean sessionActiveFilter = true;
     private boolean sessionSavedFilter = false;
 
-    String nodeIdStr = null;
-    String taskIdStr = null;
-    String subnet = null;
-    String ipStr = null;
+    private String nodeIdStr = null;
+    private String taskIdStr = null;
+    private String subnet = null;
+    private String ipStr = null;
 
-    String sessionId = null;
+
+    private Long sessionId = null;
+    private Session webSession = null;
 
     @PostConstruct
     public void postContruct() {
         Random r = new Random();
-        Long l = r.nextLong();
-        sessionId = l.toString();
+        sessionId = r.nextLong();
+        webSocketHandler.putBean(sessionId,this);
     }
 
     // this method is calling from xhtml page becouse request params are not available in postConstruct
@@ -78,22 +88,58 @@ public class TaskViewBean implements Serializable, Observer {
         if (node!=null & taskIdStr != null) {
             taskId = Integer.valueOf(taskIdStr);
             blb = node.getBranchLight(taskId);
+            taskIdStr = null;
         }
         if (blb!=null & subnet!=null) {
-            try {
-                InetAddress subnetAddr = InetAddress.getByName(subnet);
-                sbl = node.getSubnetLight(taskId,subnet);
-
-            } catch (UnknownHostException une) {
-                une.printStackTrace();
+            if (sbl != null) {
+                node.removeObserver(blb.getBib().getId(),sbl.getSubnet().getHostAddress());
             }
+                sbl = node.getSubnetLight(blb.getBib().getId(),subnet,true);
+                onlineIps = new ArrayList<>(sbl.getLightLiveIps());
+                allIps = new ArrayList<>(sbl.getLightIps());
+                node.addObserver(this);
+                subnet = null;
         }
         if (sbl!=null & ipStr!=null) {
-            ipBean =  node.getIpItemBean(taskId,ipStr);
+            if (ipBean!=null) {
+                node.removeObserver(blb.getBib().getId(),ipBean.getIp());
+            }
+            ipBean =  node.getIpItemBean(blb.getBib().getId(),ipStr,true);
+            updateCurrentSessionList();
+            System.out.println("initBeans.ipBean="+ipBean.getIp());
+            node.addObserver(this);
+            ipStr= null;
         }
 
     }
 
+    public String getCurrentBranchId() {
+        return blb.getBib().getId().toString();
+    }
+
+    public String getChartStrValues() {
+        Node node = null;
+        Long nodeId;
+        String result = "0";
+        if (nodeIdStr != null) {
+            nodeId = Long.parseLong(nodeIdStr);
+            node = ConnectionHandler.getInstance().getNode(nodeId);
+
+        }
+        if (node != null & blb != null) {
+            Date timeFrom = new Date(new Date().getTime()-11000);
+            Date timeTo = new Date();
+            TimeSeries ts = node.getDataOutChart(blb.getBib().getId(),timeFrom.getTime(),timeTo.getTime());
+
+            for (int item=0;item<ts.getItemCount();item++) {
+                Integer val = (Integer) ts.getValue(item);
+                result = result+","+val.toString();
+            }
+
+
+        }
+        return result;
+    }
     public String getIpStr() {
         return ipStr;
     }
@@ -113,6 +159,7 @@ public class TaskViewBean implements Serializable, Observer {
 
     public void setSubnet(String subnet) {
         this.subnet = subnet;
+        System.out.println("subnet = "+this.subnet);
         initBeans();
     }
 
@@ -144,6 +191,7 @@ public class TaskViewBean implements Serializable, Observer {
     }
 
     public SubnetLightBean getSb() {
+        System.out.println("getSubnetLight");
         return sbl;
     }
 
@@ -248,6 +296,11 @@ public class TaskViewBean implements Serializable, Observer {
         this.sessionActiveFilter = sessionActiveFilter;
 
     }
+    public void changeActiveFilter() {
+        this.sessionActiveFilter = !sessionActiveFilter;
+        updateCurrentSessionList();
+
+    }
 
     public boolean isSessionInFilter() {
         return sessionInFilter;
@@ -257,12 +310,18 @@ public class TaskViewBean implements Serializable, Observer {
         this.sessionInFilter = sessionInFilter;
     }
 
+    public void changeInFilter() {
+        this.sessionInFilter = !sessionInFilter;
+        updateCurrentSessionList();
+    }
+
     public boolean isSessionOutFilter() {
         return sessionOutFilter;
     }
 
-    public void setSessionOutFilter(boolean sessionOutFilter) {
-        this.sessionOutFilter = sessionOutFilter;
+    public void changeOutFilter() {
+        this.sessionOutFilter = !sessionOutFilter;
+        updateCurrentSessionList();
     }
 
     public boolean isSessionSavedFilter() {
@@ -273,16 +332,63 @@ public class TaskViewBean implements Serializable, Observer {
         this.sessionSavedFilter = sessionSavedFilter;
     }
 
+    public void changeSavedFilter() {
+        this.sessionSavedFilter = !sessionSavedFilter;
+        updateCurrentSessionList();
+    }
+
     public String sizeToStr(double size,Integer afterDot) {
         return ConnectionHandler.processSize(size,afterDot);
 
     }
-    public String getSessionId() {
+    public Long getSessionId() {
         return sessionId;
     }
 
-    public void setSessionId(String sessionId) {
+    public void setSessionId(Long sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public Session getWebSession() {
+        return webSession;
+    }
+
+    public void setWebSession(Session webSession) {
+        System.out.println("Set web Session");
+        this.webSession = webSession;
+    }
+
+    public List<IPItemLightBean> getAllIps() {
+        return allIps;
+    }
+
+    public void setAllIps(List<IPItemLightBean> allIps) {
+        this.allIps = allIps;
+    }
+
+    public List<IPItemLightBean> getOnlineIps() {
+        return onlineIps;
+    }
+
+    public void setOnlineIps(List<IPItemLightBean> onlineIps) {
+        this.onlineIps = onlineIps;
+    }
+
+    public List<SessionBean> getSessionList() {
+        return sessionList;
+    }
+
+    public void setSessionList(List<SessionBean> sessionList) {
+        this.sessionList = sessionList;
+    }
+
+    public void updateCurrentSessionList() {
+        sessionList.clear();
+        if (sessionActiveFilter & sessionInFilter) sessionList.addAll(ipBean.getActiveInSes());
+        if (sessionActiveFilter & sessionOutFilter) sessionList.addAll(ipBean.getActiveOutSes());
+        if (sessionSavedFilter & sessionInFilter) sessionList.addAll(ipBean.getStoredInSes());
+        if (sessionSavedFilter & sessionOutFilter) sessionList.addAll(ipBean.getStoredOutSes());
+
     }
 
 
@@ -292,13 +398,18 @@ public class TaskViewBean implements Serializable, Observer {
             if (arg instanceof SubnetLightBean) {
                 SubnetLightBean receivedBean = (SubnetLightBean) arg;
                 if (receivedBean.getSubnet() == sbl.getSubnet() & receivedBean.getBrId() == sbl.getBrId()) {
+                    sbl=receivedBean;
+                    webSocketHandler.updateSubnetInfo(webSession);
                     // web socket notify
                 }
             }
-            if (arg instanceof IPItemBean) {
-                IPItemBean receivedBean = (IPItemBean) arg;
-                if (receivedBean.getIp() == ipBean.getIp() & receivedBean.getBrId() == ipBean.getBrId()) {
+            if (arg instanceof IPItemLightBean) {
+                IPItemLightBean receivedBean = (IPItemLightBean) arg;
+                if (receivedBean.getIp().equals(ipBean.getIp()) & receivedBean.getBrId() == ipBean.getBrId()) {
                     // web socket notify
+                    ipBean.update(receivedBean);
+                    System.out.println("initBeans.ipBean="+ipBean.getIp());
+                    webSocketHandler.updateIpInfo(webSession);
                 }
             }
         }

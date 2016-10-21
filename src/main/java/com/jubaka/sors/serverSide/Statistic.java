@@ -47,7 +47,7 @@ public class Statistic extends HttpServlet {
 			
 			
 			TimeSeries tsIn = node.getDataInChart(brId);
-			TimeSeries tsdOut = node.getDataOutChart(brId);
+			TimeSeries tsdOut = node.getDataOutChart(brId,(long)-1,(long)-1);
 			DefaultTableModel model = (DefaultTableModel) node.getBaseTModel(brId);
 			request.setAttribute("tsIn", tsIn);
 			request.setAttribute("tsOut", tsdOut);
@@ -58,7 +58,7 @@ public class Statistic extends HttpServlet {
 			
 			String networkStr = request.getParameter("net");
 			
-			TimeSeries tsIn = node.getNetworkDataInChart(brId, networkStr);
+			TimeSeries tsIn = node.getNetworkDataInChart(brId, networkStr,(long)-1,(long)-1);
 			TimeSeries tsdOut = node.getNetworkDataOutChart(brId, networkStr);
 			DefaultTableModel model = (DefaultTableModel) node.getSubnetTModel(brId, networkStr);
 			request.setAttribute("tsIn", tsIn);

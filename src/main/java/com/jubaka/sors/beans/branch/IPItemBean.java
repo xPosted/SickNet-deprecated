@@ -53,6 +53,19 @@ public class IPItemBean extends IPItemLightBean implements Serializable {
 	public void setDataCapInfo(SesDataCapBean sdcb) {
 		this.sdcb = sdcb;
 	}
-	
+
+	public void update(IPItemLightBean bean) {
+		setIp(bean.getIp());
+		setDnsName(bean.getDnsName());
+		setDataDown(bean.getDataDown());
+		setDataUp(bean.getDataUp());
+		setActivated(bean.getActivated());
+		setInputCount(bean.getInputCount());
+		setOutputCount(bean.getOutputCount());
+		setSavedCount(bean.getSavedCount());
+		setActiveCount(bean.getActiveCount());
+		setBrId(bean.getBrId());
+
+	}
 
 }

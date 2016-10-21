@@ -67,6 +67,22 @@ public class BeanConstructor {
 
     }
 
+    public IPItemBean prepareIpBean(Integer branch_id, String ip) {
+
+
+        try {
+            SessionsAPI cntr = ClassFactory.getInstance().getSesionInstance(
+                    branch_id);
+            IPaddr ipaddr = IPaddr.getInstance(branch_id, ip);
+            return prepareIpBean(branch_id,ipaddr);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public IPItemBean prepareIpBean(Integer branch_id, IPaddr ip) {
         DataSaverInfo dsi = ClassFactory.getInstance().getDataSaverInfo(
                 branch_id);
@@ -79,14 +95,10 @@ public class BeanConstructor {
 
             ipInfo = (IPItemBean) prepareIPItemLightBean(branch_id, ip,ipInfo);
 
-            ipInfo.setActiveOutSes(translateSessionSet(cntr
-                    .getOutputActiveSes(ipStr)));
-            ipInfo.setActiveInSes(translateSessionSet(cntr
-                    .getInputActiveSes(ipStr)));
-            ipInfo.setStoredOutSes(translateSessionSet(cntr
-                    .getOutputStoredSes(ipStr)));
-            ipInfo.setStoredInSes(translateSessionSet(cntr
-                    .getInputStoredSes(ipStr)));
+            ipInfo.setActiveOutSes(translateSessionSet(cntr.getOutputActiveSes(ipStr)));
+            ipInfo.setActiveInSes(translateSessionSet(cntr.getInputActiveSes(ipStr)));
+            ipInfo.setStoredOutSes(translateSessionSet(cntr.getOutputStoredSes(ipStr)));
+            ipInfo.setStoredInSes(translateSessionSet(cntr.getInputStoredSes(ipStr)));
             SesCaptureInfo sci = dsi.getCatchInfo(ip.getAddr());
             SesDataCapBean sdcb = new SesDataCapBean();
 
@@ -215,36 +227,7 @@ public class BeanConstructor {
         return scb;
     }
 
-    public IPItemBean prepareIpBean(Integer branch_id, String ip) {
 
-        IPItemBean ipInfo = new IPItemBean();
-        try {
-            SessionsAPI cntr = ClassFactory.getInstance().getSesionInstance(
-                    branch_id);
-            IPaddr ipaddr = IPaddr.getInstance(branch_id, ip);
-            ipInfo.setIp(ip);
-            ipInfo.setActiveOutSes(translateSessionSet(cntr
-                    .getOutputActiveSes(ip)));
-            ipInfo.setActiveInSes(translateSessionSet(cntr
-                    .getInputActiveSes(ip)));
-            ipInfo.setStoredOutSes(translateSessionSet(cntr
-                    .getOutputStoredSes(ip)));
-            ipInfo.setStoredInSes(translateSessionSet(cntr
-                    .getInputStoredSes(ip)));
-            ipInfo.setActivated(ipaddr.getActivated());
-            ipInfo.setActiveCount(ipaddr.getActiveSesCount());
-            ipInfo.setDataDown(ipaddr.getDataDown());
-            ipInfo.setDataUp(ipaddr.getDataUp());
-            ipInfo.setInputCount(ipaddr.getInSessionCount());
-            ipInfo.setOutputCount(ipaddr.getOutSessionCount());
-            ipInfo.setSavedCount(ipaddr.getSavedSesCount());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return ipInfo;
-    }
 
     public BranchBean prepareBranchBean(Integer id) {
         Branch br = ClassFactory.getInstance().getBranch(id);
