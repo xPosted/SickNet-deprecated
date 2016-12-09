@@ -33,16 +33,16 @@ public class BuildIPinfoTemplate extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		/*
 try {
-			
+
 			
 			String nodeName = request.getParameter("nodeName");
 			Map<String, String[]> params = request.getParameterMap();
 				if (params.containsKey("branchId")) {
 					Integer brId = Integer.parseInt(request.getParameter("branchId"));
-					Node node = ConnectionHandler.getInstance().getNode(nodeName);
-					BranchBean bb = node.getBranch(brId);
+					NodeServerEndpoint nodeServerEndpoint = ConnectionHandler.getInstance().getNodeServerEndPoint(nodeName);
+					BranchBean bb = nodeServerEndpoint.getBranch(brId);
 					if (params.containsKey("subnet")) {
 						InetAddress netAddr = InetAddress.getByName(request.getParameter("subnet"));
 						SubnetBean sb = bb.getSubnetByAddr(netAddr);
@@ -57,6 +57,7 @@ try {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			*/
 		
 	}
 

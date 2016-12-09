@@ -1,20 +1,23 @@
 package com.jubaka.sors.entities;
 
-import com.jubaka.sors.serverSide.*;
-import com.jubaka.sors.serverSide.Node;
-
-import java.sql.Time;
+import javax.persistence.*;
+import java.lang.reflect.ParameterizedType;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by root on 28.08.16.
  */
+
+@Entity
+@Table(name = "users")
 public class User {
 
-    private int key = -1;
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String nickName;
     private String firstName;
     private String secondName;
@@ -24,7 +27,7 @@ public class User {
     private Timestamp joinDate;
     private String image;
 
-    private Set<com.jubaka.sors.serverSide.Node> availableNodes = new HashSet<Node>();
+   // private Set<com.jubaka.sors.serverSide.NodeServerEndpoint> availableNodes = new HashSet<NodeServerEndpoint>();
     public String getNickName() {
         return nickName;
     }
@@ -70,15 +73,17 @@ public class User {
     public String getImage() {
         return image;
     }
+
     public void setImage(String image) {
         this.image = image;
     }
-    public int getKey() {
-        return key;
-    }
-    public void setKey(int key) {
-        this.key = key;
+
+    public Long getId() {
+        return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
 }

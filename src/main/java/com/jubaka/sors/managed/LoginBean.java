@@ -65,11 +65,21 @@ public class LoginBean implements Serializable {
 
     public void loginAction() throws IOException {
 
+        pass = PassEncoder.encode(pass);
         user = userService.checkUser(login,pass);
         if (user != null) {
             linked = true;
             FacesContext.getCurrentInstance().getExternalContext().redirect("NodesView.xhtml");
         }
+
+    }
+
+    public void logoutAction() throws IOException{
+        linked = false;
+        user = null;
+        login = "";
+        pass = "";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("landing.xhtml");
 
     }
 

@@ -299,23 +299,20 @@ public class SessionsAPI implements Observer, Serializable {
 				ses.setAck(ack);
 
 				if (packet.hasHeader(http)) {
-					ses.addHttp(http);
+					ses.handlePacket(tcp,http,packetSrcAddr,ts);
+				} else {
+					ses.handlePacket(tcp, null, packetSrcAddr, ts);
 				}
+				/*
+				 try {
 
-				try {
 
-					// if (glCollector.checkSession(ses)) { //
-					// //////////////////////
-					// if (true) {
-					// /////////////////// wtf?
 					ses.putDataDirect(tcp.getPayload(), packetSrcAddr, ts);
-					// } else
-					// ses.quietPutData(tcp.getPayload(),
-					// packetSrcAddr, ts);
 
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				*/
 
 				return;
 
@@ -485,8 +482,8 @@ public class SessionsAPI implements Observer, Serializable {
 			PrintWriter pw = new PrintWriter(recoveryManifest);
 
 			for (Session ses : set) {
-				String srcPath = ses.getDataSaver().getSrcDataAsFile();
-				String dstPath = ses.getDataSaver().getDstDataAsFile();
+				String srcPath = ses.getDataSaver().getSrcDataFilePath();
+				String dstPath = ses.getDataSaver().getDstDataFilePath();
 				if (srcPath != null)
 					pw.println(srcPath);
 				if (dstPath != null)

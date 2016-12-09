@@ -4,14 +4,16 @@ import com.jubaka.sors.beans.Bean;
 
 import java.io.Serializable;
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Created by root on 07.10.16.
  */
 public class BranchLightBean extends Bean implements Serializable{
     private BranchInfoBean bib =null;
-    private HashSet<SubnetLightBean> subnetsLight = new HashSet<SubnetLightBean>();
+    private List<SubnetLightBean> subnetsLight = new ArrayList<>();
 
 
     public BranchInfoBean getBib() {
@@ -27,10 +29,14 @@ public class BranchLightBean extends Bean implements Serializable{
         }
         return null;
     }
-    public HashSet<SubnetLightBean> getSubnetsLight() {
+    public List<SubnetLightBean> getSubnetsLight() {
         return subnetsLight;
     }
-    public void setSubnetsLight(HashSet<SubnetLightBean> subnetsLight) {
+    public void setSubnetsLight(List<SubnetLightBean> subnetsLight) {
         this.subnetsLight = subnetsLight;
+    }
+
+    public List<SubnetLightBean> getSubnetsLightBeanList() {
+        return new ArrayList<SubnetLightBean>(subnetsLight);
     }
 }

@@ -32,13 +32,13 @@ public class BranchList extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HashSet<BranchInfoBean> bigSet = new HashSet<BranchInfoBean>();
+	/*	HashSet<BranchInfoBean> bigSet = new HashSet<BranchInfoBean>();
 		String user = (String) request.getSession().getAttribute("user");
-		SecurityVisor sv = ConnectionHandler.getInstance().getSv();
-		Set<Node> nodes  = sv.getNodes(user);
+
+		Set<NodeServerEndpoint> nodeServerEndpoints = sv.getNodes(user);
 		Integer ownCount = 0;
 		Integer liveCount = 0;
-		for (Node n : nodes) {
+		for (NodeServerEndpoint n : nodeServerEndpoints) {
 			for (BranchInfoBean bib : n.getBranchInfoSet(user)) {
 				bigSet.add(bib);
 				System.out.println(bib.getUserName()+" "+user);
@@ -49,13 +49,13 @@ public class BranchList extends HttpServlet {
 		}
 		request.setAttribute("branchList", bigSet);
 		request.setAttribute("ownCount", ownCount);
-		request.setAttribute("nodeCount", nodes.size());
+		request.setAttribute("nodeCount", nodeServerEndpoints.size());
 		request.setAttribute("liveCount", liveCount);
 		
 	
 		
 		request.getRequestDispatcher("Processing.jsp").forward(request, response);
-		
+		*/
 	}
 
 	/**

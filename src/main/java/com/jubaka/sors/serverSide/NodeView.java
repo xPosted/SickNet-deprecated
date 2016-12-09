@@ -34,9 +34,10 @@ public class NodeView extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/*
 		String nodeName =  request.getParameter("nodeName");
 		ConnectionHandler ch = ConnectionHandler.getInstance();
-		Node n = ch.getNode(nodeName);
+		NodeServerEndpoint n = ch.getNodeServerEndPoint(nodeName);
 		String user = (String) request.getSession().getAttribute("user");
 		
 		InfoBean ib = n.getInfo();
@@ -51,8 +52,8 @@ public class NodeView extends HttpServlet {
 		request.setAttribute("branchStat", bsb);
 		request.setAttribute("ifs", liveDevs);
 		
-		request.getRequestDispatcher("Node.jsp").forward(request, response);
-		
+		request.getRequestDispatcher("NodeServerEndpoint.jsp").forward(request, response);
+		*/
 	}
 
 	/**

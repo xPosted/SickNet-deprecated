@@ -1,15 +1,37 @@
 package com.jubaka.sors.protocol.http;
 
+import java.io.RandomAccessFile;
 import java.io.Serializable;
 
+import com.jubaka.sors.protocol.http.protocol.tcp.TCP;
 import org.jnetpcap.packet.AbstractMessageHeader.MessageType;
 import org.jnetpcap.protocol.tcpip.Http;
 import org.jnetpcap.protocol.tcpip.Http.Request;
 import org.jnetpcap.protocol.tcpip.Http.Response;
 
 
-public abstract class HTTP implements Serializable {
-	
+public abstract class HTTP extends TCP implements Serializable {
+
+	protected Long httpHeaderPointer;
+	protected Long httpDataPointer;
+
+	public Long getHttpDataPointer() {
+		return httpDataPointer;
+	}
+
+	public void setHttpDataPointer(Long httpDataPointer) {
+		this.httpDataPointer = httpDataPointer;
+	}
+
+	public Long getHttpHeaderPointer() {
+		return httpHeaderPointer;
+	}
+
+	public void setHttpHeaderPointer(Long httpHeaderPointer) {
+		this.httpHeaderPointer = httpHeaderPointer;
+	}
+
+
 	public static HTTP build(Http http)  {
 		if (http.getMessageType() == MessageType.REQUEST) {
 			HTTPRequest request = new HTTPRequest();

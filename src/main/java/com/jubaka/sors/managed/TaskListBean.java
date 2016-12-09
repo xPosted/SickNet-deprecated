@@ -1,9 +1,12 @@
 package com.jubaka.sors.managed;
 
 import com.jubaka.sors.beans.branch.BranchInfoBean;
+import com.jubaka.sors.entities.Branch;
 import com.jubaka.sors.serverSide.ConnectionHandler;
-import com.jubaka.sors.serverSide.Node;
+import com.jubaka.sors.serverSide.NodeServerEndpoint;
 import com.jubaka.sors.serverSide.SecurityVisor;
+import com.jubaka.sors.service.BranchService;
+import com.jubaka.sors.service.NodeService;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
@@ -24,22 +27,33 @@ public class TaskListBean {
 
     @Inject
     private LoginBean loginBean;
+
+    @Inject
+    private NodeService nodeService;
+    @Inject
+    private BranchService branchService;
+
     private Set<BranchInfoBean> tasks;
+
+    private List<BranchInfoBean> dbTasks;
     private Integer ownCount =0;
     private Integer liveCount=0;
     private Integer nodesCount;
-    private Integer totalCount;
+    private Integer inMemoryCount=0;
+
+    private Integer databaseCount=0;
 
     @PostConstruct
     public void init() {
+
         tasks = new HashSet<BranchInfoBean>();
         String user = loginBean.getUser().getNickName();
-        SecurityVisor sv = ConnectionHandler.getInstance().getSv();
-        Set<Node> nodes  = sv.getNodes(user);
+
+        List<NodeServerEndpoint> nodeServerEndpoints = nodeService.getConnectedNodeEndPointsByUser();
         ownCount = 0;
         liveCount = 0;
-        nodesCount = nodes.size();
-        for (Node n : nodes) {
+        nodesCount = nodeServerEndpoints.size();
+        for (NodeServerEndpoint n : nodeServerEndpoints) {
             for (BranchInfoBean bib : n.getBranchInfoSet(user)) {
                 tasks.add(bib);
                 System.out.println(bib.getUserName()+" "+user);
@@ -48,13 +62,22 @@ public class TaskListBean {
             }
 
         }
-        totalCount = tasks.size();
+        dbTasks = new ArrayList<>();
+        List<Branch> dbBranchs = branchService.selectByCurrentUser();
+        for (Branch b : dbBranchs) {
+            BranchInfoBean bib = branchService.castToInfoBean(b);
+            dbTasks.add(bib);
+        }
+
+
+        inMemoryCount = tasks.size();
+        databaseCount =  dbTasks.size();
 
     }
 
     public String getTaskType(BranchInfoBean bib) {
         if (bib.getIface() == null) return "Pcap file";
-        else return "Live";
+        else return "Live capture";
     }
 
     public String sizeToStr(double size,Integer afterDot) {
@@ -97,14 +120,28 @@ public class TaskListBean {
         this.nodesCount = nodesCount;
     }
 
-    public Integer getTotalCount() {
-        return totalCount;
+    public Integer getInMemoryCount() {
+        return inMemoryCount;
     }
 
-    public void setTotalCount(Integer totalCount) {
-        this.totalCount = totalCount;
+    public void setInMemoryCount(Integer inMemoryCount) {
+        this.inMemoryCount = inMemoryCount;
     }
 
+    public List<BranchInfoBean> getDbTasks() {
+        return dbTasks;
+    }
 
+    public void setDbTasks(List<BranchInfoBean> dbTasks) {
+        this.dbTasks = dbTasks;
+    }
+
+    public Integer getDatabaseCount() {
+        return databaseCount;
+    }
+
+    public void setDatabaseCount(Integer databaseCount) {
+        this.databaseCount = databaseCount;
+    }
 
 }

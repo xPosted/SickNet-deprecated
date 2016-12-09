@@ -16,7 +16,9 @@ public class IPItemLightBean extends Bean implements Serializable {
     protected Long dataUp = (long) 0;
     protected Date activated = new Date(0);
     protected Integer inputCount=0;
+    protected Integer inputActiveCount=0;
     protected Integer outputCount=0;
+    protected Integer outputActiveCount=0;
     protected Integer activeCount=0;
     protected Integer savedCount=0;
     protected Integer brId=null;
@@ -81,6 +83,26 @@ public class IPItemLightBean extends Bean implements Serializable {
 
     public void setBrId(Integer brId) {
         this.brId = brId;
+    }
+
+    public String toString() {
+        return ip;
+    }
+
+    public Integer getOutputActiveCount() {
+        return outputActiveCount;
+    }
+
+    public void setOutputActiveCount(Integer outputActiveCount) {
+        this.outputActiveCount = outputActiveCount;
+    }
+
+    public Integer getInputActiveCount() {
+        return inputActiveCount;
+    }
+
+    public void setInputActiveCount(Integer inputActiveCount) {
+        this.inputActiveCount = inputActiveCount;
     }
 
 }

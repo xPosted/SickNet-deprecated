@@ -21,6 +21,7 @@ public class SessionDataPanel extends JTabbedPane {
 	
 	public JTextArea txtrSrcData = new JTextArea();
 	public JTextArea txtrDstData = new JTextArea();
+	public JTextArea txtrBothData = new JTextArea();
 	
 	
 	public SessionDataPanel() {
@@ -73,6 +74,11 @@ public class SessionDataPanel extends JTabbedPane {
 		JScrollPane scrollPane_3 = new JScrollPane();
 		scrollPane_3.setViewportView(txtrDstData);
 		tabbedPane_2.addTab("Destionation transmitted", null, scrollPane_3, null);
+
+		JScrollPane scrollPane_4 = new JScrollPane();
+		scrollPane_4.setViewportView(txtrBothData);
+		tabbedPane_2.addTab("ALL", null, scrollPane_4, null);
+
 
 		JPanel panel_27 = new JPanel();
 		sesDataViewPan.add(panel_27);

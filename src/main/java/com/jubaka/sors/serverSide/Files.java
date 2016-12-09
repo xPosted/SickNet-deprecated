@@ -30,21 +30,23 @@ public class Files extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/*
 	
 		String brIdStr = request.getParameter("brID");
 		String path = request.getParameter("path");
-		String nodeName = request.getParameter("node");
+		String nodeName = request.getParameter("nodeServerEndpoint");
 		 if ((brIdStr == null ) || (path == null) || (nodeName == null)) {
 			 return;
 		 }
 		 Integer brId = Integer.parseInt(brIdStr);
-		 Node node = ConnectionHandler.getInstance().getNode(nodeName);
-		 FileListBean flb = node.getDir(brId, path);
+		 NodeServerEndpoint nodeServerEndpoint = ConnectionHandler.getInstance().getNodeServerEndPoint(nodeName);
+		 FileListBean flb = nodeServerEndpoint.getDir(brId, path);
 		 if (flb == null) {
 			 return;
 		 }
 		 request.setAttribute("FileListBean", flb);
 		 request.getRequestDispatcher("Files.jsp").forward(request, response);
+		 */
 	}
 
 	/**

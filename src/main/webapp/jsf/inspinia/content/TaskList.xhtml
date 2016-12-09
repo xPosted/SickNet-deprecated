@@ -225,7 +225,9 @@
                     <div  class="statisticDiv panel-default">
                         <!-- first column  -->
                         <div class="panel panel-default" style="width: 20%; padding: 10px;  float: left;">
-                            Found <span class="badge">#{taskListBean.totalCount}</span> captures on <span class="badge"> #{taskListBean.nodesCount}</span> Nodes
+                            Found <span class="badge">#{taskListBean.inMemoryCount}</span> captures on <span class="badge"> #{taskListBean.nodesCount}</span> Nodes
+                            <br/>
+                            <span class="badge">#{taskListBean.databaseCount}</span> captures on <span class="badge"> Database </span> Nodes
                         </div>
 
                         <!-- second column  -->
@@ -245,7 +247,7 @@
 
                     </div>
 
-                    <div class="mainTableDiv">
+                    <div class="mainTableDiv table table-hover">
                         <div>
                             <table 	style="width: 100%;" class="table-hover">
                                 <caption> Processing data info </caption>
@@ -253,10 +255,11 @@
                                 <tr>
                                     <th> Name</th>
                                     <th> Location</th>
-                                    <th> Status</th>
+                                    <th> Type</th>
+                                    <th> Net/Host/Session</th>
                                     <th> Size</th>
-                                    <th> Action</th>
                                     <th> Init Date</th>
+                                    <th> Action</th>
                                 </tr>
                                 </thead>
                                 <tbody class="full-width">
@@ -266,14 +269,68 @@
                                     <th> <a href="app/jsf/inspinia/content/AppView.xhtml?nodeId=#{bib.nodeId}&amp;taskId=#{bib.id}"> #{bib.branchName} </a> </th>
                                     <th> <a href="NodeView?nodeName=capricornus@Sors_production"></a> #{bib.nodeName}</th>
                                     <th> #{taskListBean.getTaskType(bib)} </th>
-
+                                    <th> #{bib.subnetCount}/#{bib.hostsCount}/#{bib.sessionsCount}</th>
                                     <th> #{taskListBean.sizeToStr(bib.uploadSize,2)}</th>
 
-                                    <th> <input type="button" value="Stop/Delete"/> </th>
                                     <th> #{bib.getTime()} </th>
-
+                                    <th>
+                                        <span style="font-size: 25px;">
+                                            <a> <i class="fa fa-area-chart"></i></a>
+                                            <a> <i class="fa fa-gear"></i></a>
+                                        </span>
+                                    </th>
 
                                 </tr>
+                                </ui:repeat>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <div style="background-color: #ffffff; text-align: center; font-family: 'open sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; font-size: 25px; height: 45px; padding: 10px 0px 10px 0px; "> <span> Database results </span> </div>
+                    <div class="mainTableDiv table table-hover">
+                        <div>
+                            <table 	style="width: 100%;" class="table-hover">
+                                <caption> Processing data info </caption>
+                                <thead>
+                                <tr>
+                                    <th> Name</th>
+                                    <th> Type</th>
+                                    <th> Net/Host/Session</th>
+                                   <!-- <th> Owner</th>  -->
+                                    <th> Node</th>
+                                    <th> Size</th>
+                                    <th> Init Date</th>
+                                    <th> Action</th>
+
+                                </tr>
+                                </thead>
+                                <tbody class="full-width">
+                                <ui:repeat value="#{taskListBean.dbTasks}" var="bib">
+                                    <tr>
+
+                                        <th> <a href="app/jsf/inspinia/content/AppView.xhtml?dbtaskId=#{bib.dbid}"> #{bib.branchName} </a> </th>
+
+                                        <th> #{taskListBean.getTaskType(bib)} </th>
+                                        <th> #{bib.subnetCount}/#{bib.hostsCount}/#{bib.sessionsCount}</th>
+                                     <!--   <th> #{bib.userName}</th>  -->
+                                        <th> #{bib.nodeName}</th>
+                                        <th> #{taskListBean.sizeToStr(bib.uploadSize,2)}</th>
+
+                                        <th> #{bib.getTime()} </th>
+
+                                        <th>
+                                           <span style="font-size: 25px;">
+                                            <a> <i class="fa fa-area-chart"></i></a>
+                                            <a> <i class="fa fa-gear"></i></a>
+                                        </span>
+
+                                        </th>
+
+                                    </tr>
                                 </ui:repeat>
 
 

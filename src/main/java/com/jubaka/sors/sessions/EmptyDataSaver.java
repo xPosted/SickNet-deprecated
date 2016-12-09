@@ -1,6 +1,8 @@
 package com.jubaka.sors.sessions;
 
+import java.io.File;
 import java.io.InputStream;
+import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.util.NoSuchElementException;
 import java.util.TreeMap;
@@ -67,15 +69,15 @@ public class EmptyDataSaver implements Serializable,DataSaver {
 	}
 
 	@Override
-	public void putData(byte[] databuf, boolean bySrc,long time) {
-		if (bySrc) {
-			incrementSrcData(databuf.length,time);
-			
-		} else {
-			incrementDstData(databuf.length,time);
-			
-		}
+	public Long putSrcData(byte[] databuf, long time) {
+		incrementSrcData(databuf.length,time);
+		return null;
+	}
 
+	@Override
+	public Long putDstData(byte[] databuf, long time) {
+		incrementDstData(databuf.length,time);
+		return null;
 	}
 
 
@@ -124,6 +126,26 @@ public class EmptyDataSaver implements Serializable,DataSaver {
 	}
 
 	@Override
+	public String getSrcDataFilePath() {
+		return null;
+	}
+
+	@Override
+	public String getDstDataFilePath() {
+		return null;
+	}
+
+	@Override
+	public File getSrcDataFile() {
+		return null;
+	}
+
+	@Override
+	public File getDstDataFile() {
+		return null;
+	}
+
+	@Override
 	public InputStream getSrcDataAsStream() {
 		// TODO Auto-generated method stub
 		return null;
@@ -135,18 +157,6 @@ public class EmptyDataSaver implements Serializable,DataSaver {
 		return null;
 	}
 
-	@Override
-	public String getSrcDataAsFile() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getDstDataAsFile() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	
 
 }

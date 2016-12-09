@@ -33,6 +33,7 @@ public class Auth extends HttpServlet {
 
 	private void handle(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		/*
 		
 		System.out.println("sesID="+request.getSession().getId());
 		String signout = (String) request.getParameter("signout");
@@ -49,6 +50,8 @@ public class Auth extends HttpServlet {
 			request.getSession().setAttribute("user", user);
 			request.getRequestDispatcher("sors.xhtml").forward(request, response);
 		}
+
+		*/
 		
 
 	}

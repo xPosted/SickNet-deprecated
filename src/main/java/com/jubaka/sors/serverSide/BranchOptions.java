@@ -32,23 +32,24 @@ public class BranchOptions extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/*
 		String currentUser = (String) request.getSession().getAttribute("user");
 		String obj = request.getParameter("object");
 		String action = request.getParameter("action");
 		Integer brId = Integer.parseInt(request.getParameter("branchId"));
 		String nodeName = request.getParameter("nodeName");
-		Node node = ConnectionHandler.getInstance().getNode(nodeName);
+		NodeServerEndpoint nodeServerEndpoint = ConnectionHandler.getInstance().getNodeServerEndPoint(nodeName);
 		
 		
 		
 		if (action!=null) {
 			switch (action) {
 			case "start":
-				node.startBranch(brId);
+				nodeServerEndpoint.startBranch(brId);
 				break;
 
 			case "stop":
-				node.stopBranch(brId);
+				nodeServerEndpoint.stopBranch(brId);
 			
 				break;
 			case "delData":
@@ -64,13 +65,13 @@ public class BranchOptions extends HttpServlet {
 			String in = request.getParameter("inP");
 			String out = request.getParameter("outP");
 			if ((in!=null) & (out!=null)) {
-				boolean res = node.setCapture(brId, obj, in, out);
+				boolean res = nodeServerEndpoint.setCapture(brId, obj, in, out);
 				if (res) response.getWriter().println("success"); else 
 					response.getWriter().println("error");
 				return;
 			}
 			
-			SesDataCapBean sdc = node.getSesDataCaptureInfo(obj, brId);
+			SesDataCapBean sdc = nodeServerEndpoint.getSesDataCaptureInfo(obj, brId);
 			if (sdc.getObject().equals("capture_not_set")) {
 				response.getWriter().println("capture_not_set");
 				return;
@@ -84,15 +85,15 @@ public class BranchOptions extends HttpServlet {
 			
 			
 		}
-		InfoBean ib = node.getInfo();
-		BranchInfoBean bib = node.getBranchInfo(currentUser, brId);
-		SubnetBeanList sbl = node.getSubnetBeanList(brId);
+		InfoBean ib = nodeServerEndpoint.getInfo();
+		BranchInfoBean bib = nodeServerEndpoint.getBranchInfo(currentUser, brId);
+		SubnetBeanList sbl = nodeServerEndpoint.getSubnetBeanList(brId);
 		
 		request.setAttribute("bib", bib);
 		request.setAttribute("ib", ib);
 		request.setAttribute("sbl", sbl);
 		request.getRequestDispatcher("BranchOptions.jsp").forward(request, response);
-		
+		*/
 	}
 
 	/**

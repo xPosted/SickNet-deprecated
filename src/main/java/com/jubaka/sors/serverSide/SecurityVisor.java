@@ -9,10 +9,11 @@ import java.util.Random;
 import java.util.Set;
 
 public class SecurityVisor {
+	/*
 	private HashMap<String, HashSet<String>> userNodeMap = new HashMap<String, HashSet<String>>(); 
 	
-	public  void handleNewNode(Node n) {  // add db unid exist check
-		/*
+	public  void handleNewNode(NodeServerEndpoint n) {  // add db unid exist check
+
 		DBManager dbm = ConnectionHandler.getDbManager();
 		boolean exist = true;
 		Long unid = n.getUnid();
@@ -24,7 +25,7 @@ public class SecurityVisor {
 			n.updateUnid(unid);
 			dbm.addNewNode(n);
 		}
-		*/
+
 
 
 		//  temporary unid procesing
@@ -34,6 +35,7 @@ public class SecurityVisor {
 				n.updateUnid(unid);
 
 		}
+
 
 
 		SecPolicyBean scb = n.getSecPolicyBean();
@@ -62,21 +64,22 @@ public class SecurityVisor {
 		return true;
 	}
 	
-	public Set<Node> getPublicNodes() {
+	public Set<NodeServerEndpoint> getPublicNodes() {
 		return getNodes("*");
 	}
 	
-	public Set<Node> getNodes(String userName) {
-		HashSet<Node> nodes = new HashSet<Node>();
-		if (userNodeMap.get(userName)==null) return nodes;
+	public Set<NodeServerEndpoint> getNodes(String userName) {
+		HashSet<NodeServerEndpoint> nodeServerEndpoints = new HashSet<NodeServerEndpoint>();
+		if (userNodeMap.get(userName)==null) return nodeServerEndpoints;
 		ConnectionHandler ch = ConnectionHandler.getInstance();
 		for (String n : userNodeMap.get(userName)) {
-			Node node = ch.getNode(n);
-			if (node!=null)
-			nodes.add(node);
+			NodeServerEndpoint nodeServerEndpoint = ch.getNode(n);
+			if (nodeServerEndpoint !=null)
+			nodeServerEndpoints.add(nodeServerEndpoint);
 		}
-		return nodes;
+		return nodeServerEndpoints;
 		
 	}
+	*/
 
 }

@@ -5,6 +5,7 @@ import com.jubaka.sors.entities.User;
 import java.util.HashMap;
 
 public class UserBase {
+	/*
 	private static UserBase inst=null;
 	private HashMap<String, User> userBase =new  HashMap<String, User>();
 	private UserBase() {
@@ -36,5 +37,6 @@ public class UserBase {
 		return uObj;
 		
 	}
+	*/
 
 }

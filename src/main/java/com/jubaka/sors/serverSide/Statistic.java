@@ -33,22 +33,23 @@ public class Statistic extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/*
 
 		String idStr = request.getParameter("branchId");
 		String nodeName = request.getParameter("nodeName");
 		String chartType = request.getParameter("type");
 		String curUser = (String) request.getSession().getAttribute("user");
 		Integer brId = Integer.valueOf(idStr);
-		Node node = ConnectionHandler.getInstance().getNode(nodeName);
-		InfoBean ib = node.getInfo();
-		BranchInfoBean bib = node.getBranchInfo(curUser, brId);
+		NodeServerEndpoint nodeServerEndpoint = ConnectionHandler.getInstance().getNodeServerEndPoint(nodeName);
+		InfoBean ib = nodeServerEndpoint.getInfo();
+		BranchInfoBean bib = nodeServerEndpoint.getBranchInfo(curUser, brId);
 		
 		if (chartType.equals("global")) {
 			
 			
-			TimeSeries tsIn = node.getDataInChart(brId);
-			TimeSeries tsdOut = node.getDataOutChart(brId,(long)-1,(long)-1);
-			DefaultTableModel model = (DefaultTableModel) node.getBaseTModel(brId);
+			TimeSeries tsIn = nodeServerEndpoint.getDataInChart(brId);
+			TimeSeries tsdOut = nodeServerEndpoint.getDataOutChart(brId,(long)-1,(long)-1);
+			DefaultTableModel model = (DefaultTableModel) nodeServerEndpoint.getBaseTModel(brId);
 			request.setAttribute("tsIn", tsIn);
 			request.setAttribute("tsOut", tsdOut);
 			request.setAttribute("TableModel", model);
@@ -58,9 +59,9 @@ public class Statistic extends HttpServlet {
 			
 			String networkStr = request.getParameter("net");
 			
-			TimeSeries tsIn = node.getNetworkDataInChart(brId, networkStr,(long)-1,(long)-1);
-			TimeSeries tsdOut = node.getNetworkDataOutChart(brId, networkStr);
-			DefaultTableModel model = (DefaultTableModel) node.getSubnetTModel(brId, networkStr);
+			TimeSeries tsIn = nodeServerEndpoint.getNetworkDataInChart(brId, networkStr,(long)-1,(long)-1);
+			TimeSeries tsdOut = nodeServerEndpoint.getNetworkDataOutChart(brId, networkStr);
+			DefaultTableModel model = (DefaultTableModel) nodeServerEndpoint.getSubnetTModel(brId, networkStr);
 			request.setAttribute("tsIn", tsIn);
 			request.setAttribute("tsOut", tsdOut);
 			request.setAttribute("TableModel", model);
@@ -70,9 +71,9 @@ public class Statistic extends HttpServlet {
 			
 			String ip = request.getParameter("ip");
 			
-			TimeSeries tsIn = node.getIpDataInChart(brId, ip);
-			TimeSeries tsdOut = node.getIpDataOutChart(brId, ip);
-			DefaultTableModel model = (DefaultTableModel) node.getIpTModel(brId, ip);
+			TimeSeries tsIn = nodeServerEndpoint.getIpDataInChart(brId, ip);
+			TimeSeries tsdOut = nodeServerEndpoint.getIpDataOutChart(brId, ip);
+			DefaultTableModel model = (DefaultTableModel) nodeServerEndpoint.getIpTModel(brId, ip);
 			request.setAttribute("tsIn", tsIn);
 			request.setAttribute("tsOut", tsdOut);
 			request.setAttribute("TableModel", model);
@@ -84,7 +85,7 @@ public class Statistic extends HttpServlet {
 		
 		request.getRequestDispatcher("Statistic.jsp").forward(request, response);
 		
-		
+		*/
 		
 	}
 

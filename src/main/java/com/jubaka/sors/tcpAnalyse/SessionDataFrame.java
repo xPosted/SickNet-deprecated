@@ -13,6 +13,7 @@ public class SessionDataFrame extends JFrame {
 	private JPanel contentPane;
 	public JTextArea txtrSrcData;
 	public JTextArea txtrDstData;
+	public JTextArea txtrBothData;
 
 	/**
 	 * Launch the application.
@@ -45,6 +46,7 @@ public class SessionDataFrame extends JFrame {
 		contentPane.add(sdp, BorderLayout.CENTER);
 		this.txtrDstData = sdp.txtrDstData;
 		this.txtrSrcData = sdp.txtrSrcData;
+		this.txtrBothData = sdp.txtrBothData;
 	}
 
 }

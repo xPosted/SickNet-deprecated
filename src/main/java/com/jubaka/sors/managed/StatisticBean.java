@@ -1,8 +1,13 @@
 package com.jubaka.sors.managed;
 
+import com.jubaka.sors.beans.branch.BranchBean;
+import com.jubaka.sors.beans.branch.IPItemBean;
+import com.jubaka.sors.beans.branch.SubnetBean;
+import com.jubaka.sors.entities.Branch;
 import com.jubaka.sors.serverSide.ConnectionHandler;
-import com.jubaka.sors.serverSide.Node;
-import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset;
+import com.jubaka.sors.serverSide.NodeServerEndpoint;
+import com.jubaka.sors.serverSide.StatisticLogic;
+import com.jubaka.sors.service.BranchService;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.TimeSeries;
 
@@ -24,11 +29,19 @@ import java.util.Map;
 @RequestScoped
 public class StatisticBean {
 
+    @Inject
+    private ConnectionHandler ch;
+    @Inject
+    private BranchService branchService;
+
     private String nodeIdStr = null;
 
     private String taskIdStr = null;
     private String subnet = null;
     private String ipStr = null;
+
+
+    private String dbidStr = null;
 
     private String chartDataStr = "";
     private String humanValues = "";
@@ -45,26 +58,33 @@ public class StatisticBean {
     public void init() {
         Long nodeId = null;
         Integer taskId = null;
-        Node node = null;
+        NodeServerEndpoint nodeServerEndpoint = null;
 
         ExternalContext externalContext =  FacesContext.getCurrentInstance().getExternalContext();
         Map<String,String> params = externalContext.getRequestParameterMap();
-        if (params.get("nodeId")!=null) nodeIdStr = params.get("nodeId");
-        if (params.get("taskId")!=null) taskIdStr = params.get("taskId");
-        if (params.get("net")!=null)    subnet = params.get("net");
+        nodeIdStr = params.get("nodeId");
+        taskIdStr = params.get("taskId");
+        dbidStr = params.get("dbid");
+        subnet = params.get("net");
         ipStr = params.get("host");
 
 
+        if (dbidStr != null) {
+            Long dbId = Long.parseLong(dbidStr);
+            readStatFromDB(dbId);
+            return;
+        }
+
         if (nodeIdStr != null) {
             nodeId = Long.parseLong(nodeIdStr);
-            node = ConnectionHandler.getInstance().getNode(nodeId);
+            nodeServerEndpoint = ch.getNodeServerEndPoint(nodeId);
 
         }
         if (ipStr!=null & taskIdStr!=null) {
             taskId = Integer.parseInt(taskIdStr);
-            TimeSeries tsOut = node.getIpDataOutChart(taskId,ipStr);
+            TimeSeries tsOut = nodeServerEndpoint.getIpDataOutChart(taskId,ipStr);
 
-            DefaultTableModel model = node.getIpTModel(taskId,ipStr);
+            DefaultTableModel model = nodeServerEndpoint.getIpTModel(taskId,ipStr);
 
             handleTableModel(model);
             handleTimeSeries(tsOut);
@@ -74,9 +94,9 @@ public class StatisticBean {
         }
         if (subnet != null & taskIdStr != null) {
             taskId = Integer.parseInt(taskIdStr);
-            TimeSeries tsOut = node.getNetworkDataOutChart(taskId,subnet);
+            TimeSeries tsOut = nodeServerEndpoint.getNetworkDataOutChart(taskId,subnet);
 
-            DefaultTableModel model = node.getSubnetTModel(taskId,subnet);
+            DefaultTableModel model = nodeServerEndpoint.getSubnetTModel(taskId,subnet);
 
             handleTableModel(model);
             handleTimeSeries(tsOut);
@@ -84,11 +104,11 @@ public class StatisticBean {
 
             return;
         }
-        if (node!=null & taskIdStr != null) {
+        if (nodeServerEndpoint !=null & taskIdStr != null) {
             taskId = Integer.parseInt(taskIdStr);
-            TimeSeries tsOut = node.getDataOutChart(taskId,(long)-1,(long)-1);
+            TimeSeries tsOut = nodeServerEndpoint.getDataOutChart(taskId,(long)-1,(long)-1);
 
-            DefaultTableModel model = node.getBaseTModel(taskId);
+            DefaultTableModel model = nodeServerEndpoint.getBaseTModel(taskId);
 
             handleTableModel(model);
             handleTimeSeries(tsOut);
@@ -96,6 +116,38 @@ public class StatisticBean {
             return;
         }
         return;
+    }
+
+    private void readStatFromDB(Long brId) {
+        Branch b = branchService.selectById(brId);
+        BranchBean bb = branchService.castToBean(b);
+        DefaultTableModel model = null;
+        TimeSeries ts = null;
+
+        if (ipStr != null) {
+            IPItemBean ipBean =  bb.getIPbyName(ipStr);
+            model = StatisticLogic.getIPTableModel(ipBean);
+            ts = StatisticLogic.createIpDataOutSeries(null,ipBean,null,null);
+            subView = "host";
+        } else
+
+        if (subnet != null) {
+            SubnetBean sb = bb.getSubnetByName(subnet);
+            model = StatisticLogic.getNetTableModel(sb);
+            ts = StatisticLogic.createNetworkDataOutSeries(null,sb,null,null);
+            subView = "host";
+        } else {
+            model = StatisticLogic.getBaseTableModel(bb);
+            ts = StatisticLogic.createDataOutSeries(bb,null,null);
+            subView = "net";
+        }
+
+
+        handleTableModel(model);
+        handleTimeSeries(ts);
+
+
+
     }
 
     private void handleTimeSeries(TimeSeries ts) {
@@ -181,5 +233,19 @@ public class StatisticBean {
     public void setSubView(String subView) {
         this.subView = subView;
     }
+
+    public boolean isDbManaged() {
+        if (dbidStr != null) return true;
+        return false;
+    }
+
+    public String getDbidStr() {
+        return dbidStr;
+    }
+
+    public void setDbidStr(String dbidStr) {
+        this.dbidStr = dbidStr;
+    }
+
 
 }

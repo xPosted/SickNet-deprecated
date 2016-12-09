@@ -67,7 +67,7 @@ public class GeneralSettingsPanel extends JPanel {
 		panel.add(panel_1);
 		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
 		
-		JLabel lblNewLabel = new JLabel("Node status");
+		JLabel lblNewLabel = new JLabel("NodeServerEndpoint status");
 		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 16));
 		panel_1.add(lblNewLabel);
 		

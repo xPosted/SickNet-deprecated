@@ -31,19 +31,20 @@ public class GetSessionData extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/*
 		String direction = request.getParameter("direction");
 		if (direction==null) return;
 		String nodeName = request.getParameter("nodeName");
 		if (nodeName==null) return;
 		Integer brId = Integer.parseInt(request.getParameter("branchId"));
 		if (brId==null) return;
-		Node node = ConnectionHandler.getInstance().getNode(nodeName);
-		if (node==null) return;
+		NodeServerEndpoint nodeServerEndpoint = ConnectionHandler.getInstance().getNodeServerEndPoint(nodeName);
+		if (nodeServerEndpoint ==null) return;
 		String net = request.getParameter("subnet");
 		if (net==null) return;
 		Long tm = Long.parseLong(request.getParameter("sessionID"));
 		if (tm==null) return;
-		SessionDataBean sdb = node.getSessionData(brId, net, tm);
+		SessionDataBean sdb = nodeServerEndpoint.getSessionData(brId, net, tm);
 		
 		byte[] targetData = null;
 		if (direction.equals("src")) {
@@ -60,6 +61,7 @@ public class GetSessionData extends HttpServlet {
 		while (scan.hasNext()) {
 			response.getWriter().println("<p>"+scan.nextLine()+"</p>");
 		}
+		*/
 	}
 
 	/**

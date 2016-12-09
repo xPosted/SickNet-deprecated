@@ -10,9 +10,7 @@ import com.jubaka.sors.sessions.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by root on 30.08.16.
@@ -43,6 +41,8 @@ public class BeanConstructor {
         SessionBean sb = new SessionBean();
         sb = (SessionBean) prepareSessionLightBean(ses,sb);
 
+        sb.setSrcDataTimeBinding(ses.getDataSaver().getSrcTimeBinding());
+        sb.setDstDataTimeBinding(ses.getDataSaver().getDstTimeBinding());
         sb.setHttpBuf(ses.getHTTPList());
         return sb;
     }
@@ -61,6 +61,8 @@ public class BeanConstructor {
         bean.setDataUp(ipaddr.getDataUp());
         bean.setInputCount(ipaddr.getInSessionCount());
         bean.setOutputCount(ipaddr.getOutSessionCount());
+        bean.setInputActiveCount(ipaddr.getInputActiveCount());
+        bean.setOutputActiveCount(ipaddr.getOutputActiveCount());
         bean.setSavedCount(ipaddr.getSavedSesCount());
         bean.setBrId(brId);
         return bean;
@@ -141,6 +143,10 @@ public class BeanConstructor {
         sb.setAddrCnt(net.getIps().size());
         sb.setActiveSesCnt(net.getLiveSesCount());
         sb.setSesCnt(net.getSesCount());
+        sb.setActiveInSesCnt(net.getInputActiveSesCount());
+        sb.setActiveOutSesCnt(net.getOutputActiveSesCount());
+        sb.setInSesCnt(net.getInputSesCount());
+        sb.setOutSesCnt(net.getOutputSesCount());
 
         HashSet<IPItemLightBean> ipBeans = new HashSet<IPItemLightBean>();
         HashSet<IPItemLightBean> liveIpBeans = new HashSet<IPItemLightBean>();
@@ -234,7 +240,7 @@ public class BeanConstructor {
         SessionsAPI sApi = ClassFactory.getInstance().getSesionInstance(id);
         BranchBean bb = new BranchBean();
         bb.setBib(prepareBranchInfoBean(br));
-        HashSet<SubnetBean> netBeanSet = new HashSet<SubnetBean>();
+        List<SubnetBean> netBeanSet = new ArrayList<>();
         for (Subnet net : sApi.getAllSubnets()) {
             netBeanSet.add(prepareSubnetBean(id, net));
         }
@@ -247,7 +253,7 @@ public class BeanConstructor {
         SessionsAPI sApi = ClassFactory.getInstance().getSesionInstance(id);
         BranchLightBean bb = new BranchLightBean();
         bb.setBib(prepareBranchInfoBean(br));
-        HashSet<SubnetLightBean> netBeanSet = new HashSet<SubnetLightBean>();
+        List<SubnetLightBean> netBeanSet = new ArrayList<>();
         for (Subnet net : sApi.getAllSubnets()) {
             netBeanSet.add(prepareSubnetLightBean(net,null));
         }
@@ -264,8 +270,8 @@ public class BeanConstructor {
         SubnetBean sb = new SubnetBean();
         sb = (SubnetBean) prepareSubnetLightBean(net, sb);
 
-        HashSet<IPItemBean> ipBeans = new HashSet<IPItemBean>();
-        HashSet<IPItemBean> liveIpBeans = new HashSet<IPItemBean>();
+        List<IPItemBean> ipBeans = new ArrayList<>();
+        List<IPItemBean> liveIpBeans = new ArrayList<>();
         for (IPaddr ip : net.getIps()) {
             ipBeans.add(prepareIpBean(id, ip));
         }
@@ -391,6 +397,9 @@ public class BeanConstructor {
     }
 
     public BranchInfoBean prepareBranchInfoBean(Branch br) {
+
+        SessionsAPI sApi = ClassFactory.getInstance().getSesionInstance(br.getId());
+
         BranchInfoBean bib = new BranchInfoBean();
         bib.setId(br.getId());
         bib.setFileName(br.getFileName());
@@ -403,6 +412,9 @@ public class BeanConstructor {
         bib.setNodeName("capricornus@" + LoadInfo.getNodeName());
         bib.setBranchName(br.getName());
         bib.setState(br.getState());
+        bib.setSubnetCount(sApi.getSubnetCount());
+        bib.setHostsCount(sApi.getIPsCount());
+        bib.setSessionsCount(sApi.getSessionsCount());
         return bib;
     }
 

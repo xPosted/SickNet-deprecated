@@ -44,6 +44,7 @@ public class CreateBranch extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		/*
 		System.out.println("UploadBLABLA");
 		if (request.getPart("pathToFile") != null) {
 			long sz = request.getPart("pathToFile").getSize();
@@ -83,7 +84,7 @@ public class CreateBranch extends HttpServlet {
 				fout.close();
 				String userName = (String) request.getSession().getAttribute("user");
 				response.getWriter().println("<h1>" + "Branch created on "+request.getParameter("nodeName")+" by "+userName + "</h1>");
-				Node n = ConnectionHandler.getInstance().getNode(request.getParameter("nodeName"));
+				NodeServerEndpoint n = ConnectionHandler.getInstance().getNodeServerEndPoint(request.getParameter("nodeName"));
 				
 				n.createBranch(f.getAbsolutePath(),userName , fileName, bname);
 				
@@ -95,12 +96,12 @@ public class CreateBranch extends HttpServlet {
 			if (bname==null) bname="Unnamed";
 			String userName = (String) request.getSession().getAttribute("user");
 			response.getWriter().println("<h1>" + "Branch created on "+request.getParameter("nodeName")+" by "+userName + "</h1>");
-			Node n = ConnectionHandler.getInstance().getNode(request.getParameter("nodeName"));
+			NodeServerEndpoint n = ConnectionHandler.getInstance().getNodeServerEndPoint(request.getParameter("nodeName"));
 			
 			n.createLiveBranch(iface,userName , bname,request.getRemoteAddr());
 			
 		}
 		
-
+*/
 	}
 }

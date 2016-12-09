@@ -96,7 +96,7 @@ declare function json:escape($s as xs:string) as xs:string {
 };
 
 declare function json:atomize($x as element()) as xs:string {
-  if (count($x/node()) = 0) then 'null'
+  if (count($x/nodeServerEndpoint()) = 0) then 'null'
   else if ($x/@type = &quot;number&quot;) then
     let $castable := $x castable as xs:float or
                      $x castable as xs:double or
@@ -117,7 +117,7 @@ declare function json:print-value($x as element()) as xs:string {
   if (count($x/*) = 0) then
     json:atomize($x)
   else if ($x/@quote = &quot;true&quot;) then
-    concat('&quot;', json:escape(xdmp:quote($x/node())), '&quot;')
+    concat('&quot;', json:escape(xdmp:quote($x/nodeServerEndpoint())), '&quot;')
   else
     string-join(('{',
       string-join(for $i in $x/* return json:print-name-value($i), &quot;,&quot;),
@@ -169,16 +169,16 @@ declare function json:print-name-value($x as element()) as xs:string? {
   Namespace URIs are ignored.  Namespace prefixes are included in the JSON name.
   &lt;p/&gt;
   Attributes are ignored, except for the special attribute @array=&quot;true&quot; that
-  indicates the JSON serialization should write the node, even if single, as an
+  indicates the JSON serialization should write the nodeServerEndpoint, even if single, as an
   array, and the attribute @type that can be set to &quot;boolean&quot; or &quot;number&quot; to
   dictate the value should be written as that type (unquoted).  There's also
   an @quote attribute that when set to true writes the inner content as text
   rather than as structured JSON, useful for sending some XHTML over the
   wire.
   &lt;p/&gt;
-  Text nodes within mixed content are ignored.
+  Text nodeServerEndpoints within mixed content are ignored.
 
-  @param $x Element node to convert
+  @param $x Element nodeServerEndpoint to convert
   @return String holding JSON serialized representation of $x
 
   @author Jason Hunter

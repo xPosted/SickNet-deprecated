@@ -84,7 +84,7 @@ setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		Component horizontalGlue = Box.createHorizontalGlue();
 		panel_1.add(horizontalGlue);
 		
-		JLabel lblNewLabel = new JLabel("Node Name");
+		JLabel lblNewLabel = new JLabel("NodeServerEndpoint Name");
 		panel_1.add(lblNewLabel);
 		
 		Component horizontalGlue_1 = Box.createHorizontalGlue();
@@ -120,7 +120,7 @@ setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		Component horizontalGlue_4 = Box.createHorizontalGlue();
 		panel_4.add(horizontalGlue_4);
 		
-		JLabel lblNewLabel_1 = new JLabel("Node description");
+		JLabel lblNewLabel_1 = new JLabel("NodeServerEndpoint description");
 		panel_4.add(lblNewLabel_1);
 		
 		Component horizontalGlue_5 = Box.createHorizontalGlue();

@@ -7,6 +7,7 @@ import java.util.Date;
 
 public class BranchInfoBean extends Bean implements Serializable {
 	private Integer id;
+	private Long dbid = null;
 	private Long nodeId;
 	private String nodeName;
 	private String branchName;
@@ -19,6 +20,9 @@ public class BranchInfoBean extends Bean implements Serializable {
 	private Date time;
 	private String desc="SORS branch description";
 	private int state= 0;
+	private Integer subnetCount =0;
+	private Integer hostsCount = 0;
+	private Integer sessionsCount =0;
 
 	
 	public Integer getId() {
@@ -100,6 +104,37 @@ public class BranchInfoBean extends Bean implements Serializable {
 
 	public void setNodeId(Long nodeId) {
 		this.nodeId = nodeId;
+	}
+	public Long getDbid() {
+		return dbid;
+	}
+
+	public void setDbid(Long dbid) {
+		this.dbid = dbid;
+	}
+
+	public Integer getHostsCount() {
+		return hostsCount;
+	}
+
+	public void setHostsCount(Integer hostsCount) {
+		this.hostsCount = hostsCount;
+	}
+
+	public Integer getSessionsCount() {
+		return sessionsCount;
+	}
+
+	public void setSessionsCount(Integer sessionsCount) {
+		this.sessionsCount = sessionsCount;
+	}
+
+	public Integer getSubnetCount() {
+		return subnetCount;
+	}
+
+	public void setSubnetCount(Integer subnetCount) {
+		this.subnetCount = subnetCount;
 	}
 
 

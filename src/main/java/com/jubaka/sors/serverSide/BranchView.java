@@ -33,6 +33,7 @@ public class BranchView extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/*
 		try {
 			Map<String, String[]> params;
 		if (request.getParameterMap().size() == 0)
@@ -41,8 +42,8 @@ public class BranchView extends HttpServlet {
 		String nodeName = params.get("nodeName")[0];
 			if (params.containsKey("branchId")) {
 				Integer brId = Integer.parseInt(params.get("branchId")[0]);
-				Node node = ConnectionHandler.getInstance().getNode(nodeName);
-				BranchBean bb = node.getBranch(brId);
+				NodeServerEndpoint nodeServerEndpoint = ConnectionHandler.getInstance().getNodeServerEndPoint(nodeName);
+				BranchBean bb = nodeServerEndpoint.getBranch(brId);
 				request.setAttribute("branchBean", bb);
 				if (params.containsKey("subnet")) {
 					InetAddress netAddr = InetAddress.getByName(params.get("subnet")[0]);
@@ -60,6 +61,7 @@ public class BranchView extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 
 	/**

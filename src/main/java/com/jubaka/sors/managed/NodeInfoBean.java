@@ -5,17 +5,15 @@ import com.jubaka.sors.beans.SecPolicy;
 import com.jubaka.sors.beans.SecPolicyBean;
 import com.jubaka.sors.beans.branch.BranchStatBean;
 import com.jubaka.sors.serverSide.ConnectionHandler;
-import com.jubaka.sors.serverSide.Node;
+import com.jubaka.sors.serverSide.NodeServerEndpoint;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.sql.Connection;
 import java.util.Map;
 
 /**
@@ -25,10 +23,11 @@ import java.util.Map;
 @RequestScoped
 public class NodeInfoBean implements Serializable   {
 
-
+    @Inject
+    private ConnectionHandler ch;
     @Inject
     private LoginBean loginBean;
-    private Node node;
+    private NodeServerEndpoint nodeServerEndpoint;
     private InfoBean infoBean;
     private SecPolicyBean securityBean;
     private SecPolicy userSecurityBean;
@@ -41,12 +40,12 @@ public class NodeInfoBean implements Serializable   {
         Map<String, String> parameterMap = (Map<String, String>) externalContext.getRequestParameterMap();
         String nodeIDStr =  parameterMap.get("nodeId");
         Long nodeID = Long.parseLong(nodeIDStr);
-        node = ConnectionHandler.getInstance().getNode(nodeID);
-        infoBean = node.getInfo();
-        securityBean = node.getSecPolicyBean();
+        nodeServerEndpoint = ch.getNodeServerEndPoint(nodeID);
+        infoBean = nodeServerEndpoint.getInfo();
+        securityBean = nodeServerEndpoint.getSecPolicyBean();
         userSecurityBean = securityBean.getUserPolicy().get(userNick);
-        nodeUserBranchStat = node.getBranchStat(userNick);
-        /// node = magic;
+        nodeUserBranchStat = nodeServerEndpoint.getBranchStat(userNick);
+        /// nodeServerEndpoint = magic;
         //  infoBean = magic;
     }
 

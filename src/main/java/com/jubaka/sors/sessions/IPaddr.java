@@ -26,7 +26,10 @@ public class IPaddr extends Observable implements Serializable, CustomObserver {
 	private Long dataDown = (long) 0;
 	private Long dataUp = (long) 0;
 	private Date activated = new Date();
+
+	private Integer inputActiveCount=0;
 	private Integer inputCount=0;
+	private Integer outputActiveCount=0;
 	private Integer outputCount=0;
 	private Integer activeCount=0;
 	private Integer savedCount=0;
@@ -396,20 +399,30 @@ public class IPaddr extends Observable implements Serializable, CustomObserver {
 	public synchronized Integer getOutSessionCount() {
 		return outputCount;
 	}
-	
-	
+
+	public Integer getInputActiveCount() {
+		return inputActiveCount;
+	}
+
+	public void setInputActiveCount(Integer inputActiveCount) {
+		this.inputActiveCount = inputActiveCount;
+	}
+
+	public Integer getOutputActiveCount() {
+		return outputActiveCount;
+	}
+
+	public void setOutputActiveCount(Integer outputActiveCount) {
+		this.outputActiveCount = outputActiveCount;
+	}
+
+
+
 	public void  sessionClose(Session s) {
 		net.onCloseConnection(s);
 		net.onCloseConnection(s);
 		activeCount--;
 		savedCount++;
-	/*	if (s.getSrcIP()==this) {
-			
-			closeOutputSes=s;
-		} else {
-			closeInputSes=s;
-		}
-		*/
 		setChanged();
 		notifyObservers(s);
 		
@@ -419,9 +432,9 @@ public class IPaddr extends Observable implements Serializable, CustomObserver {
 	public synchronized void handleIncomingSession(Session ses) {
 		activeCount++;
 		inputCount++;
+		inputActiveCount++;
 		net.save(ses);
 		net.addIp(ses.getDstIP());
-//		addInputSes=ses;
 		setChanged();
 		notifyObservers(ses);
 		
@@ -429,9 +442,9 @@ public class IPaddr extends Observable implements Serializable, CustomObserver {
 	public synchronized void handleOutputSession(Session ses) {
 		activeCount++;
 		outputCount++;
+		outputActiveCount++;
 		net.save(ses);
 		net.addIp(ses.getSrcIP());
-	//	addOutputSes=ses;
 		setChanged();
 		notifyObservers(ses);
 		

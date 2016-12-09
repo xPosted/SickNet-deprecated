@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+   http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+
+    <persistence-unit name="SorsPersistence" transaction-type="JTA">
+
+       <jta-data-source>java:/MySqlDS</jta-data-source>
+        <class>com.jubaka.sors.entities.User</class>
+        <class>com.jubaka.sors.entities.Branch</class>
+        <class>com.jubaka.sors.entities.Subnet</class>
+        <class>com.jubaka.sors.entities.Host</class>
+        <class>com.jubaka.sors.entities.Session</class>
+        <class>com.jubaka.sors.entities.NodeCheckPoint</class>
+        <class>com.jubaka.sors.entities.Node</class>
+
+
+
+        <properties>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/sors?useUnicode=true&amp;serverTimezone=UTC&amp;characterEncoding=UTF-8"/>
+            <property name="javax.persistence.jdbc.user" value="root"/>
+            <property name="javax.persistence.jdbc.password" value="ivanivka"/>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+         <!--  <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>  -->
+
+        </properties>
+
+
+    </persistence-unit>
+</persistence>

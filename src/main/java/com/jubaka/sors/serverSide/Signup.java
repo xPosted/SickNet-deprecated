@@ -39,6 +39,7 @@ public class Signup extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/*
 		System.out.println(request.getParameter("nickNameff"));
 		System.out.println(request.getParameter("fNameff"));
 		System.out.println(request.getParameter("sNameff"));
@@ -69,6 +70,7 @@ public class Signup extends HttpServlet {
 		 if (!res) request.getRequestDispatcher("NullHandler.jsp").forward(request, response);
 		request.getSession().setAttribute("user", u.getNickName());
 		request.getRequestDispatcher("sors.xhtml").forward(request, response);
+		*/
 		
 	}
 

@@ -1,14 +1,14 @@
 package com.jubaka.sors.managed;
 
 import com.jubaka.sors.beans.InfoBean;
-import com.jubaka.sors.entities.User;
 import com.jubaka.sors.serverSide.ConnectionHandler;
-import com.jubaka.sors.serverSide.Node;
+import com.jubaka.sors.serverSide.NodeServerEndpoint;
 import com.jubaka.sors.serverSide.SecurityVisor;
+import com.jubaka.sors.service.NodeActiveCheckPointService;
+import com.jubaka.sors.service.NodeService;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -26,7 +26,11 @@ public class NodesBean implements Serializable {
 
     @Inject
     private LoginBean loginBean;
-    private Set<Node> nodes = new HashSet<>();
+    @Inject
+    private NodeActiveCheckPointService activeCheckPointService;
+    @Inject
+    private NodeService nodeService;
+    private List<NodeServerEndpoint> nodeServerEndpoints = new ArrayList<>();
 
     private List<InfoBean> infoBeans = new ArrayList<>();
 
@@ -35,15 +39,14 @@ public class NodesBean implements Serializable {
     public void init() {
         System.out.println("NodesBean init");
         ExternalContext externalContext =  FacesContext.getCurrentInstance().getExternalContext();
-        SecurityVisor sv =  ConnectionHandler.getInstance().getSv();
         Map<String,String> params = externalContext.getRequestParameterMap();
         String pubStr = params.get("pub");
-        if (pubStr == null) pubStr="false";
-        boolean shared = Boolean.getBoolean(params.get("pub"));
-        if (shared == true) nodes = sv.getNodes("*");
-        else
-            nodes = sv.getNodes(loginBean.getUser().getNickName());
-        for (Node n : nodes) {
+
+      //  boolean shared = Boolean.getBoolean(params.get("pub"));
+      //  if (shared == true) nodeServerEndpoints = sv.getNodes("*");
+
+        nodeServerEndpoints = nodeService.getConnectedNodeEndPointsByUser();
+        for (NodeServerEndpoint n : nodeServerEndpoints) {
             infoBeans.add(n.getInfo());
         }
 

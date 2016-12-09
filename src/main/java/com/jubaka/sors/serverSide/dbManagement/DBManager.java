@@ -2,12 +2,9 @@ package com.jubaka.sors.serverSide.dbManagement;
 
 import com.jubaka.sors.beans.InfoBean;
 import com.jubaka.sors.entities.User;
-import com.jubaka.sors.serverSide.Node;
+import com.jubaka.sors.serverSide.NodeServerEndpoint;
 import com.jubaka.sors.serverSide.UserBase;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,7 +13,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Properties;
 
 public class DBManager {
@@ -120,8 +116,8 @@ public class DBManager {
 		}
 		return null;
 	}
-	
-	public boolean addNewNode(Node n) {
+	/*
+	public boolean addNewNode(NodeServerEndpoint n) {
 		try {
 		InfoBean ib = n.getInfo();
 		String userName = ib.getOwner();
@@ -130,8 +126,8 @@ public class DBManager {
 		SimpleDateFormat sdf = new SimpleDateFormat(
 				"yyyy-MM-dd HH-mm-ss");
 		
-			stat.executeQuery("insert into Nodes (id, name, owner, note, osArch, procCount, maxMem, rdc, rds, ipAddr, lastConnect, active)"+
-							"values ("+n.getUnid()+",'"+ib.getNodeName()+"','"+u.getKey()+"','"+ib.getDesc()+"','"+ib.getOsArch()+"',"+ib.getProcCount()+","+ib.getMaxMem()+","+ib.getReceivedDumpCount()+","+ib.getReceivedDumpSize()+",'"+n.getAddr().getHostAddress()+"','"+sdf.format(new Date())+"',1");
+		//	stat.executeQuery("insert into Nodes (id, name, owner, note, osArch, procCount, maxMem, rdc, rds, ipAddr, lastConnect, active)"+
+		//					"values ("+n.getUnid()+",'"+ib.getNodeName()+"','"+u.getKey()+"','"+ib.getDesc()+"','"+ib.getOsArch()+"',"+ib.getProcCount()+","+ib.getMaxMem()+","+ib.getReceivedDumpCount()+","+ib.getReceivedDumpSize()+",'"+n.getAddr().getHostAddress()+"','"+sdf.format(new Date())+"',1");
 		stat.close();
 			return true;
 		} catch (SQLException e) {
@@ -142,7 +138,7 @@ public class DBManager {
 		
 	}
 	
-	
+	*/
 	public boolean checkUnidExest(Long unid) {
 		try {
 		Statement stat = dbCon.createStatement();

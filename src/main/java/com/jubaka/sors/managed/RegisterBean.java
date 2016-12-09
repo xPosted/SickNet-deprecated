@@ -2,9 +2,11 @@ package com.jubaka.sors.managed;
 
 import com.jubaka.sors.entities.User;
 import com.jubaka.sors.serverSide.UserBase;
+import com.jubaka.sors.service.UserService;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
@@ -17,6 +19,9 @@ import java.util.Date;
 @Named
 @SessionScoped
 public class RegisterBean implements Serializable {
+
+    @Inject
+    private UserService userService;
 
     private int key = -1;
     private String nickName;
@@ -90,7 +95,7 @@ public class RegisterBean implements Serializable {
 
         User u = new User();
         u.setNickName(nickName);
-        u.setPass(pass);
+        u.setPass(PassEncoder.encode(pass));
         u.setFirstName(firstName);
         u.setSecondName(secondName);
         u.setEmail(email);
@@ -98,7 +103,8 @@ public class RegisterBean implements Serializable {
         u.setJoinDate(new Date());
         //u.setLastLogin(new Date());
       //  u.setImage(request.getParameter("imageff"));
-        boolean res = UserBase.getInstance().addUser(u);
+        userService.addUser(u);
+
 
         try {
             FacesContext.getCurrentInstance().getExternalContext().redirect("landing.xhtml");

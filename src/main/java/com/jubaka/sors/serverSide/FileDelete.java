@@ -27,13 +27,14 @@ public class FileDelete extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/*
 		String brIdStr = request.getParameter("brID");
 		String path = request.getParameter("path");
 		String nodeName = request.getParameter("node");
-		 Node node = ConnectionHandler.getInstance().getNode(nodeName);
-		 node.delete(Integer.parseInt(brIdStr), path);
+		 NodeServerEndpoint nodeServerEndpoint = ConnectionHandler.getInstance().getNodeServerEndPoint(nodeName);
+		 nodeServerEndpoint.delete(Integer.parseInt(brIdStr), path);
 		 
-		
+		*/
 	}
 
 	/**

@@ -11,31 +11,49 @@ import java.util.Observable;
 import java.util.Properties;
 
 import com.jubaka.sors.beans.AutorisationBean;
+import com.jubaka.sors.entities.Node;
 import com.jubaka.sors.entities.User;
+import com.jubaka.sors.managed.PassEncoder;
 import com.jubaka.sors.serverSide.bean.StreamTransportBean;
 import com.jubaka.sors.serverSide.dbManagement.DBManager;
+import com.jubaka.sors.service.NodeActiveCheckPointService;
+import com.jubaka.sors.service.NodeService;
+import com.jubaka.sors.service.UserService;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
+@Named
+@ApplicationScoped
 public class ConnectionHandler  extends Observable {
+
+	@Inject
+	private UserService userService;
+	@Inject
+	private NodeService nodeService;
+
+	@Inject
+	private NodeActiveCheckPointService checkPointService;
+
+
 	
 	private static ConnectionHandler inst=null;
 	private static DBManager dbManager = null;
 	private ConnectionListener listener = null;
-	private SecurityVisor sv = new SecurityVisor();
-	private HashMap<String, Node> nodeList = new HashMap<String, Node>();
-	private HashMap<Long, Node> idNodeList = new HashMap<Long, Node>();
-	private UserBase ub;
+	private static HashMap<String, NodeServerEndpoint> nodeList = new HashMap<String, NodeServerEndpoint>();
+	private static HashMap<Long, NodeServerEndpoint> idNodeList = new HashMap<Long, NodeServerEndpoint>();
+
 	
-	
+	/*
 	public static ConnectionHandler getInstance() {
 		if (inst==null) {
 			inst = new ConnectionHandler();
 		}
 		return inst;
 	}
-	private ConnectionHandler() {
-		ub = UserBase.getInstance();
-		
-	}
+*/
 	public void initDBManager() {
 		Properties props = new Properties();
 		props.setProperty("user", "sors"); 
@@ -46,11 +64,11 @@ public class ConnectionHandler  extends Observable {
 		dbManager = new DBManager("95.47.114.170", "3306", "sors", props);
 	}
 	
-	public Node getNode(String nodeName) {
+	public NodeServerEndpoint getNodeServerEndPoint(String nodeName) {
 		return nodeList.get(nodeName);
 	}
 
-	public Node getNode(Long id) {
+	public NodeServerEndpoint getNodeServerEndPoint(Long id) {
 		return idNodeList.get(id);
 	}
 	
@@ -62,9 +80,14 @@ public class ConnectionHandler  extends Observable {
 		
 	}
 	
-	public void nodeDisconnected(Node n) {
+	public void nodeDisconnected(NodeServerEndpoint n) {
+		Node node = nodeService.getNodeByUnid(n.getUnid());
+		checkPointService.ifExistMoveToHistory(node);
 		nodeList.remove(n.getFullName());
+		idNodeList.remove(n.getUnid());
 	}
+
+
 	public void handleConnection(Socket s) {
 		ObjectInputStream ois;
 		System.out.println(this);
@@ -98,26 +121,25 @@ public class ConnectionHandler  extends Observable {
 		
 	}
 	public void autorise(AutorisationBean auth, ObjectInputStream ois, Socket s) {
-				User uObj = ub.getUser(auth.getNodeUserName());
-				Node node = new Node();
-				node.setS(s);
-				node.setOwner(auth.getNodeUserName());
-				node.setNodeName(auth.getNodeName());
-				node.createStreams(ois);
-				
-				if (uObj==null) { node.loginIncorrect(); return;}
-				if ( ! uObj.getPass().equals(auth.getNodeUserPass()))  {node.loginIncorrect(); return;}
+				User uObj = userService.getUserByNick(auth.getNodeUserName());
+				NodeServerEndpoint nodeServerEndpoint = new NodeServerEndpoint();
+				nodeServerEndpoint.setS(s);
+				nodeServerEndpoint.setOwner(auth.getNodeUserName());
+				nodeServerEndpoint.setNodeName(auth.getNodeName());
+				nodeServerEndpoint.setUnid(auth.getUnid());
+				nodeServerEndpoint.createStreams(ois);
 
-				sv.handleNewNode(node); 				 // here is unid creates
-				nodeList.put(node.getFullName(), node);
-				idNodeList.put(node.getUnid(),node);
+
+				if (uObj==null) { nodeServerEndpoint.loginIncorrect(); return;}
+				String encodedPass = PassEncoder.encode(auth.getNodeUserPass());
+				if ( ! uObj.getPass().equals(encodedPass))  {
+					nodeServerEndpoint.loginIncorrect(); return;}
+
+				nodeService.handleNewNode(nodeServerEndpoint,uObj); 				 // here is unid creates
+				nodeList.put(nodeServerEndpoint.getFullName(), nodeServerEndpoint);
+				idNodeList.put(nodeServerEndpoint.getUnid(), nodeServerEndpoint);
 		
 	}
-	public SecurityVisor getSv() {
-		return sv;
-	}
-	
-	
 	
 	public static double round(double value, int places) {
 	    if (places < 0) throw new IllegalArgumentException();

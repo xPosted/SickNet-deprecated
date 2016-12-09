@@ -4,7 +4,9 @@ import com.jubaka.sors.beans.Bean;
 
 import java.io.Serializable;
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Created by root on 30.08.16.
@@ -12,6 +14,14 @@ import java.util.HashSet;
 public class SubnetLightBean extends Bean implements Serializable {
     protected Long dataSend = (long) 0;
     protected Long dataReceive = (long) 0;
+    protected Integer activeInSesCnt = 0;
+    protected Integer activeOutSesCnt = 0;
+
+
+
+    protected  Integer inSesCnt = 0;
+    protected Integer outSesCnt = 0;
+
     protected Integer activeSesCnt=0;
     protected Integer activeAddrCnt=0;
     protected Integer sesCnt=0;
@@ -101,5 +111,47 @@ public class SubnetLightBean extends Bean implements Serializable {
     public void setLightLiveIps(HashSet<IPItemLightBean> liveIps) {
         this.liveIps = liveIps;
     }
+
+    public List<IPItemLightBean> getAllIpList() {
+        return new ArrayList<>(ips);
+    }
+    public List<IPItemLightBean> getLiveIpList() {
+        return  new ArrayList<IPItemLightBean>(liveIps);
+    }
+
+    public Integer getActiveOutSesCnt() {
+        return activeOutSesCnt;
+    }
+
+    public void setActiveOutSesCnt(Integer activeOutSesCnt) {
+        this.activeOutSesCnt = activeOutSesCnt;
+    }
+
+    public Integer getActiveInSesCnt() {
+        return activeInSesCnt;
+    }
+
+    public void setActiveInSesCnt(Integer activeInSesCnt) {
+        this.activeInSesCnt = activeInSesCnt;
+    }
+
+    public Integer getInSesCnt() {
+        return inSesCnt;
+    }
+
+    public void setInSesCnt(Integer inSesCnt) {
+        this.inSesCnt = inSesCnt;
+    }
+
+    public Integer getOutSesCnt() {
+        return outSesCnt;
+    }
+
+    public void setOutSesCnt(Integer outSesCnt) {
+        this.outSesCnt = outSesCnt;
+    }
+
+
+
 
 }

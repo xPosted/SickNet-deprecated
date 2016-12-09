@@ -26,13 +26,15 @@ public class StreamTest extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String nodeName = request.getParameter("node");
+		/*
+		String nodeName = request.getParameter("nodeServerEndpoint");
 		Integer brId =  Integer.parseInt( request.getParameter("brID"));
 		String sorsPath = request.getParameter("path");
 		String fileName = request.getParameter("fileName");
-		Node node =ConnectionHandler.getInstance().getNode(nodeName);
+		NodeServerEndpoint nodeServerEndpoint =ConnectionHandler.getInstance().getNodeServerEndPoint(nodeName);
 		response.setHeader("Content-Disposition", "attachment; filename="+fileName);
-		node.getFile(brId, sorsPath, response);
+		nodeServerEndpoint.getFile(brId, sorsPath, response);
+		*/
 	}
 
 	/**

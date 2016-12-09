@@ -245,7 +245,7 @@ public class DataCatchView extends JFrame {
 		});
 		button.setPreferredSize(new Dimension(25, 25));
 		button.setMargin(new Insets(0, 0, 0, 0));
-		button.setIcon(new ImageIcon(DataCatchView.class.getResource("/tcpAnalyse/refresh_27.jpg")));
+		button.setIcon(new ImageIcon(DataCatchView.class.getResource("/refresh_27.jpg")));
 		panel_26.add(button);
 		
 		Component horizontalStrut_16 = Box.createHorizontalStrut(5);
@@ -551,7 +551,7 @@ public class DataCatchView extends JFrame {
 		btnNewButton.setMinimumSize(new Dimension(40, 10));
 		btnNewButton.setMaximumSize(new Dimension(45, 25));
 		btnNewButton.setIcon(new ImageIcon(DataCatch.class
-				.getResource("/tcpAnalyse/change2_1.jpg")));
+				.getResource("/change2_1.jpg")));
 		btnNewButton.setFont(new Font("Dialog", Font.PLAIN, 10));
 		btnNewButton.setPreferredSize(new Dimension(40, 25));
 		btnNewButton.addActionListener(new ActionListener() {

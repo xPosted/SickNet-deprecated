@@ -1,15 +1,6 @@
 package com.jubaka.sors.remote;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.text.ParseException;
@@ -120,6 +111,8 @@ public class ConnectionHandler implements Runnable, Observer {
 
 			String[] command;
 			RequestObject ro;
+
+
 			while (!s.isClosed()) {
 				try {
 				Object in = ois.readObject();
@@ -139,13 +132,18 @@ public class ConnectionHandler implements Runnable, Observer {
 			}	catch (Exception e) {
 					e.printStackTrace();
 					if (sendLock.isLocked()) sendLock.unlock();
+					if (s.isClosed()) break;
+					if (e instanceof EOFException) break;
+
+
 				}
 		}
 	}
 
+
+
 	private void handleRequest(RequestObject ro) {
 		try {
-
 
 		String[] command = ro.getRequestStr();
 
@@ -815,6 +813,8 @@ public class ConnectionHandler implements Runnable, Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		try {
+			if (s == null) return;
+			if (s.isClosed()) return;
 
 			if (o instanceof Subnet) {
 				Subnet net = (Subnet) o;

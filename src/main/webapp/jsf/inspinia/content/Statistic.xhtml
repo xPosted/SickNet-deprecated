@@ -92,14 +92,23 @@
 
         function openSubView(element) {
             var targetAddr = $(element).children('td:first').text();
+            var isdbmanaged = "#{statisticBean.isDbManaged()}".toLowerCase();
             console.log(targetAddr);
-            window.location.href = '/Sors_JSFDeveloping-1.0-SNAPSHOT/app/jsf/inspinia/content/Statistic.xhtml?nodeId=#{statisticBean.nodeIdStr}&amp;taskId=#{statisticBean.taskIdStr}&amp;#{statisticBean.subView}='+targetAddr;
+            if (isdbmanaged === "true") {
+                window.location.href = '/Sors_JSFDeveloping-1.0-SNAPSHOT/app/jsf/inspinia/content/Statistic.xhtml?dbid=#{statisticBean.dbidStr}&amp;#{statisticBean.subView}='+targetAddr;
+            }
+            if (isdbmanaged === "false") {
+                window.location.href = '/Sors_JSFDeveloping-1.0-SNAPSHOT/app/jsf/inspinia/content/Statistic.xhtml?nodeId=#{statisticBean.nodeIdStr}&amp;taskId=#{statisticBean.taskIdStr}&amp;#{statisticBean.subView}='+targetAddr;
+            }
+
+
         }
     </script>
 
 </h:head>
 
 <body class="">
+
 
 <div id="wrapper">
 

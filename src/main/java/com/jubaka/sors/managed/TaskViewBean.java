@@ -1,10 +1,12 @@
 package com.jubaka.sors.managed;
 
-import com.jubaka.sors.beans.Bean;
+import com.jubaka.sors.beans.Category;
 import com.jubaka.sors.beans.branch.*;
+import com.jubaka.sors.entities.Branch;
 import com.jubaka.sors.serverSide.ConnectionHandler;
-import com.jubaka.sors.serverSide.Node;
-import com.jubaka.sors.serverSide.SecurityVisor;
+import com.jubaka.sors.serverSide.NodeServerEndpoint;
+import com.jubaka.sors.service.BranchService;
+import com.jubaka.sors.service.SessionCategoriser;
 import org.jfree.data.time.TimeSeries;
 
 import javax.annotation.PostConstruct;
@@ -14,10 +16,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.websocket.Session;
-import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
 import java.io.Serializable;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.*;
 
 /**
@@ -28,19 +28,28 @@ import java.util.*;
 @SessionScoped
 public class TaskViewBean implements Serializable, Observer {
 
-
+    @Inject
+    private ConnectionHandler ch;
     @Inject
     private LoginBean loginBean;
 
     @Inject
     private WebSocketHandler webSocketHandler;
 
+    @Inject
+    private BranchService branchService;
+
     private BranchLightBean blb = null;
     private SubnetLightBean sbl = null;
     private IPItemBean ipBean = null;
-    private List<IPItemLightBean> onlineIps = null;
-    private List<IPItemLightBean> allIps = null;
+    private List<?> onlineIps = new ArrayList<>();
+    private List<?> allIps = new ArrayList<>();
     private List<SessionBean> sessionList = new ArrayList<>();
+
+    private List<Category> categories;
+    private Map<Category,List<SessionBean>> categoriesData;
+
+    private NodeServerEndpoint nodeServerEndpoint = null;
 
     private boolean sessionInFilter = false;
     private boolean sessionOutFilter = true;
@@ -49,12 +58,15 @@ public class TaskViewBean implements Serializable, Observer {
 
     private String nodeIdStr = null;
     private String taskIdStr = null;
+    private String dbTaskIdStr = null;
     private String subnet = null;
     private String ipStr = null;
 
 
     private Long sessionId = null;
     private Session webSession = null;
+
+    private boolean categorised = true;
 
     @PostConstruct
     public void postContruct() {
@@ -67,69 +79,171 @@ public class TaskViewBean implements Serializable, Observer {
     public void init() {
         ExternalContext externalContext =  FacesContext.getCurrentInstance().getExternalContext();
         Map<String,String> params = externalContext.getRequestParameterMap();
-        if (params.get("nodeId")!=null) nodeIdStr = params.get("nodeId");
-        if (params.get("taskId")!=null) taskIdStr = params.get("taskId");
-        if (params.get("net")!=null)    subnet = params.get("net");
+        nodeIdStr = params.get("nodeId");
+        taskIdStr = params.get("taskId");
+        dbTaskIdStr = params.get("dbtaskId");
+        subnet = params.get("net");
         ipStr = params.get("host");
 
-        initBeans();
+        if (nodeIdStr != null & taskIdStr != null) {
+            Long nodeUnid = Long.parseLong(nodeIdStr);
+            Integer taskId = Integer.parseInt(taskIdStr);
+            initTask(nodeUnid,taskId);
+        }
+        if (dbTaskIdStr != null) {
+            Long dbTaskId = Long.parseLong(dbTaskIdStr);
+            initTask(dbTaskId);
+        }
+
+
+
+          //  initBeans();
 
     }
+
+
+
 
     public void initBeans() {
         Long nodeId = null;
         Integer taskId = null;
-        Node node = null;
+        NodeServerEndpoint nodeServerEndpoint = null;
+
         if (nodeIdStr != null) {
             nodeId = Long.parseLong(nodeIdStr);
-            node = ConnectionHandler.getInstance().getNode(nodeId);
+            nodeServerEndpoint = ch.getNodeServerEndPoint(nodeId);
 
         }
-        if (node!=null & taskIdStr != null) {
+        if (nodeServerEndpoint !=null & taskIdStr != null) {
             taskId = Integer.valueOf(taskIdStr);
-            blb = node.getBranchLight(taskId);
+            blb = nodeServerEndpoint.getBranchLight(taskId);
             taskIdStr = null;
         }
         if (blb!=null & subnet!=null) {
             if (sbl != null) {
-                node.removeObserver(blb.getBib().getId(),sbl.getSubnet().getHostAddress());
+                nodeServerEndpoint.removeObserver(blb.getBib().getId(),sbl.getSubnet().getHostAddress());
             }
-                sbl = node.getSubnetLight(blb.getBib().getId(),subnet,true);
+                sbl = nodeServerEndpoint.getSubnetLight(blb.getBib().getId(),subnet,true);
                 onlineIps = new ArrayList<>(sbl.getLightLiveIps());
                 allIps = new ArrayList<>(sbl.getLightIps());
-                node.addObserver(this);
+                nodeServerEndpoint.addObserver(this);
                 subnet = null;
         }
         if (sbl!=null & ipStr!=null) {
             if (ipBean!=null) {
-                node.removeObserver(blb.getBib().getId(),ipBean.getIp());
+                nodeServerEndpoint.removeObserver(blb.getBib().getId(),ipBean.getIp());
             }
-            ipBean =  node.getIpItemBean(blb.getBib().getId(),ipStr,true);
+            ipBean =  nodeServerEndpoint.getIpItemBean(blb.getBib().getId(),ipStr,true);
             updateCurrentSessionList();
             System.out.println("initBeans.ipBean="+ipBean.getIp());
-            node.addObserver(this);
+            nodeServerEndpoint.addObserver(this);
             ipStr= null;
         }
 
     }
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    public boolean isDbManagedTask() {
+        if (blb instanceof BranchBean) {
+            if ((blb.getBib().getDbid())!= null)
+                return true;
+        }
+        return false;
+    }
+   public void initTask(Long nodeUnid, Integer taskId) {
+
+       nodeServerEndpoint = ch.getNodeServerEndPoint(nodeUnid);
+
+
+       if (nodeServerEndpoint !=null) {
+           taskId = Integer.valueOf(taskIdStr);
+           blb = nodeServerEndpoint.getBranchLight(taskId);
+       }
+
+       ipBean = null;
+       sbl = null;
+       onlineIps.clear();
+       allIps.clear();
+
+   }
+
+
+    public void selectSubnet(String subnet) {
+
+        if (blb instanceof BranchBean){
+            BranchBean bb = (BranchBean) blb;
+            SubnetBean sb = bb.getSubnetByName(subnet);
+            sbl = sb;
+            onlineIps = sb.getLiveIps();
+            allIps = sb.getIps();
+        } else {
+            if (sbl != null) {
+                nodeServerEndpoint.removeObserver(blb.getBib().getId(),sbl.getSubnet().getHostAddress());
+            }
+            sbl = nodeServerEndpoint.getSubnetLight(blb.getBib().getId(),subnet,true);
+            onlineIps = new ArrayList<>(sbl.getLightLiveIps());
+            allIps = new ArrayList<>(sbl.getLightIps());
+            nodeServerEndpoint.addObserver(this);
+        }
+        if (sbl == null) return;
+
+
+
+    }
+
+    public void selectIp(String address) {
+        if (sbl instanceof SubnetBean) {
+            SubnetBean sb = (SubnetBean) sbl;
+            ipBean = sb.getIpByName(address);
+        } else {
+            if (ipBean!=null) {
+                nodeServerEndpoint.removeObserver(blb.getBib().getId(),ipBean.getIp());
+            }
+            ipBean =  nodeServerEndpoint.getIpItemBean(blb.getBib().getId(),address,true);
+            nodeServerEndpoint.addObserver(this);
+        }
+        updateCurrentSessionList();
+    }
+
+    public void initTask(Long dbtaskId) {
+        Branch b =  branchService.selectById(dbtaskId);
+        blb = branchService.castToBean(b);
+
+        ipBean = null;
+        sbl = null;
+        onlineIps.clear();
+        allIps.clear();
+    }
+
+    public List<?> getSubnetList() {
+        if (blb instanceof BranchBean) {
+            BranchBean bb = (BranchBean) blb;
+            return bb.getSubnets();
+        } else {
+            return blb.getSubnetsLight();
+        }
+
+    }
+
 
     public String getCurrentBranchId() {
         return blb.getBib().getId().toString();
     }
 
     public String getChartStrValues() {
-        Node node = null;
-        Long nodeId;
+        if (blb instanceof BranchBean) return "0";
         String result = "0";
-        if (nodeIdStr != null) {
-            nodeId = Long.parseLong(nodeIdStr);
-            node = ConnectionHandler.getInstance().getNode(nodeId);
 
-        }
-        if (node != null & blb != null) {
+        if (nodeServerEndpoint != null & blb != null) {
             Date timeFrom = new Date(new Date().getTime()-11000);
             Date timeTo = new Date();
-            TimeSeries ts = node.getDataOutChart(blb.getBib().getId(),timeFrom.getTime(),timeTo.getTime());
+            TimeSeries ts = nodeServerEndpoint.getDataOutChart(blb.getBib().getId(),timeFrom.getTime(),timeTo.getTime());
 
             for (int item=0;item<ts.getItemCount();item++) {
                 Integer val = (Integer) ts.getValue(item);
@@ -146,7 +260,7 @@ public class TaskViewBean implements Serializable, Observer {
 
     public void setIpStr(String ipStr) {
         this.ipStr = ipStr;
-        initBeans();
+       // initBeans();
     }
 
     public String getNodeIdStr() {
@@ -160,7 +274,7 @@ public class TaskViewBean implements Serializable, Observer {
     public void setSubnet(String subnet) {
         this.subnet = subnet;
         System.out.println("subnet = "+this.subnet);
-        initBeans();
+       // initBeans();
     }
 
     public String getTaskIdStr() {
@@ -222,25 +336,25 @@ public class TaskViewBean implements Serializable, Observer {
             return "0";
     }
 
-    public String getSessionsActiveCount() {
+    public String getNetworkSessionsActiveCount() {
         if (sbl != null) {
             return sbl.getActiveSesCnt().toString();
         } else return "0";
     }
 
-    public String getSessionsAllCount() {
+    public String getNetworkSessionsAllCount() {
         if (sbl != null) {
             return sbl.getSesCnt().toString();
         } else return "0";
     }
 
-    public String getAddrsAllCount() {
+    public String getNetworkAddrsAllCount() {
         if (sbl !=null ) {
             return sbl.getAddrCnt().toString();
         } else return "0";
     }
 
-    public String getAddrsActiveCount() {
+    public String getNetworkAddrsActiveCount() {
         if (sbl !=null ) {
             return sbl.getActiveAddrCnt().toString();
         } else return "0";
@@ -358,19 +472,28 @@ public class TaskViewBean implements Serializable, Observer {
         this.webSession = webSession;
     }
 
-    public List<IPItemLightBean> getAllIps() {
+    public boolean isCategorised() {
+        return categorised;
+    }
+
+    public void setCategorised(boolean categorised) {
+        this.categorised = categorised;
+    }
+
+
+    public List<?> getAllIps() {
         return allIps;
     }
 
-    public void setAllIps(List<IPItemLightBean> allIps) {
+    public void setAllIps(List<?> allIps) {
         this.allIps = allIps;
     }
 
-    public List<IPItemLightBean> getOnlineIps() {
+    public List<?> getOnlineIps() {
         return onlineIps;
     }
 
-    public void setOnlineIps(List<IPItemLightBean> onlineIps) {
+    public void setOnlineIps(List<?> onlineIps) {
         this.onlineIps = onlineIps;
     }
 
@@ -389,27 +512,43 @@ public class TaskViewBean implements Serializable, Observer {
         if (sessionSavedFilter & sessionInFilter) sessionList.addAll(ipBean.getStoredInSes());
         if (sessionSavedFilter & sessionOutFilter) sessionList.addAll(ipBean.getStoredOutSes());
 
+        if (isCategorised()) {
+            SessionCategoriser categoriser = new SessionCategoriser();
+            categoriesData = categoriser.sortByHost(getSelectedIp(),sessionList);
+            categories = new ArrayList<>(categoriesData.keySet());
+        }
+
     }
 
 
     @Override
     public void update(Observable o, Object arg) {
-        if (o instanceof Node) {
+        if (o instanceof NodeServerEndpoint & webSession != null) {
             if (arg instanceof SubnetLightBean) {
                 SubnetLightBean receivedBean = (SubnetLightBean) arg;
                 if (receivedBean.getSubnet() == sbl.getSubnet() & receivedBean.getBrId() == sbl.getBrId()) {
                     sbl=receivedBean;
-                    webSocketHandler.updateSubnetInfo(webSession);
+                    try {
+                        webSocketHandler.updateSubnetInfo(webSession);
+                    } catch(IOException io) {
+                        webSession = null;
+                    }
+
                     // web socket notify
                 }
             }
-            if (arg instanceof IPItemLightBean) {
+            if (arg instanceof IPItemLightBean & webSession != null) {
                 IPItemLightBean receivedBean = (IPItemLightBean) arg;
                 if (receivedBean.getIp().equals(ipBean.getIp()) & receivedBean.getBrId() == ipBean.getBrId()) {
                     // web socket notify
                     ipBean.update(receivedBean);
                     System.out.println("initBeans.ipBean="+ipBean.getIp());
-                    webSocketHandler.updateIpInfo(webSession);
+                    try {
+                        webSocketHandler.updateIpInfo(webSession);
+
+                    } catch(IOException io) {
+                        webSession = null;
+                    }
                 }
             }
         }

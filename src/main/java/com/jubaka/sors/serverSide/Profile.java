@@ -29,6 +29,7 @@ public class Profile extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/*
 		String nickname = request.getParameter("nickname");
 		if (nickname==null) nickname = (String) request.getSession().getAttribute("user");
 		if (nickname==null) return;
@@ -36,6 +37,7 @@ public class Profile extends HttpServlet {
 		if (uObj==null) return;
 		request.setAttribute("uObj", uObj);
 		request.getRequestDispatcher("Profile.jsp").forward(request, response);
+		*/
 		
 	}
 

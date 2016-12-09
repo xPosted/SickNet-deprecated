@@ -1,7 +1,6 @@
 package com.jubaka.sors.serverSide;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,6 +27,7 @@ public class Nodes extends HttpServlet {
     }
 
     private void handle(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException {
+		/*
     	ConnectionHandler ch = ConnectionHandler.getInstance();
 		SecurityVisor sv = ch.getSv();
 		String userName = (String) request.getSession().getAttribute("user");
@@ -40,10 +40,10 @@ public class Nodes extends HttpServlet {
 		if (pub.equals("true")) {
 			userName="*";
 		}
-		Set<Node> nodes = sv.getNodes(userName); 
+		Set<NodeServerEndpoint> nodeServerEndpoints = sv.getNodes(userName);
 		 Set<InfoBean> ibset = new HashSet<InfoBean>();
 
-		 for (Node n : nodes) {
+		 for (NodeServerEndpoint n : nodeServerEndpoints) {
 			 ibset.add(n.getInfo());
 		 }
 		 request.setAttribute("InfoBeanSet", ibset);
@@ -52,6 +52,8 @@ public class Nodes extends HttpServlet {
 			 request.getRequestDispatcher("IgorDesigned.jsp?public=true").forward(request, response);
 		 else 
 			 request.getRequestDispatcher("IgorDesigned.jsp?public=false").forward(request, response);
+
+    	*/
     }
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)

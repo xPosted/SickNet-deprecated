@@ -17,7 +17,7 @@ public class UserOld {
 	private String image;
 	private boolean online=false;
 	
-	private Set<Node> availableNodes = new HashSet<Node>();
+	private Set<NodeServerEndpoint> availableNodeServerEndpoints = new HashSet<NodeServerEndpoint>();
 	public String getNickName() {
 		return nickName;
 	}

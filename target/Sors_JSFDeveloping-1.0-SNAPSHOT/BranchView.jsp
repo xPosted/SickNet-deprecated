@@ -800,7 +800,7 @@
 						<button onclick="document.getElementById('linkToFiles').click();"
 							class="btn btn-default">
 							Files <a id="linkToFiles"
-								href="Files?brID=<%=bb.getBib().getId()%>&node=<%=bb.getBib().getNodeName()%>&path=/"></a>
+								href="Files?brID=<%=bb.getBib().getId()%>&nodeServerEndpoint=<%=bb.getBib().getNodeName()%>&path=/"></a>
 						</button>
 					</li>
 

@@ -272,7 +272,7 @@ function onRowClick(event) {
 
 <div id="d1">
 			<table id="mainTable" class="nodeTable table table-default" onclick="GGG()">
-				<caption>Available nodes</caption>
+				<caption>Available nodeServerEndpoints</caption>
 				<thead>
 					<tr onfocus="fff(this)">
 						<th id="col1" onmouseleave="hideCloseIcon(event);"

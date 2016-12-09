@@ -22,14 +22,16 @@
                             <img alt="image" class="img-circle" src="../img/profile_small.jpg" />
                              </span>
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">David Williams</strong>
-                             </span> <span class="text-muted text-xs block">Art Director <b class="caret"></b></span> </span> </a>
+                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">#{loginBean.user.firstName} #{loginBean.user.secondName}</strong>
+                             </span> <span class="text-muted text-xs block">#{loginBean.user.nickName} <b class="caret"></b></span> </span> </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li><a href="../profile.html">Profile</a></li>
+                            <li><a href="app/jsf/inspinia/content/Profile.xhtml">Profile</a></li>
                             <li><a href="../contacts.html">Contacts</a></li>
                             <li><a href="../mailbox.html">Mailbox</a></li>
                             <li class="divider"></li>
-                            <li><a href="../login.html">Logout</a></li>
+                            <li>
+                                    <h:commandLink action="#{loginBean.logoutAction()}" value="Logout"></h:commandLink>
+                            </li>
                         </ul>
                     </div>
                     <div class="logo-element">
@@ -38,7 +40,7 @@
                 </li>
 
                 <li>
-                    <a href="#"><i class="fa fa-sitemap"></i> <span class="nav-label">Available Nodes </span><span class="fa arrow"></span></a>
+                    <a href="app/jsf/inspinia/content/NodesView.xhtml"><i class="fa fa-sitemap"></i> <span class="nav-label">Available Nodes </span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse">
 
                         <li><a href="app/jsf/inspinia/content/NodesView.xhtml">Private</a></li>
@@ -47,10 +49,10 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-sitemap"></i> <span class="nav-label">Task List</span><span class="fa arrow"></span></a>
+                    <a href="app/jsf/inspinia/content/TaskList.xhtml"><i class="fa fa-sitemap"></i> <span class="nav-label">Task List</span><span class="fa arrow"></span></a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-sitemap"></i> <span class="nav-label">Task View</span><span class="fa arrow"></span></a>
+                    <a href="app/jsf/inspinia/content/AppView.xhtml"><i class="fa fa-sitemap"></i> <span class="nav-label">Task View</span><span class="fa arrow"></span></a>
                 </li>
                 <li>
                     <a href="#"><i class="fa fa-sitemap"></i> <span class="nav-label">Settings</span><span class="fa arrow"></span></a>

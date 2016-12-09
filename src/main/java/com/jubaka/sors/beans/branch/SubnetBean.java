@@ -1,13 +1,16 @@
 package com.jubaka.sors.beans.branch;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+
 import com.jubaka.sors.beans.SesDataCapBean;
 
 
 public class SubnetBean extends SubnetLightBean implements Serializable {
-	HashSet<IPItemBean> ips = new HashSet<IPItemBean>();	// all captured ips
-	HashSet<IPItemBean> liveIps = new HashSet<IPItemBean>();	// ips that are online
+	List<IPItemBean> ips = new ArrayList<>();    // all captured ips
+	List<IPItemBean> liveIps = new ArrayList<>();	// ips that are online
 	
 
     private SesDataCapBean sesDataCapBean=null;
@@ -19,16 +22,16 @@ public class SubnetBean extends SubnetLightBean implements Serializable {
     	return null;
     }
     
-	public HashSet<IPItemBean> getIps() {
+	public List<IPItemBean> getIps() {
 		return ips;
 	}
-	public void setIps(HashSet<IPItemBean> ips) {
+	public void setIps(List<IPItemBean> ips) {
 		this.ips = ips;
 	}
-	public HashSet<IPItemBean> getLiveIps() {
+	public List<IPItemBean> getLiveIps() {
 		return liveIps;
 	}
-	public void setLiveIps(HashSet<IPItemBean> liveIps) {
+	public void setLiveIps(List<IPItemBean> liveIps) {
 		this.liveIps = liveIps;
 	}
 	public SesDataCapBean getSesDataCapBean() {
@@ -36,5 +39,13 @@ public class SubnetBean extends SubnetLightBean implements Serializable {
 	}
 	public void setSesDataCapBean(SesDataCapBean sesDataCapBean) {
 		this.sesDataCapBean = sesDataCapBean;
+	}
+
+	public IPItemBean getIpByName(String name) {
+		for (IPItemBean ipBean : ips) {
+			if (ipBean.getIp().equals(name))
+				return ipBean;
+		}
+		return null;
 	}
 }

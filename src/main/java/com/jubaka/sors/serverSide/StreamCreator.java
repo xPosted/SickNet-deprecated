@@ -2,6 +2,8 @@ package com.jubaka.sors.serverSide;
 
 import com.jubaka.sors.serverSide.bean.StreamTransportBean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -10,11 +12,14 @@ import java.util.Observer;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
 
-
+@Named
 public class StreamCreator implements Observer {
 	private Integer id = -1;
 	private Semaphore sem = new Semaphore(1);
 	private StreamTransportBean stb = null;
+
+	@Inject
+	private ConnectionHandler ch;
 	
 	
 	public StreamCreator() {
@@ -38,12 +43,12 @@ public class StreamCreator implements Observer {
 		System.out.println("FInish");
 	}
 	
-	public StreamTransportBean getStream(Node node) {
+	public StreamTransportBean getStream(NodeServerEndpoint nodeServerEndpoint) {
 		Random r = new Random();
 		id =r.nextInt();
-		ConnectionHandler.getInstance().addObserver(this);
-		System.out.println(ConnectionHandler.getInstance());
-		node.createStream(id);
+		ch.addObserver(this);
+
+		nodeServerEndpoint.createStream(id);
 		try {
 			sem.acquire();
 		} catch (InterruptedException e) {

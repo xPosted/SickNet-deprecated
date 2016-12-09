@@ -136,6 +136,7 @@ public class MainWin implements Observer {
 	HashSet<NetViewItemPanel> netPanSet = new HashSet<NetViewItemPanel>();
 	JTextArea txtrSrcData = null;
 	JTextArea txtrDstData = null;
+	JTextArea txtrBothData = null;
 	//JList liveIPlist = new JList();
 	JTextArea dumpArea;
 	JLabel lblDate;
@@ -357,6 +358,16 @@ public class MainWin implements Observer {
 	public void setSrcData(ArrayList<String> text, Integer id) {
 		if (txtrSrcData == null) return;
 		SessionDataUpdater dataUpdater = new SessionDataUpdater(txtrSrcData,
+				id, text);
+		Thread th = new Thread(dataUpdater);
+
+		th.start();
+
+	}
+
+	public void setAllData(ArrayList<String> text, Integer id) {
+		if (txtrBothData == null) return;
+		SessionDataUpdater dataUpdater = new SessionDataUpdater(txtrBothData,
 				id, text);
 		Thread th = new Thread(dataUpdater);
 
@@ -1039,7 +1050,7 @@ public class MainWin implements Observer {
 		JMenuItem mntmSecurity = new JMenuItem("Security");
 		mnCommunity.add(mntmSecurity);
 		
-		JMenuItem mntmNodeInfo = new JMenuItem("Node info");
+		JMenuItem mntmNodeInfo = new JMenuItem("NodeServerEndpoint info");
 		mnCommunity.add(mntmNodeInfo);
 		
 		JMenu mnHelp = new JMenu("Help");
@@ -1079,6 +1090,7 @@ public class MainWin implements Observer {
 		panel.revalidate();
 		txtrSrcData = sdp.txtrSrcData;
 		txtrDstData = sdp.txtrDstData;
+		txtrBothData = sdp.txtrBothData;
 		if (sdf != null)
 			sdf.dispose();
 
@@ -1093,6 +1105,7 @@ public class MainWin implements Observer {
 		
 		txtrSrcData = sdf.txtrSrcData;
 		txtrDstData = sdf.txtrDstData;
+		txtrBothData = sdf.txtrBothData;
 		
 		panel.revalidate();
 		

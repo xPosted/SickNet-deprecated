@@ -158,13 +158,13 @@ padding: 3px;
 					
 					%>
 						<th style="font-size: 16px;"> 
-						/<a href="Files?node=<%=request.getParameter("node")%>&brID=<%=request.getParameter("brID")%>&path=/">root</a> 
+						/<a href="Files?nodeServerEndpoint=<%=request.getParameter("nodeServerEndpoint")%>&brID=<%=request.getParameter("brID")%>&path=/">root</a>
 						<% for (String item : splitedFullPath) { 
 							if (item.trim().equals("")) continue;
 								path=path+item+"/";
 						%>
 						
-								/ <a href="Files?node=<%=request.getParameter("node")%>&brID=<%=request.getParameter("brID")%>&path=<%=path%>"><%=item %></a>
+								/ <a href="Files?nodeServerEndpoint=<%=request.getParameter("nodeServerEndpoint")%>&brID=<%=request.getParameter("brID")%>&path=<%=path%>"><%=item %></a>
 						
 						 <% } %>
 			
@@ -187,7 +187,7 @@ padding: 3px;
 				<table class="table table-default">
 				<thead>
 					<tr>
-						<th><%=request.getParameter("node")%>
+						<th><%=request.getParameter("nodeServerEndpoint")%>
 					</tr>
 				</thead>
 				<tbody>
@@ -216,7 +216,7 @@ padding: 3px;
 				<div style="float: left; padding: 5px;">
 					<img style="width: 25px;" alt="" src="style/folder.jpg">
 				</div>
-				<div style="width: 300px; float: left; padding: 5px;"><a href="Files?node=<%=request.getParameter("node")%>&brID=<%=request.getParameter("brID")%>&path=<%=flb.getMainDir().getParent().getFullPath()%>"> .. </a>  </div>
+				<div style="width: 300px; float: left; padding: 5px;"><a href="Files?nodeServerEndpoint=<%=request.getParameter("nodeServerEndpoint")%>&brID=<%=request.getParameter("brID")%>&path=<%=flb.getMainDir().getParent().getFullPath()%>"> .. </a>  </div>
 				<div style="padding-top:5px; text-align:center; width: 190px; float: left;">document</div>
 				<div style="padding-top:5px; text-align:center;width: 200px; float: left;">65 K</div>
 				<div style="padding-top:5px; width: 200px; float:left;">
@@ -235,7 +235,7 @@ padding: 3px;
 				<div style="float: left; padding: 5px;">
 					<img style="width: 25px;" alt="" src="style/folder.jpg">
 				</div>
-				<div style="width: 300px; float: left; padding: 5px;"><a href="Files?node=<%=request.getParameter("node")%>&brID=<%=request.getParameter("brID")%>&path=<%=dir.getFullPath()%>"> <%=dir.getName()%> </a>  </div>
+				<div style="width: 300px; float: left; padding: 5px;"><a href="Files?nodeServerEndpoint=<%=request.getParameter("nodeServerEndpoint")%>&brID=<%=request.getParameter("brID")%>&path=<%=dir.getFullPath()%>"> <%=dir.getName()%> </a>  </div>
 				<div style="padding-top:5px; text-align:center; width: 190px; float: left;">folder</div>
 				<div style="padding-top:5px; text-align:center;width: 200px; float: left;"><%=ConnectionHandler.processSize(dir.getSize(),2) %></div>
 				<div style="padding-top:5px; width: 200px; float:left;">
@@ -256,7 +256,7 @@ padding: 3px;
 				<div style="float: left; padding: 5px;">
 					<img style="width: 25px;" alt="" src="style/file_icon.jpg">
 				</div>
-				<div style="width: 300px; float: left; padding: 5px;"><a href="StreamTest?node=<%=request.getParameter("node")%>&brID=<%=request.getParameter("brID")%>&path=<%=f.getFullPath()%>&fileName=<%=f.getName()%>"><%=f.getName() %></a></div>
+				<div style="width: 300px; float: left; padding: 5px;"><a href="StreamTest?nodeServerEndpoint=<%=request.getParameter("nodeServerEndpoint")%>&brID=<%=request.getParameter("brID")%>&path=<%=f.getFullPath()%>&fileName=<%=f.getName()%>"><%=f.getName() %></a></div>
 				<div style="padding-top:5px; text-align:center; width: 190px; float: left;">document</div>
 				<div style="padding-top:5px; text-align:center;width: 200px; float: left;"><%= ConnectionHandler.processSize(f.getSize(),2)%></div>
 				<div style="padding-top:5px; width: 200px; float:left;">

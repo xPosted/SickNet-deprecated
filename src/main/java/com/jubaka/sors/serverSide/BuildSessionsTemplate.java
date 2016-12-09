@@ -33,6 +33,7 @@ public class BuildSessionsTemplate extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/*
 		try {
 			
 			
@@ -40,8 +41,8 @@ public class BuildSessionsTemplate extends HttpServlet {
 			Map<String, String[]> params = request.getParameterMap();
 				if (params.containsKey("branchId")) {
 					Integer brId = Integer.parseInt(request.getParameter("branchId"));
-					Node node = ConnectionHandler.getInstance().getNode(nodeName);
-					BranchBean bb = node.getBranch(brId);
+					NodeServerEndpoint nodeServerEndpoint = ConnectionHandler.getInstance().getNodeServerEndPoint(nodeName);
+					BranchBean bb = nodeServerEndpoint.getBranch(brId);
 					request.setAttribute("branchBean", bb);
 					if (params.containsKey("subnet")) {
 						InetAddress netAddr = InetAddress.getByName(request.getParameter("subnet"));
@@ -58,6 +59,7 @@ public class BuildSessionsTemplate extends HttpServlet {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			*/
 	}
 
 	/**

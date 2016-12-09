@@ -253,7 +253,7 @@ table.nodeTable th {
 
 		<div style="width: 770px; margin-left: 365px; margin-right: auto;">
 			<table id="mainTable" class="nodeTable table table-default">
-				<caption>Available nodes</caption>
+				<caption>Available nodeServerEndpoints</caption>
 				<thead>
 					<tr>
 						<th id="col1" onmouseleave="hideCloseIcon(event);"
