@@ -13,6 +13,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 //import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.JTextArea;
@@ -81,6 +82,17 @@ public class API extends Observable implements PcapPacketHandler<String>, Serial
 		
 		dumps.remove(dump);
 	
+	}
+
+	public void waitForCaptureOff() {
+		if (captor == null) return;
+		exec.shutdown();
+		try {
+			exec.awaitTermination(8, TimeUnit.HOURS);
+		} catch (InterruptedException ie) {
+			ie.printStackTrace();
+		}
+
 	}
 
 	public void startCapture(String dev, String expression, String fileName) {

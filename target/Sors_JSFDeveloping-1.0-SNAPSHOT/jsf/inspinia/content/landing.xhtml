@@ -47,8 +47,10 @@
                         <li><a class="page-scroll" href="#pricing">Download</a></li>
                         <li><a class="page-scroll" href="#contact">Contact</a></li>
                         <h:form enctype="multipart/form-data">
+                            <li><h:inputText value="#{createTaskBean.taskName}"></h:inputText></li>
                         <li><h:inputFile id="file" value="#{createTaskBean.upFilePart}"></h:inputFile> </li>
                         <li><h:commandButton value="Upload" action="#{createTaskBean.upload()}" ></h:commandButton></li>
+
                         </h:form>
                     </ul>
                 </div>

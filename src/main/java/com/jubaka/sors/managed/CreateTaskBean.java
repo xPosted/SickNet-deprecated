@@ -1,7 +1,13 @@
 package com.jubaka.sors.managed;
 
+import com.jubaka.sors.beans.branch.BranchBean;
+import com.jubaka.sors.factories.ClassFactory;
+import com.jubaka.sors.remote.BeanConstructor;
 import com.jubaka.sors.serverSide.ConnectionHandler;
 import com.jubaka.sors.serverSide.NodeServerEndpoint;
+import com.jubaka.sors.service.BranchService;
+import com.jubaka.sors.sessions.API;
+import com.jubaka.sors.sessions.Branch;
 import org.primefaces.model.UploadedFile;
 
 import javax.enterprise.context.RequestScoped;
@@ -10,8 +16,10 @@ import javax.inject.Named;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Scanner;
 
 /**
@@ -28,6 +36,8 @@ public class CreateTaskBean {
     private ConnectionHandler cHandler;
     @Inject
     private LoginBean loginBean;
+    @Inject
+    private BranchService branchService;
     private String taskName;
     private String nodeName;
     private Long nodeId;
@@ -70,9 +80,33 @@ public class CreateTaskBean {
     }
 
     private void createTask() {
-        if (nodeId ==  null | upFilePart == null | taskName == null) return;
+        if (upFilePart == null | taskName == null) return;
 
-        NodeServerEndpoint nodeEndpoint =  cHandler.getNodeServerEndPoint(nodeId);
-        nodeEndpoint.createBranch(loginBean.getLogin(),upFilePart,taskName);
+        BeanConstructor beanConstructor = new BeanConstructor();
+        String usersHome = args.getUploadPath() +File.separator+ loginBean.getLogin()+File.separator;
+        ClassFactory fuckingFactory = ClassFactory.getStandaloneInstance(usersHome,true);
+        String usersPcapPath = usersHome+"pcaps"+File.separator;
+        String dumpPath = usersPcapPath + upFilePart.getSubmittedFileName();
+
+        try {
+            Files.createDirectories(Paths.get(usersPcapPath));
+            Files.copy(upFilePart.getInputStream(),Paths.get(dumpPath), StandardCopyOption.REPLACE_EXISTING);
+            int branchId = fuckingFactory.createBranch(loginBean.getLogin(),taskName,dumpPath,null,null);
+            Branch newBr = fuckingFactory.getBranch(branchId);
+            newBr.startCapture(null);
+            API api =  fuckingFactory.getAPIinstance(branchId);
+            api.waitForCaptureOff();
+            BranchBean bBean = beanConstructor.prepareBranchBean(branchId);
+            com.jubaka.sors.entities.Branch persistedBranch = branchService.persistBranch(bBean);
+
+        } catch (IOException io) {
+            io.printStackTrace();
+        }
+
+
+        //NodeServerEndpoint nodeEndpoint =  cHandler.getNodeServerEndPoint(nodeId);
+        //nodeEndpoint.createBranch(loginBean.getLogin(),upFilePart,taskName);
+
+
     }
 }

@@ -13,16 +13,11 @@ import org.jnetpcap.PcapIf;
 import java.io.File;
 import java.io.Serializable;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Observable;
-import java.util.Set;
-
+import java.util.*;
 
 
 public class ClassFactory extends Observable implements Serializable {
+
 	private Integer id = 0;
 	private Integer remDumpCount=0;
 	private long receivedDumpSize=0;
@@ -35,6 +30,7 @@ public class ClassFactory extends Observable implements Serializable {
 	 * 
 	 */
 	static ClassFactory instance = null;
+	static ClassFactory standaloneInstance = null;
 	private boolean alowRemote = false;
 	private LoadLimits ll;
 	private HashMap<Integer, Controller> cntrList = new HashMap<Integer, Controller>();
@@ -44,22 +40,43 @@ public class ClassFactory extends Observable implements Serializable {
 	private HashMap<Integer, DataSaverInfo> dsList = new HashMap<Integer, DataSaverInfo>();
 	private String configPath = "/usr/local/etc/sors/sors.cfg";
 
-	private ClassFactory() {
-		
-		LoadInfo li = new LoadInfo();
-		String osarch = li.getOsArch();
-		ConfigIO rc;
-		if (osarch.contains("Linux")) {
-			File cfg = new File(configPath);
-			rc = new ConfigIO(cfg);
-			ll = rc.read();
-			if (ll==null) return;
-			checkDirsExist();
+
+	private ClassFactory(String home, boolean singleton) {
+		standaloneInstance = this;
+		if (singleton) instance = this;
+		try {
+			ll = new LoadLimits(home,-1,null,-1,new HashSet<>(),new HashSet<>());
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		instance = this;
-		setPathToForemost(ll.getPathToForemost());
-		// Thread th = new Thread(new memViewer()); curent memory loading
-		// th.start();
+
+	}
+
+	private ClassFactory() {
+
+			LoadInfo li = new LoadInfo();
+			String osarch = li.getOsArch();
+			ConfigIO rc;
+			if (osarch.contains("Linux")) {
+				File cfg = new File(configPath);
+				rc = new ConfigIO(cfg);
+				ll = rc.read();
+				if (ll==null) return;
+				checkDirsExist();
+			}
+			instance = this;
+			setPathToForemost(ll.getPathToForemost());
+			// Thread th = new Thread(new memViewer()); curent memory loading
+			// th.start();
+		
+
+	}
+
+	public static ClassFactory getStandaloneInstance(String home,boolean singleton) {
+		if (standaloneInstance == null) {
+			standaloneInstance = new ClassFactory(home,singleton);
+		}
+		return standaloneInstance;
 	}
 
 	public static ClassFactory getInstance() {
