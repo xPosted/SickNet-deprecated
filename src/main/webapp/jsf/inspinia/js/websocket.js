@@ -21,11 +21,17 @@ function onMessage(event) {
     if (inputMsg.action === "update") {
         if (inputMsg.target === "subnet") {
             console.log("update subnet");
-            $(".updateSubnetInfoBtn").click();
+            updateSubnetInfo();
+
         }
         if (inputMsg.target === "ip") {
             console.log("update ip");
-            $(".updateIpInfoBtn").click();
+            updateIpInfo();
+
+        }
+        if (inputMsg.target === "categories") {
+            console.log("update categories");
+
         }
     }
 

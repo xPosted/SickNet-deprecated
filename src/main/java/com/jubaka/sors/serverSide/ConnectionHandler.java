@@ -54,7 +54,7 @@ public class ConnectionHandler  extends Observable {
 		return inst;
 	}
 */
-	public void initDBManager() {
+/*	public void initDBManager() {
 		Properties props = new Properties();
 		props.setProperty("user", "sors"); 
 		props.setProperty("password", "simpleJubaka"); 
@@ -63,7 +63,7 @@ public class ConnectionHandler  extends Observable {
 		props.setProperty("verifyServerCertificate", "false");
 		dbManager = new DBManager("95.47.114.170", "3306", "sors", props);
 	}
-	
+*/
 	public NodeServerEndpoint getNodeServerEndPoint(String nodeName) {
 		return nodeList.get(nodeName);
 	}
@@ -72,12 +72,18 @@ public class ConnectionHandler  extends Observable {
 		return idNodeList.get(id);
 	}
 	
-	public void initConnectionListener() {
+	public void initConnectionListener(Integer port) {
+		if (listener!=null) return;
+		listener = new ConnectionListener();
+		listener.startListener(this,port);
+		
+	}
+
+	public void updateConnectionListener(Integer port) {
 		if (listener!=null) listener.closeConnection();
 		listener = new ConnectionListener();
-		
-		listener.startListener(this);
-		
+
+		listener.startListener(this,port);
 	}
 	
 	public void nodeDisconnected(NodeServerEndpoint n) {
@@ -128,6 +134,7 @@ public class ConnectionHandler  extends Observable {
 				nodeServerEndpoint.setNodeName(auth.getNodeName());
 				nodeServerEndpoint.setUnid(auth.getUnid());
 				nodeServerEndpoint.createStreams(ois);
+				nodeServerEndpoint.setCh(this);
 
 
 				if (uObj==null) { nodeServerEndpoint.loginIncorrect(); return;}

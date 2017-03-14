@@ -3,9 +3,12 @@ package com.jubaka.sors.serverSide;
 import com.jubaka.sors.dao.TestDao;
 import com.jubaka.sors.dao.UserDao;
 import com.jubaka.sors.entities.User;
+import com.jubaka.sors.managed.ServerArgumentsBean;
 
 import java.io.IOException;
 import java.util.Set;
+import javax.ejb.Startup;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.CDI;
@@ -21,10 +24,13 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class InitNodeListener
  */
 @Named
+@ApplicationScoped
 @WebServlet("/InitNodeListener")
 	public class InitNodeListener extends HttpServlet {
 	@Inject
 	private ConnectionHandler ch;
+	@Inject
+	private ServerArgumentsBean args;
 
 	private static final long serialVersionUID = 1L;
        
@@ -32,7 +38,7 @@ import javax.servlet.http.HttpServletResponse;
      * @see HttpServlet#HttpServlet()
      */
     public InitNodeListener() {
-    	
+
         super();
         // TODO Auto-generated constructor stub
     }
@@ -42,7 +48,8 @@ import javax.servlet.http.HttpServletResponse;
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		ch.initConnectionListener();
+
+		ch.initConnectionListener(args.getPortListenTo());
 	//	ch.initDBManager();
 		System.out.println("NodeListener started");
 		// TODO Auto-generated method stub

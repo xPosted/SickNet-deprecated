@@ -4,6 +4,10 @@ import com.jubaka.sors.beans.branch.*;
 import com.jubaka.sors.dao.BranchDao;
 import com.jubaka.sors.entities.*;
 import com.jubaka.sors.managed.LoginBean;
+import com.jubaka.sors.protocol.http.HTTP;
+import com.jubaka.sors.protocol.http.HTTPRequest;
+import com.jubaka.sors.protocol.http.HTTPResponse;
+import com.jubaka.sors.unitTests.HTTPResp;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -202,7 +206,9 @@ public class BranchService {
         sesBean.setClosed(ses.getClosed());
         sesBean.setSrcDataTimeBinding(ses.getChartData().getSrcDataTime());
         sesBean.setDstDataTimeBinding(ses.getChartData().getDstDataTime());
-
+        List<HTTP> httpList = combine(ses.getRequestList(),ses.getResponseList());
+        sesBean.setHttpBuf(httpList);
+        if (sesBean.getHttpBuf().size()>0) sesBean.setHttp(true);
         return sesBean;
 
     }
@@ -256,6 +262,73 @@ public class BranchService {
 
         return bean;
 
+
+    }
+
+    public HTTPRequest castToBean(HttpRequest req) {
+        HTTPRequest bean = new HTTPRequest();
+        bean.setAccept(req.getAccept());
+        bean.setAccept_Charset(req.getAccept_Charset());
+        bean.setAccept_Encoding(req.getAccept_Encoding());
+        bean.setAccept_Language(req.getAccept_Language());
+        bean.setAccept_Ranges(req.getAccept_Ranges());
+        bean.setAuthorization(req.getAuthorization());
+        bean.setCache_Control(req.getCache_Control());
+        bean.setConnection(req.getConnection());
+        bean.setContent_Length(req.getContent_Length());
+        bean.setContent_Type(req.getContent_Type());
+        bean.setCookie(req.getCookie());
+        bean.setDate(req.getDate());
+        bean.setHost(req.getHost());
+        bean.setIf_Modified_Since(req.getIf_Modified_Since());
+        bean.setUser_Agent(req.getUser_Agent());
+        bean.setUA_CPU(req.getUA_CPU());
+        bean.setProxy_Connection(req.getProxy_Connection());
+        bean.setReferer(req.getReferer());
+        bean.setRequestMethod(req.getRequestMethod());
+        bean.setRequestUrl(req.getRequestUrl());
+        bean.setRequestVersion(req.getRequestVersion());
+        return bean;
+
+    }
+
+    public HTTPResponse castToBean(HttpResponse resp) {
+        HTTPResponse bean = new HTTPResponse();
+        bean.setRequestVersion(resp.getRequestVersion());
+        bean.setRequestUrl(resp.getRequestUrl());
+        bean.setAccept_Ranges(resp.getAccept_Ranges());
+        bean.setAge(resp.getAge());
+        bean.setAllow(resp.getAllow());
+        bean.setCache_Control(resp.getCache_Control());
+        bean.setContent_Disposition(resp.getContent_Disposition());
+        bean.setContent_Encoding(resp.getContent_Encoding());
+        bean.setContent_Length(resp.getContent_Length());
+        bean.setContent_Location(resp.getContent_Location());
+        bean.setContent_MD5(resp.getContent_MD5());
+        bean.setContent_Range(resp.getContent_Range());
+        bean.setContent_Type(resp.getContent_Type());
+        bean.setExpires(resp.getExpires());
+        bean.setResponseCode(resp.getResponseCode());
+        bean.setResponseCodeMsg(resp.getResponseCodeMsg());
+        bean.setServer(resp.getServer());
+        bean.setSet_Cookie(resp.getSet_Cookie());
+        return bean;
+
+    }
+
+    public List<HTTP>  combine(List<HttpRequest> reqs, List<HttpResponse> resps) {
+
+        TreeMap<Integer,HTTP> httpMap = new TreeMap<>();
+
+        for (HttpRequest req : reqs) {
+            httpMap.put(req.getSequence(),castToBean(req));
+        }
+        for (HttpResponse resp : resps) {
+            httpMap.put(resp.getSequence(),castToBean(resp));
+        }
+
+        List<HTTP> httpList = new ArrayList<>(httpMap.values());
+        return httpList;
 
     }
 

@@ -4,6 +4,7 @@ import com.jubaka.sors.beans.Bean;
 import com.jubaka.sors.protocol.http.HTTP;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  */
 public class SessionLightBean extends Bean implements Serializable {
 
+    private static SimpleDateFormat sdf= new SimpleDateFormat("ss:mm:HH dd.mm");
     protected Long srcDataLen = (long) 0;
     protected Long dstDataLen = (long) 0;
     protected Date established;
@@ -23,6 +25,9 @@ public class SessionLightBean extends Bean implements Serializable {
     protected String dstIP;
     protected Integer srcP;
     protected Integer dstP;
+    protected boolean http=false;
+
+
 
     public  String getSrcIP() {
         return srcIP;
@@ -98,5 +103,26 @@ public class SessionLightBean extends Bean implements Serializable {
     }
 
 
+    public String getNiga() {
+        System.out.println("Niga");
+        return "Niga";
+    }
+    public boolean isHttp() {
+        if (http) System.out.println("True"); else System.out.println("False");
+        return http;
+    }
 
+    public void setHttp(boolean http) {
+        this.http = http;
+    }
+
+    public String getEstablishedWebStr() {
+        return sdf.format(established);
+
+    }
+
+    public String getClosedWebStr() {
+        if (closed == null) return "Online";
+        return sdf.format(closed);
+    }
 }

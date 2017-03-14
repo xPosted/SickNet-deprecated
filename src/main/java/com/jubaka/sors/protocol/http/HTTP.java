@@ -4,6 +4,7 @@ import java.io.RandomAccessFile;
 import java.io.Serializable;
 
 import com.jubaka.sors.protocol.http.protocol.tcp.TCP;
+import com.jubaka.sors.unitTests.HTTPResp;
 import org.jnetpcap.packet.AbstractMessageHeader.MessageType;
 import org.jnetpcap.protocol.tcpip.Http;
 import org.jnetpcap.protocol.tcpip.Http.Request;
@@ -83,6 +84,28 @@ public abstract class HTTP extends TCP implements Serializable {
 			return response;
 		}
 		return null;
+	}
+
+	public boolean isRequest() {
+		if (this instanceof HTTPRequest) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isResponse() {
+		if (this instanceof HTTPResponse) {
+			return true;
+		}
+		return false;
+	}
+
+	public HTTPRequest castToRequest() {
+		return (HTTPRequest) this;
+	}
+
+	public HTTPResponse castToResponse() {
+		return (HTTPResponse) this;
 	}
 
 }

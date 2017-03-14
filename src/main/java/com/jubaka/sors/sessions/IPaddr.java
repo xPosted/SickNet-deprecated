@@ -3,13 +3,7 @@ package com.jubaka.sors.sessions;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Observable;
-import java.util.Set;
+import java.util.*;
 
 import com.jubaka.sors.protocol.http.HTTP;
 import org.jnetpcap.protocol.network.Ip4;
@@ -17,8 +11,11 @@ import org.jnetpcap.protocol.tcpip.Tcp;
 
 
 public class IPaddr extends Observable implements Serializable, CustomObserver {
-	private Long receiveLimitBuf = (long)0;
-	private Long sendLimitBuf = (long)0;
+
+
+
+	private List<Session> newSessionsForCC = Collections.synchronizedList(new ArrayList<>());
+	private boolean remoteObserver = false;
 
 	private InetAddress addr;
 	private String dnsName= new String("not resolved");
@@ -102,12 +99,21 @@ public class IPaddr extends Observable implements Serializable, CustomObserver {
 		return activated;
 	}
 
+	public List<Session> getNewSessionsForCC() {
+		List<Session> item = new ArrayList<>(newSessionsForCC);
+		clearNewSessionsList();
+		return item;
+	}
+
+	public void clearNewSessionsList() {
+		newSessionsForCC.clear();
+	}
 	public IPaddr(Integer id, InetAddress addr, Subnet net) {
 		this.addr = addr;
 		this.net = net;
-		addInst(id,this);
 		GetHostName hName = new GetHostName(this);
 		hName.resolve();
+		addInst(id,this);
 	}
 	
 	public void setSubnet(Subnet net) {
@@ -119,6 +125,15 @@ public class IPaddr extends Observable implements Serializable, CustomObserver {
 		if (ses.getSrcIP() == this) return false;
 		if (ses.getDstIP() == this) return true;
 		return false;
+	}
+
+	public boolean isRemoteObserver() {
+		return remoteObserver;
+	}
+
+	public void setRemoteObserver(boolean remoteObserver) {
+		this.remoteObserver = remoteObserver;
+		System.out.println("set remote observer "+remoteObserver);
 	}
 	
 	public void clearAll() {
@@ -436,7 +451,8 @@ public class IPaddr extends Observable implements Serializable, CustomObserver {
 		net.save(ses);
 		net.addIp(ses.getDstIP());
 		setChanged();
-		notifyObservers(ses);
+	//	notifyObservers(ses);
+		 newSessionsForCC.add(ses);
 		
 	}
 	public synchronized void handleOutputSession(Session ses) {
@@ -446,7 +462,8 @@ public class IPaddr extends Observable implements Serializable, CustomObserver {
 		net.save(ses);
 		net.addIp(ses.getSrcIP());
 		setChanged();
-		notifyObservers(ses);
+	//	notifyObservers(ses);
+		if (remoteObserver) newSessionsForCC.add(ses);
 		
 	}
 	public String getDnsName() {

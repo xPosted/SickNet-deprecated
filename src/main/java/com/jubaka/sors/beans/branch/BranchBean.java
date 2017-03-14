@@ -45,4 +45,6 @@ public class BranchBean extends BranchLightBean implements Serializable {
 		return null;
 
 	}
+
+
 }

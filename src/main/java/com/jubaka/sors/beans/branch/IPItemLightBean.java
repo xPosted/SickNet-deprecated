@@ -1,9 +1,11 @@
 package com.jubaka.sors.beans.branch;
 
 import com.jubaka.sors.beans.Bean;
+import com.jubaka.sors.sessions.Session;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by root on 30.08.16.
@@ -22,6 +24,7 @@ public class IPItemLightBean extends Bean implements Serializable {
     protected Integer activeCount=0;
     protected Integer savedCount=0;
     protected Integer brId=null;
+    protected List<SessionBean> newSessionsForCC=null;
 
     public synchronized Long getDataDown() {
         return dataDown;
@@ -103,6 +106,15 @@ public class IPItemLightBean extends Bean implements Serializable {
 
     public void setInputActiveCount(Integer inputActiveCount) {
         this.inputActiveCount = inputActiveCount;
+    }
+
+
+    public List<SessionBean> getNewSessionsForCC() {
+        return newSessionsForCC;
+    }
+
+    public void setNewSessionsForCC(List<SessionBean> newSessionsForCC) {
+        this.newSessionsForCC = newSessionsForCC;
     }
 
 }

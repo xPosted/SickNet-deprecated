@@ -4,6 +4,7 @@ package com.jubaka.sors.managed;
 import com.jubaka.sors.entities.User;
 import com.jubaka.sors.service.UserService;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -63,16 +64,29 @@ public class LoginBean implements Serializable {
         this.user = user;
     }
 
-    public void loginAction() throws IOException {
+    @PostConstruct
+    public void testConstruct() {
+        System.out.println("test postconstruct in loginBean");
+    }
 
-        pass = PassEncoder.encode(pass);
-        user = userService.checkUser(login,pass);
+    public void loginAction() throws IOException {
+        if (user != null)  {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("NodesView.xhtml");
+            return;
+        }
+        if (pass!=null & login!= null) {
+            pass = PassEncoder.encode(pass);
+            user = userService.checkUser(login, pass);
+        }
         if (user != null) {
             linked = true;
             FacesContext.getCurrentInstance().getExternalContext().redirect("NodesView.xhtml");
         }
 
     }
+
+
+
 
     public void logoutAction() throws IOException{
         linked = false;

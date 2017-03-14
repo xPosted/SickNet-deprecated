@@ -376,10 +376,6 @@ public class Subnet extends Observable implements Serializable, CustomObserver  
 		 treeItem.add(s);
 		 timeSesMap.put(s.getEstablished().getTime(), s);
 		 setChanged();
-	  	
-		
-		
-		
 
 	}
   	public Session getSessionById(Long tm) {

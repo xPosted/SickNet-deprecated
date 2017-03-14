@@ -1,12 +1,6 @@
 package com.jubaka.sors.serverSide;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.*;
@@ -14,23 +8,25 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import javax.swing.table.DefaultTableModel;
 
 import com.jubaka.sors.beans.*;
 import com.jubaka.sors.beans.branch.*;
 import com.jubaka.sors.serverSide.bean.StreamTransportBean;
+import com.jubaka.sors.service.NodeService;
 import com.mysql.fabric.Server;
 import org.jfree.data.time.TimeSeries;
 
-@Named
 public class NodeServerEndpoint extends Observable {
 
-	@Inject
-	private ConnectionHandler ch;
 
+
+	private ConnectionHandler ch;
 	private InfoBean info = null;
 	private String nodeName = null;
 	private Socket s = null;
@@ -56,7 +52,7 @@ public class NodeServerEndpoint extends Observable {
 			}
 			fullName= owner+"@"+nodeName;
 			addr=s.getInetAddress();
-			Thread th =new Thread( new ServerInListener(ois));
+			Thread th =new Thread( new ServerInListener(ois,this));
 			th.start();
 
 		} catch (IOException oie) {
@@ -204,6 +200,67 @@ public class NodeServerEndpoint extends Observable {
 
 		} catch (IOException e) {
 			
+			e.printStackTrace();
+			if (lock.isLocked()) lock.unlock();
+			disconnect();
+			return false;
+		}
+
+		return true;
+	}
+
+	public   boolean createBranch(String byUser, Part filePart, String branchName) {
+		if  (checkConnection()==false) {
+			return false;
+		}
+		try {
+
+			if (filePart == null) return false;
+			long fileLen = filePart.getSize();
+			String[] command = new String[5];
+			command[0] = "createBranch_";
+			command[1] = Long.toString(fileLen) ;
+			command[2] = byUser;
+			command[3] = filePart.getName();
+			command[4] = branchName;
+
+			Long requestId = random.nextLong();
+			RequestObject request = new RequestObject();
+			request.setRequestId(requestId);
+			request.setRequestStr(command);
+			lock.lock();
+			oos.writeObject(request);
+			oos.flush();
+			lock.unlock();
+			Bean response = getResponse(requestId);
+
+			if (response.getObject().equals("getPcap")) {
+				InputStream fin = filePart.getInputStream();
+				long  counter = 0;
+				while (counter < fileLen) {
+					byte[] smallBuf;
+					byte[] buf = new byte[4096];
+					int count = fin.read(buf);
+
+					counter = counter + count;
+					if (count < 4096) {
+						smallBuf = new byte[count];
+						for (int j = 0; j < count; j++) {
+							smallBuf[j] = buf[j];
+						}
+
+						oos.write(smallBuf);
+
+					} else
+						oos.write(buf);
+				}
+				oos.flush();
+			}
+
+
+
+		} catch (IOException e) {
+
 			e.printStackTrace();
 			if (lock.isLocked()) lock.unlock();
 			disconnect();
@@ -585,7 +642,74 @@ public class NodeServerEndpoint extends Observable {
 
 		return ts;
 	}
-	
+
+	public  TimeSeries getSesDstDataChart(Integer brId,String network,Long sesId) {
+		if  (checkConnection()==false) {
+			return null;
+		}
+		TimeSeries ts = new TimeSeries("NULL");
+		try {
+			String[] command = new String[4];
+			command[0] = "getSessionDstDataChart_";
+			command[1] = brId.toString();
+			command[2] = network;
+			command[3] = sesId.toString();
+
+			Long requestId = random.nextLong();
+			RequestObject request = new RequestObject();
+			request.setRequestId(requestId);
+			request.setRequestStr(command);
+			lock.lock();
+			oos.writeObject(request);
+			oos.flush();
+			lock.unlock();
+			Bean response = getResponse(requestId);
+			if (response.getObject() instanceof TimeSeries) {
+				ts = (TimeSeries) response.getObject();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			disconnect();
+		}
+
+		return ts;
+	}
+
+	public  TimeSeries getSesSrcDataChart(Integer brId,String network,Long sesId) {
+		if  (checkConnection()==false) {
+			return null;
+		}
+		TimeSeries ts = new TimeSeries("NULL");
+		try {
+			String[] command = new String[4];
+			command[0] = "getSessionSrcDataChart_";
+			command[1] = brId.toString();
+			command[2] = network;
+			command[3] = sesId.toString();
+
+			Long requestId = random.nextLong();
+			RequestObject request = new RequestObject();
+			request.setRequestId(requestId);
+			request.setRequestStr(command);
+			lock.lock();
+			oos.writeObject(request);
+			oos.flush();
+			lock.unlock();
+			Bean response = getResponse(requestId);
+			if (response.getObject() instanceof TimeSeries) {
+				ts = (TimeSeries) response.getObject();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			disconnect();
+		}
+
+		return ts;
+	}
+
+
 	public  DefaultTableModel getSubnetTModel(Integer brId,String subnet) {
 		if  (checkConnection()==false) {
 			return null;
@@ -1265,6 +1389,14 @@ public class NodeServerEndpoint extends Observable {
 		return bsb;
 	}
 	private  void disconnect() {
+		try {
+			ois.close();
+			oos.close();
+		} catch (IOException io) {
+			io.printStackTrace();
+		}
+
+
 		ch.nodeDisconnected(this);
 	}
 
@@ -1339,11 +1471,23 @@ public class NodeServerEndpoint extends Observable {
 		this.addr = addr;
 	}
 
+	public ConnectionHandler getCh() {
+		return ch;
+	}
+
+	public void setCh(ConnectionHandler ch) {
+		this.ch = ch;
+	}
+
 	class ServerInListener implements  Runnable {
 
 		private ObjectInputStream ois;
-		public ServerInListener(ObjectInputStream ois) {
+		private NodeServerEndpoint nse = null;
+
+		public ServerInListener(ObjectInputStream ois,NodeServerEndpoint nse) {
+
 			this.ois = ois;
+			this.nse = nse;
 		}
 
 		@Override
@@ -1367,7 +1511,11 @@ public class NodeServerEndpoint extends Observable {
 							notifyObservers(bean);
 						}
 					} else System.err.println("not a bean instance handled!!");
-					} catch (Exception e) {
+					} catch (EOFException e) {
+						e.printStackTrace();
+						nse.disconnect();
+						break;
+					} catch (IOException | ClassNotFoundException e) {
 						e.printStackTrace();
 						break;
 					}

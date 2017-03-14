@@ -3,10 +3,11 @@ package com.jubaka.sors.managed;
 import com.jubaka.sors.beans.Category;
 import com.jubaka.sors.beans.branch.*;
 import com.jubaka.sors.entities.Branch;
-import com.jubaka.sors.serverSide.ConnectionHandler;
-import com.jubaka.sors.serverSide.NodeServerEndpoint;
+import com.jubaka.sors.serverSide.*;
 import com.jubaka.sors.service.BranchService;
+import com.jubaka.sors.service.PortServiceService;
 import com.jubaka.sors.service.SessionCategoriser;
+import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.TimeSeries;
 
 import javax.annotation.PostConstruct;
@@ -18,6 +19,7 @@ import javax.inject.Named;
 import javax.websocket.Session;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -39,15 +41,26 @@ public class TaskViewBean implements Serializable, Observer {
     @Inject
     private BranchService branchService;
 
+    @Inject
+    private PortServiceService portService;
+
     private BranchLightBean blb = null;
     private SubnetLightBean sbl = null;
     private IPItemBean ipBean = null;
     private List<?> onlineIps = new ArrayList<>();
     private List<?> allIps = new ArrayList<>();
     private List<SessionBean> sessionList = new ArrayList<>();
+    private List<Category> newCategories = new ArrayList<>();
+    private List<SessionBean> newSessions = new ArrayList<>();
 
-    private List<Category> categories;
-    private Map<Category,List<SessionBean>> categoriesData;
+    private SessionBean selectedSesBean = null;
+
+    private List<Category> categories= Collections.synchronizedList(new ArrayList<>());
+    private List<SmartFilter> filters = new ArrayList<>();
+ //   private Map<Category,List<SessionBean>> categoriesData;
+    private Category selectedCat = null;
+ //   private int categoryType = 0;
+  //  private boolean categorised = true;
 
     private NodeServerEndpoint nodeServerEndpoint = null;
 
@@ -66,7 +79,12 @@ public class TaskViewBean implements Serializable, Observer {
     private Long sessionId = null;
     private Session webSession = null;
 
-    private boolean categorised = true;
+    private String chartDataStr="";
+
+
+    private String selectedCategoryId = "";
+
+
 
     @PostConstruct
     public void postContruct() {
@@ -95,14 +113,14 @@ public class TaskViewBean implements Serializable, Observer {
             initTask(dbTaskId);
         }
 
-
-
+        filters.add(new HostSessionFilter());
+        filters.add(new PortSessionFilter(portService));
           //  initBeans();
 
     }
 
 
-
+/*
 
     public void initBeans() {
         Long nodeId = null;
@@ -134,20 +152,46 @@ public class TaskViewBean implements Serializable, Observer {
                 nodeServerEndpoint.removeObserver(blb.getBib().getId(),ipBean.getIp());
             }
             ipBean =  nodeServerEndpoint.getIpItemBean(blb.getBib().getId(),ipStr,true);
-            updateCurrentSessionList();
-            System.out.println("initBeans.ipBean="+ipBean.getIp());
+    //        refreshFilter(null);
             nodeServerEndpoint.addObserver(this);
             ipStr= null;
         }
 
     }
+    */
+
+    public Category getSelectedCat() {
+        return selectedCat;
+    }
+
+    public void setSelectedCat(Category selectedCat) {
+        this.selectedCat = selectedCat;
+      sessionList = selectedCat.getSessionList();
+        System.out.println("select cat - " + selectedCat.getName());
+       /// / refreshFilter(selectedCat);
+    }
+
+    public void setSelectedCat(String listId) {
+        int id = 0;
+        try {
+            id = Integer.decode(listId);
+        } catch (NumberFormatException nfe) {
+            nfe.printStackTrace();
+            return;
+        }
+
+        this.selectedCat =  categories.get(id);
+        sessionList = selectedCat.getSessionList();
+    }
+
+
     public List<Category> getCategories() {
+
         return categories;
     }
 
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
-    }
+  //  public void setCategories(List<Category> categories) {      this.categories = categories;
+   // }
 
     public boolean isDbManagedTask() {
         if (blb instanceof BranchBean) {
@@ -158,6 +202,13 @@ public class TaskViewBean implements Serializable, Observer {
     }
    public void initTask(Long nodeUnid, Integer taskId) {
 
+       if (nodeServerEndpoint != null) {
+           if (nodeServerEndpoint.getUnid().equals(nodeUnid)) {
+               if (blb.getBib().getId().equals(taskId))
+                   return;
+               //You have already viewed this branch before
+           }
+       }
        nodeServerEndpoint = ch.getNodeServerEndPoint(nodeUnid);
 
 
@@ -168,10 +219,18 @@ public class TaskViewBean implements Serializable, Observer {
 
        ipBean = null;
        sbl = null;
+
        onlineIps.clear();
        allIps.clear();
 
+
+
    }
+
+    public String getSelectedNetDataDownDirect() {
+        if (sbl != null) return sbl.getDataReceive().toString();
+        return "0";
+    }
 
 
     public void selectSubnet(String subnet) {
@@ -208,7 +267,9 @@ public class TaskViewBean implements Serializable, Observer {
             ipBean =  nodeServerEndpoint.getIpItemBean(blb.getBib().getId(),address,true);
             nodeServerEndpoint.addObserver(this);
         }
-        updateCurrentSessionList();
+        //refreshFilter(null);
+        if (filters.size()>0)
+            refreshFiltersNew(getSelectedIp(),null,filters.get(0));
     }
 
     public void initTask(Long dbtaskId) {
@@ -231,6 +292,16 @@ public class TaskViewBean implements Serializable, Observer {
 
     }
 
+    public SessionBean getSelectedSesBean() {
+        return selectedSesBean;
+    }
+
+    public void setSelectedSesBean(SessionBean selectedSesBean) {
+        System.out.println("Session "+selectedSesBean.getDstIP()+" https size "+ selectedSesBean.getHttpBuf().size());
+        this.selectedSesBean = selectedSesBean;
+        buildSessionChartStr();
+    }
+
 
     public String getCurrentBranchId() {
         return blb.getBib().getId().toString();
@@ -244,7 +315,7 @@ public class TaskViewBean implements Serializable, Observer {
             Date timeFrom = new Date(new Date().getTime()-11000);
             Date timeTo = new Date();
             TimeSeries ts = nodeServerEndpoint.getDataOutChart(blb.getBib().getId(),timeFrom.getTime(),timeTo.getTime());
-
+            if (ts == null) return "0";
             for (int item=0;item<ts.getItemCount();item++) {
                 Integer val = (Integer) ts.getValue(item);
                 result = result+","+val.toString();
@@ -273,7 +344,6 @@ public class TaskViewBean implements Serializable, Observer {
 
     public void setSubnet(String subnet) {
         this.subnet = subnet;
-        System.out.println("subnet = "+this.subnet);
        // initBeans();
     }
 
@@ -285,7 +355,28 @@ public class TaskViewBean implements Serializable, Observer {
         this.taskIdStr = taskIdStr;
     }
 
+  //  public int getCategoryType() {
+  //      return categoryType;
+   // }
+/*
+    public void setCategoryTypeHost() {
+        categoryType = 0;
+        selectedCat = null;
+        updateCurrentSessionList();
+    }
+    public void setCategoryTypePort() {
+        categoryType = 1;
+        selectedCat = null;
+        updateCurrentSessionList();
+    }
+*/
+  public String getSelectedCategoryId() {
+      return selectedCategoryId;
+  }
 
+    public void setSelectedCategoryId(String selectedCategoryId) {
+        this.selectedCategoryId = selectedCategoryId;
+    }
 
 
     public BranchLightBean getBb() {
@@ -305,13 +396,17 @@ public class TaskViewBean implements Serializable, Observer {
     }
 
     public SubnetLightBean getSb() {
-        System.out.println("getSubnetLight");
         return sbl;
     }
 
     public void setSb(SubnetBean sb) {
         this.sbl = sb;
     }
+
+    public List<SmartFilter> getFilters() {
+        return filters;
+    }
+
 
     public List<?> setToList(Set<?> set) {
         return new ArrayList<>(set);
@@ -412,9 +507,64 @@ public class TaskViewBean implements Serializable, Observer {
     }
     public void changeActiveFilter() {
         this.sessionActiveFilter = !sessionActiveFilter;
-        updateCurrentSessionList();
+  //      refreshFilter(null);
 
     }
+
+    public String getChartDataStr() {
+
+        System.out.println("chartStrVal = "+chartDataStr);
+        return chartDataStr;
+    }
+
+    public void setChartDataStr(String chartDataStr) {
+        this.chartDataStr = chartDataStr;
+    }
+
+
+    public String buildSessionChartStr() {
+
+        if (selectedSesBean==null) return "";
+
+       TimeSeries tsDst = nodeServerEndpoint.getSesDstDataChart(blb.getBib().getId(),sbl.getSubnet().getHostAddress(),selectedSesBean.getEstablished().getTime());
+        TimeSeries tsSrc = nodeServerEndpoint.getSesSrcDataChart(blb.getBib().getId(),sbl.getSubnet().getHostAddress(),selectedSesBean.getEstablished().getTime());
+        return handleTimeSeries(tsDst,tsSrc);
+    }
+
+    private String handleTimeSeries(TimeSeries tsDst,TimeSeries tsSrc) {
+
+        chartDataStr = "{\n" +
+                "  \"cols\": [\n" +
+                "    {\"id\":\"\",\"label\":\"Topping\",\"pattern\":\"\",\"type\":\"string\"},\n" +
+                "    {\"id\":\"\",\"label\":\"Dst transmitted data\",\"pattern\":\"\",\"type\":\"number\"},\n" +
+                "    {\"id\":\"\",\"label\":\"Src transmitted data\",\"pattern\":\"\",\"type\":\"number\"}\n" +
+                "  ],\n" +
+                "  \"rows\": [";
+
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss dd.MM");
+        Collection timePeriodCollection  = tsSrc.getTimePeriods();
+        timePeriodCollection.addAll(tsDst.getTimePeriods());
+        String valDstStr = "";
+        String valSrcStr = "";
+        for (Object rtpO : timePeriodCollection) {
+            RegularTimePeriod rtp = (RegularTimePeriod) rtpO;
+            Number valDst = tsDst.getValue(rtp);
+            Number valSrc = tsSrc.getValue(rtp);
+            if (valDst == null) valDst = 0;
+            if (valSrc == null) valSrc = 0;
+            valDstStr = ConnectionHandler.processSize(valDst.doubleValue(),2);
+            valSrcStr = ConnectionHandler.processSize(valSrc.doubleValue(),2);
+            chartDataStr=chartDataStr+"{\"c\":[{\"v\":\""+ sdf.format(rtp.getEnd())+"\",\"f\":null},{\"v\":"+valDst+",\"f\":\""+valDstStr+"\"},{\"v\":"+valSrc+",\"f\":\""+valSrcStr+"\"}]},";
+
+         //   humanValues = humanValues+"{v:"+valDst+", f:'"+ConnectionHandler.processSize(valDst.doubleValue(),2)+"'},";
+         //   if (valDst != valSrc) humanValues = humanValues+"{v:"+valSrc+", f:'"+ConnectionHandler.processSize(valSrc.doubleValue(),2)+"'},";
+
+        }
+        chartDataStr +="  ]\n}";
+        return chartDataStr;
+    }
+
+
 
     public boolean isSessionInFilter() {
         return sessionInFilter;
@@ -426,7 +576,7 @@ public class TaskViewBean implements Serializable, Observer {
 
     public void changeInFilter() {
         this.sessionInFilter = !sessionInFilter;
-        updateCurrentSessionList();
+    //    refreshFilter(null);
     }
 
     public boolean isSessionOutFilter() {
@@ -435,7 +585,7 @@ public class TaskViewBean implements Serializable, Observer {
 
     public void changeOutFilter() {
         this.sessionOutFilter = !sessionOutFilter;
-        updateCurrentSessionList();
+   //     refreshFilter(null);
     }
 
     public boolean isSessionSavedFilter() {
@@ -448,7 +598,7 @@ public class TaskViewBean implements Serializable, Observer {
 
     public void changeSavedFilter() {
         this.sessionSavedFilter = !sessionSavedFilter;
-        updateCurrentSessionList();
+   //     refreshFilter(null);
     }
 
     public String sizeToStr(double size,Integer afterDot) {
@@ -472,13 +622,9 @@ public class TaskViewBean implements Serializable, Observer {
         this.webSession = webSession;
     }
 
-    public boolean isCategorised() {
-        return categorised;
-    }
-
-    public void setCategorised(boolean categorised) {
-        this.categorised = categorised;
-    }
+//    public void setCategorised(boolean categorised) {
+ //       this.categorised = categorised;
+  //  }
 
 
     public List<?> getAllIps() {
@@ -505,52 +651,208 @@ public class TaskViewBean implements Serializable, Observer {
         this.sessionList = sessionList;
     }
 
-    public void updateCurrentSessionList() {
+    public String longToStr(Long size) {
+        return ConnectionHandler.processSize(size,1);
+    }
+
+    public void printArgs(final String id) {
+        System.out.println(" printArgs "+id);
+
+    }
+
+    public void refreshFiltersNew(String selectedIp, List<Category> categories, SmartFilter filter) {
+        this.categories.clear();
+        Integer currentIndexofFilter = filters.indexOf(filter);
+        if (categories == null) {
+            sessionList.clear();
+            if (sessionActiveFilter & sessionInFilter) sessionList.addAll(ipBean.getActiveInSes());
+            if (sessionActiveFilter & sessionOutFilter) sessionList.addAll(ipBean.getActiveOutSes());
+            if (sessionSavedFilter & sessionInFilter) sessionList.addAll(ipBean.getStoredInSes());
+            if (sessionSavedFilter & sessionOutFilter) sessionList.addAll(ipBean.getStoredOutSes());
+            categories = filter.sort(selectedIp,sessionList);
+            if (currentIndexofFilter < (filters.size()-1)) {
+                SmartFilter nextFilter = filters.get(currentIndexofFilter+1);
+                refreshFiltersNew(selectedIp,categories,nextFilter);
+            }
+            this.categories.addAll(categories);
+
+        } else {
+            for (Category cat : categories) {
+                cat.setSubCategories(filter.sort(selectedIp, cat.getSessionList()));
+                if (currentIndexofFilter < (filters.size()-1)) {
+                    SmartFilter nextFilter = filters.get(currentIndexofFilter+1);
+                    refreshFiltersNew(selectedIp,cat.getSubCategories(),nextFilter);
+
+                }
+            }
+        }
+
+
+    }
+
+    public List<Category> categorise(String selectedIp, List<SessionBean> sessions, List<SmartFilter> filters, SmartFilter currentFilter) {
+        Integer currentIndexofFilter = filters.indexOf(currentFilter);
+        List<Category> cats = currentFilter.sort(selectedIp,sessions);
+        if ((currentIndexofFilter+1)<filters.size()) {
+            for (Category cat : cats) {
+                cat.setSubCategories(categorise(selectedIp,cat.getSessionList(),filters,filters.get(currentIndexofFilter+1)));
+            }
+        }
+
+        return cats;
+
+    }
+
+
+/*
+    public void refreshFilter(Category selectedCat) {
         sessionList.clear();
         if (sessionActiveFilter & sessionInFilter) sessionList.addAll(ipBean.getActiveInSes());
         if (sessionActiveFilter & sessionOutFilter) sessionList.addAll(ipBean.getActiveOutSes());
         if (sessionSavedFilter & sessionInFilter) sessionList.addAll(ipBean.getStoredInSes());
         if (sessionSavedFilter & sessionOutFilter) sessionList.addAll(ipBean.getStoredOutSes());
 
-        if (isCategorised()) {
-            SessionCategoriser categoriser = new SessionCategoriser();
-            categoriesData = categoriser.sortByHost(getSelectedIp(),sessionList);
-            categories = new ArrayList<>(categoriesData.keySet());
+        if (filters.size()==0) return;
+        if (selectedCat == null) {
+            filters.get(0).sort(getSelectedIp(),sessionList);
+            for (Integer i =1;i<filters.size();i++) {
+                filters.get(i).clearState();
+
+            }
+            sessionList.clear();
+            return;
+        }
+        if (selectedCat != null) {
+            SmartFilter smartFilter = selectedCat.getParentType();
+            Integer currentFilterIndex = filters.indexOf(smartFilter);
+            if (currentFilterIndex == (filters.size()-1))  sessionList = selectedCat.getSessionList();
+            else {
+                SmartFilter filter = filters.get(currentFilterIndex+1);
+                filter.sort(getSelectedIp(),selectedCat.getSessionList());
+                sessionList.clear();
+                return;
+            }
         }
 
+
+
+
+    }
+*/
+
+    public boolean passBasicFilter(SessionLightBean slb) {
+        if (sessionInFilter) {
+            if (    !   slb.getDstIP().equals(ipBean.getIp())) {
+                return false;
+            }
+        }
+        if (sessionOutFilter) {
+            if (    !   slb.getSrcIP().equals(ipBean.getIp())) {
+                return false;
+            }
+        }
+        if (sessionActiveFilter) {
+            if (    !   (slb.getClosed() == null)) {
+                return false;
+            }
+        }
+        if (sessionSavedFilter) {
+            if (    !   (slb.getClosed() !=null)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
+    public void addHostFilter() {
+        filters.add(new HostSessionFilter());
+      //  refreshFilter(null);
+        System.out.println(" add fileter");
+    }
+
+    public void addPortFilter() {
+        filters.add(new PortSessionFilter(portService));
+     //   refreshFilter(null);
+        System.out.println(" add fileter");
     }
 
 
     @Override
     public void update(Observable o, Object arg) {
         if (o instanceof NodeServerEndpoint & webSession != null) {
-            if (arg instanceof SubnetLightBean) {
-                SubnetLightBean receivedBean = (SubnetLightBean) arg;
-                if (receivedBean.getSubnet() == sbl.getSubnet() & receivedBean.getBrId() == sbl.getBrId()) {
-                    sbl=receivedBean;
-                    try {
-                        webSocketHandler.updateSubnetInfo(webSession);
-                    } catch(IOException io) {
-                        webSession = null;
-                    }
+            if (o == nodeServerEndpoint){
+                if (arg instanceof SubnetLightBean) {
+                    SubnetLightBean receivedBean = (SubnetLightBean) arg;
+                    if (sbl == null) return;
+                    if (receivedBean.getSubnet() == sbl.getSubnet() & receivedBean.getBrId() == sbl.getBrId()) {
+                        sbl=receivedBean;
+                        try {
+                            webSocketHandler.updateSubnetInfo(webSession);
+                        } catch(IOException io) {
+                            webSession = null;
+                        }
 
-                    // web socket notify
-                }
-            }
-            if (arg instanceof IPItemLightBean & webSession != null) {
-                IPItemLightBean receivedBean = (IPItemLightBean) arg;
-                if (receivedBean.getIp().equals(ipBean.getIp()) & receivedBean.getBrId() == ipBean.getBrId()) {
-                    // web socket notify
-                    ipBean.update(receivedBean);
-                    System.out.println("initBeans.ipBean="+ipBean.getIp());
-                    try {
-                        webSocketHandler.updateIpInfo(webSession);
-
-                    } catch(IOException io) {
-                        webSession = null;
+                        // web socket notify
                     }
                 }
+                if (arg instanceof IPItemLightBean) {
+                    IPItemLightBean receivedBean = (IPItemLightBean) arg;
+                    if (ipBean == null) return;
+                    if (receivedBean.getIp().equals(ipBean.getIp()) & receivedBean.getBrId() == ipBean.getBrId()) {
+                        // web socket notify
+                        ipBean.update(receivedBean);
+                        try {
+                            webSocketHandler.updateIpInfo(webSession);
+
+                        } catch(IOException io) {
+                            webSession = null;
+                        }
+                        if (receivedBean.getNewSessionsForCC().size()>0) {
+
+                            boolean updateCategories = false;
+                            boolean addCategories = false;
+
+                            List<Category> newCats = categorise(ipBean.getIp(),receivedBean.getNewSessionsForCC(),filters,filters.get(0));
+                          //  newCategories.addAll(newCats);
+
+
+                            synchronized (categories) {
+                                for (Category cat : categories) {
+                                    for (Category newCat : newCats) {
+                                        if (cat.checkForEquals(newCat)) {
+                                            updateCategories = true;
+
+                                        } else {
+                                            addCategories = true;
+                                        //    categories.addAll(newCats);
+
+
+                                        }
+                                    }
+
+                                }
+                            }
+
+                            if (updateCategories) {
+                                try {
+                                    webSocketHandler.updateCategoryInfo(webSession);
+                                } catch (IOException io) {
+                                    webSession=null;
+                                    io.printStackTrace();
+                                }
+                                System.out.println("updateCategories");
+                            }
+                            if (addCategories) System.out.println("addCategories "+newCategories.size());
+
+                        }
+
+                    }
+                }
+
             }
         }
+
     }
 }

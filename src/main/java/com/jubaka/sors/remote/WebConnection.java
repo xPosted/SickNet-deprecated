@@ -82,6 +82,8 @@ private AutorisationBean prepareAutorisationBean() {
 	public static void closeConnection() {
 		try {
 			socket.close();
+
+			socket = null;
 			isRun=false;
 			
 		} catch (IOException e) {

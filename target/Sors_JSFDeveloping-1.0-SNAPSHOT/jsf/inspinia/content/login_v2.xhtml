@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
-<head>
+<h:head>
+
+    <f:metadata>
+        <f:viewAction action="#{loginBean.loginAction()}"/>
+    </f:metadata>
     <base href="http://localhost:8080/Sors_JSFDeveloping-1.0-SNAPSHOT/"/>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -15,7 +20,7 @@
     <link href="jsf/inspinia/css/animate.css" rel="stylesheet"/>
     <link href="jsf/inspinia/css/style.css" rel="stylesheet"/>
 
-</head>
+</h:head>
 
 <body class="gray-bg">
 

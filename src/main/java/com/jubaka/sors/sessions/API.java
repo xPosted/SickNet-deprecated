@@ -142,7 +142,7 @@ public class API extends Observable implements PcapPacketHandler<String>, Serial
 
 	@Override
 	public void nextPacket(PcapPacket arg0, String arg1) {
-		System.out.println("-");
+	//	System.out.println("-");
 		queue.add(new PcapPacket(arg0));
 		
 		if (!mutex.isLocked()) {

@@ -132,8 +132,7 @@ public class ConnectionHandler implements Runnable, Observer {
 			}	catch (Exception e) {
 					e.printStackTrace();
 					if (sendLock.isLocked()) sendLock.unlock();
-					if (s.isClosed()) break;
-					if (e instanceof EOFException) break;
+					break;
 
 
 				}
@@ -369,6 +368,46 @@ public class ConnectionHandler implements Runnable, Observer {
 			}
 			return;
 		}
+			if (command[0].startsWith("getSessionDstDataChart_")) {
+
+				if (command.length == 4) {
+					Integer brId = Integer.parseInt(command[1]);
+					String subnetStr = command[2];
+					Long sesId = Long.parseLong(command[3]);
+					Subnet subnet = StrToSubnet(brId,subnetStr);
+					Session ses =  subnet.getSessionById(sesId);
+					TimeSeries ts = StatisticLogic.createSessionDstTS(ses);
+					Bean transportBean = new Bean();
+					transportBean.setRequestId(ro.getRequestId());
+					transportBean.setObject(ts);
+					sendLock.lock();
+					oos.writeObject(transportBean);
+					oos.flush();
+					sendLock.unlock();
+				}
+				return;
+			}
+
+			if (command[0].startsWith("getSessionSrcDataChart_")) {
+
+				if (command.length == 4) {
+					Integer brId = Integer.parseInt(command[1]);
+					String subnetStr = command[2];
+					Long sesId = Long.parseLong(command[3]);
+					Subnet subnet = StrToSubnet(brId,subnetStr);
+					Session ses =  subnet.getSessionById(sesId);
+					TimeSeries ts = StatisticLogic.createSessionSrcTS(ses);
+					Bean transportBean = new Bean();
+					transportBean.setRequestId(ro.getRequestId());
+					transportBean.setObject(ts);
+					sendLock.lock();
+					oos.writeObject(transportBean);
+					oos.flush();
+					sendLock.unlock();
+				}
+				return;
+			}
+
 
 		if (command[0].startsWith("getDir_")) {
 
@@ -740,7 +779,10 @@ public class ConnectionHandler implements Runnable, Observer {
 				IPaddr ipaddr = IPaddr.getInstance(id,obj);
 
 				if (subnet != null) subnet.deleteObserver(this);
-				if (ipaddr != null) ipaddr.deleteObserver(this);
+				if (ipaddr != null) {
+					ipaddr.deleteObserver(this);
+					ipaddr.setRemoteObserver(false);
+				}
 
 			}
 			return;
@@ -762,6 +804,7 @@ public class ConnectionHandler implements Runnable, Observer {
 				if (observe) {
 					IPaddr ipaddr = IPaddr.getInstance(id, ipStr);
 					ipaddr.addObserver(this);
+					ipaddr.setRemoteObserver(true);
 				}
 
 			}

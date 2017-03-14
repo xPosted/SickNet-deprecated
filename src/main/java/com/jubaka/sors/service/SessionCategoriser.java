@@ -1,20 +1,35 @@
 package com.jubaka.sors.service;
 
 import com.jubaka.sors.beans.Category;
-import com.jubaka.sors.beans.branch.SessionBean;
-import com.jubaka.sors.beans.branch.SessionLightBean;
+import com.jubaka.sors.beans.branch.*;
 import com.jubaka.sors.entities.Session;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.*;
 
 /**
  * Created by root on 07.12.16.
  */
+
+
 public class SessionCategoriser {
+
+/*
+    private PortServiceService portService;
+
+    public SessionCategoriser(PortServiceService portService) {
+        this.portService = portService;
+
+    }
 
 
     public Map<Category,List<SessionBean>> sortByHost(String selectedHost, List<SessionBean> sessions) {
         Map<Category, List<SessionBean>> categories = new HashMap<>();
+        Map<String,List<SessionBean>> stringCategorised = new HashMap<String,List<SessionBean>>();
 
         String key= null;
         for (SessionBean sesBean : sessions) {
@@ -22,29 +37,59 @@ public class SessionCategoriser {
             if (!sesBean.getSrcIP().equals(selectedHost)) {key = sesBean.getSrcIP();}
             if (!sesBean.getDstIP().equals(selectedHost)) {key = sesBean.getDstIP();}
             if (key == null) return categories;
-            if (categories.containsKey(key)) {
-                List<SessionBean> categorySet = categories.get(key);
+            if (stringCategorised.containsKey(key)) {
+                List<SessionBean> categorySet = stringCategorised.get(key);
                 categorySet.add(sesBean);
             } else {
-                Category cat = new Category();
-                cat.setName(key);
-                cat.setCategoryDesc("Desc");
-                cat.setType(0);
-                cat.setSelectedHost(selectedHost);
+
                 List<SessionBean> categorySet = new ArrayList<>();
                 categorySet.add(sesBean);
-                categories.put(cat, categorySet);
+                stringCategorised.put(key, categorySet);
 
             }
         }
 
+        categories = createHostCategories(stringCategorised);
         calcStatCategorised(categories);
         return categories;
 
     }
 
+
+    private Map<Category,List<SessionBean>> createHostCategories(Map<String,List<SessionBean>> strCategorised) {
+        Map<Category,List<SessionBean>> res = new HashMap<>();
+        IPItemLightBean ipBean = null;
+        for (String strKey : strCategorised.keySet()) {
+            Category cat = new Category();
+            cat.setName(strKey);
+            try {
+                cat.setCategoryDesc(InetAddress.getByName(strKey).getHostName());
+            } catch(UnknownHostException uhe) {
+                uhe.printStackTrace();
+                cat.setCategoryDesc("-");
+            }
+
+            cat.setType(0);
+            res.put(cat,strCategorised.get(strKey));
+        }
+          return res;
+    }
+
+    private Map<Category,List<SessionBean>> createPortCategories(Map<Integer,List<SessionBean>> strCategorised) {
+        Map<Category,List<SessionBean>> res = new HashMap<>();
+        for (Integer intKey : strCategorised.keySet()) {
+            Category cat = new Category();
+            cat.setName(intKey.toString());
+            cat.setCategoryDesc(portService.getServiceName(intKey));
+            cat.setType(1);
+            res.put(cat,strCategorised.get(intKey));
+        }
+        return res;
+    }
+
     public Map<Category,List<SessionBean>> sortByPort(String selectedHost, List<SessionBean> sessions) {
-        HashMap<Category, List<SessionBean>> categories = new HashMap<>();
+        Map<Integer, List<SessionBean>> intCategorised = new HashMap<>();
+        Map<Category, List<SessionBean>> categories = new HashMap<>();
 
 
         Integer key= null;
@@ -52,23 +97,20 @@ public class SessionCategoriser {
 
             key = sesBean.getDstP();
             if (key == null) return categories;
-            if (categories.containsKey(key)) {
-                List<SessionBean> categorySet = categories.get(key);
+            if (intCategorised.containsKey(key)) {
+                List<SessionBean> categorySet = intCategorised.get(key);
                 categorySet.add(sesBean);
             } else {
-                Category cat = new Category();
-                cat.setName(key.toString());
-                cat.setCategoryDesc("Desc");
-                cat.setType(0);
-                cat.setSelectedHost(selectedHost);
+
                 List<SessionBean> categorySet = new ArrayList<>();
                 categorySet.add(sesBean);
-                categories.put(cat,categorySet);
+                intCategorised.put(key,categorySet);
 
             }
         }
 
 
+        categories = createPortCategories(intCategorised);
         calcStatCategorised(categories);
         return categories;
 
@@ -102,4 +144,6 @@ public class SessionCategoriser {
 
 
     }
+
+    */
 }

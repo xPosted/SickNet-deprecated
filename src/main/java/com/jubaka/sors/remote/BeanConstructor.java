@@ -32,6 +32,10 @@ public class BeanConstructor {
         bean.setSeq(ses.getSeq());
         bean.setSrcIP(ses.getSrcIP().getAddr().getHostAddress());
         bean.setSrcP(ses.getSrcP());
+        if (ses.getHTTPList().size()>0)
+            bean.setHttp(true);
+        else
+            bean.setHttp(false);
 
         return bean;
 
@@ -64,6 +68,7 @@ public class BeanConstructor {
         bean.setInputActiveCount(ipaddr.getInputActiveCount());
         bean.setOutputActiveCount(ipaddr.getOutputActiveCount());
         bean.setSavedCount(ipaddr.getSavedSesCount());
+        bean.setNewSessionsForCC(translateSessionSetToList(ipaddr.getNewSessionsForCC()));
         bean.setBrId(brId);
         return bean;
 
@@ -342,7 +347,7 @@ public class BeanConstructor {
 
     }
 
-    public HashSet<SessionBean> translateSessionSet(HashSet<Session> sesSet) {
+    public HashSet<SessionBean> translateSessionSet(Collection<Session> sesSet) {
         HashSet<SessionBean> res = new HashSet<SessionBean>();
         if (sesSet == null)
             return res;
@@ -353,6 +358,16 @@ public class BeanConstructor {
         return res;
     }
 
+    public List<SessionBean> translateSessionSetToList(Collection<Session> sesSet) {
+        List<SessionBean> res = new ArrayList<>();
+        if (sesSet == null)
+            return res;
+        for (Session item : sesSet) {
+            SessionBean sb = translateSessionToBean(item);
+            res.add(sb);
+        }
+        return res;
+    }
 
     public SubnetBeanList prepareSubnetBeanList(Integer brId) {
         SubnetBeanList bean = new SubnetBeanList();

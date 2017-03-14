@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
         <server-args>
 
-            <port>
-                443
-            </port>
-            <uploadPath>
-                /niga
-            </uploadPath>
+            <port>443</port>
+            <uploadPath>/var/sorsTmp/</uploadPath>
 
         </server-args>

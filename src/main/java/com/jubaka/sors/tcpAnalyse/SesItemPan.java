@@ -339,7 +339,7 @@ public class SesItemPan extends JPanel implements Observer, Destroyable, Runnabl
         byte[] buf;
         try {
             for (TCP tcp : sesStub.getPacketList()) {
-
+                if (tcp.getDataFile() == null) return new byte[0];
                 raf = new RandomAccessFile(tcp.getDataFile(),"r");
                 raf.seek(tcp.getDataPointer());
                 buf = new byte[tcp.getPayloadLen()];

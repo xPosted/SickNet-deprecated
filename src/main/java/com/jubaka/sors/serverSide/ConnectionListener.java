@@ -7,6 +7,7 @@ public class ConnectionListener implements Runnable {
 	private String msg = "Hello niga";
 	private ServerSocket ss;
 	private ConnectionHandler handler;
+	private Integer portListenTo;
 
 	public ConnectionListener() {
 
@@ -22,8 +23,9 @@ public class ConnectionListener implements Runnable {
 		}
 	}
 
-	public void startListener(ConnectionHandler handler) {
+	public void startListener(ConnectionHandler handler,Integer port) {
 
+		portListenTo = port;
 		this.handler = handler;
 		Thread th = new Thread(this);
 		th.start();
@@ -37,10 +39,11 @@ public class ConnectionListener implements Runnable {
 	@Override
 	public void run() {
 		try {
-			ss = new ServerSocket(443);
+			ss = new ServerSocket(portListenTo);
 			while (!ss.isClosed()) {
 				handler.handleConnection(ss.accept());
 			}
+			System.out.println("443 handle loop finish");
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}

@@ -4,6 +4,7 @@ import org.hibernate.annotations.NaturalIdCache;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by root on 28.08.16.
@@ -35,6 +36,12 @@ public class Session {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "chartId")
     private SessionChart chartData;
+
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<HttpRequest> requestList;
+
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<HttpResponse> responseList;
 
     public Date getClosed() {
         return closed;
@@ -124,6 +131,22 @@ public class Session {
 
     public void setChartData(SessionChart chartData) {
         this.chartData = chartData;
+    }
+
+    public List<HttpRequest> getRequestList() {
+        return requestList;
+    }
+
+    public void setRequestList(List<HttpRequest> requestList) {
+        this.requestList = requestList;
+    }
+
+    public List<HttpResponse> getResponseList() {
+        return responseList;
+    }
+
+    public void setResponseList(List<HttpResponse> responseList) {
+        this.responseList = responseList;
     }
 
 

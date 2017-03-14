@@ -86,6 +86,21 @@ public class WebSocketHandler {
        }
     }
 
+    public void updateCategoryInfo(Session webSession) throws IOException {
+        try {
+            lock.lock();
+            JsonProvider provider = JsonProvider.provider();
+            JsonObjectBuilder objBuilder = provider.createObjectBuilder();
+            objBuilder.add("action", "update");
+            objBuilder.add("target", "categories");
+            JsonObject jsonObj = objBuilder.build();
+            webSession.getBasicRemote().sendText(jsonObj.toString());
+
+        } finally {
+            lock.unlock();
+        }
+    }
+
     public void updateIpInfo(Session webSession) throws IOException {
        try {
            lock.lock();

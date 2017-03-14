@@ -10,6 +10,11 @@ import java.util.TreeMap;
 
 public class SessionBean extends SessionLightBean implements Serializable {
 
+	private TreeMap<Long, Integer> srcDataTimeBinding = null;
+	private TreeMap<Long, Integer> dstDataTimeBinding = null;
+	private List<HTTP> httpBuf = null;
+
+
 	public List<HTTP> getHttpBuf() {
 		return httpBuf;
 	}
@@ -33,8 +38,6 @@ public class SessionBean extends SessionLightBean implements Serializable {
 		this.dstDataTimeBinding = dstDataTimeBinding;
 	}
 
-	private TreeMap<Long, Integer> srcDataTimeBinding = null;
-	private TreeMap<Long, Integer> dstDataTimeBinding = null;
-	private List<HTTP> httpBuf = null;
+
 	
 }

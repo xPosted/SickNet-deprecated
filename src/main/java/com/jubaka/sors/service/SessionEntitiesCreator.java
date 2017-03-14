@@ -1,11 +1,14 @@
 package com.jubaka.sors.service;
 
 import com.jubaka.sors.beans.branch.SessionBean;
-import com.jubaka.sors.entities.Host;
-import com.jubaka.sors.entities.Session;
-import com.jubaka.sors.entities.SessionChart;
+import com.jubaka.sors.entities.*;
+import com.jubaka.sors.protocol.http.HTTP;
+import com.jubaka.sors.protocol.http.HTTPRequest;
+import com.jubaka.sors.protocol.http.HTTPResponse;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by root on 04.11.16.
@@ -55,7 +58,36 @@ public class SessionEntitiesCreator {
             chart.setDstDataTime(sesBean.getDstDataTimeBinding());
 
             entity.setChartData(chart);
+            entity.setRequestList(getHttpRequestList(sesBean.getHttpBuf()));
+            entity.setResponseList(getHttpResponseList(sesBean.getHttpBuf()));
 
+    }
+
+    private List<HttpRequest> getHttpRequestList(List<HTTP> https) {
+        Integer counter = 0;
+        List<HttpRequest> requests = new ArrayList<>();
+        for (HTTP http : https) {
+            if (http instanceof HTTPRequest) {
+                HTTPRequest req = (HTTPRequest) http;
+                requests.add(HttpRequestService.prepareEntity(req,counter));
+            }
+            counter++;
+        }
+        return requests;
+    }
+
+    private List<HttpResponse> getHttpResponseList(List<HTTP> https) {
+        Integer counter = 0;
+        List<HttpResponse> responses = new ArrayList<>();
+        for (HTTP http : https) {
+            if (http instanceof HTTPResponse) {
+                HTTPResponse resp = (HTTPResponse) http;
+                responses.add(HttpResponseService.prepareEntity(resp,counter));
+
+            }
+            counter++;
+        }
+        return responses;
     }
 
 

@@ -314,4 +314,8 @@ public class HTTPRequest extends HTTP implements Serializable {
 	public void setUser_Agent(String user_Agent) {
 		User_Agent = user_Agent;
 	}
+
+	public String getFullRequestUrl() {
+		return getHost()+"/"+getRequestUrl();
+	}
 }

@@ -99,7 +99,7 @@ public class SessionsAPI implements Observer, Serializable {
 			InetAddress addr = InetAddress.getByName(ip);
 			Subnet net = netDetect(addr);
 			IPaddr ipaddr = IPaddr.getInstance(id, ip);
-			System.out.println(ip + " and ipaddr = " + ipaddr);
+		//	System.out.println(ip + " and ipaddr = " + ipaddr);
 			return net.getInputStoredSes(ipaddr);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -114,7 +114,7 @@ public class SessionsAPI implements Observer, Serializable {
 			InetAddress addr = InetAddress.getByName(ip);
 			Subnet net = netDetect(addr);
 			IPaddr ipaddr = IPaddr.getInstance(id, ip);
-			System.out.println(ip + " and ipaddr = " + ipaddr);
+		//	System.out.println(ip + " and ipaddr = " + ipaddr);
 			return net.getOutputStoredSes(ipaddr);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -134,7 +134,7 @@ public class SessionsAPI implements Observer, Serializable {
 			InetAddress addr = InetAddress.getByName(ip);
 			Subnet net = netDetect(addr);
 			IPaddr ipaddr = IPaddr.getInstance(id, ip);
-			System.out.println(ip + " and ipaddr = " + ipaddr);
+		//	System.out.println(ip + " and ipaddr = " + ipaddr);
 			return ipaddr.getNet().getInputActiveSes(ipaddr);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -148,7 +148,7 @@ public class SessionsAPI implements Observer, Serializable {
 		try {
 			InetAddress addr = InetAddress.getByName(ip);
 			IPaddr ipaddr = IPaddr.getInstance(id, ip);
-			System.out.println(ip + " and ipaddr = " + ipaddr);
+		//	System.out.println(ip + " and ipaddr = " + ipaddr);
 			return ipaddr.getNet().getOutputActiveSes(ipaddr);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -203,7 +203,7 @@ public class SessionsAPI implements Observer, Serializable {
 			notKnown.deleteIP(removeItem);
 
 		nets.add(res);
-		System.out.println("Net added");
+	//	System.out.println("Net added");
 		return res;
 	}
 
@@ -322,10 +322,7 @@ public class SessionsAPI implements Observer, Serializable {
 				createSession(new Date(0), tcp, ip);
 				InetAddress src = InetAddress.getByAddress(ip.source());
 				InetAddress dst = InetAddress.getByAddress(ip.destination());
-				System.out.println("create new session" + src + " -> " + dst
-						+ " ACK=" + tcp.flags_ACK() + "; SYN="
-						+ tcp.flags_SYN() + "; seq=" + tcp.seq() + "; ack="
-						+ tcp.ack());
+
 			}
 
 		} catch (Exception e) {
