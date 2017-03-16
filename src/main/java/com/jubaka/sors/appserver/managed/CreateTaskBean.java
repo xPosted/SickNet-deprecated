@@ -1,6 +1,6 @@
 package com.jubaka.sors.appserver.managed;
 
-import com.jubaka.sors.appserver.beans.branch.BranchBean;
+import com.jubaka.sors.beans.branch.BranchBean;
 import com.jubaka.sors.desktop.factories.ClassFactory;
 import com.jubaka.sors.desktop.remote.BeanConstructor;
 import com.jubaka.sors.appserver.serverSide.ConnectionHandler;

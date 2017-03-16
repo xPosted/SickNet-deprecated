@@ -1,10 +1,10 @@
 package com.jubaka.sors.appserver.serverSide;
 
-import com.jubaka.sors.appserver.beans.FileListBean;
-import com.jubaka.sors.appserver.beans.InfoBean;
-import com.jubaka.sors.appserver.beans.SecPolicyBean;
-import com.jubaka.sors.appserver.beans.SesDataCapBean;
-import com.jubaka.sors.appserver.beans.branch.*;
+import com.jubaka.sors.beans.FileListBean;
+import com.jubaka.sors.beans.InfoBean;
+import com.jubaka.sors.beans.SecPolicyBean;
+import com.jubaka.sors.beans.SesDataCapBean;
+import com.jubaka.sors.beans.branch.*;
 import org.jfree.data.time.TimeSeries;
 
 import javax.servlet.http.HttpServletResponse;

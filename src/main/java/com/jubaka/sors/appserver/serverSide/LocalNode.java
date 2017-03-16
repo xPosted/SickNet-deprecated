@@ -1,14 +1,11 @@
 package com.jubaka.sors.appserver.serverSide;
 
-import com.jubaka.sors.appserver.beans.FileListBean;
-import com.jubaka.sors.appserver.beans.InfoBean;
-import com.jubaka.sors.appserver.beans.SecPolicyBean;
-import com.jubaka.sors.appserver.beans.SesDataCapBean;
-import com.jubaka.sors.appserver.beans.branch.*;
+import com.jubaka.sors.beans.*;
+import com.jubaka.sors.beans.branch.*;
 import com.jubaka.sors.desktop.factories.ClassFactory;
+import com.jubaka.sors.desktop.remote.BeanConstructor;
 import org.jfree.data.time.TimeSeries;
 
-import javax.inject.Named;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import javax.swing.table.DefaultTableModel;
@@ -22,10 +19,10 @@ import java.util.Set;
 
 public class LocalNode implements EndpointInterface {
     private ClassFactory localFactory;
+    private BeanConstructor constructor;
 
-    public LocalNode(Autho) {
-        localFactory = ClassFactory.getStandaloneInstance();
-
+    public LocalNode(AuthorisationBean authorisation, String home) {
+        localFactory = ClassFactory.getStandaloneInstance(home);
     }
 
     @Override
@@ -160,7 +157,8 @@ public class LocalNode implements EndpointInterface {
 
     @Override
     public InfoBean getInfo() {
-        return null;
+
+        return constructor.prepareInfoBean(localFactory);
     }
 
     @Override

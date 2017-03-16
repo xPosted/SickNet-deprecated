@@ -1,6 +1,6 @@
 package com.jubaka.sors.appserver.service;
 
-import com.jubaka.sors.appserver.beans.branch.SessionBean;
+import com.jubaka.sors.beans.branch.SessionBean;
 import com.jubaka.sors.appserver.entities.*;
 import com.jubaka.sors.desktop.http.HTTP;
 import com.jubaka.sors.desktop.http.HTTPRequest;

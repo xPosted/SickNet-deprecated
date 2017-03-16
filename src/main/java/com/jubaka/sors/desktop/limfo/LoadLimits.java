@@ -11,7 +11,7 @@ import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import com.jubaka.sors.appserver.beans.SecPolicy;
+import com.jubaka.sors.beans.SecPolicy;
 import com.jubaka.sors.desktop.factories.ClassFactory;
 import com.jubaka.sors.desktop.sessions.Branch;
 import com.jubaka.sors.desktop.tcpAnalyse.Controller;

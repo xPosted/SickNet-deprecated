@@ -10,7 +10,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import com.jubaka.sors.appserver.beans.SecPolicy;
+import com.jubaka.sors.beans.SecPolicy;
 import com.jubaka.sors.desktop.limfo.LoadInfo;
 import com.jubaka.sors.desktop.limfo.LoadLimits;
 import com.jubaka.sors.desktop.remote.WebConnection;

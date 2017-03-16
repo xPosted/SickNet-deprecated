@@ -7,7 +7,7 @@ import java.util.TreeMap;
 
 import javax.swing.table.DefaultTableModel;
 
-import com.jubaka.sors.appserver.beans.branch.*;
+import com.jubaka.sors.beans.branch.*;
 import com.jubaka.sors.desktop.tcpAnalyse.Controller;
 import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;

@@ -9,8 +9,8 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Observable;
 
-import com.jubaka.sors.appserver.beans.AutorisationBean;
-import com.jubaka.sors.appserver.beans.InfoBean;
+import com.jubaka.sors.beans.AuthorisationBean;
+import com.jubaka.sors.beans.InfoBean;
 import com.jubaka.sors.appserver.entities.Node;
 import com.jubaka.sors.appserver.entities.User;
 import com.jubaka.sors.appserver.managed.PassEncoder;
@@ -99,8 +99,8 @@ public class ConnectionHandler  extends Observable {
 		try {
 			ois = new ObjectInputStream(new BufferedInputStream(s.getInputStream()));
 			Object obj = ois.readObject();
-			if (obj instanceof AutorisationBean) {
-				AutorisationBean auth = (AutorisationBean) obj;
+			if (obj instanceof AuthorisationBean) {
+				AuthorisationBean auth = (AuthorisationBean) obj;
 				autorise(auth,ois,s);
 			}
 			if (obj instanceof Integer) {
@@ -125,7 +125,7 @@ public class ConnectionHandler  extends Observable {
 		
 		
 	}
-	public void autorise(AutorisationBean auth, ObjectInputStream ois, Socket s) {
+	public void autorise(AuthorisationBean auth, ObjectInputStream ois, Socket s) {
 				User uObj = userService.getUserByNick(auth.getNodeUserName());
 				NodeServerEndpoint nodeServerEndpoint = new NodeServerEndpoint();
 				nodeServerEndpoint.setS(s);
@@ -147,7 +147,7 @@ public class ConnectionHandler  extends Observable {
 		
 	}
 
-	public boolean autorise(AutorisationBean auth, InfoBean infoBean) {
+	public boolean autorise(AuthorisationBean auth, InfoBean infoBean) {
 
 		User uObj = userService.getUserByNick(auth.getNodeUserName());
 		if (uObj==null) {return false;}

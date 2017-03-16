@@ -1,6 +1,6 @@
 package com.jubaka.sors.appserver.managed;
 
-import com.jubaka.sors.appserver.beans.InfoBean;
+import com.jubaka.sors.beans.InfoBean;
 import com.jubaka.sors.appserver.serverSide.NodeServerEndpoint;
 import com.jubaka.sors.appserver.service.NodeActiveCheckPointService;
 import com.jubaka.sors.appserver.service.NodeService;

@@ -1,6 +1,6 @@
-package com.jubaka.sors.appserver.beans;
+package com.jubaka.sors.beans;
 
-import com.jubaka.sors.appserver.beans.branch.SessionBean;
+import com.jubaka.sors.beans.branch.SessionBean;
 
 import java.io.Serializable;
 import java.util.Date;

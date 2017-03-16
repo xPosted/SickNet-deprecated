@@ -1,6 +1,6 @@
 package com.jubaka.sors.desktop.remote;
 
-import com.jubaka.sors.appserver.beans.AutorisationBean;
+import com.jubaka.sors.beans.AuthorisationBean;
 import com.jubaka.sors.desktop.factories.ClassFactory;
 import com.jubaka.sors.desktop.limfo.LoadInfo;
 import com.jubaka.sors.desktop.limfo.LoadLimits;
@@ -31,8 +31,8 @@ public class WebConnection implements Runnable {
 		
 	}
 	
-private AutorisationBean prepareAutorisationBean() {
-	AutorisationBean auth = new AutorisationBean();
+private AuthorisationBean prepareAutorisationBean() {
+	AuthorisationBean auth = new AuthorisationBean();
 	LoadLimits lim = ClassFactory.getInstance().getLimits();
 	auth.setNodeUserName(userName);			
 	auth.setNodeUserPass(password);				

@@ -1,7 +1,7 @@
 package com.jubaka.sors.appserver.service;
 
-import com.jubaka.sors.appserver.beans.branch.IPItemBean;
-import com.jubaka.sors.appserver.beans.branch.SubnetBean;
+import com.jubaka.sors.beans.branch.IPItemBean;
+import com.jubaka.sors.beans.branch.SubnetBean;
 import com.jubaka.sors.appserver.dao.SubnetDao;
 import com.jubaka.sors.appserver.entities.Branch;
 import com.jubaka.sors.appserver.entities.Host;

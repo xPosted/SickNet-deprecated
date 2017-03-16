@@ -1,9 +1,9 @@
 package com.jubaka.sors.appserver.managed;
 
-import com.jubaka.sors.appserver.beans.InfoBean;
-import com.jubaka.sors.appserver.beans.SecPolicy;
-import com.jubaka.sors.appserver.beans.SecPolicyBean;
-import com.jubaka.sors.appserver.beans.branch.BranchStatBean;
+import com.jubaka.sors.beans.InfoBean;
+import com.jubaka.sors.beans.SecPolicy;
+import com.jubaka.sors.beans.SecPolicyBean;
+import com.jubaka.sors.beans.branch.BranchStatBean;
 import com.jubaka.sors.appserver.serverSide.ConnectionHandler;
 import com.jubaka.sors.appserver.serverSide.NodeServerEndpoint;
 

@@ -1,6 +1,6 @@
 package com.jubaka.sors.appserver.service;
 
-import com.jubaka.sors.appserver.beans.InfoBean;
+import com.jubaka.sors.beans.InfoBean;
 import com.jubaka.sors.appserver.dao.NodeDao;
 import com.jubaka.sors.appserver.entities.Node;
 import com.jubaka.sors.appserver.entities.NodeActiveCheckPoint;

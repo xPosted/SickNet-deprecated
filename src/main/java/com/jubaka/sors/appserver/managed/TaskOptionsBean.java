@@ -1,6 +1,6 @@
 package com.jubaka.sors.appserver.managed;
 
-import com.jubaka.sors.appserver.beans.branch.*;
+import com.jubaka.sors.beans.branch.*;
 import com.jubaka.sors.appserver.entities.Branch;
 import com.jubaka.sors.appserver.serverSide.ConnectionHandler;
 import com.jubaka.sors.appserver.serverSide.NodeServerEndpoint;

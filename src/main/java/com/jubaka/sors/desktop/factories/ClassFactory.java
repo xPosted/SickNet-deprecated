@@ -1,6 +1,6 @@
 package com.jubaka.sors.desktop.factories;
 
-import com.jubaka.sors.appserver.beans.SecPolicy;
+import com.jubaka.sors.beans.SecPolicy;
 import com.jubaka.sors.desktop.limfo.LoadInfo;
 import com.jubaka.sors.desktop.limfo.LoadLimits;
 import com.jubaka.sors.desktop.sessions.*;

@@ -1,4 +1,4 @@
-package com.jubaka.sors.appserver.beans.branch;
+package com.jubaka.sors.beans.branch;
 
 import java.io.Serializable;
 import java.net.InetAddress;

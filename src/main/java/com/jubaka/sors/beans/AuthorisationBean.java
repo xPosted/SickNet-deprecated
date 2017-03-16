@@ -1,8 +1,8 @@
-package com.jubaka.sors.appserver.beans;
+package com.jubaka.sors.beans;
 
 import java.io.Serializable;
 
-public class AutorisationBean extends Bean implements Serializable {
+public class AuthorisationBean extends Bean implements Serializable {
 	private String nodeUserName;
 	private String nodeUserPass;
 	private String nodeName;

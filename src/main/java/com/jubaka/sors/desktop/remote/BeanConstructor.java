@@ -1,7 +1,7 @@
 package com.jubaka.sors.desktop.remote;
 
-import com.jubaka.sors.appserver.beans.*;
-import com.jubaka.sors.appserver.beans.branch.*;
+import com.jubaka.sors.beans.*;
+import com.jubaka.sors.beans.branch.*;
 import com.jubaka.sors.desktop.factories.ClassFactory;
 import com.jubaka.sors.desktop.limfo.LoadInfo;
 import com.jubaka.sors.desktop.limfo.LoadLimits;
@@ -81,7 +81,7 @@ public class BeanConstructor {
             SessionsAPI sesApi = branch.getFactory().getSesionInstance(
                     branch.getId());
             IPaddr ipaddr = sesApi.getIpInstance(ip);
-            return prepareIpBean(branch.getId(),ipaddr);
+            return prepareIpBean(branch,ipaddr);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -90,17 +90,17 @@ public class BeanConstructor {
         return null;
     }
 
-    public IPItemBean prepareIpBean(Integer branch_id, IPaddr ip) {
+    public IPItemBean prepareIpBean(Branch br, IPaddr ip) {
         DataSaverInfo dsi = ClassFactory.getInstance().getDataSaverInfo(
-                branch_id);
+                br.getId());
         IPItemBean ipInfo = new IPItemBean();
         try {
             SessionsAPI cntr = ClassFactory.getInstance().getSesionInstance(
-                    branch_id);
+                    br.getId());
             IPaddr ipaddr = ip;
             String ipStr = ip.getAddr().getHostAddress();
 
-            ipInfo = (IPItemBean) prepareIPItemLightBean(branch_id, ip,ipInfo);
+            ipInfo = (IPItemBean) prepareIPItemLightBean(br.getId(), ip,ipInfo);
 
             ipInfo.setActiveOutSes(translateSessionSet(cntr.getOutputActiveSes(ipStr)));
             ipInfo.setActiveInSes(translateSessionSet(cntr.getInputActiveSes(ipStr)));
@@ -126,8 +126,8 @@ public class BeanConstructor {
     }
 
 
-    public SubnetLightBean prepareSubnetLightBean(Integer brId, String subnetStr, SubnetLightBean subnetBean) {
-        SessionsAPI sApi = ClassFactory.getInstance().getSesionInstance(brId);
+    public SubnetLightBean prepareSubnetLightBean(Branch br, String subnetStr, SubnetLightBean subnetBean) {
+        SessionsAPI sApi = br.getFactory().getSesionInstance(br.getId());
         Subnet subnet =  sApi.getNetByName(subnetStr);
         return prepareSubnetLightBean(subnet,subnetBean);
     }
@@ -229,9 +229,8 @@ public class BeanConstructor {
     }
 
 
-    public SecPolicyBean prepareSecPolBean() {
-        ClassFactory cf = ClassFactory.getInstance();
-        LoadLimits ll = cf.getLimits();
+    public SecPolicyBean prepareSecPolBean(ClassFactory factory) {
+        LoadLimits ll = factory.getLimits();
         SecPolicyBean scb = new SecPolicyBean();
         scb.setIpPolicy(ll.getIpPolicy());
         scb.setUserPolicy(ll.getUserPolicy());
@@ -240,22 +239,22 @@ public class BeanConstructor {
 
 
 
-    public BranchBean prepareBranchBean(Integer id) {
-        Branch br = ClassFactory.getInstance().getBranch(id);
-        SessionsAPI sApi = ClassFactory.getInstance().getSesionInstance(id);
+    public BranchBean prepareBranchBean(Branch br) {
+
+        SessionsAPI sApi = br.getFactory().getSesionInstance(br.getId());
         BranchBean bb = new BranchBean();
         bb.setBib(prepareBranchInfoBean(br));
         List<SubnetBean> netBeanSet = new ArrayList<>();
         for (Subnet net : sApi.getAllSubnets()) {
-            netBeanSet.add(prepareSubnetBean(id, net));
+            netBeanSet.add(prepareSubnetBean(br, net));
         }
         bb.setSubnets(netBeanSet);
         return bb;
     }
 
-    public BranchLightBean prepareLightBranchBean(Integer id) {
-        Branch br = ClassFactory.getInstance().getBranch(id);
-        SessionsAPI sApi = ClassFactory.getInstance().getSesionInstance(id);
+    public BranchLightBean prepareLightBranchBean(Branch br) {
+
+        SessionsAPI sApi = br.getFactory().getSesionInstance(br.getId());
         BranchLightBean bb = new BranchLightBean();
         bb.setBib(prepareBranchInfoBean(br));
         List<SubnetLightBean> netBeanSet = new ArrayList<>();
@@ -269,20 +268,20 @@ public class BeanConstructor {
 
 
 
-    public SubnetBean prepareSubnetBean(Integer id, Subnet net) {
+    public SubnetBean prepareSubnetBean(Branch br, Subnet net) {
 
-        DataSaverInfo dsi = ClassFactory.getInstance().getDataSaverInfo(id);
+        DataSaverInfo dsi = br.getFactory().getDataSaverInfo(br.getId());
         SubnetBean sb = new SubnetBean();
         sb = (SubnetBean) prepareSubnetLightBean(net, sb);
 
         List<IPItemBean> ipBeans = new ArrayList<>();
         List<IPItemBean> liveIpBeans = new ArrayList<>();
         for (IPaddr ip : net.getIps()) {
-            ipBeans.add(prepareIpBean(id, ip));
+            ipBeans.add(prepareIpBean(br, ip));
         }
 
         for (IPaddr ip : net.getLiveIps()) {
-            liveIpBeans.add(prepareIpBean(id, ip));
+            liveIpBeans.add(prepareIpBean(br, ip));
         }
 
         sb.setIps(ipBeans);
@@ -370,39 +369,39 @@ public class BeanConstructor {
         return res;
     }
 
-    public SubnetBeanList prepareSubnetBeanList(Integer brId) {
+    public SubnetBeanList prepareSubnetBeanList(Branch br) {
         SubnetBeanList bean = new SubnetBeanList();
-        Set<Subnet> nets = ClassFactory.getInstance().getSesionInstance(brId)
+        Set<Subnet> nets = br.getFactory().getSesionInstance(br.getId())
                 .getAllSubnets();
         Set<SubnetBean> beanSet = new HashSet<SubnetBean>();
         for (Subnet net : nets) {
-            beanSet.add(prepareSubnetBean(brId, net));
+            beanSet.add(prepareSubnetBean(br, net));
         }
-        bean.setBrId(brId);
+        bean.setBrId(br.getId());
         bean.setNets(beanSet);
         return bean;
     }
 
-    public BranchStatBean prepareBrStat(String byUser) {
-        ClassFactory cf = ClassFactory.getInstance();
+    public BranchStatBean prepareBrStat(ClassFactory factory, String byUser) {
+
         BranchStatBean bsb = new BranchStatBean();
         bsb.setByUser(byUser);
-        bsb.setBranchProcessed(cf.getBranchRceivedCount());
-        bsb.setTotalBranchLen(cf.getTotalReceivedBrLen());
-        bsb.setAvailableBranchCount(cf.getAvailableBranchCnt());
-        bsb.setAvailableBranchLen(cf.getAvailableBranchLen());
-        bsb.setAvailableBranchByUser(cf.getAvailableBranchCntByUser(byUser));
-        bsb.setAvailableBranchByUserLen(cf.getAvailableBranchByUserLen(byUser));
+        bsb.setBranchProcessed(factory.getBranchRceivedCount());
+        bsb.setTotalBranchLen(factory.getTotalReceivedBrLen());
+        bsb.setAvailableBranchCount(factory.getAvailableBranchCnt());
+        bsb.setAvailableBranchLen(factory.getAvailableBranchLen());
+        bsb.setAvailableBranchByUser(factory.getAvailableBranchCntByUser(byUser));
+        bsb.setAvailableBranchByUserLen(factory.getAvailableBranchByUserLen(byUser));
         return bsb;
 
     }
 
-    public BranchInfoBean prepareBranchInfoBean(String user, Integer brId) {
+    public BranchInfoBean prepareBranchInfoBean(String user, Branch br) {
 
-        ClassFactory cf = ClassFactory.getInstance();
+        ClassFactory cf = br.getFactory();
         LoadLimits ll = cf.getLimits();
         SecPolicy sp = cf.getLimits().getPolicyByUser(user);
-        Branch b = ClassFactory.getInstance().getBranch(brId);
+        Branch b = cf.getBranch(br.getId());
         if (b == null)
             return null;
         if (ll.checkBranchAvailable(sp, b) == false) {
@@ -414,7 +413,7 @@ public class BeanConstructor {
 
     public BranchInfoBean prepareBranchInfoBean(Branch br) {
 
-        SessionsAPI sApi = ClassFactory.getInstance().getSesionInstance(br.getId());
+        SessionsAPI sApi = br.getFactory().getSesionInstance(br.getId());
 
         BranchInfoBean bib = new BranchInfoBean();
         bib.setId(br.getId());
@@ -434,8 +433,8 @@ public class BeanConstructor {
         return bib;
     }
 
-    public Set<BranchInfoBean> prepareBranchInfoSet(String userName) {
-        ClassFactory cf = ClassFactory.getInstance();
+    public Set<BranchInfoBean> prepareBranchInfoSet(Branch br, String userName) {
+        ClassFactory cf = br.getFactory();
         LoadLimits ll = cf.getLimits();
         SecPolicy sp = cf.getLimits().getPolicyByUser(userName);
         HashSet<BranchInfoBean> res = new HashSet<BranchInfoBean>();
@@ -449,9 +448,9 @@ public class BeanConstructor {
 
     }
 
-    public SessionDataBean prepareSessionDataBean(Integer brID, String net,
+    public SessionDataBean prepareSessionDataBean(Branch br, String net,
                                                    Long sesID) {
-        SessionsAPI sesAPI = ClassFactory.getInstance().getSesionInstance(brID);
+        SessionsAPI sesAPI = br.getFactory().getSesionInstance(br.getId());
         if (sesAPI == null)
             return null;
         Subnet subnet = sesAPI.getNetByName(net);

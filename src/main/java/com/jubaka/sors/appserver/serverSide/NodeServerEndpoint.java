@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import javax.swing.table.DefaultTableModel;
 
-import com.jubaka.sors.appserver.beans.*;
-import com.jubaka.sors.appserver.beans.branch.*;
+import com.jubaka.sors.beans.*;
+import com.jubaka.sors.beans.branch.*;
 import com.jubaka.sors.appserver.serverSide.bean.StreamTransportBean;
 import org.jfree.data.time.TimeSeries;
 

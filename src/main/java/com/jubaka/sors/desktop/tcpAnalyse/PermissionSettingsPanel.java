@@ -29,7 +29,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.LineBorder;
 
 
-import com.jubaka.sors.appserver.beans.SecPolicy;
+import com.jubaka.sors.beans.SecPolicy;
 import com.jubaka.sors.desktop.factories.ClassFactory;
 import com.jubaka.sors.desktop.limfo.LoadLimits;
 

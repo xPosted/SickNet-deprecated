@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.jubaka.sors.appserver.beans.branch.IPItemBean;
+import com.jubaka.sors.beans.branch.IPItemBean;
 
 /**
  * Servlet implementation class Filter

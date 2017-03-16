@@ -1,6 +1,6 @@
 package com.jubaka.sors.appserver.servlet;
 
-import com.jubaka.sors.appserver.beans.branch.IPItemBean;
+import com.jubaka.sors.beans.branch.IPItemBean;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

@@ -1,8 +1,8 @@
 package com.jubaka.sors.appserver.managed;
 
-import com.jubaka.sors.appserver.beans.branch.BranchBean;
-import com.jubaka.sors.appserver.beans.branch.IPItemBean;
-import com.jubaka.sors.appserver.beans.branch.SubnetBean;
+import com.jubaka.sors.beans.branch.BranchBean;
+import com.jubaka.sors.beans.branch.IPItemBean;
+import com.jubaka.sors.beans.branch.SubnetBean;
 import com.jubaka.sors.appserver.entities.Branch;
 import com.jubaka.sors.appserver.serverSide.ConnectionHandler;
 import com.jubaka.sors.appserver.serverSide.NodeServerEndpoint;

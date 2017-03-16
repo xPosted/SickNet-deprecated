@@ -1,6 +1,6 @@
-package com.jubaka.sors.appserver.beans;
+package com.jubaka.sors.beans;
 
-import com.jubaka.sors.appserver.beans.branch.SessionBean;
+import com.jubaka.sors.beans.branch.SessionBean;
 import com.jubaka.sors.appserver.serverSide.ConnectionHandler;
 import com.jubaka.sors.appserver.serverSide.SmartFilter;
 

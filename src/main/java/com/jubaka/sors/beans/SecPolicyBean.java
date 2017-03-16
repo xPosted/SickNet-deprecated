@@ -1,4 +1,4 @@
-package com.jubaka.sors.appserver.beans;
+package com.jubaka.sors.beans;
 
 import java.io.Serializable;
 import java.util.HashMap;

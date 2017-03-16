@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <%@page import="com.jubaka.sors.appserver.serverSide.ConnectionHandler"%>
-<%@page import="com.jubaka.sors.appserver.beans.InfoBean"%>
-<%@page import="com.jubaka.sors.appserver.beans.branch.BranchInfoBean"%>
-<%@page import="com.jubaka.sors.appserver.beans.branch.IPItemBean"%>
-<%@page import="com.jubaka.sors.appserver.beans.branch.SubnetBean"%>
-<%@page import="com.jubaka.sors.appserver.beans.branch.SubnetBeanList"%>
+<%@page import="com.jubaka.sors.beans.InfoBean"%>
+<%@page import="com.jubaka.sors.beans.branch.BranchInfoBean"%>
+<%@page import="com.jubaka.sors.beans.branch.IPItemBean"%>
+<%@page import="com.jubaka.sors.beans.branch.SubnetBean"%>
+<%@page import="com.jubaka.sors.beans.branch.SubnetBeanList"%>
 <html>
 <head>
 <meta charset="UTF-8">

@@ -1,6 +1,6 @@
 package com.jubaka.sors.appserver.service;
 
-import com.jubaka.sors.appserver.beans.branch.*;
+import com.jubaka.sors.beans.branch.*;
 import com.jubaka.sors.appserver.dao.BranchDao;
 import com.jubaka.sors.appserver.entities.*;
 import com.jubaka.sors.appserver.managed.LoginBean;

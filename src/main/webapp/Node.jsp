@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <%@page import="java.util.List"%>
-<%@page import="com.jubaka.sors.appserver.beans.branch.BranchStatBean"%>
-<%@page import="com.jubaka.sors.appserver.beans.SecPolicy"%>
+<%@page import="com.jubaka.sors.beans.branch.BranchStatBean"%>
+<%@page import="com.jubaka.sors.beans.SecPolicy"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.jubaka.sors.appserver.serverSide.ConnectionHandler"%>
-<%@page import="com.jubaka.sors.appserver.beans.InfoBean"%>
+<%@page import="com.jubaka.sors.beans.InfoBean"%>
 <html>
 <head>
 <link href="style/css/carousel.css" rel="stylesheet">

@@ -1,8 +1,8 @@
 package com.jubaka.sors.appserver.serverSide;
 
-import com.jubaka.sors.appserver.beans.Category;
-import com.jubaka.sors.appserver.beans.branch.IPItemLightBean;
-import com.jubaka.sors.appserver.beans.branch.SessionBean;
+import com.jubaka.sors.beans.Category;
+import com.jubaka.sors.beans.branch.IPItemLightBean;
+import com.jubaka.sors.beans.branch.SessionBean;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

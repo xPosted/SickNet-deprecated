@@ -9,8 +9,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.table.DefaultTableModel;
 
-import com.jubaka.sors.appserver.beans.*;
-import com.jubaka.sors.appserver.beans.branch.*;
+import com.jubaka.sors.beans.*;
+import com.jubaka.sors.beans.branch.*;
 import com.jubaka.sors.desktop.factories.ClassFactory;
 import com.jubaka.sors.desktop.limfo.LoadLimits;
 import com.jubaka.sors.desktop.sessions.*;
