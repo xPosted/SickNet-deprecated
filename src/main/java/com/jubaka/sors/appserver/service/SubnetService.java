@@ -1,12 +1,11 @@
-package com.jubaka.sors.service;
+package com.jubaka.sors.appserver.service;
 
-import com.jubaka.sors.beans.branch.IPItemBean;
-import com.jubaka.sors.beans.branch.SubnetBean;
-import com.jubaka.sors.dao.SubnetDao;
-import com.jubaka.sors.entities.Branch;
-import com.jubaka.sors.entities.Host;
-import com.jubaka.sors.entities.Subnet;
-import com.jubaka.sors.sessions.IPaddr;
+import com.jubaka.sors.appserver.beans.branch.IPItemBean;
+import com.jubaka.sors.appserver.beans.branch.SubnetBean;
+import com.jubaka.sors.appserver.dao.SubnetDao;
+import com.jubaka.sors.appserver.entities.Branch;
+import com.jubaka.sors.appserver.entities.Host;
+import com.jubaka.sors.appserver.entities.Subnet;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

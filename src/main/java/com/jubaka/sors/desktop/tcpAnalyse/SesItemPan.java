@@ -1,4 +1,4 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
@@ -20,9 +20,9 @@ import java.awt.Color;
 
 import javax.swing.border.BevelBorder;
 
-import com.jubaka.sors.protocol.http.protocol.tcp.TCP;
-import com.jubaka.sors.sessions.Session;
-import com.jubaka.sors.sessions.SimpleDataSaver;
+import com.jubaka.sors.desktop.http.protocol.tcp.TCP;
+import com.jubaka.sors.desktop.sessions.Session;
+import com.jubaka.sors.desktop.sessions.SimpleDataSaver;
 
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;

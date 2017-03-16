@@ -8,13 +8,13 @@
     <persistence-unit name="SorsPersistence" transaction-type="JTA">
 
        <jta-data-source>java:/MySqlDS</jta-data-source>
-        <class>com.jubaka.sors.entities.User</class>
-        <class>com.jubaka.sors.entities.Branch</class>
-        <class>com.jubaka.sors.entities.Subnet</class>
-        <class>com.jubaka.sors.entities.Host</class>
-        <class>com.jubaka.sors.entities.Session</class>
-        <class>com.jubaka.sors.entities.NodeCheckPoint</class>
-        <class>com.jubaka.sors.entities.Node</class>
+        <class>com.jubaka.sors.appserver.entities.User</class>
+        <class>com.jubaka.sors.appserver.entities.Branch</class>
+        <class>com.jubaka.sors.appserver.entities.Subnet</class>
+        <class>com.jubaka.sors.appserver.entities.Host</class>
+        <class>com.jubaka.sors.appserver.entities.Session</class>
+        <class>com.jubaka.sors.appserver.entities.NodeCheckPoint</class>
+        <class>com.jubaka.sors.appserver.entities.Node</class>
 
 
 

@@ -1,6 +1,6 @@
-package com.jubaka.sors.dao;
+package com.jubaka.sors.appserver.dao;
 
-import com.jubaka.sors.entities.Subnet;
+import com.jubaka.sors.appserver.entities.Subnet;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;

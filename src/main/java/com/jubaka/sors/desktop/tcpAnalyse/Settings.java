@@ -1,4 +1,4 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 
 import java.awt.BorderLayout;
 
@@ -25,7 +25,7 @@ import javax.swing.JSeparator;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 
-import com.jubaka.sors.factories.ClassFactory;
+import com.jubaka.sors.desktop.factories.ClassFactory;
 import com.sun.corba.se.impl.orbutil.concurrent.Mutex;
 
 import java.awt.event.WindowAdapter;

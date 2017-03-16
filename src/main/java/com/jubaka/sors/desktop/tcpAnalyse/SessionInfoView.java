@@ -1,4 +1,4 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -27,9 +27,9 @@ import java.util.ArrayList;
 
 import javax.swing.border.EtchedBorder;
 
-import com.jubaka.sors.sessions.Session;
-import com.jubaka.sors.sessions.SessionDataUpdater;
-import com.jubaka.sors.tcpAnalyse.httpView.HTTPView;
+import com.jubaka.sors.desktop.sessions.Session;
+import com.jubaka.sors.desktop.sessions.SessionDataUpdater;
+import com.jubaka.sors.desktop.tcpAnalyse.httpView.HTTPView;
 
 import javax.swing.JTabbedPane;
 import javax.swing.JRadioButton;

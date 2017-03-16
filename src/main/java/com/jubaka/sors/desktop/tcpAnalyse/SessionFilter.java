@@ -1,6 +1,6 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 
-import com.jubaka.sors.sessions.Session;
+import com.jubaka.sors.desktop.sessions.Session;
 
 import java.util.HashSet;
 

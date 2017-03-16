@@ -1,10 +1,10 @@
-package com.jubaka.sors.service;
+package com.jubaka.sors.appserver.service;
 
-import com.jubaka.sors.beans.branch.SessionBean;
-import com.jubaka.sors.entities.*;
-import com.jubaka.sors.protocol.http.HTTP;
-import com.jubaka.sors.protocol.http.HTTPRequest;
-import com.jubaka.sors.protocol.http.HTTPResponse;
+import com.jubaka.sors.appserver.beans.branch.SessionBean;
+import com.jubaka.sors.appserver.entities.*;
+import com.jubaka.sors.desktop.http.HTTP;
+import com.jubaka.sors.desktop.http.HTTPRequest;
+import com.jubaka.sors.desktop.http.HTTPResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
@@ -9,8 +9,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 
-import com.jubaka.sors.factories.ClassFactory;
-import com.jubaka.sors.limfo.LoadLimits;
+import com.jubaka.sors.desktop.factories.ClassFactory;
+import com.jubaka.sors.desktop.limfo.LoadLimits;
 
 public class SettingsViewPanel extends JPanel {
 	LoadLimits ll = ClassFactory.getInstance().getLimits();

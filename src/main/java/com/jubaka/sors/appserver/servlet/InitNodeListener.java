@@ -1,6 +1,7 @@
-package com.jubaka.sors.appserver.serverSide;
+package com.jubaka.sors.appserver.servlet;
 
 import com.jubaka.sors.appserver.managed.ServerArgumentsBean;
+import com.jubaka.sors.appserver.serverSide.ConnectionHandler;
 
 import java.io.IOException;
 import javax.enterprise.context.ApplicationScoped;

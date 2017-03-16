@@ -1,14 +1,12 @@
-package com.jubaka.sors.managed;
+package com.jubaka.sors.appserver.managed;
 
-import com.jubaka.sors.beans.branch.BranchBean;
-import com.jubaka.sors.factories.ClassFactory;
-import com.jubaka.sors.remote.BeanConstructor;
-import com.jubaka.sors.serverSide.ConnectionHandler;
-import com.jubaka.sors.serverSide.NodeServerEndpoint;
-import com.jubaka.sors.service.BranchService;
-import com.jubaka.sors.sessions.API;
-import com.jubaka.sors.sessions.Branch;
-import org.primefaces.model.UploadedFile;
+import com.jubaka.sors.appserver.beans.branch.BranchBean;
+import com.jubaka.sors.desktop.factories.ClassFactory;
+import com.jubaka.sors.desktop.remote.BeanConstructor;
+import com.jubaka.sors.appserver.serverSide.ConnectionHandler;
+import com.jubaka.sors.appserver.service.BranchService;
+import com.jubaka.sors.desktop.sessions.API;
+import com.jubaka.sors.desktop.sessions.Branch;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -16,11 +14,9 @@ import javax.inject.Named;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Scanner;
 
 /**
  * Created by root on 14.02.17.
@@ -84,7 +80,7 @@ public class CreateTaskBean {
 
         BeanConstructor beanConstructor = new BeanConstructor();
         String usersHome = args.getUploadPath() +File.separator+ loginBean.getLogin()+File.separator;
-        ClassFactory fuckingFactory = ClassFactory.getStandaloneInstance(usersHome,true);
+        ClassFactory fuckingFactory = ClassFactory.getStandaloneInstance(usersHome);
         String usersPcapPath = usersHome+"pcaps"+File.separator;
         String dumpPath = usersPcapPath + upFilePart.getSubmittedFileName();
 
@@ -97,7 +93,7 @@ public class CreateTaskBean {
             API api =  fuckingFactory.getAPIinstance(branchId);
             api.waitForCaptureOff();
             BranchBean bBean = beanConstructor.prepareBranchBean(branchId);
-            com.jubaka.sors.entities.Branch persistedBranch = branchService.persistBranch(bBean);
+            com.jubaka.sors.appserver.entities.Branch persistedBranch = branchService.persistBranch(bBean);
 
         } catch (IOException io) {
             io.printStackTrace();

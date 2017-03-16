@@ -1,4 +1,4 @@
-package com.jubaka.sors.sessions;
+package com.jubaka.sors.desktop.sessions;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

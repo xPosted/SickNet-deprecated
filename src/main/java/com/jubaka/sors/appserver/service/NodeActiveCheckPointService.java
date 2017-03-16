@@ -1,16 +1,14 @@
-package com.jubaka.sors.service;
+package com.jubaka.sors.appserver.service;
 
-import com.jubaka.sors.beans.InfoBean;
-import com.jubaka.sors.dao.NodeActiveCheckPointDao;
-import com.jubaka.sors.dao.NodeCheckPointDao;
-import com.jubaka.sors.entities.Node;
-import com.jubaka.sors.entities.NodeActiveCheckPoint;
-import com.jubaka.sors.entities.NodeCheckPoint;
-import com.jubaka.sors.entities.User;
-import com.jubaka.sors.managed.LoginBean;
+import com.jubaka.sors.appserver.beans.InfoBean;
+import com.jubaka.sors.appserver.dao.NodeActiveCheckPointDao;
+import com.jubaka.sors.appserver.dao.NodeCheckPointDao;
+import com.jubaka.sors.appserver.entities.Node;
+import com.jubaka.sors.appserver.entities.NodeActiveCheckPoint;
+import com.jubaka.sors.appserver.entities.User;
+import com.jubaka.sors.appserver.managed.LoginBean;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.sql.Timestamp;

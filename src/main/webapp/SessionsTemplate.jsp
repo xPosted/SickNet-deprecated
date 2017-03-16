@@ -1,11 +1,11 @@
-<%@page import="com.jubaka.sors.serverSide.ExtFilter"%>
+<%@page import="com.jubaka.sors.appserver.serverSide.ExtFilter"%>
 <%@page import="java.util.Random"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.jubaka.sors.beans.branch.IPItemBean"%>
-<%@page import="com.jubaka.sors.beans.branch.SubnetBean"%>
-<%@page import="com.jubaka.sors.beans.branch.BranchBean"%>
-<%@page import="com.jubaka.sors.serverSide.ConnectionHandler"%>
-<%@page import="com.jubaka.sors.beans.branch.SessionBean"%>
+<%@page import="com.jubaka.sors.appserver.beans.branch.IPItemBean"%>
+<%@page import="com.jubaka.sors.appserver.beans.branch.SubnetBean"%>
+<%@page import="com.jubaka.sors.appserver.beans.branch.BranchBean"%>
+<%@page import="com.jubaka.sors.appserver.serverSide.ConnectionHandler"%>
+<%@page import="com.jubaka.sors.appserver.beans.branch.SessionBean"%>
 <%@page import="java.util.HashSet"%>
 <%BranchBean bb = (BranchBean) request.getAttribute("branchBean"); 
 	SubnetBean sb = (SubnetBean) request.getAttribute("subnetBean");

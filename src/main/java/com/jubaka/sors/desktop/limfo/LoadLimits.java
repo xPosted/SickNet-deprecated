@@ -1,4 +1,4 @@
-package com.jubaka.sors.limfo;
+package com.jubaka.sors.desktop.limfo;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -12,10 +12,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import com.jubaka.sors.appserver.beans.SecPolicy;
-import com.jubaka.sors.factories.ClassFactory;
-import com.jubaka.sors.sessions.Branch;
-import com.jubaka.sors.tcpAnalyse.Controller;
-import com.jubaka.sors.tcpAnalyse.MainWin;
+import com.jubaka.sors.desktop.factories.ClassFactory;
+import com.jubaka.sors.desktop.sessions.Branch;
+import com.jubaka.sors.desktop.tcpAnalyse.Controller;
+import com.jubaka.sors.desktop.tcpAnalyse.MainWin;
 
 public class LoadLimits {
 	private String home = null;

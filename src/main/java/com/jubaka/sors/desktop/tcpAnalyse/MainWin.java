@@ -1,6 +1,5 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 
-import java.awt.Desktop;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -53,23 +52,18 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JCheckBox;
 
-import com.jubaka.sors.factories.ClassFactory;
+import com.jubaka.sors.desktop.factories.ClassFactory;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
 import java.net.UnknownHostException;
 
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.JTabbedPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.JToggleButton;
-import javax.swing.ButtonGroup;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -81,10 +75,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JCheckBoxMenuItem;
 
-import com.jubaka.sors.limfo.LoadLimits;
-import com.jubaka.sors.sessions.*;
-import com.jubaka.sors.view.statistic.StatMain;
-import com.sun.org.apache.bcel.internal.generic.LLOAD;
+import com.jubaka.sors.desktop.limfo.LoadLimits;
+import com.jubaka.sors.desktop.sessions.*;
+import com.jubaka.sors.desktop.statistic.StatMain;
 
 public class MainWin implements Observer {
 	static int compCount = 0; // tmp
@@ -658,7 +651,8 @@ public class MainWin implements Observer {
 				 if (e.getClickCount()==2) {
 					 MyTableModel model = (MyTableModel) tbl_0.getModel();
 			            String ip = model.getIPbyRow(tbl_0.getSelectedRow());
-			            IPaddr addr = IPaddr.getInstance(id, ip);
+			            SessionsAPI sesApi = ClassFactory.getInstance().getSesionInstance(id);
+			            IPaddr addr = sesApi.getIpInstance(ip);
 			            if (addr!=null) {
 			            	
 			            }
@@ -1184,12 +1178,7 @@ public class MainWin implements Observer {
 	*/
 	}
 	
-	/**
-	 * Display date when ip captured
-	 * 
-	 * @param data
-	 *            - date & time when session start
-	 */
+
 	public void initTable(JTable tbl) {
 		tbl.setFillsViewportHeight(true);
 		tbl.setShowGrid(false);
@@ -1357,8 +1346,8 @@ public class MainWin implements Observer {
 	
 	public void deleteIPObserver(){
 		if (selectedIP != null) {
-			IPaddr addr1 = IPaddr.getInstance(currentNet.getId(),
-					selectedIP);
+			SessionsAPI sesApi = factory.getSesionInstance(currentNet.getId());
+			IPaddr addr1 = sesApi.getIpInstance(selectedIP);
 			addr1.deleteObserver(this);
 			selectedIP = null;
 			System.out.println(addr1.getAddr().getHostAddress()
@@ -1398,9 +1387,10 @@ public class MainWin implements Observer {
 
 			buildActTab(prepareTree(activeSes));
 			buildSvdTab(prepareTree(savedSes));
-			System.out.println(sessionView.comboSort.getSelectedIndex());
+		//	System.out.println(sessionView.comboSort.getSelectedIndex());
 
-			IPaddr addr = IPaddr.getInstance(currentNet.getId(), ip);
+			SessionsAPI sesApi = factory.getSesionInstance(currentNet.getId());
+			IPaddr addr = sesApi.getIpInstance(ip);
 			if (addr == null) {
 				System.out.println("IPaddr was not found " + ip);
 				return;

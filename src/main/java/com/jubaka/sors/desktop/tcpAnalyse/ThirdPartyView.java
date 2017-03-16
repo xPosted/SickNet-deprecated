@@ -1,4 +1,4 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 
 import java.awt.BorderLayout;
 
@@ -40,9 +40,9 @@ import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import com.jubaka.sors.factories.ClassFactory;
-import com.jubaka.sors.sessions.Branch;
-import com.jubaka.sors.sessions.SessionsAPI;
+import com.jubaka.sors.desktop.factories.ClassFactory;
+import com.jubaka.sors.desktop.sessions.Branch;
+import com.jubaka.sors.desktop.sessions.SessionsAPI;
 
 import javax.swing.JScrollPane;
 

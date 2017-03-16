@@ -1,4 +1,4 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -33,9 +33,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 
-import com.jubaka.sors.factories.ClassFactory;
-import com.jubaka.sors.sessions.SesCaptureInfo;
-import com.jubaka.sors.sessions.SessionsAPI;
+import com.jubaka.sors.desktop.factories.ClassFactory;
+import com.jubaka.sors.desktop.sessions.SesCaptureInfo;
+import com.jubaka.sors.desktop.sessions.SessionsAPI;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.JSeparator;

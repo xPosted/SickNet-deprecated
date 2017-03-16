@@ -1,7 +1,6 @@
-package com.jubaka.sors.dao;
+package com.jubaka.sors.appserver.dao;
 
-import com.jubaka.sors.entities.HttpResponse;
-import org.jnetpcap.protocol.tcpip.Http;
+import com.jubaka.sors.appserver.entities.HttpResponse;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;

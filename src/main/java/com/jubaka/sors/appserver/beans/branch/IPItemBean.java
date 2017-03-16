@@ -1,10 +1,8 @@
-package com.jubaka.sors.beans.branch;
+package com.jubaka.sors.appserver.beans.branch;
 
-import com.jubaka.sors.beans.Bean;
-import com.jubaka.sors.beans.SesDataCapBean;
+import com.jubaka.sors.appserver.beans.SesDataCapBean;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashSet;
 
 

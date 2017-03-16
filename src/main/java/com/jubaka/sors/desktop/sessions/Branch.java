@@ -1,11 +1,10 @@
-package com.jubaka.sors.sessions;
+package com.jubaka.sors.desktop.sessions;
 
 import java.io.File;
 import java.util.Date;
 
-import com.jubaka.sors.factories.ClassFactory;
-import com.jubaka.sors.remote.BeanConstructor;
-import com.jubaka.sors.remote.ConnectionHandler;
+import com.jubaka.sors.desktop.factories.ClassFactory;
+import com.jubaka.sors.desktop.remote.BeanConstructor;
 
 public class Branch {
 	private Integer id;
@@ -21,11 +20,14 @@ public class Branch {
 	private String iface=null;
 	private Date time;
 	private String desc="SORS branch description";
+
+
+
 	private ClassFactory factory;
 	private int state =0;  // 0 created; 1 started; 2 paused; 3 stoped; 
 
 	
-	public Branch(Integer id,String name, String ip, String path,String iface) {
+	public Branch(Integer id,String name, String ip, String path,String iface,ClassFactory customClassFactory) {
 		pathToFile=path;
 		if (path != null) {
 			File dump = new File(path);
@@ -40,7 +42,10 @@ public class Branch {
 		this.id = id;
 		webIP = ip;
 		time = new Date();
-		factory = ClassFactory.getInstance();
+		if (customClassFactory == null)
+			factory = ClassFactory.getInstance();
+		else factory = customClassFactory;
+
 		if (name==null) {
 			if (iface!=null) this.name=iface;
 			if (fileName!=null)  this.name=fileName;
@@ -58,7 +63,13 @@ public class Branch {
 		factory.getAPIinstance(id).breakCapture();
 		active=false;
 	}
-	
+
+	public ClassFactory getFactory() {
+		if (factory == null) return ClassFactory.getInstance();
+		return factory;
+	}
+
+
 	public boolean isDataCapture() {
 		factory = ClassFactory.getInstance();
 		DataSaverInfo dsi = factory.getDataSaverInfo(id);

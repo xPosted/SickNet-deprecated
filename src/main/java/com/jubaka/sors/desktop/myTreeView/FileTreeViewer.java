@@ -1,27 +1,20 @@
-package com.jubaka.sors.myTreeView;
+package com.jubaka.sors.desktop.myTreeView;
 
-import com.jubaka.sors.sessions.IPaddr;
-import com.jubaka.sors.sessions.Session;
-import com.jubaka.sors.sessions.Subnet;
+import com.jubaka.sors.desktop.sessions.IPaddr;
+import com.jubaka.sors.desktop.sessions.Session;
+import com.jubaka.sors.desktop.sessions.Subnet;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;

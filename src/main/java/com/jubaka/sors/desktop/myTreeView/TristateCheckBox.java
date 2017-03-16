@@ -1,4 +1,4 @@
-package com.jubaka.sors.myTreeView;
+package com.jubaka.sors.desktop.myTreeView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

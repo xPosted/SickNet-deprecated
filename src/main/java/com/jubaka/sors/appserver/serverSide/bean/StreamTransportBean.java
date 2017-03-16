@@ -1,4 +1,4 @@
-package com.jubaka.sors.serverSide.bean;
+package com.jubaka.sors.appserver.serverSide.bean;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

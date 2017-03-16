@@ -1,4 +1,4 @@
-package com.jubaka.sors.view.statistic;
+package com.jubaka.sors.desktop.statistic;
 
 import java.awt.BorderLayout;
 import java.text.SimpleDateFormat;
@@ -7,7 +7,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import javax.swing.BoxLayout;
 import java.awt.Dimension;
 
@@ -16,15 +15,14 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JSplitPane;
 
-import com.jubaka.sors.factories.ClassFactory;
-import com.jubaka.sors.sessions.IPaddr;
-import com.jubaka.sors.sessions.SessionsAPI;
+import com.jubaka.sors.desktop.factories.ClassFactory;
+import com.jubaka.sors.desktop.sessions.IPaddr;
+import com.jubaka.sors.desktop.sessions.SessionsAPI;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
-import com.jubaka.sors.sessions.Subnet;
+import com.jubaka.sors.desktop.sessions.Subnet;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -63,7 +61,7 @@ public class StatMain extends JFrame {
 				if (me.getClickCount()==2) {
 					DefaultTableModel model = (DefaultTableModel) table.getModel();
 					String ipStr = (String)model.getValueAt(table.getSelectedRow(), 0);
-					IPaddr ip = IPaddr.getInstance(branchId, ipStr);
+					IPaddr ip = ClassFactory.getInstance().getSesionInstance(branchId).getIpInstance(ipStr);
 					StatMain statView = new StatMain(ip,branchId);
 					statView.setVisible(true);
 				}

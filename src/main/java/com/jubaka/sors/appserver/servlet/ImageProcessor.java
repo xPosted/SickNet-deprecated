@@ -1,4 +1,4 @@
-package com.jubaka.sors.appserver.serverSide;
+package com.jubaka.sors.appserver.servlet;
 
 import java.io.BufferedInputStream;
 import java.io.File;

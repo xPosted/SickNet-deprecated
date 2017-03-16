@@ -1,18 +1,16 @@
-package com.jubaka.sors.service;
+package com.jubaka.sors.appserver.service;
 
-import com.jubaka.sors.beans.branch.*;
-import com.jubaka.sors.dao.BranchDao;
-import com.jubaka.sors.entities.*;
-import com.jubaka.sors.managed.LoginBean;
-import com.jubaka.sors.protocol.http.HTTP;
-import com.jubaka.sors.protocol.http.HTTPRequest;
-import com.jubaka.sors.protocol.http.HTTPResponse;
-import com.jubaka.sors.unitTests.HTTPResp;
+import com.jubaka.sors.appserver.beans.branch.*;
+import com.jubaka.sors.appserver.dao.BranchDao;
+import com.jubaka.sors.appserver.entities.*;
+import com.jubaka.sors.appserver.managed.LoginBean;
+import com.jubaka.sors.desktop.http.HTTP;
+import com.jubaka.sors.desktop.http.HTTPRequest;
+import com.jubaka.sors.desktop.http.HTTPResponse;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.net.InetAddress;
 import java.net.UnknownHostException;

@@ -1,7 +1,6 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -17,7 +16,6 @@ import java.awt.Component;
 
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
@@ -27,9 +25,6 @@ import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.SwingConstants;
 
-import java.awt.GridLayout;
-
-import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 
@@ -40,12 +35,7 @@ import javax.swing.JTextField;
 
 import java.awt.Insets;
 
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.MatteBorder;
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.border.BevelBorder;
-
-import com.jubaka.sors.sessions.API;
+import com.jubaka.sors.desktop.sessions.API;
 import org.jnetpcap.PcapAddr;
 import org.jnetpcap.PcapIf;
 
@@ -57,8 +47,6 @@ import java.util.List;
 import javax.swing.ListSelectionModel;
 
 import java.awt.Font;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;

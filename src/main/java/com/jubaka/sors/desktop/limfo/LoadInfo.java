@@ -1,25 +1,13 @@
-package com.jubaka.sors.limfo;
+package com.jubaka.sors.desktop.limfo;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
-import java.lang.management.MemoryPoolMXBean;
 import java.lang.management.MemoryUsage;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Scanner;
 
-import com.jubaka.sors.factories.ClassFactory;
-import com.jubaka.sors.sessions.Branch;
-
-import com.sun.management.OperatingSystemMXBean;
+import com.jubaka.sors.desktop.factories.ClassFactory;
+import com.jubaka.sors.desktop.sessions.Branch;
 
 
 //import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;

@@ -1,4 +1,4 @@
-package com.jubaka.sors.remote;
+package com.jubaka.sors.desktop.remote;
 
 import java.io.*;
 import java.net.Socket;
@@ -11,12 +11,12 @@ import javax.swing.table.DefaultTableModel;
 
 import com.jubaka.sors.appserver.beans.*;
 import com.jubaka.sors.appserver.beans.branch.*;
-import com.jubaka.sors.factories.ClassFactory;
-import com.jubaka.sors.limfo.LoadLimits;
-import com.jubaka.sors.sessions.*;
-import com.jubaka.sors.tcpAnalyse.Controller;
-import com.jubaka.sors.tcpAnalyse.MainWin;
-import com.jubaka.sors.tcpAnalyse.Settings;
+import com.jubaka.sors.desktop.factories.ClassFactory;
+import com.jubaka.sors.desktop.limfo.LoadLimits;
+import com.jubaka.sors.desktop.sessions.*;
+import com.jubaka.sors.desktop.tcpAnalyse.Controller;
+import com.jubaka.sors.desktop.tcpAnalyse.MainWin;
+import com.jubaka.sors.desktop.tcpAnalyse.Settings;
 import org.jfree.data.time.TimeSeries;
 
 public class ConnectionHandler implements Runnable, Observer {
@@ -83,7 +83,7 @@ public class ConnectionHandler implements Runnable, Observer {
 		ClassFactory cl = ClassFactory.getInstance();
 		SessionsAPI sesAPI = cl.getSesionInstance(brID);
 		Subnet subnet = sesAPI.getNetByName(obj);
-		IPaddr ip = IPaddr.getInstance(brID, obj);
+		IPaddr ip = cl.getSesionInstance(brID).getIpInstance(obj);
 
 		if (subnet != null) {
 			cl.getDataSaverInfo(brID).addSubnet(subnet, in, out);
@@ -230,7 +230,7 @@ public class ConnectionHandler implements Runnable, Observer {
 			if (command.length == 3) {
 				Integer brId = Integer.parseInt(command[1]);
 				String ipAddrStr = command[2];
-				IPaddr addr = IPaddr.getInstance(brId, ipAddrStr);
+				IPaddr addr = ClassFactory.getInstance().getSesionInstance(brId).getIpInstance(ipAddrStr);
 				DefaultTableModel ipStatTModel = StatisticLogic
 						.getIPTableModel(addr);
 				Bean transportBean = new Bean();
@@ -331,7 +331,8 @@ public class ConnectionHandler implements Runnable, Observer {
 			if (command.length == 3) {
 				Integer brId = Integer.parseInt(command[1]);
 				String ipStr = command[2];
-				IPaddr ip = IPaddr.getInstance(brId, ipStr);
+
+				IPaddr ip = ClassFactory.getInstance().getSesionInstance(brId).getIpInstance(ipStr);
 				TimeSeries ts = StatisticLogic.createIpDataInSeries(
 						null,ip, null, null);
 				Bean transportBean = new Bean();
@@ -350,7 +351,7 @@ public class ConnectionHandler implements Runnable, Observer {
 			if (command.length == 3) {
 				Integer brId = Integer.parseInt(command[1]);
 				String ipStr = command[2];
-				IPaddr ip = IPaddr.getInstance(brId, ipStr);
+				IPaddr ip = ClassFactory.getInstance().getSesionInstance(brId).getIpInstance(ipStr);
 				TimeSeries ts = StatisticLogic.createIpDataOutSeries(
 						null,ip, null, null);
 				Bean transportBean = new Bean();
@@ -409,8 +410,8 @@ public class ConnectionHandler implements Runnable, Observer {
 			if (command.length == 3) {
 				Integer brId = Integer.parseInt(command[1]);
 				String sorsPath = command[2];
-
-				FileListBean bean = beanConstructor.prepareFileListBean(brId, sorsPath);
+				Branch br =  ClassFactory.getInstance().getBranch(brId);
+				FileListBean bean = beanConstructor.prepareFileListBean(br, sorsPath);
 				bean.setRequestId(ro.getRequestId());
 				sendLock.lock();
 				oos.writeObject(bean);
@@ -520,8 +521,8 @@ public class ConnectionHandler implements Runnable, Observer {
 			if (command.length == 3) {
 				String object = command[1];
 				Integer brId = Integer.parseInt(command[2]);
-
-				SesDataCapBean sesDataCapBean = beanConstructor.prepareSesDataCapBean(object, brId);
+				Branch br = ClassFactory.getInstance().getBranch(brId);
+				SesDataCapBean sesDataCapBean = beanConstructor.prepareSesDataCapBean(br,object);
 				sesDataCapBean.setRequestId(ro.getRequestId());
 				sendLock.lock();
 				oos.writeObject(sesDataCapBean);
@@ -771,7 +772,7 @@ public class ConnectionHandler implements Runnable, Observer {
 				String obj = command[2];
 				SessionsAPI sApi = ClassFactory.getInstance().getSesionInstance(id);
 				Subnet subnet =  sApi.getNetByName(obj);
-				IPaddr ipaddr = IPaddr.getInstance(id,obj);
+				IPaddr ipaddr = sApi.getIpInstance(obj);
 
 				if (subnet != null) subnet.deleteObserver(this);
 				if (ipaddr != null) {
@@ -788,8 +789,8 @@ public class ConnectionHandler implements Runnable, Observer {
 				Integer id = Integer.parseInt(command[1]);
 				String ipStr = command[2];
 				boolean observe = Boolean.valueOf(command[3]);
-
-				IPItemBean bean = beanConstructor.prepareIpBean(id,ipStr);
+				Branch br = ClassFactory.getInstance().getBranch(id);
+				IPItemBean bean = beanConstructor.prepareIpBean(br,ipStr);
 				bean.setRequestId(ro.getRequestId());
 				sendLock.lock();
 				oos.writeObject(bean);
@@ -797,7 +798,7 @@ public class ConnectionHandler implements Runnable, Observer {
 				sendLock.unlock();
 
 				if (observe) {
-					IPaddr ipaddr = IPaddr.getInstance(id, ipStr);
+					IPaddr ipaddr = ClassFactory.getInstance().getSesionInstance(id).getIpInstance(ipStr);
 					ipaddr.addObserver(this);
 					ipaddr.setRemoteObserver(true);
 				}

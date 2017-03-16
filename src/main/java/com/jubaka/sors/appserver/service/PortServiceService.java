@@ -1,7 +1,7 @@
-package com.jubaka.sors.service;
+package com.jubaka.sors.appserver.service;
 
-import com.jubaka.sors.dao.PortServiceDao;
-import com.jubaka.sors.entities.PortServiceBinding;
+import com.jubaka.sors.appserver.dao.PortServiceDao;
+import com.jubaka.sors.appserver.entities.PortServiceBinding;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

@@ -1,6 +1,6 @@
-package com.jubaka.sors.dao;
+package com.jubaka.sors.appserver.dao;
 
-import com.jubaka.sors.entities.HttpRequest;
+import com.jubaka.sors.appserver.entities.HttpRequest;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;

@@ -1,4 +1,4 @@
-package com.jubaka.sors.managed;
+package com.jubaka.sors.appserver.managed;
 
 import javax.inject.Named;
 import javax.inject.Singleton;

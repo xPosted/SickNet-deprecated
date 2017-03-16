@@ -1,8 +1,6 @@
-package com.jubaka.sors.sessions;
+package com.jubaka.sors.desktop.sessions;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
@@ -17,8 +15,8 @@ import java.util.concurrent.Executors;
 
 import javax.swing.JPanel;
 
-import com.jubaka.sors.protocol.http.HTTP;
-import com.jubaka.sors.protocol.http.protocol.tcp.TCP;
+import com.jubaka.sors.desktop.http.HTTP;
+import com.jubaka.sors.desktop.http.protocol.tcp.TCP;
 import org.jnetpcap.protocol.tcpip.Http;
 import org.jnetpcap.protocol.tcpip.Tcp;
 
@@ -27,7 +25,6 @@ import org.jnetpcap.protocol.tcpip.Tcp;
 
 public class Session extends Observable implements Serializable, CustomObserver {
 
-    Integer debug = 0;
     private DataSaver dsaver;
     private JPanel view;
     private Long srcDataLen = (long) 0;

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<%@page import="com.jubaka.sors.tcpAnalyse.Controller"%>
+<%@page import="com.jubaka.sors.desktop.tcpAnalyse.Controller"%>
 <%@page import="java.util.HashSet"%>
-<%@page import="com.jubaka.sors.serverSide.ConnectionHandler"%>
-<%@page import="com.jubaka.sors.beans.branch.SessionBean"%>
+<%@page import="com.jubaka.sors.appserver.serverSide.ConnectionHandler"%>
+<%@page import="com.jubaka.sors.appserver.beans.branch.SessionBean"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.jubaka.sors.beans.branch.IPItemBean"%>
-<%@page import="com.jubaka.sors.beans.branch.SubnetBean"%>
-<%@page import="com.jubaka.sors.beans.branch.BranchBean"%>
-<%@page import="com.jubaka.sors.sessions.Branch"%>
+<%@page import="com.jubaka.sors.appserver.beans.branch.IPItemBean"%>
+<%@page import="com.jubaka.sors.appserver.beans.branch.SubnetBean"%>
+<%@page import="com.jubaka.sors.appserver.beans.branch.BranchBean"%>
+<%@page import="com.jubaka.sors.desktop.sessions.Branch"%>
 <html style="height: 2369px;">
 <head>
 

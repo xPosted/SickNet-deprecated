@@ -3,9 +3,9 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.jubaka.sors.beans.branch.IPItemBean"%>
-<%@page import="com.jubaka.sors.beans.branch.SessionBean"%>
-<%@page import="com.jubaka.sors.sessions.Data_bean"%>
+<%@page import="com.jubaka.sors.appserver.beans.branch.IPItemBean"%>
+<%@page import="com.jubaka.sors.appserver.beans.branch.SessionBean"%>
+<%@page import="com.jubaka.sors.desktop.sessions.Data_bean"%>
 <%@page import="javax.swing.JOptionPane"%>
 <%@page import="java.util.HashSet"%>
 <%@page import="java.net.InetAddress"%>

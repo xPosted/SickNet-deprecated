@@ -1,4 +1,4 @@
-package com.jubaka.sors.myTreeView;
+package com.jubaka.sors.desktop.myTreeView;
 
 import java.awt.BorderLayout;
 import java.awt.Component;

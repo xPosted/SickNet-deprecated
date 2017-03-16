@@ -1,4 +1,4 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 /*
 import java.awt.BorderLayout;
 import java.awt.EventQueue;

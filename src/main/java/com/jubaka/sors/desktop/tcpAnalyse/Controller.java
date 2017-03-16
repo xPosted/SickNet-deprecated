@@ -1,4 +1,4 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 
 import java.awt.Component;
 import java.io.ByteArrayInputStream;
@@ -23,10 +23,9 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import com.jubaka.sors.factories.ClassFactory;
-import com.jubaka.sors.limfo.LoadLimits;
-import com.jubaka.sors.sessions.*;
-import sun.applet.Main;
+import com.jubaka.sors.desktop.factories.ClassFactory;
+import com.jubaka.sors.desktop.limfo.LoadLimits;
+import com.jubaka.sors.desktop.sessions.*;
 
 public class Controller {
 	private static API api;

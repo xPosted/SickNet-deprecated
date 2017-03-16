@@ -1,4 +1,4 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -22,9 +22,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
-import com.jubaka.sors.factories.ClassFactory;
-import com.jubaka.sors.limfo.LoadLimits;
-import com.jubaka.sors.sessions.Session;
+import com.jubaka.sors.desktop.factories.ClassFactory;
+import com.jubaka.sors.desktop.limfo.LoadLimits;
+import com.jubaka.sors.desktop.sessions.Session;
 
 public class SessionsListView extends JPanel {
 	protected JToggleButton btnInput;

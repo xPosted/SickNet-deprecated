@@ -1,4 +1,4 @@
-package com.jubaka.sors.dao;
+package com.jubaka.sors.appserver.dao;
 
 /**
  * Created by root on 31.10.16.

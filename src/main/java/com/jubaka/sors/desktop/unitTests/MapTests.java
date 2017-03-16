@@ -1,4 +1,4 @@
-package com.jubaka.sors.unitTests;
+package com.jubaka.sors.desktop.unitTests;
 
 import java.util.Date;
 import java.util.LinkedHashMap;

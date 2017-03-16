@@ -1,10 +1,10 @@
-package com.jubaka.sors.view.statistic;
+package com.jubaka.sors.desktop.statistic;
 
 import javax.swing.JPanel;
 
-import com.jubaka.sors.factories.ClassFactory;
-import com.jubaka.sors.sessions.Branch;
-import com.jubaka.sors.tcpAnalyse.Controller;
+import com.jubaka.sors.desktop.factories.ClassFactory;
+import com.jubaka.sors.desktop.sessions.Branch;
+import com.jubaka.sors.desktop.tcpAnalyse.Controller;
 
 import javax.swing.BoxLayout;
 import javax.swing.border.EmptyBorder;

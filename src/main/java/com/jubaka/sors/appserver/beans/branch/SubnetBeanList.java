@@ -1,11 +1,8 @@
-package com.jubaka.sors.beans.branch;
+package com.jubaka.sors.appserver.beans.branch;
 
-import com.jubaka.sors.beans.Bean;
+import com.jubaka.sors.appserver.beans.Bean;
 
 import java.io.Serializable;
-import java.net.InetAddress;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
 
 public class SubnetBeanList extends Bean implements Serializable {

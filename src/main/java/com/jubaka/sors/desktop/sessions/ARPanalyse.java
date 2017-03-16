@@ -1,4 +1,4 @@
-package com.jubaka.sors.sessions;
+package com.jubaka.sors.desktop.sessions;
 
 import java.util.Observable;
 import java.util.Observer;

@@ -1,9 +1,8 @@
-package com.jubaka.sors.protocol.http.protocol.tcp;
+package com.jubaka.sors.desktop.http.protocol.tcp;
 
-import com.jubaka.sors.sessions.IPaddr;
+import com.jubaka.sors.desktop.sessions.IPaddr;
 
 import java.io.File;
-import java.io.RandomAccessFile;
 
 /**
  * Created by root on 18.11.16.

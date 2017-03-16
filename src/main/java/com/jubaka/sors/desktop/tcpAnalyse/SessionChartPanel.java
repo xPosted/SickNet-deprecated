@@ -1,10 +1,10 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 
-import com.jubaka.sors.sessions.Session;
-import com.jubaka.sors.sessions.StatisticLogic;
+import com.jubaka.sors.desktop.sessions.Session;
+import com.jubaka.sors.desktop.sessions.StatisticLogic;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;

@@ -1,4 +1,4 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 
 import javax.swing.JPanel;
 
@@ -21,7 +21,7 @@ import java.util.Observer;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
-import com.jubaka.sors.sessions.Subnet;
+import com.jubaka.sors.desktop.sessions.Subnet;
 
 public class NetInfoPanel extends JPanel implements Observer {
 

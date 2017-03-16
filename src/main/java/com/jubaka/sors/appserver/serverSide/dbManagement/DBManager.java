@@ -1,9 +1,6 @@
-package com.jubaka.sors.serverSide.dbManagement;
+package com.jubaka.sors.appserver.serverSide.dbManagement;
 
-import com.jubaka.sors.beans.InfoBean;
-import com.jubaka.sors.entities.User;
-import com.jubaka.sors.serverSide.NodeServerEndpoint;
-import com.jubaka.sors.serverSide.UserBase;
+import com.jubaka.sors.appserver.entities.User;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

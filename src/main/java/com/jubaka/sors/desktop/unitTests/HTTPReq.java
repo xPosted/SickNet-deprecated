@@ -1,4 +1,4 @@
-package com.jubaka.sors.unitTests;
+package com.jubaka.sors.desktop.unitTests;
 
 public class HTTPReq extends MyHttp {
 	public String toString() {

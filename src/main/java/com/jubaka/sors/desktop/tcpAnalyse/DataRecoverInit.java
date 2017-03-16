@@ -1,4 +1,4 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -8,11 +8,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JTree;
-import javax.swing.Renderer;
 import javax.swing.SwingConstants;
 
 import java.awt.Dimension;
@@ -26,8 +24,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeCellRenderer;
 
-import com.jubaka.sors.factories.ClassFactory;
-import com.jubaka.sors.myTreeView.FileTreeViewer;
+import com.jubaka.sors.desktop.factories.ClassFactory;
+import com.jubaka.sors.desktop.myTreeView.FileTreeViewer;
 
 import java.awt.Color;
 
@@ -43,25 +41,20 @@ import javax.swing.Box;
 import javax.swing.JButton;
 
 import java.awt.Insets;
-import java.awt.SystemColor;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
-import javax.swing.UIManager;
 import javax.swing.JScrollPane;
-import javax.swing.JList;
 import javax.swing.JTable;
 
-import com.jubaka.sors.sessions.Branch;
-import com.jubaka.sors.sessions.Session;
-import com.jubaka.sors.sessions.SessionsAPI;
-import com.jubaka.sors.sessions.Subnet;
+import com.jubaka.sors.desktop.sessions.Branch;
+import com.jubaka.sors.desktop.sessions.Session;
+import com.jubaka.sors.desktop.sessions.SessionsAPI;
+import com.jubaka.sors.desktop.sessions.Subnet;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.border.BevelBorder;
 import javax.swing.JSplitPane;
 
 public class DataRecoverInit extends JFrame {

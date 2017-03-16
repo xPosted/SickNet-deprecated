@@ -1,4 +1,4 @@
-package com.jubaka.sors.unitTests;
+package com.jubaka.sors.desktop.unitTests;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

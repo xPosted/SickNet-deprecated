@@ -1,9 +1,8 @@
-package com.jubaka.sors.tcpAnalyse.httpView;
+package com.jubaka.sors.desktop.tcpAnalyse.httpView;
 
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
 import javax.swing.SwingUtilities;
-import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EtchedBorder;
@@ -14,21 +13,15 @@ import java.awt.BorderLayout;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-import javax.swing.border.MatteBorder;
 
 import java.awt.Color;
 
-import javax.swing.border.LineBorder;
 import javax.swing.JSeparator;
 import javax.swing.UIManager;
 
-import com.jubaka.sors.protocol.http.HTTP;
-import com.jubaka.sors.protocol.http.HTTPRequest;
-import com.jubaka.sors.protocol.http.HTTPResponse;
-
-import java.awt.Component;
-
-import javax.swing.Box;
+import com.jubaka.sors.desktop.http.HTTP;
+import com.jubaka.sors.desktop.http.HTTPRequest;
+import com.jubaka.sors.desktop.http.HTTPResponse;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

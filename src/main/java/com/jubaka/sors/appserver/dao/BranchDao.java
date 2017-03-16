@@ -1,14 +1,13 @@
-package com.jubaka.sors.dao;
+package com.jubaka.sors.appserver.dao;
 
-import com.jubaka.sors.entities.Branch;
-import com.jubaka.sors.entities.Node;
-import com.jubaka.sors.entities.User;
+import com.jubaka.sors.appserver.entities.Branch;
+import com.jubaka.sors.appserver.entities.Node;
+import com.jubaka.sors.appserver.entities.User;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 import javax.persistence.*;
 import javax.transaction.Transactional;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;

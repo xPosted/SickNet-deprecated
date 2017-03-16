@@ -1,9 +1,9 @@
-package com.jubaka.sors.view.statistic;
+package com.jubaka.sors.desktop.statistic;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-import com.jubaka.sors.sessions.StatisticLogic;
+import com.jubaka.sors.desktop.sessions.StatisticLogic;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 

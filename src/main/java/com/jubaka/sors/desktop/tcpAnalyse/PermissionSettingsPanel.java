@@ -1,4 +1,4 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -30,8 +30,8 @@ import javax.swing.border.LineBorder;
 
 
 import com.jubaka.sors.appserver.beans.SecPolicy;
-import com.jubaka.sors.factories.ClassFactory;
-import com.jubaka.sors.limfo.LoadLimits;
+import com.jubaka.sors.desktop.factories.ClassFactory;
+import com.jubaka.sors.desktop.limfo.LoadLimits;
 
 
 import java.awt.Color;

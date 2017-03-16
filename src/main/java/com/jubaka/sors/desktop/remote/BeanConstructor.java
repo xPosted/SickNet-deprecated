@@ -1,11 +1,11 @@
-package com.jubaka.sors.remote;
+package com.jubaka.sors.desktop.remote;
 
 import com.jubaka.sors.appserver.beans.*;
 import com.jubaka.sors.appserver.beans.branch.*;
-import com.jubaka.sors.factories.ClassFactory;
-import com.jubaka.sors.limfo.LoadInfo;
-import com.jubaka.sors.limfo.LoadLimits;
-import com.jubaka.sors.sessions.*;
+import com.jubaka.sors.desktop.factories.ClassFactory;
+import com.jubaka.sors.desktop.limfo.LoadInfo;
+import com.jubaka.sors.desktop.limfo.LoadLimits;
+import com.jubaka.sors.desktop.sessions.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -74,14 +74,14 @@ public class BeanConstructor {
 
     }
 
-    public IPItemBean prepareIpBean(Integer branch_id, String ip) {
+    public IPItemBean prepareIpBean(Branch branch, String ip) {
 
 
         try {
-            SessionsAPI cntr = ClassFactory.getInstance().getSesionInstance(
-                    branch_id);
-            IPaddr ipaddr = IPaddr.getInstance(branch_id, ip);
-            return prepareIpBean(branch_id,ipaddr);
+            SessionsAPI sesApi = branch.getFactory().getSesionInstance(
+                    branch.getId());
+            IPaddr ipaddr = sesApi.getIpInstance(ip);
+            return prepareIpBean(branch.getId(),ipaddr);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -169,33 +169,33 @@ public class BeanConstructor {
         return sb;
     }
 
-    public FileListBean prepareFileListBean(Integer brId, String sorsPath) {
-            String recoveredPath = ClassFactory.getInstance().getRecoveredDataPath(
-                    brId);
+    public FileListBean prepareFileListBean(Branch br, String sorsPath) {
+            String recoveredPath = br.getFactory().getRecoveredDataPath(
+                    br.getId());
 
-            Branch br = ClassFactory.getInstance().getBranch(brId);
+
             FileListBean flb = new FileListBean();
             File recoveredFileObj = new File(recoveredPath);
             flb.setSize(sizeOf(recoveredFileObj));
             flb.setFileCount(getFileCount(recoveredFileObj));
             flb.setDate(br.getLastRecovered());
-            flb.setBrId(brId);
+            flb.setBrId(br.getId());
             flb.setFilter(null);
-            flb.setMainDir(prepareDirectoryBean(sorsPath, brId));
+            flb.setMainDir(prepareDirectoryBean(sorsPath, br));
             flb.setBranchName(br.getName());
             return flb;
 
     }
-    public FileBean prepareFileBean(File f, Integer brId, String sorsPath) {
-        String branchPath = ClassFactory.getInstance().getBranchPath(brId);
+    public FileBean prepareFileBean(File f, Branch br, String sorsPath) {
+        String branchPath = br.getFactory().getBranchPath(br.getId());
         FileBean fBean = new FileBean();
         fBean.setName(f.getName());
         fBean.setFullPath(sorsPath + "/" + f.getName());
         fBean.setSize(f.length());
         fBean.setLastModify(f.lastModified());
         String rawDataFileName = getRawDataByRFileName(f.getName(), branchPath);
-        SessionBean sb = translateSessionToBean(getSessionByRawDataFile(
-                rawDataFileName, brId));
+        SessionBean sb = translateSessionToBean(getSessionByRawDataFile(br,
+                rawDataFileName));
         fBean.setSession(sb);
         if (rawDataFileName.endsWith("src"))
             fBean.setTransmittedBySrc(true);
@@ -204,9 +204,9 @@ public class BeanConstructor {
         return fBean;
     }
 
-    public DirectoryBean prepareDirectoryBean(String sorsPath, Integer brId) {
-        ClassFactory cl = ClassFactory.getInstance();
-        String recoveredDataPath = cl.getRecoveredDataPath(brId);
+    public DirectoryBean prepareDirectoryBean(String sorsPath, Branch br) {
+        ClassFactory cl = br.getFactory();
+        String recoveredDataPath = cl.getRecoveredDataPath(br.getId());
         File f = new File(recoveredDataPath + "/" + sorsPath);
         DirectoryBean dirBean = new DirectoryBean();
         dirBean.setFullPath(sorsPath);
@@ -215,12 +215,12 @@ public class BeanConstructor {
         for (File item : f.listFiles()) {
             if (item.isDirectory()) {
                 DirectoryBean subDir = prepareDirectoryBean(sorsPath + "/"
-                        + item.getName(), brId);
+                        + item.getName(), br);
                 subDir.setParent(dirBean);
                 dirBean.addDir(subDir);
             }
             if (item.isFile()) {
-                dirBean.addFile(prepareFileBean(item, brId, sorsPath));
+                dirBean.addFile(prepareFileBean(item, br, sorsPath));
             }
         }
         dirBean.setSize(sizeOf(f));
@@ -307,17 +307,18 @@ public class BeanConstructor {
         return bean;
     }
 
-    public SesDataCapBean prepareSesDataCapBean(String addr, Integer id) {
+    public SesDataCapBean prepareSesDataCapBean(Branch br, String addr) {
         addr = addr.trim();
-        ClassFactory cl = ClassFactory.getInstance();
-        SessionsAPI sesAPI = cl.getSesionInstance(id);
-        Subnet subnet = sesAPI.getNetByName(addr);
-        IPaddr ip = IPaddr.getInstance(id, addr);
+        ClassFactory currentFactory = br.getFactory();
+
+       SessionsAPI sesApi = currentFactory.getSesionInstance(br.getId());
+        Subnet subnet = sesApi.getNetByName(addr);
+        IPaddr ip = sesApi.getIpInstance(addr);
 
         if (subnet != null) {
 
             SesDataCapBean bean = new SesDataCapBean();
-            SesCaptureInfo sci = cl.getDataSaverInfo(id).getCatchInfo(subnet);
+            SesCaptureInfo sci = currentFactory.getDataSaverInfo(br.getId()).getCatchInfo(subnet);
             if (sci == null) {
                 bean.setObject("capture_not_set");
                 return bean;
@@ -331,7 +332,7 @@ public class BeanConstructor {
 
         if (ip != null) {
             SesDataCapBean bean = new SesDataCapBean();
-            SesCaptureInfo sci = cl.getDataSaverInfo(id).getCatchInfo(
+            SesCaptureInfo sci = currentFactory.getDataSaverInfo(br.getId()).getCatchInfo(
                     ip.getAddr());
             if (sci == null) {
                 bean.setObject("capture_not_set");
@@ -467,9 +468,8 @@ public class BeanConstructor {
     }
 
 
-    public InfoBean prepareInfoBean() {
+    public InfoBean prepareInfoBean(ClassFactory cf) {
         LoadInfo li = new LoadInfo();
-        ClassFactory cf = ClassFactory.getInstance();
         LoadLimits ll = cf.getLimits();
         InfoBean ib = new InfoBean();
         ib.setNodeName(LoadInfo.getNodeName());
@@ -522,10 +522,11 @@ public class BeanConstructor {
 
 
 
-    public Session getSessionByRawDataFile(String fileName, Integer brId) {
+    public Session getSessionByRawDataFile(Branch br, String fileName) {
+
+        SessionsAPI sesApi = br.getFactory().getSesionInstance(br.getId());
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM_HH:mm:ss");
-
         String[] splitedFileName = fileName.split("/");
         String directFileName = splitedFileName[splitedFileName.length - 1];
         String[] splitedDirectFileName = directFileName.split("_");
@@ -536,7 +537,7 @@ public class BeanConstructor {
         String srcIpPort = IpPort.split("-")[0];
         Integer lastDot = srcIpPort.lastIndexOf(".");
         String ip = srcIpPort.substring(0, lastDot);
-        IPaddr ipaddr = IPaddr.getInstance(brId, ip);
+        IPaddr ipaddr = sesApi.getIpInstance(ip);
 
         if (ipaddr != null) {
 

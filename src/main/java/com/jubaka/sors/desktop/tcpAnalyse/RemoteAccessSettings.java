@@ -1,4 +1,4 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
@@ -24,8 +24,8 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JPasswordField;
 
-import com.jubaka.sors.limfo.LoadInfo;
-import com.jubaka.sors.remote.WebConnection;
+import com.jubaka.sors.desktop.limfo.LoadInfo;
+import com.jubaka.sors.desktop.remote.WebConnection;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 

@@ -1,12 +1,11 @@
-package com.jubaka.sors.managed;
+package com.jubaka.sors.appserver.managed;
 
-import com.jubaka.sors.beans.Category;
-import com.jubaka.sors.beans.branch.*;
-import com.jubaka.sors.entities.Branch;
-import com.jubaka.sors.serverSide.*;
-import com.jubaka.sors.service.BranchService;
-import com.jubaka.sors.service.PortServiceService;
-import com.jubaka.sors.service.SessionCategoriser;
+import com.jubaka.sors.appserver.beans.Category;
+import com.jubaka.sors.appserver.beans.branch.*;
+import com.jubaka.sors.appserver.entities.Branch;
+import com.jubaka.sors.appserver.serverSide.*;
+import com.jubaka.sors.appserver.service.BranchService;
+import com.jubaka.sors.appserver.service.PortServiceService;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.TimeSeries;
 

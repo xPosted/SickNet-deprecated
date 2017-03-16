@@ -1,17 +1,15 @@
-package com.jubaka.sors.service;
+package com.jubaka.sors.appserver.service;
 
-import com.jubaka.sors.beans.branch.IPItemBean;
-import com.jubaka.sors.beans.branch.SessionBean;
-import com.jubaka.sors.dao.HostDao;
-import com.jubaka.sors.entities.Branch;
-import com.jubaka.sors.entities.Host;
-import com.jubaka.sors.entities.Session;
-import com.jubaka.sors.entities.Subnet;
+import com.jubaka.sors.appserver.beans.branch.IPItemBean;
+import com.jubaka.sors.appserver.beans.branch.SessionBean;
+import com.jubaka.sors.appserver.dao.HostDao;
+import com.jubaka.sors.appserver.entities.Host;
+import com.jubaka.sors.appserver.entities.Session;
+import com.jubaka.sors.appserver.entities.Subnet;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.Entity;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;

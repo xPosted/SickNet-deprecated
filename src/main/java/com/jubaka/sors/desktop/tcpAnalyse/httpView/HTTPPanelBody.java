@@ -1,25 +1,16 @@
-package com.jubaka.sors.tcpAnalyse.httpView;
+package com.jubaka.sors.desktop.tcpAnalyse.httpView;
 
-import com.jubaka.sors.protocol.http.HTTP;
-import com.jubaka.sors.protocol.http.HTTPRequest;
-import com.jubaka.sors.protocol.http.HTTPResponse;
+import com.jubaka.sors.desktop.http.HTTP;
+import com.jubaka.sors.desktop.http.HTTPRequest;
+import com.jubaka.sors.desktop.http.HTTPResponse;
 
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
 import javax.swing.border.LineBorder;
 import javax.swing.UIManager;
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.border.BevelBorder;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
 
-import java.awt.Dimension;
-import java.awt.BorderLayout;
-
-import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
 
-import java.awt.SystemColor;
 import javax.swing.border.CompoundBorder;
 import java.awt.Color;
 

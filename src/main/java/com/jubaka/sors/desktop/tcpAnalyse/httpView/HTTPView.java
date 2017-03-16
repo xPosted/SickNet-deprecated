@@ -1,18 +1,13 @@
-package com.jubaka.sors.tcpAnalyse.httpView;
+package com.jubaka.sors.desktop.tcpAnalyse.httpView;
 
 import javax.swing.JPanel;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 
 import javax.swing.JScrollPane;
-import javax.swing.JTree;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeCellRenderer;
 
-import com.jubaka.sors.protocol.http.HTTP;
-import com.jubaka.sors.sessions.Session;
+import com.jubaka.sors.desktop.http.HTTP;
+import com.jubaka.sors.desktop.sessions.Session;
 import javax.swing.BoxLayout;
 
 

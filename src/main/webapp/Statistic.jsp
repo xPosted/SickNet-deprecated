@@ -1,7 +1,7 @@
-<%@page import="com.jubaka.sors.beans.branch.BranchInfoBean"%>
-<%@page import="com.jubaka.sors.beans.InfoBean"%>
+<%@page import="com.jubaka.sors.appserver.beans.branch.BranchInfoBean"%>
+<%@page import="com.jubaka.sors.appserver.beans.InfoBean"%>
 <%@page import="javax.swing.table.DefaultTableModel"%>
-<%@page import="com.jubaka.sors.serverSide.ConnectionHandler"%>
+<%@page import="com.jubaka.sors.appserver.serverSide.ConnectionHandler"%>
 <%@page import="java.util.HashSet"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.TreeSet"%>

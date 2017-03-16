@@ -1,6 +1,6 @@
-package com.jubaka.sors.sessions;
+package com.jubaka.sors.desktop.sessions;
 
-import com.jubaka.sors.factories.ClassFactory;
+import com.jubaka.sors.desktop.factories.ClassFactory;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -30,20 +30,20 @@ public class SimpleDataSaver implements Serializable, DataSaver {
     private File srcDataFile;
     private File dstDataFile;
 
-    private Integer id;
+    private Branch  br;
 
     private TreeMap<Long, Integer> srcDataTimeBinding = new TreeMap<Long, Integer>();
     private TreeMap<Long, Integer> dstDataTimeBinding = new TreeMap<Long, Integer>();
 
-    public SimpleDataSaver(Integer id, Session sesInst) {
-        this.id = id;
+    public SimpleDataSaver(Branch br, Session sesInst) {
+        this.br = br;
         sInst = sesInst;
         srcIP = sInst.getSrcIP().getAddr();
         dstIP = sInst.getDstIP().getAddr();
 
         try {
 
-            path = ClassFactory.getInstance().getRawDataPath(id);
+            path = br.getFactory().getRawDataPath(br.getId());
         } catch (Exception e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();

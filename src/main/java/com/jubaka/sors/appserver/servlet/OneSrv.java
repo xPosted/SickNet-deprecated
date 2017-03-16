@@ -1,4 +1,4 @@
-package com.jubaka.sors.appserver.serverSide;
+package com.jubaka.sors.appserver.servlet;
 
 import com.jubaka.sors.appserver.beans.branch.IPItemBean;
 

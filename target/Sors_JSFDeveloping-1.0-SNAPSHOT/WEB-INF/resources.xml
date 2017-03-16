@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<resources>
-    <Resource id="userDataSource" type="DataSource">
-        JdbcDriver com.mysql.jdbc.Driver
-        JdbcUrl jdbc:mysql://mywebsite.com/trivitup
-        UserName trivitup
-        Password password
-    </Resource>
-</resources>

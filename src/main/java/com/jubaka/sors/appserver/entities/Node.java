@@ -1,4 +1,4 @@
-package com.jubaka.sors.entities;
+package com.jubaka.sors.appserver.entities;
 
 
 import javax.persistence.Entity;

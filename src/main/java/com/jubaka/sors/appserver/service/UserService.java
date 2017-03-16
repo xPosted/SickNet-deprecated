@@ -1,8 +1,7 @@
-package com.jubaka.sors.service;
+package com.jubaka.sors.appserver.service;
 
-import com.jubaka.sors.dao.UserDao;
-import com.jubaka.sors.entities.User;
-import com.jubaka.sors.serverSide.UserBase;
+import com.jubaka.sors.appserver.dao.UserDao;
+import com.jubaka.sors.appserver.entities.User;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

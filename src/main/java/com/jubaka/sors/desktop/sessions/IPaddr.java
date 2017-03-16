@@ -1,11 +1,12 @@
-package com.jubaka.sors.sessions;
+package com.jubaka.sors.desktop.sessions;
 
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
 
-import com.jubaka.sors.protocol.http.HTTP;
+import com.jubaka.sors.desktop.factories.ClassFactory;
+import com.jubaka.sors.desktop.http.HTTP;
 import org.jnetpcap.protocol.network.Ip4;
 import org.jnetpcap.protocol.tcpip.Tcp;
 
@@ -13,7 +14,7 @@ import org.jnetpcap.protocol.tcpip.Tcp;
 public class IPaddr extends Observable implements Serializable, CustomObserver {
 
 
-
+	private ClassFactory myFactory;
 	private List<Session> newSessionsForCC = Collections.synchronizedList(new ArrayList<>());
 	private boolean remoteObserver = false;
 
@@ -33,58 +34,12 @@ public class IPaddr extends Observable implements Serializable, CustomObserver {
 	private Integer notifyLimit = 1024; // GUI will change after counters increase on more than this val 
 	private Integer notifyValue = 0;
 	
-	
-//	public Session addInputSes=null;
-//	public Session closeInputSes=null;
-//	public Session addOutputSes=null;
-//	public Session closeOutputSes=null;
-	
-	
-	
+
 //	private static HashMap<String, IPaddr> storage = new HashMap<String, IPaddr>();
-	private static HashMap<Integer, HashMap<String, IPaddr>> storage = new HashMap<Integer, HashMap<String,IPaddr>>(); 
-	
-	/**
-	 * Return IPaddr object by branch id and ipaddress
-	 * @param id branch id
-	 * @param ip ipaddress
-	 * @return IPaddr object
-	 */
-	public static IPaddr getInstance(Integer id,String ip) {
-		
-		HashMap<String, IPaddr> cell =   storage.get(id);
-		if (cell == null) {
-			createCell(id);
-			return null;
-		}
-		IPaddr res = cell.get(ip);
-		if (res==null) {
-			
-				try {
-					InetAddress ia = InetAddress.getByName(ip);
-					res=cell.get(ia.getHostAddress());
-				} catch (UnknownHostException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			
-		}
-		
-		return res;
 
-	}
-	private static void createCell(Integer id) {
-		HashMap<String, IPaddr> cell = new HashMap<String,IPaddr>();
-		storage.put(id, cell);
-	}
 
-	public static void addInst(Integer id, IPaddr item) {
-		
-		storage.get(id).put(item.getAddr().getHostAddress(), item);
-		ObserverTimer ipTimer = ObserverTimer.getinstance();
-		ipTimer.addObserver(item);
 
-	}
+
 	public synchronized Long getDataDown() {
 		return dataDown;
 	}
@@ -108,17 +63,19 @@ public class IPaddr extends Observable implements Serializable, CustomObserver {
 	public void clearNewSessionsList() {
 		newSessionsForCC.clear();
 	}
-	public IPaddr(Integer id, InetAddress addr, Subnet net) {
+	public IPaddr(ClassFactory myFactory, Branch br, InetAddress addr, Subnet net) {
 		this.addr = addr;
 		this.net = net;
 		GetHostName hName = new GetHostName(this);
 		hName.resolve();
-		addInst(id,this);
+		ObserverTimer ipTimer = ObserverTimer.getinstance();
+		ipTimer.addObserver(this);
+		myFactory.getSesionInstance(br.getId()).addIpInst(addr.getHostAddress(),this);
+		this.myFactory = myFactory;
 	}
-	
-	public void setSubnet(Subnet net) {
-		this.net=net;
-		
+
+	public Integer getBrachId() {
+		return net.getId();
 	}
 	
 	public boolean isIn(Session ses) {
@@ -191,6 +148,9 @@ public class IPaddr extends Observable implements Serializable, CustomObserver {
 		return net;
 	}
 
+	public void moveToSubnet(Subnet newNet) {
+		net = newNet;
+	}
 	public InetAddress getAddr() {
 		return addr;
 	}
@@ -245,27 +205,25 @@ public class IPaddr extends Observable implements Serializable, CustomObserver {
 		return resultCount;
 	}
 	
-	public Session getSessionByPacket(Tcp tcp,Ip4 ip,Integer brId) {
-		try {
-		IPaddr packetSrcIp = this;
-		IPaddr packetDstIp = IPaddr.getInstance(brId,InetAddress.getByAddress(ip.destination()).getHostAddress());
+	public Session getSessionByPacket(int tcpSrcPort,int tcpDstPort, IPaddr dstAddr) {
+
+
+
 		
-		HashSet<Session> inputActive = net.getInputActiveSes(this);
-		HashSet<Session> outputActive = net.getOutputActiveSes(this);
+		Set<Session> inputActive = getInputActiveSessions();
+		Set<Session> outputActive = getOutputActiveSessions();
 		
 		for (Session ses : inputActive) {
-			if (ses.getSrcIP()==packetDstIp & ses.getSrcP()==tcp.destination()) {
-				if (ses.getDstP() == tcp.source()) return ses;
+			if (ses.getSrcIP()==dstAddr & ses.getSrcP() == tcpDstPort) {
+				if (ses.getDstP() == tcpSrcPort) return ses;
 			}
 		}
 		for (Session ses : outputActive) {
-			if (ses.getDstIP()==packetDstIp & ses.getDstP()==tcp.destination()) {
-				if (ses.getSrcP() == tcp.source()) return ses;
+			if (ses.getDstIP()==dstAddr & ses.getDstP() == tcpDstPort) {
+				if (ses.getSrcP() == tcpSrcPort) return ses;
 			}
 		}
-		} catch (UnknownHostException uhe) {
-			uhe.printStackTrace();
-		}
+
 		return null;
 	}
 	

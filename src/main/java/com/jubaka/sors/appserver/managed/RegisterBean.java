@@ -1,8 +1,7 @@
-package com.jubaka.sors.managed;
+package com.jubaka.sors.appserver.managed;
 
-import com.jubaka.sors.entities.User;
-import com.jubaka.sors.serverSide.UserBase;
-import com.jubaka.sors.service.UserService;
+import com.jubaka.sors.appserver.entities.User;
+import com.jubaka.sors.appserver.service.UserService;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;

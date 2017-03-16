@@ -1,7 +1,7 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 
-import com.jubaka.sors.factories.ClassFactory;
-import com.jubaka.sors.sessions.Branch;
+import com.jubaka.sors.desktop.factories.ClassFactory;
+import com.jubaka.sors.desktop.sessions.Branch;
 
 import java.awt.BorderLayout;
 
@@ -40,7 +40,6 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JSpinner;
 
 public class BranchInfoView extends JFrame {
 

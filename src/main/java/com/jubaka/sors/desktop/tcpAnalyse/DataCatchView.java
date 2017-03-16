@@ -1,4 +1,4 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -31,9 +31,9 @@ import java.util.Set;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-import com.jubaka.sors.factories.ClassFactory;
-import com.jubaka.sors.myTreeView.FileTreeViewer;
-import com.jubaka.sors.sessions.*;
+import com.jubaka.sors.desktop.factories.ClassFactory;
+import com.jubaka.sors.desktop.myTreeView.FileTreeViewer;
+import com.jubaka.sors.desktop.sessions.*;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -315,6 +315,7 @@ public class DataCatchView extends JFrame {
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ClassFactory cl = ClassFactory.getInstance();
+				Branch br = cl.getBranch(id);
 				String ip = txtaddIP.getText();
 				InetAddress ia =null;
 				try {
@@ -325,14 +326,14 @@ public class DataCatchView extends JFrame {
 				}
 				for (Subnet net : cl.getSesionInstance(id).getAllSubnets()) {
 					if  (net.inSubnet(ia)) {
-						IPaddr addr = new IPaddr(id, ia, net);
+						IPaddr addr = new IPaddr(cl,br, ia, net);
 						net.addIPmanualy(addr);
 						refresh();
 						return;
 					}
 				}
 				Subnet defaultNet =  cl.getSesionInstance(id).getNotKnownNet();
-				IPaddr addr = new IPaddr(id, ia, defaultNet);
+				IPaddr addr = new IPaddr(cl,br, ia, defaultNet);
 				defaultNet.addIPmanualy(addr);
 				refresh();
 				

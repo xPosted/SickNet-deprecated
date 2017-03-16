@@ -1,15 +1,4 @@
-package com.jubaka.sors.service;
-
-import com.jubaka.sors.beans.Category;
-import com.jubaka.sors.beans.branch.*;
-import com.jubaka.sors.entities.Session;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.*;
+package com.jubaka.sors.appserver.service;
 
 /**
  * Created by root on 07.12.16.

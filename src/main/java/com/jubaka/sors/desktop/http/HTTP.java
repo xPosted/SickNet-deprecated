@@ -1,10 +1,8 @@
-package com.jubaka.sors.protocol.http;
+package com.jubaka.sors.desktop.http;
 
-import java.io.RandomAccessFile;
 import java.io.Serializable;
 
-import com.jubaka.sors.protocol.http.protocol.tcp.TCP;
-import com.jubaka.sors.unitTests.HTTPResp;
+import com.jubaka.sors.desktop.http.protocol.tcp.TCP;
 import org.jnetpcap.packet.AbstractMessageHeader.MessageType;
 import org.jnetpcap.protocol.tcpip.Http;
 import org.jnetpcap.protocol.tcpip.Http.Request;

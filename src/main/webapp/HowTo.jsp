@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<%@page import="com.jubaka.sors.serverSide.UserBase"%>
-<%@page import="com.jubaka.sors.serverSide.User"%>
+<%@page import="com.jubaka.sors.appserver.serverSide.UserBase"%>
+<%@page import="com.jubaka.sors.appserver.serverSide.User"%>
 <%@page import="java.util.Date"%>
 <html>
 <head>

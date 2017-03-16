@@ -1,8 +1,7 @@
-package com.jubaka.sors.dao;
+package com.jubaka.sors.appserver.dao;
 
-import com.jubaka.sors.entities.Node;
-import com.jubaka.sors.entities.NodeActiveCheckPoint;
-import com.jubaka.sors.entities.NodeCheckPoint;
+import com.jubaka.sors.appserver.entities.NodeActiveCheckPoint;
+import com.jubaka.sors.appserver.entities.NodeCheckPoint;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;

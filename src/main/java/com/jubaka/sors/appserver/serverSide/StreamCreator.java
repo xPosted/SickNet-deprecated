@@ -1,6 +1,6 @@
-package com.jubaka.sors.serverSide;
+package com.jubaka.sors.appserver.serverSide;
 
-import com.jubaka.sors.serverSide.bean.StreamTransportBean;
+import com.jubaka.sors.appserver.serverSide.bean.StreamTransportBean;
 
 import javax.inject.Inject;
 import javax.inject.Named;

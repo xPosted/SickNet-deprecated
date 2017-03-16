@@ -1,4 +1,4 @@
-package com.jubaka.sors.sessions;
+package com.jubaka.sors.desktop.sessions;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,18 +8,12 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 
 //import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 
-import com.jubaka.sors.factories.ClassFactory;
+import com.jubaka.sors.desktop.factories.ClassFactory;
 import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.protocol.network.Ip4;
 import org.jnetpcap.protocol.tcpip.Http;
@@ -28,11 +22,9 @@ import org.jnetpcap.protocol.tcpip.Tcp;
 
 public class SessionsAPI implements Observer, Serializable {
 
-	Integer debug = 0;
 	private GlobalFilterCollector glCollector;
-	static SessionsAPI instance = null;
 	protected HashSet<Subnet> nets = new HashSet<Subnet>();
-	// protected HashMap<Long, Session> seqMap = new HashMap<Long, Session>();
+	private HashMap<String, IPaddr> storage = new HashMap<String,IPaddr>();
 	protected HashSet<Long> TmpNumber = new HashSet<Long>();
 	private ArrayList<Session> allCapturedSes = new ArrayList<Session>();
 	private Tcp tcp = new Tcp();
@@ -41,19 +33,18 @@ public class SessionsAPI implements Observer, Serializable {
 	private long seq;
 	private long ack;
 
-	// ////
-	// //// debug block
+	private ClassFactory myFactory = null;
 
-	// ///
 
-	Subnet notKnown;
-	private Integer id;
+	private Subnet notKnown;
+	private Branch br;
 
-	public SessionsAPI(Integer id) throws UnknownHostException {
-		this.id = id;
-		notKnown = new Subnet(id, InetAddress.getByName("0.0.0.0"), 0);
+	public SessionsAPI(Branch br,ClassFactory myFactory) throws UnknownHostException {
+		this.br = br;
+		notKnown = new Subnet(br, InetAddress.getByName("0.0.0.0"), 0);
 		nets.add(notKnown);
-		glCollector = new GlobalFilterCollector(id);
+		glCollector = new GlobalFilterCollector(br);
+		this.myFactory = myFactory;
 
 	}
 
@@ -63,6 +54,17 @@ public class SessionsAPI implements Observer, Serializable {
 
 	public Integer getSubnetCount() {
 		return getAllSubnets().size();
+	}
+
+	public IPaddr getIpInstance(String ip) {
+
+		return storage.get(ip);
+	}
+
+	public void addIpInst(String ipStr , IPaddr item) {
+
+		storage.put(ipStr, item);
+
 	}
 
 	public Integer getIPsCount() {
@@ -82,11 +84,15 @@ public class SessionsAPI implements Observer, Serializable {
 	}
 
 	public void activate() throws Exception {
-		ClassFactory.getInstance().getAPIinstance(id).addObserver(this);
+		myFactory.getAPIinstance(getBranchId()).addObserver(this);
+	}
+
+	public Integer getBranchId() {
+		return br.getId();
 	}
 
 	public void deactivate() throws Exception {
-		ClassFactory.getInstance().getAPIinstance(id).deleteObserver(this);
+		myFactory.getAPIinstance(getBranchId()).deleteObserver(this);
 	}
 
 	public void addGlobalFilter(GlobalFilter gl) {
@@ -98,7 +104,7 @@ public class SessionsAPI implements Observer, Serializable {
 		try {
 			InetAddress addr = InetAddress.getByName(ip);
 			Subnet net = netDetect(addr);
-			IPaddr ipaddr = IPaddr.getInstance(id, ip);
+			IPaddr ipaddr = storage.get(ip);
 		//	System.out.println(ip + " and ipaddr = " + ipaddr);
 			return net.getInputStoredSes(ipaddr);
 		} catch (Exception e) {
@@ -113,7 +119,7 @@ public class SessionsAPI implements Observer, Serializable {
 		try {
 			InetAddress addr = InetAddress.getByName(ip);
 			Subnet net = netDetect(addr);
-			IPaddr ipaddr = IPaddr.getInstance(id, ip);
+			IPaddr ipaddr =storage.get(ip);
 		//	System.out.println(ip + " and ipaddr = " + ipaddr);
 			return net.getOutputStoredSes(ipaddr);
 		} catch (Exception e) {
@@ -133,7 +139,7 @@ public class SessionsAPI implements Observer, Serializable {
 		try {
 			InetAddress addr = InetAddress.getByName(ip);
 			Subnet net = netDetect(addr);
-			IPaddr ipaddr = IPaddr.getInstance(id, ip);
+			IPaddr ipaddr =  getIpInstance(ip);
 		//	System.out.println(ip + " and ipaddr = " + ipaddr);
 			return ipaddr.getNet().getInputActiveSes(ipaddr);
 		} catch (Exception e) {
@@ -147,7 +153,7 @@ public class SessionsAPI implements Observer, Serializable {
 	public HashSet<Session> getOutputActiveSes(String ip) {
 		try {
 			InetAddress addr = InetAddress.getByName(ip);
-			IPaddr ipaddr = IPaddr.getInstance(id, ip);
+			IPaddr ipaddr = getIpInstance(ip);
 		//	System.out.println(ip + " and ipaddr = " + ipaddr);
 			return ipaddr.getNet().getOutputActiveSes(ipaddr);
 		} catch (Exception e) {
@@ -162,7 +168,7 @@ public class SessionsAPI implements Observer, Serializable {
 		if (addr.getHostAddress().equals("0.0.0.0")) {
 			return notKnown;
 		}
-		Subnet res = new Subnet(id, addr, mask);
+		Subnet res = new Subnet(br, addr, mask);
 		Set<IPaddr> ipToRemoveSet = new HashSet<IPaddr>();
 		for (IPaddr item : notKnown.getIps()) {
 			if (res.inSubnet(item.getAddr())) {
@@ -193,7 +199,7 @@ public class SessionsAPI implements Observer, Serializable {
 						res.save(ses);
 					}
 				// res.addIp(item);
-				item.setSubnet(res);
+				item.moveToSubnet(res);
 				ipToRemoveSet.add(item);
 
 			}
@@ -245,12 +251,18 @@ public class SessionsAPI implements Observer, Serializable {
 			packet.getHeader(tcp);
 			packet.getHeader(ip);
 			InetAddress packetSrcAddr = InetAddress.getByAddress(ip.source());
-			IPaddr packetSrcIp = IPaddr.getInstance(id,
-					packetSrcAddr.getHostAddress());
+			InetAddress packetDstAddr = InetAddress.getByAddress(ip.destination());
+			IPaddr packetDstIp = storage.get(packetDstAddr.getHostAddress());
+			IPaddr packetSrcIp = storage.get(packetSrcAddr.getHostAddress());
 			if (packetSrcIp == null) {
 				Subnet net = netDetect(packetSrcAddr);
-				packetSrcIp = new IPaddr(id, packetSrcAddr, net);
+				packetSrcIp = new IPaddr(myFactory,br, packetSrcAddr, net);
 			}
+			if (packetDstIp == null) {
+				Subnet net = netDetect(packetDstAddr);
+				packetSrcIp = new IPaddr(myFactory,br, packetDstAddr, net);
+			}
+
 
 			if ((tcp.flags_SYN()) & (!tcp.flags_ACK())) {
 
@@ -271,7 +283,8 @@ public class SessionsAPI implements Observer, Serializable {
 
 			if (tcp.flags_FIN()) {
 
-				Session s = packetSrcIp.getSessionByPacket(tcp, ip, id);
+
+				Session s = packetSrcIp.getSessionByPacket(tcp.source(),tcp.destination(),packetDstIp);
 				if (s == null) {
 					return;
 				}
@@ -280,7 +293,8 @@ public class SessionsAPI implements Observer, Serializable {
 			}
 
 			if (tcp.flags_RST()) {
-				Session s = packetSrcIp.getSessionByPacket(tcp, ip, id);
+
+				Session s = packetSrcIp.getSessionByPacket(tcp.source(),tcp.destination(),packetDstIp);
 				if (s == null) {
 					return;
 				}
@@ -291,7 +305,7 @@ public class SessionsAPI implements Observer, Serializable {
 			seq = tcp.seq();
 			ack = tcp.ack();
 			Session ses = null;
-			ses = packetSrcIp.getSessionByPacket(tcp, ip, id);
+			ses = packetSrcIp.getSessionByPacket(tcp.source(),tcp.destination(),packetDstIp);
 
 			if (ses != null) { // System.out.println("Ses detected");
 
@@ -345,24 +359,18 @@ public class SessionsAPI implements Observer, Serializable {
 			e.printStackTrace();
 		}
 
-		tcpSrc = IPaddr.getInstance(id, srcip.getHostAddress());
-		tcpDst = IPaddr.getInstance(id, dstip.getHostAddress());
+		tcpSrc = storage.get(srcip.getHostAddress());
+		tcpDst = storage.get(dstip.getHostAddress());
+
+		Subnet netTarget = netDetect(srcip);
+		Subnet netInit = netDetect(dstip);
 
 		if (tcpSrc == null)
-			tcpSrc = new IPaddr(id, srcip, null);
+			tcpSrc = new IPaddr(myFactory,br,srcip,netTarget);
 		if (tcpDst == null)
-			tcpDst = new IPaddr(id, dstip, null);
-
-		Subnet netTarget = netDetect(tcpSrc.getAddr());
-		Subnet netInit = netDetect(tcpDst.getAddr());
-		tcpSrc.setSubnet(netTarget);
-		tcpDst.setSubnet(netInit);
+			tcpDst = new IPaddr(myFactory,br,dstip,netInit);
 
 		TmpNumber.remove(tcp.ack() - 1);
-		if (netInit == null)
-			netInit = notKnown;
-		if (netTarget == null)
-			netTarget = notKnown;
 		Session s = new Session(new EmptyDataSaver());
 		s.setSeq(tcp.ack());
 		s.setInitSeq(tcp.ack());
@@ -399,12 +407,12 @@ public class SessionsAPI implements Observer, Serializable {
 
 		s.setEstablished(started);
 
-		DataSaverInfo DSinfo = ClassFactory.getInstance().getDataSaverInfo(id);
+		DataSaverInfo DSinfo = myFactory.getDataSaverInfo(br.getId());
 
 		if (DSinfo.checkInExist(s.getDstIP(), s.getDstP()))
-			s.setDataSaver(new SimpleDataSaver(id, s));
+			s.setDataSaver(new SimpleDataSaver(br, s));
 		if (DSinfo.checkOutExist(s.getSrcIP(), s.getDstP()))
-			s.setDataSaver(new SimpleDataSaver(id, s));
+			s.setDataSaver(new SimpleDataSaver(br, s));
 
 		// save in seq_ack bases...
 
@@ -443,7 +451,7 @@ public class SessionsAPI implements Observer, Serializable {
 
 	public SesCaptureInfo getCatchInfo(String ip) throws UnknownHostException {
 		InetAddress addr = InetAddress.getByName(ip);
-		return ClassFactory.getInstance().getDataSaverInfo(id)
+		return myFactory.getDataSaverInfo(br.getId())
 				.getCatchInfo(addr);
 
 	}
@@ -451,14 +459,17 @@ public class SessionsAPI implements Observer, Serializable {
 	public boolean addIP(String netAddr, String ip) throws Exception {
 		HashSet<String> res = new HashSet<String>();
 		InetAddress net = InetAddress.getByName(netAddr);
+		IPaddr ipAddr = storage.get(ip);
+		if (ipAddr == null) {
+			InetAddress addr = InetAddress.getByName(ip);
+			Subnet network = netDetect(addr);
+			ipAddr = new IPaddr(myFactory,br, addr, network);
+		}
+
 		for (Subnet item : nets) {
 			if (item.getSubnet().equals(net)) {
-				IPaddr ipAddr = IPaddr.getInstance(id, ip);
-				if (ipAddr == null)
-					ipAddr = new IPaddr(id, InetAddress.getByName(ip), null);
 				if (item.inSubnet(ipAddr.getAddr())) {
 					item.addIPmanualy(ipAddr);
-					ipAddr.setSubnet(item);
 					return true;
 				} else
 					return false;
@@ -471,7 +482,7 @@ public class SessionsAPI implements Observer, Serializable {
 
 	private boolean makeManifest(Set<Session> set, String path) {
 		try {
-			String brHome = ClassFactory.getInstance().getBranchPath(id);
+			String brHome = myFactory.getBranchPath(br.getId());
 			File recoveryManifest = new File(path);
 			if (recoveryManifest.exists())
 				recoveryManifest.delete();
@@ -498,10 +509,10 @@ public class SessionsAPI implements Observer, Serializable {
 
 	public void dataRecovering(Set<Session> set) {
 
-		ClassFactory cl = ClassFactory.getInstance();
-		cl.getBranch(id).setLastRecovered(new Date());
-		String rawDataPath = cl.getRawDataPath(id);
-		String currentRecoveryDataPath = cl.getRecoveredDataPath(id)
+		Integer myBrId = br.getId();
+		myFactory.getBranch(myBrId).setLastRecovered(new Date());
+		String rawDataPath = myFactory.getRawDataPath(myBrId);
+		String currentRecoveryDataPath = myFactory.getRecoveredDataPath(myBrId)
 				+ File.separator + (new Date().getTime()) + File.separator;
 		String resultDataPath = currentRecoveryDataPath + File.separator
 				+ "result" + File.separator;
@@ -513,7 +524,7 @@ public class SessionsAPI implements Observer, Serializable {
 				return;
 
 			Process proc = Runtime.getRuntime().exec(
-					cl.getPathToForemost() + " -Q -d -f " + manifestPath
+					myFactory.getPathToForemost() + " -Q -d -f " + manifestPath
 							+ " -o " + resultDataPath);
 			proc.waitFor();
 			Thread.sleep(100);
@@ -521,7 +532,7 @@ public class SessionsAPI implements Observer, Serializable {
 			e.printStackTrace();
 		}
 
-		String brPath = ClassFactory.getInstance().getBranchPath(id);
+		String brPath = myFactory.getBranchPath(myBrId);
 		try {
 			File oldAudit = new File(resultDataPath + "audit.txt");
 			if (oldAudit.exists()) {
@@ -539,10 +550,10 @@ public class SessionsAPI implements Observer, Serializable {
 	}
 
 	public void dataRecovering() {
-		ClassFactory cl = ClassFactory.getInstance();
-		cl.getBranch(id).setLastRecovered(new Date());
-		String rawDataPath = cl.getRawDataPath(id);
-		String currentRecoveryDataPath = cl.getRecoveredDataPath(id)
+		Integer myBrId = br.getId();
+		myFactory.getBranch(myBrId).setLastRecovered(new Date());
+		String rawDataPath = myFactory.getRawDataPath(myBrId);
+		String currentRecoveryDataPath = myFactory.getRecoveredDataPath(myBrId)
 				+ File.separator + (new Date().getTime()) + File.separator;
 		String resultDataPath = currentRecoveryDataPath + File.separator
 				+ "result" + File.separator;
@@ -550,7 +561,7 @@ public class SessionsAPI implements Observer, Serializable {
 			Files.createDirectories(Paths.get(resultDataPath));
 
 			Process proc = Runtime.getRuntime().exec(
-					cl.getPathToForemost() + " -Q -d -z " + rawDataPath
+					myFactory.getPathToForemost() + " -Q -d -z " + rawDataPath
 							+ " -o " + resultDataPath);
 			proc.waitFor();
 			Thread.sleep(100);
@@ -558,7 +569,7 @@ public class SessionsAPI implements Observer, Serializable {
 			e.printStackTrace();
 		}
 
-		String brPath = ClassFactory.getInstance().getBranchPath(id);
+		String brPath = ClassFactory.getInstance().getBranchPath(myBrId);
 		try {
 			File oldAudit = new File(resultDataPath + "audit.txt");
 			if (oldAudit.exists()) {

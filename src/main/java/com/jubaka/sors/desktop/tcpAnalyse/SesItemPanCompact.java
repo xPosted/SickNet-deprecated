@@ -1,8 +1,7 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
-import javax.swing.JSeparator;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
@@ -20,8 +19,8 @@ import java.awt.Color;
 
 import javax.swing.border.BevelBorder;
 
-import com.jubaka.sors.sessions.Session;
-import com.jubaka.sors.sessions.SimpleDataSaver;
+import com.jubaka.sors.desktop.sessions.Session;
+import com.jubaka.sors.desktop.sessions.SimpleDataSaver;
 
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;

@@ -1,4 +1,4 @@
-package com.jubaka.sors.unitTests;
+package com.jubaka.sors.desktop.unitTests;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -14,7 +14,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 
-import com.jubaka.sors.tcpAnalyse.SettingsListItem;
+import com.jubaka.sors.desktop.tcpAnalyse.SettingsListItem;
 
 public class TreeTest extends JFrame {
 

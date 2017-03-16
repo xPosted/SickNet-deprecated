@@ -1,4 +1,4 @@
-package com.jubaka.sors.unitTests;
+package com.jubaka.sors.desktop.unitTests;
 
 import com.jubaka.sors.appserver.serverSide.HostSessionFilter;
 import com.jubaka.sors.appserver.serverSide.SmartFilter;

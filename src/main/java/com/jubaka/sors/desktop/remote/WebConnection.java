@@ -1,9 +1,9 @@
-package com.jubaka.sors.remote;
+package com.jubaka.sors.desktop.remote;
 
 import com.jubaka.sors.appserver.beans.AutorisationBean;
-import com.jubaka.sors.factories.ClassFactory;
-import com.jubaka.sors.limfo.LoadInfo;
-import com.jubaka.sors.limfo.LoadLimits;
+import com.jubaka.sors.desktop.factories.ClassFactory;
+import com.jubaka.sors.desktop.limfo.LoadInfo;
+import com.jubaka.sors.desktop.limfo.LoadLimits;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.jubaka.sors.beans;
+package com.jubaka.sors.appserver.beans;
 
 import java.io.Serializable;
 

@@ -1,8 +1,4 @@
-package com.jubaka.sors.serverSide;
-
-import com.jubaka.sors.entities.User;
-
-import java.util.HashMap;
+package com.jubaka.sors.appserver.serverSide;
 
 public class UserBase {
 	/*

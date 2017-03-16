@@ -1,13 +1,13 @@
-package com.jubaka.sors.managed;
+package com.jubaka.sors.appserver.managed;
 
-import com.jubaka.sors.beans.branch.BranchBean;
-import com.jubaka.sors.beans.branch.IPItemBean;
-import com.jubaka.sors.beans.branch.SubnetBean;
-import com.jubaka.sors.entities.Branch;
-import com.jubaka.sors.serverSide.ConnectionHandler;
-import com.jubaka.sors.serverSide.NodeServerEndpoint;
-import com.jubaka.sors.serverSide.StatisticLogic;
-import com.jubaka.sors.service.BranchService;
+import com.jubaka.sors.appserver.beans.branch.BranchBean;
+import com.jubaka.sors.appserver.beans.branch.IPItemBean;
+import com.jubaka.sors.appserver.beans.branch.SubnetBean;
+import com.jubaka.sors.appserver.entities.Branch;
+import com.jubaka.sors.appserver.serverSide.ConnectionHandler;
+import com.jubaka.sors.appserver.serverSide.NodeServerEndpoint;
+import com.jubaka.sors.appserver.serverSide.StatisticLogic;
+import com.jubaka.sors.appserver.service.BranchService;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.TimeSeries;
 

@@ -1,4 +1,4 @@
-package com.jubaka.sors.serverSide;
+package com.jubaka.sors.appserver.serverSide;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -7,8 +7,8 @@ import java.util.TreeMap;
 
 import javax.swing.table.DefaultTableModel;
 
-import com.jubaka.sors.beans.branch.*;
-import com.jubaka.sors.tcpAnalyse.Controller;
+import com.jubaka.sors.appserver.beans.branch.*;
+import com.jubaka.sors.desktop.tcpAnalyse.Controller;
 import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
 

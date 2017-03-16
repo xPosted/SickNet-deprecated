@@ -1,8 +1,8 @@
-package com.jubaka.sors.service;
+package com.jubaka.sors.appserver.service;
 
-import com.jubaka.sors.dao.HttpRequestDao;
-import com.jubaka.sors.entities.HttpRequest;
-import com.jubaka.sors.protocol.http.HTTPRequest;
+import com.jubaka.sors.appserver.dao.HttpRequestDao;
+import com.jubaka.sors.appserver.entities.HttpRequest;
+import com.jubaka.sors.desktop.http.HTTPRequest;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

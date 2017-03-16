@@ -1,7 +1,7 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 
-import com.jubaka.sors.factories.ClassFactory;
-import com.jubaka.sors.sessions.Subnet;
+import com.jubaka.sors.desktop.factories.ClassFactory;
+import com.jubaka.sors.desktop.sessions.Subnet;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;

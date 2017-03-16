@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
-<%@page import="com.jubaka.sors.serverSide.User"%>
+<%@page import="com.jubaka.sors.appserver.serverSide.User"%>
 <html>
 <head>
 <link href="style/css/carousel.css" rel="stylesheet">

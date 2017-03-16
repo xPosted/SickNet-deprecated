@@ -1,11 +1,9 @@
-package com.jubaka.sors.managed;
+package com.jubaka.sors.appserver.managed;
 
-import com.jubaka.sors.beans.InfoBean;
-import com.jubaka.sors.serverSide.ConnectionHandler;
-import com.jubaka.sors.serverSide.NodeServerEndpoint;
-import com.jubaka.sors.serverSide.SecurityVisor;
-import com.jubaka.sors.service.NodeActiveCheckPointService;
-import com.jubaka.sors.service.NodeService;
+import com.jubaka.sors.appserver.beans.InfoBean;
+import com.jubaka.sors.appserver.serverSide.NodeServerEndpoint;
+import com.jubaka.sors.appserver.service.NodeActiveCheckPointService;
+import com.jubaka.sors.appserver.service.NodeService;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;

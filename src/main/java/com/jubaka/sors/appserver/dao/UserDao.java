@@ -1,12 +1,10 @@
-package com.jubaka.sors.dao;
+package com.jubaka.sors.appserver.dao;
 
-import com.jubaka.sors.entities.User;
+import com.jubaka.sors.appserver.entities.User;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
-import javax.inject.Singleton;
 import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.sql.Timestamp;

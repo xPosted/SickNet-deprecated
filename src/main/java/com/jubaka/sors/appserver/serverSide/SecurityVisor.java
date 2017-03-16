@@ -1,12 +1,4 @@
-package com.jubaka.sors.serverSide;
-
-import com.jubaka.sors.beans.SecPolicy;
-import com.jubaka.sors.beans.SecPolicyBean;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+package com.jubaka.sors.appserver.serverSide;
 
 public class SecurityVisor {
 	/*

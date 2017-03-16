@@ -1,4 +1,4 @@
-package com.jubaka.sors.dao;
+package com.jubaka.sors.appserver.dao;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;

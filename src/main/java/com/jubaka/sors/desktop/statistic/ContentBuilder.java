@@ -1,4 +1,4 @@
-package com.jubaka.sors.view.statistic;
+package com.jubaka.sors.desktop.statistic;
 
 import javax.swing.table.TableModel;
 

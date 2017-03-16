@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<%@page import="com.jubaka.sors.serverSide.ConnectionHandler"%>
+<%@page import="com.jubaka.sors.appserver.serverSide.ConnectionHandler"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.jubaka.sors.beans.InfoBean"%>
+<%@page import="com.jubaka.sors.appserver.beans.InfoBean"%>
 <%@page import="java.util.Set"%>
 <html>
 <head>

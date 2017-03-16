@@ -1,4 +1,4 @@
-package com.jubaka.sors.serverSide;
+package com.jubaka.sors.appserver.serverSide;
 
 import java.util.Date;
 import java.util.HashSet;

@@ -1,18 +1,16 @@
-package com.jubaka.sors.service;
+package com.jubaka.sors.appserver.service;
 
-import com.jubaka.sors.beans.InfoBean;
-import com.jubaka.sors.dao.NodeDao;
-import com.jubaka.sors.entities.Node;
-import com.jubaka.sors.entities.NodeActiveCheckPoint;
-import com.jubaka.sors.entities.User;
-import com.jubaka.sors.serverSide.ConnectionHandler;
-import com.jubaka.sors.serverSide.NodeServerEndpoint;
+import com.jubaka.sors.appserver.beans.InfoBean;
+import com.jubaka.sors.appserver.dao.NodeDao;
+import com.jubaka.sors.appserver.entities.Node;
+import com.jubaka.sors.appserver.entities.NodeActiveCheckPoint;
+import com.jubaka.sors.appserver.entities.User;
+import com.jubaka.sors.appserver.serverSide.ConnectionHandler;
+import com.jubaka.sors.appserver.serverSide.NodeServerEndpoint;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -51,7 +49,7 @@ public class NodeService {
         insertUpdateNode(nodeINfo,user);
     }
 
-    private void insertUpdateNode(InfoBean info,User user) {
+    public  void insertUpdateNode(InfoBean info,User user) {
         Node node =  nodeDao.selectById(info.getUnid());
         if (node == null) node = new Node();
         node.setUnid(info.getUnid());

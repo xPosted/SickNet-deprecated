@@ -1,11 +1,8 @@
-package com.jubaka.sors.beans.branch;
-
-import com.jubaka.sors.beans.Bean;
+package com.jubaka.sors.appserver.beans.branch;
 
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class BranchBean extends BranchLightBean implements Serializable {

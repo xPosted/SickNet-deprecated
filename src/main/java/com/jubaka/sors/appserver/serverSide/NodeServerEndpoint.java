@@ -1,4 +1,4 @@
-package com.jubaka.sors.serverSide;
+package com.jubaka.sors.appserver.serverSide;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -8,21 +8,16 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import javax.swing.table.DefaultTableModel;
 
-import com.jubaka.sors.beans.*;
-import com.jubaka.sors.beans.branch.*;
-import com.jubaka.sors.serverSide.bean.StreamTransportBean;
-import com.jubaka.sors.service.NodeService;
-import com.mysql.fabric.Server;
+import com.jubaka.sors.appserver.beans.*;
+import com.jubaka.sors.appserver.beans.branch.*;
+import com.jubaka.sors.appserver.serverSide.bean.StreamTransportBean;
 import org.jfree.data.time.TimeSeries;
 
-public class NodeServerEndpoint extends Observable {
+public class NodeServerEndpoint extends Observable implements EndpointInterface {
 
 
 
@@ -43,6 +38,7 @@ public class NodeServerEndpoint extends Observable {
 	private ReentrantLock lock = new ReentrantLock();
 
 
+
 	public void createStreams(ObjectInputStream ois) {
 		try {
 			if (s != null) {
@@ -61,7 +57,7 @@ public class NodeServerEndpoint extends Observable {
 		}
 	}
 
-	public Bean getResponse(Long requestId) {
+	private Bean getResponse(Long requestId) {
 		Bean response = null;
 		try {
 			while (response == null) {
@@ -79,6 +75,7 @@ public class NodeServerEndpoint extends Observable {
 		return response;
 	}
 
+	@Override
 	public  SecPolicyBean getSecPolicyBean() {
 		if  (checkConnection()==false) {
 			return null;
@@ -114,7 +111,8 @@ public class NodeServerEndpoint extends Observable {
 	}
 	
 	
-	public   boolean createLiveBranch(String ifsName,String byUser,String branchName,String ip) {
+	@Override
+	public   boolean createLiveBranch(String ifsName, String byUser, String branchName, String ip) {
 		if  (checkConnection()==false) {
 			return false;
 		}
@@ -148,7 +146,8 @@ public class NodeServerEndpoint extends Observable {
 		return true;
 	}
 	
-	public   boolean createBranch(String pathToFile,String byUser,String fileName,String branchName) {
+	@Override
+	public   boolean createBranch(String pathToFile, String byUser, String fileName, String branchName) {
 		if  (checkConnection()==false) {
 			return false;
 		}
@@ -209,6 +208,7 @@ public class NodeServerEndpoint extends Observable {
 		return true;
 	}
 
+	@Override
 	public   boolean createBranch(String byUser, Part filePart, String branchName) {
 		if  (checkConnection()==false) {
 			return false;
@@ -270,6 +270,7 @@ public class NodeServerEndpoint extends Observable {
 		return true;
 	}
 	
+	@Override
 	public  void startBranch(Integer brId) {
 		if  (checkConnection()==false) {
 			return;
@@ -297,7 +298,8 @@ public class NodeServerEndpoint extends Observable {
 	}
 
 
-	public  void removeObserver(Integer brId,String obj) {
+	@Override
+	public  void removeObserver(Integer brId, String obj) {
 		if  (checkConnection()==false) {
 			return;
 		}
@@ -325,6 +327,7 @@ public class NodeServerEndpoint extends Observable {
 
 
 	
+	@Override
 	public  void stopBranch(Integer brId) {
 		if  (checkConnection()==false) {
 			return;
@@ -353,6 +356,7 @@ public class NodeServerEndpoint extends Observable {
 	}
 	
 	
+	@Override
 	public  FileListBean getDir(Integer brId, String sorsPath) {
 		if  (checkConnection()==false) {
 			return null;
@@ -387,6 +391,7 @@ public class NodeServerEndpoint extends Observable {
 		return flb;
 	}
 	
+	@Override
 	public  void delete(Integer brId, String sorsPath) {
 		if  (checkConnection()==false) {
 			return;
@@ -415,6 +420,7 @@ public class NodeServerEndpoint extends Observable {
 		return;
 	}
 	
+	@Override
 	public  DefaultTableModel getBaseTModel(Integer brId) {
 		if  (checkConnection()==false) {
 			return null;
@@ -450,6 +456,7 @@ public class NodeServerEndpoint extends Observable {
 	}
 	
 	
+	@Override
 	public  TimeSeries getDataInChart(Integer brId) {
 		if  (checkConnection()==false) {
 			return null;
@@ -481,6 +488,7 @@ public class NodeServerEndpoint extends Observable {
 		return ts;
 	}
 	
+	@Override
 	public  TimeSeries getDataOutChart(Integer brId, Long timeFrom, Long timeTo) {
 		if  (checkConnection()==false) {
 			return null;
@@ -516,7 +524,8 @@ public class NodeServerEndpoint extends Observable {
 		return ts;
 	}
 	
-	public  TimeSeries getNetworkDataInChart(Integer brId,String netStr, Long timeFrom, Long timeTo) {
+	@Override
+	public  TimeSeries getNetworkDataInChart(Integer brId, String netStr, Long timeFrom, Long timeTo) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -550,7 +559,8 @@ public class NodeServerEndpoint extends Observable {
 		return ts;
 	}
 	
-	public  TimeSeries getNetworkDataOutChart(Integer brId,String netStr) {
+	@Override
+	public  TimeSeries getNetworkDataOutChart(Integer brId, String netStr) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -581,7 +591,8 @@ public class NodeServerEndpoint extends Observable {
 		return ts;
 	}
 	
-	public  TimeSeries getIpDataInChart(Integer brId,String ipStr) {
+	@Override
+	public  TimeSeries getIpDataInChart(Integer brId, String ipStr) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -612,7 +623,8 @@ public class NodeServerEndpoint extends Observable {
 		return ts;
 	}
 	
-	public  TimeSeries getIpDataOutChart(Integer brId,String ipStr) {
+	@Override
+	public  TimeSeries getIpDataOutChart(Integer brId, String ipStr) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -643,7 +655,8 @@ public class NodeServerEndpoint extends Observable {
 		return ts;
 	}
 
-	public  TimeSeries getSesDstDataChart(Integer brId,String network,Long sesId) {
+	@Override
+	public  TimeSeries getSesDstDataChart(Integer brId, String network, Long sesId) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -676,7 +689,8 @@ public class NodeServerEndpoint extends Observable {
 		return ts;
 	}
 
-	public  TimeSeries getSesSrcDataChart(Integer brId,String network,Long sesId) {
+	@Override
+	public  TimeSeries getSesSrcDataChart(Integer brId, String network, Long sesId) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -710,7 +724,8 @@ public class NodeServerEndpoint extends Observable {
 	}
 
 
-	public  DefaultTableModel getSubnetTModel(Integer brId,String subnet) {
+	@Override
+	public  DefaultTableModel getSubnetTModel(Integer brId, String subnet) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -742,7 +757,8 @@ public class NodeServerEndpoint extends Observable {
 		return tableResult;
 	}
 	
-	public  DefaultTableModel getIpTModel(Integer brId,String ip) {
+	@Override
+	public  DefaultTableModel getIpTModel(Integer brId, String ip) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -774,6 +790,7 @@ public class NodeServerEndpoint extends Observable {
 		return tableResult;
 	}
 	
+	@Override
 	public   void updateUnid(Long unid) {
 		if  (checkConnection()==false) {
 			return;
@@ -803,6 +820,7 @@ public class NodeServerEndpoint extends Observable {
 		return;
 	}
 	
+	@Override
 	public   List<String> getIfsList(String byUser) {
 		List<String> ifs = new ArrayList<String>();
 		if  (checkConnection()==false) {
@@ -837,6 +855,7 @@ public class NodeServerEndpoint extends Observable {
 	}
 	
 	
+	@Override
 	public  SessionDataBean getSessionData(Integer brId, String net, Long tm) {
 		if  (checkConnection()==false) {
 			return null;
@@ -872,6 +891,7 @@ public class NodeServerEndpoint extends Observable {
 		return sdb;
 	}
 	
+	@Override
 	public  void getFile(Integer brId, String sorsPath, HttpServletResponse response) {
 		if  (checkConnection()==false) {
 			return;
@@ -931,6 +951,7 @@ public class NodeServerEndpoint extends Observable {
 	
 	
 	
+	@Override
 	public  SubnetBeanList getSubnetBeanList(Integer brId) {
 		if  (checkConnection()==false) {
 			return null;
@@ -964,6 +985,7 @@ public class NodeServerEndpoint extends Observable {
 		return sbl;
 	}
 	
+	@Override
 	public  SesDataCapBean getSesDataCaptureInfo(String target, Integer brId) {
 		if  (checkConnection()==false) {
 			return null;
@@ -1001,6 +1023,7 @@ public class NodeServerEndpoint extends Observable {
 	}
 
 	
+	@Override
 	public  InfoBean getInfo() {
 		if  (checkConnection()==false) {
 			return null;
@@ -1039,6 +1062,7 @@ public class NodeServerEndpoint extends Observable {
 	
 	
 	
+	@Override
 	public  boolean recoverSessionData(Integer brID) {
 		if  (checkConnection()==false) {
 			return false;
@@ -1069,6 +1093,7 @@ public class NodeServerEndpoint extends Observable {
 		
 	}
 	
+	@Override
 	public   boolean setCapture(Integer brId, String obj, String in, String out) {
 		if  (checkConnection()==false) {
 			return false;
@@ -1101,6 +1126,7 @@ public class NodeServerEndpoint extends Observable {
 		return false;
 	}
 
+	@Override
 	public  BranchLightBean getBranchLight(Integer id) {
 		if  (checkConnection()==false) {
 			return null;
@@ -1133,6 +1159,7 @@ public class NodeServerEndpoint extends Observable {
 		return bb;
 	}
 
+	@Override
 	public  IPItemBean getIpItemBean(Integer id, String ip, boolean observe) {
 		if  (checkConnection()==false) {
 			return null;
@@ -1167,7 +1194,8 @@ public class NodeServerEndpoint extends Observable {
 		return ipBean;
 	}
 
-	public  SubnetLightBean getSubnetLight(Integer id,String subnet, boolean observe) {
+	@Override
+	public  SubnetLightBean getSubnetLight(Integer id, String subnet, boolean observe) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -1201,6 +1229,7 @@ public class NodeServerEndpoint extends Observable {
 		return subnetLight;
 	}
 
+	@Override
 	public  BranchBean getBranch(Integer id) {
 		if  (checkConnection()==false) {
 			return null;
@@ -1234,6 +1263,7 @@ public class NodeServerEndpoint extends Observable {
 		return bb;
 	}
 	
+	@Override
 	public  void loginIncorrect() {
 		if  (checkConnection()==false) {
 			return;
@@ -1259,6 +1289,7 @@ public class NodeServerEndpoint extends Observable {
 		}
 	}
 
+	@Override
 	public  Set<BranchInfoBean> getBranchInfoSet(String byUser) {
 		if  (checkConnection()==false) {
 			return null;
@@ -1321,7 +1352,8 @@ public class NodeServerEndpoint extends Observable {
 		
 	}
 	
-	public  BranchInfoBean getBranchInfo(String byUser,Integer brid) {
+	@Override
+	public  BranchInfoBean getBranchInfo(String byUser, Integer brid) {
 		if  (checkConnection()==false) {
 			return null;
 		}
@@ -1357,6 +1389,7 @@ public class NodeServerEndpoint extends Observable {
 		return bib;
 	}
 
+	@Override
 	public BranchStatBean getBranchStat(String byUser) {
 		if  (checkConnection()==false) {
 			return null;
@@ -1415,6 +1448,7 @@ public class NodeServerEndpoint extends Observable {
 	}
 
 
+	@Override
 	public void setInfo(InfoBean info) {
 		this.info = info;
 	}
@@ -1435,46 +1469,52 @@ public class NodeServerEndpoint extends Observable {
 		return ois;
 	}
 
+	@Override
 	public String getOwner() {
 		return owner;
 	}
 
+	@Override
 	public void setOwner(String owner) {
 		this.owner = owner;
 	}
 
+	@Override
 	public String getNodeName() {
 		return nodeName;
 	}
 
+	@Override
 	public void setNodeName(String nodeName) {
 		this.nodeName = nodeName;
 	}
 
-	public String getFullName() {
-		return fullName;
-	}
-
+	@Override
 	public Long getUnid() {
 		return unid;
 	}
 
+	@Override
 	public void setUnid(Long unid) {
 		this.unid = unid;
 	}
 
+	@Override
 	public InetAddress getAddr() {
 		return addr;
 	}
 
+	@Override
 	public void setAddr(InetAddress addr) {
 		this.addr = addr;
 	}
 
+	@Override
 	public ConnectionHandler getCh() {
 		return ch;
 	}
 
+	@Override
 	public void setCh(ConnectionHandler ch) {
 		this.ch = ch;
 	}

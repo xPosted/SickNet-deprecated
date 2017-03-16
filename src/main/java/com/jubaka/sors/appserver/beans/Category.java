@@ -1,8 +1,8 @@
-package com.jubaka.sors.beans;
+package com.jubaka.sors.appserver.beans;
 
-import com.jubaka.sors.beans.branch.SessionBean;
-import com.jubaka.sors.serverSide.ConnectionHandler;
-import com.jubaka.sors.serverSide.SmartFilter;
+import com.jubaka.sors.appserver.beans.branch.SessionBean;
+import com.jubaka.sors.appserver.serverSide.ConnectionHandler;
+import com.jubaka.sors.appserver.serverSide.SmartFilter;
 
 import java.util.ArrayList;
 import java.util.Collections;

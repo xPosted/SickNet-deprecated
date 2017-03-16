@@ -1,4 +1,4 @@
-package com.jubaka.sors.tcpAnalyse.httpView;
+package com.jubaka.sors.desktop.tcpAnalyse.httpView;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

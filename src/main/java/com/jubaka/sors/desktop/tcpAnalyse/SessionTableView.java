@@ -1,21 +1,14 @@
-package com.jubaka.sors.tcpAnalyse;
+package com.jubaka.sors.desktop.tcpAnalyse;
 
-import com.jubaka.sors.sessions.Session;
+import com.jubaka.sors.desktop.sessions.Session;
 
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import java.awt.BorderLayout;
 import java.text.SimpleDateFormat;
 
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
-
-import javax.swing.JButton;
-import javax.swing.border.LineBorder;
-
-import java.awt.Color;
 
 public class SessionTableView extends JScrollPane {
 	private JTable table;

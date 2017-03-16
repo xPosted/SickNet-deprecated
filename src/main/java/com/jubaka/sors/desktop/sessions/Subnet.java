@@ -1,6 +1,6 @@
-package com.jubaka.sors.sessions;
+package com.jubaka.sors.desktop.sessions;
 
-import com.jubaka.sors.factories.ClassFactory;
+import com.jubaka.sors.desktop.factories.ClassFactory;
 
 import java.io.Serializable;
 import java.net.InetAddress;
@@ -44,8 +44,8 @@ public class Subnet extends Observable implements Serializable, CustomObserver  
 	private int subnetMask;
     private int suffix;
     public boolean selected= false;
-    private ClassFactory clFact = ClassFactory.getInstance();
-    private Integer id;
+    private Branch br;
+    private ClassFactory factory = null;
 
     /**
      * Creates a subnet from CIDR notation. For example, the subnet
@@ -55,9 +55,9 @@ public class Subnet extends Observable implements Serializable, CustomObserver  
      * @param mask The mask
      */
     
-    public Subnet(Integer id, InetAddress subnet, int mask)  {
-    	this.id=id;
-    	
+    public Subnet(Branch br, InetAddress subnet, int mask)  {
+    	this.br=br;
+    	factory = br.getFactory();
     	
         if (subnet == null) {
             throw new IllegalArgumentException("Subnet address can not be null");
@@ -139,7 +139,7 @@ public class Subnet extends Observable implements Serializable, CustomObserver  
   		ips.add(ip);
   		liveIps.add(ip);
   		if (isSelected())
-  				clFact.getController(id).addIP(ip.getAddr().getHostAddress());
+  				factory.getController(br.getId()).addIP(ip.getAddr().getHostAddress());
   	
   	}
   	
@@ -153,7 +153,7 @@ public class Subnet extends Observable implements Serializable, CustomObserver  
   		//		System.out.println(ip.getAddr());		
   		liveIps.remove(ip);
   		if (isSelected())
-  			clFact.getController(id).removeIP(ip.getAddr().getHostAddress());
+  			factory.getController(br.getId()).removeIP(ip.getAddr().getHostAddress());
   	
   							
   	}
@@ -504,7 +504,7 @@ public class Subnet extends Observable implements Serializable, CustomObserver  
 
 
 	public synchronized Integer getId() {
-		return id;
+		return br.getId();
 	}
 
 	@Override

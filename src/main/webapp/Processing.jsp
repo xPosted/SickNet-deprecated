@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<%@page import="com.jubaka.sors.serverSide.Nodes"%>
+<%@page import="com.jubaka.sors.appserver.servlet.Nodes"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.jubaka.sors.serverSide.ConnectionHandler"%>
-<%@page import="com.jubaka.sors.beans.branch.BranchInfoBean"%>
+<%@page import="com.jubaka.sors.appserver.serverSide.ConnectionHandler"%>
+<%@page import="com.jubaka.sors.appserver.beans.branch.BranchInfoBean"%>
 <%@page import="java.util.HashSet"%>
 <html>
 <head>

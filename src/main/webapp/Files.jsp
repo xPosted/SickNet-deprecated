@@ -1,9 +1,9 @@
-<%@page import="com.jubaka.sors.beans.branch.SessionBean"%>
-<%@page import="com.jubaka.sors.sessions.Session"%>
-<%@page import="com.jubaka.sors.serverSide.ConnectionHandler"%>
-<%@page import="com.jubaka.sors.beans.FileBean"%>
-<%@page import="com.jubaka.sors.beans.DirectoryBean"%>
-<%@page import="com.jubaka.sors.beans.FileListBean"%>
+<%@page import="com.jubaka.sors.appserver.beans.branch.SessionBean"%>
+<%@page import="com.jubaka.sors.desktop.sessions.Session"%>
+<%@page import="com.jubaka.sors.appserver.serverSide.ConnectionHandler"%>
+<%@page import="com.jubaka.sors.appserver.beans.FileBean"%>
+<%@page import="com.jubaka.sors.appserver.beans.DirectoryBean"%>
+<%@page import="com.jubaka.sors.appserver.beans.FileListBean"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

@@ -1,12 +1,10 @@
-package com.jubaka.sors.beans.branch;
+package com.jubaka.sors.appserver.beans.branch;
 
-import com.jubaka.sors.beans.Bean;
-import com.jubaka.sors.protocol.http.HTTP;
+import com.jubaka.sors.appserver.beans.Bean;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by root on 30.08.16.

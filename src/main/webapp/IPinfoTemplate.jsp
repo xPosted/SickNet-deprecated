@@ -1,8 +1,8 @@
 
 
 
-<%@page import="com.jubaka.sors.beans.branch.IPItemBean"%>
-<%@page import="com.jubaka.sors.serverSide.ConnectionHandler"%>
+<%@page import="com.jubaka.sors.appserver.beans.branch.IPItemBean"%>
+<%@page import="com.jubaka.sors.appserver.serverSide.ConnectionHandler"%>
 <%@page import="java.text.SimpleDateFormat"%>
 
 <%

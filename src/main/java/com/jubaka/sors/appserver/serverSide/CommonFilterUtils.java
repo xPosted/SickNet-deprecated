@@ -1,10 +1,9 @@
-package com.jubaka.sors.serverSide;
+package com.jubaka.sors.appserver.serverSide;
 
-import com.jubaka.sors.beans.Category;
-import com.jubaka.sors.beans.branch.SessionBean;
+import com.jubaka.sors.appserver.beans.Category;
+import com.jubaka.sors.appserver.beans.branch.SessionBean;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by root on 14.01.17.

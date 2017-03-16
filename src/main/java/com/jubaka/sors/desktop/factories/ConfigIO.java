@@ -1,4 +1,4 @@
-package com.jubaka.sors.factories;
+package com.jubaka.sors.desktop.factories;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,9 +11,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import com.jubaka.sors.appserver.beans.SecPolicy;
-import com.jubaka.sors.limfo.LoadInfo;
-import com.jubaka.sors.limfo.LoadLimits;
-import com.jubaka.sors.remote.WebConnection;
+import com.jubaka.sors.desktop.limfo.LoadInfo;
+import com.jubaka.sors.desktop.limfo.LoadLimits;
+import com.jubaka.sors.desktop.remote.WebConnection;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

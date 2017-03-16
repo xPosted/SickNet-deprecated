@@ -1,10 +1,7 @@
-package com.jubaka.sors.service;
+package com.jubaka.sors.appserver.service;
 
-import com.jubaka.sors.beans.branch.SessionBean;
-import com.jubaka.sors.beans.branch.SessionDataBean;
-import com.jubaka.sors.dao.SessionDao;
-import com.jubaka.sors.entities.Host;
-import com.jubaka.sors.entities.Session;
+import com.jubaka.sors.appserver.dao.SessionDao;
+import com.jubaka.sors.appserver.entities.Session;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

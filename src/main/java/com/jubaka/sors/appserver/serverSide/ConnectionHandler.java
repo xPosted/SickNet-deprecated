@@ -1,4 +1,4 @@
-package com.jubaka.sors.serverSide;
+package com.jubaka.sors.appserver.serverSide;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -8,22 +8,21 @@ import java.math.RoundingMode;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Observable;
-import java.util.Properties;
 
-import com.jubaka.sors.beans.AutorisationBean;
-import com.jubaka.sors.entities.Node;
-import com.jubaka.sors.entities.User;
-import com.jubaka.sors.managed.PassEncoder;
-import com.jubaka.sors.serverSide.bean.StreamTransportBean;
-import com.jubaka.sors.serverSide.dbManagement.DBManager;
-import com.jubaka.sors.service.NodeActiveCheckPointService;
-import com.jubaka.sors.service.NodeService;
-import com.jubaka.sors.service.UserService;
+import com.jubaka.sors.appserver.beans.AutorisationBean;
+import com.jubaka.sors.appserver.beans.InfoBean;
+import com.jubaka.sors.appserver.entities.Node;
+import com.jubaka.sors.appserver.entities.User;
+import com.jubaka.sors.appserver.managed.PassEncoder;
+import com.jubaka.sors.appserver.serverSide.bean.StreamTransportBean;
+import com.jubaka.sors.appserver.serverSide.dbManagement.DBManager;
+import com.jubaka.sors.appserver.service.NodeActiveCheckPointService;
+import com.jubaka.sors.appserver.service.NodeService;
+import com.jubaka.sors.appserver.service.UserService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 @Named
 @ApplicationScoped
@@ -146,6 +145,18 @@ public class ConnectionHandler  extends Observable {
 				nodeList.put(nodeServerEndpoint.getFullName(), nodeServerEndpoint);
 				idNodeList.put(nodeServerEndpoint.getUnid(), nodeServerEndpoint);
 		
+	}
+
+	public boolean autorise(AutorisationBean auth, InfoBean infoBean) {
+
+		User uObj = userService.getUserByNick(auth.getNodeUserName());
+		if (uObj==null) {return false;}
+		String encodedPass = PassEncoder.encode(auth.getNodeUserPass());
+		if ( ! uObj.getPass().equals(encodedPass))  {
+			nodeService.insertUpdateNode(infoBean,uObj);
+		}
+		return true;
+
 	}
 	
 	public static double round(double value, int places) {

@@ -1,0 +1,41 @@
+package com.jubaka.sors.appserver.beans.branch;
+
+import com.jubaka.sors.desktop.http.HTTP;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.TreeMap;
+
+public class SessionBean extends SessionLightBean implements Serializable {
+
+	private TreeMap<Long, Integer> srcDataTimeBinding = null;
+	private TreeMap<Long, Integer> dstDataTimeBinding = null;
+	private List<HTTP> httpBuf = null;
+
+
+	public List<HTTP> getHttpBuf() {
+		return httpBuf;
+	}
+	public void setHttpBuf(List<HTTP> httpBuf) {
+		this.httpBuf = httpBuf;
+	}
+
+	public TreeMap<Long, Integer> getSrcDataTimeBinding() {
+		return srcDataTimeBinding;
+	}
+
+	public void setSrcDataTimeBinding(TreeMap<Long, Integer> srcDataTimeBinding) {
+		this.srcDataTimeBinding = srcDataTimeBinding;
+	}
+
+	public TreeMap<Long, Integer> getDstDataTimeBinding() {
+		return dstDataTimeBinding;
+	}
+
+	public void setDstDataTimeBinding(TreeMap<Long, Integer> dstDataTimeBinding) {
+		this.dstDataTimeBinding = dstDataTimeBinding;
+	}
+
+
+	
+}

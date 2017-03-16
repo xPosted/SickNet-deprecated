@@ -1,13 +1,13 @@
-package com.jubaka.sors.sessions;
+package com.jubaka.sors.desktop.sessions;
 
 import java.util.HashSet;
 
 public class GlobalFilterCollector {
-	private Integer brID=null;
+	private Branch br=null;
 	private HashSet<GlobalFilter> collector = new HashSet<GlobalFilter>();
 	
-	public GlobalFilterCollector(Integer brID) {
-		this.brID=brID;
+	public GlobalFilterCollector(Branch br) {
+		this.br=br;
 	} 
 
 	public void addFilter(GlobalFilter filter) {

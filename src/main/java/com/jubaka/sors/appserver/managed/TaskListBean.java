@@ -1,12 +1,11 @@
-package com.jubaka.sors.managed;
+package com.jubaka.sors.appserver.managed;
 
-import com.jubaka.sors.beans.branch.BranchInfoBean;
-import com.jubaka.sors.entities.Branch;
-import com.jubaka.sors.serverSide.ConnectionHandler;
-import com.jubaka.sors.serverSide.NodeServerEndpoint;
-import com.jubaka.sors.serverSide.SecurityVisor;
-import com.jubaka.sors.service.BranchService;
-import com.jubaka.sors.service.NodeService;
+import com.jubaka.sors.appserver.beans.branch.BranchInfoBean;
+import com.jubaka.sors.appserver.entities.Branch;
+import com.jubaka.sors.appserver.serverSide.ConnectionHandler;
+import com.jubaka.sors.appserver.serverSide.NodeServerEndpoint;
+import com.jubaka.sors.appserver.service.BranchService;
+import com.jubaka.sors.appserver.service.NodeService;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;

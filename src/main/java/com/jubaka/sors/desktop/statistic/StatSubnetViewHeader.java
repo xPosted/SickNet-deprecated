@@ -1,7 +1,7 @@
-package com.jubaka.sors.view.statistic;
+package com.jubaka.sors.desktop.statistic;
 
-import com.jubaka.sors.sessions.Subnet;
-import com.jubaka.sors.tcpAnalyse.Controller;
+import com.jubaka.sors.desktop.sessions.Subnet;
+import com.jubaka.sors.desktop.tcpAnalyse.Controller;
 
 import javax.swing.JPanel;
 
