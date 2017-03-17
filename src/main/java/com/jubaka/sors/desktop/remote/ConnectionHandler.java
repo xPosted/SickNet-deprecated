@@ -142,7 +142,7 @@ public class ConnectionHandler implements Runnable, Observer {
 		String[] command = ro.getRequestStr();
 
 		if (command[0].equals("getInfo")) {
-			InfoBean iBean = beanConstructor.prepareInfoBean();
+			InfoBean iBean = beanConstructor.prepareInfoBean(ClassFactory.getInstance());
 			iBean.setRequestId(ro.getRequestId());
 			sendLock.lock();
 			oos.writeObject(iBean);
@@ -152,7 +152,7 @@ public class ConnectionHandler implements Runnable, Observer {
 		}
 
 		if (command[0].equals("getSec")) {
-			SecPolicyBean secPol = beanConstructor.prepareSecPolBean();
+			SecPolicyBean secPol = beanConstructor.prepareSecPolBean(ClassFactory.getInstance());
 			secPol.setRequestId(ro.getRequestId());
 			sendLock.lock();
 			oos.writeObject(secPol);
@@ -172,7 +172,7 @@ public class ConnectionHandler implements Runnable, Observer {
 
 			if (command.length == 2) {
 				String byUser = command[1];
-				BranchStatBean brStat = beanConstructor.prepareBrStat(byUser);
+				BranchStatBean brStat = beanConstructor.prepareBrStat(ClassFactory.getInstance(), byUser);
 				brStat.setRequestId(ro.getRequestId());
 				sendLock.lock();
 				oos.writeObject(brStat);
@@ -434,7 +434,7 @@ public class ConnectionHandler implements Runnable, Observer {
 				String byUser = command[1];
 				Bean transportBean = new Bean();
 				transportBean.setRequestId(ro.getRequestId());
-				transportBean.setObject(beanConstructor.prepareBranchInfoSet(byUser));
+				transportBean.setObject(beanConstructor.prepareBranchInfoSet(ClassFactory.getInstance(), byUser));
 				sendLock.lock();
 				oos.writeObject(transportBean);
 				oos.flush();
@@ -449,7 +449,8 @@ public class ConnectionHandler implements Runnable, Observer {
 				String byUser = command[1];
 				Integer brid = Integer.parseInt(command[2]);
 
-				BranchInfoBean infoBean = beanConstructor.prepareBranchInfoBean(byUser, brid);
+				Branch br = ClassFactory.getInstance().getBranch(brid);
+				BranchInfoBean infoBean = beanConstructor.prepareBranchInfoBean(byUser,br);
 				infoBean.setRequestId(ro.getRequestId());
 				sendLock.lock();
 				oos.writeObject(infoBean);
@@ -466,7 +467,8 @@ public class ConnectionHandler implements Runnable, Observer {
 				String net = command[2];
 				Long tm = Long.parseLong(command[3]);
 
-				SessionDataBean sessionData = beanConstructor.prepareSessionDataBean(brid, net, tm);
+				Branch br = ClassFactory.getInstance().getBranch(brid);
+				SessionDataBean sessionData = beanConstructor.prepareSessionDataBean(br, net, tm);
 				sessionData.setRequestId(ro.getRequestId());
 				sendLock.lock();
 				oos.writeObject(sessionData);
@@ -490,7 +492,9 @@ public class ConnectionHandler implements Runnable, Observer {
 
 			if (command.length == 2) {
 				Integer brId = Integer.parseInt(command[1]);
-				SubnetBeanList subnetBeanList = beanConstructor.prepareSubnetBeanList(brId);
+
+				Branch br = ClassFactory.getInstance().getBranch(brId);
+				SubnetBeanList subnetBeanList = beanConstructor.prepareSubnetBeanList(br);
 				subnetBeanList.setRequestId(ro.getRequestId());
 				sendLock.lock();
 				oos.writeObject(subnetBeanList);
@@ -732,7 +736,8 @@ public class ConnectionHandler implements Runnable, Observer {
 			if (command.length == 2) {
 				Integer id = Integer.parseInt(command[1]);
 
-				BranchBean bean = beanConstructor.prepareBranchBean(id);
+				Branch br = ClassFactory.getInstance().getBranch(id);
+				BranchBean bean = beanConstructor.prepareBranchBean(br);
 				bean.setRequestId(ro.getRequestId());
 				sendLock.lock();
 				oos.writeObject(bean);
@@ -749,7 +754,8 @@ public class ConnectionHandler implements Runnable, Observer {
 				String subnetStr = command[2];
 				boolean observe = Boolean.valueOf(command[3]);
 
-				SubnetLightBean bean = beanConstructor.prepareSubnetLightBean(id,subnetStr,null);
+				Branch br = ClassFactory.getInstance().getBranch(id);
+				SubnetLightBean bean = beanConstructor.prepareSubnetLightBean(br,subnetStr,null);
 				bean.setRequestId(ro.getRequestId());
 				sendLock.lock();
 				oos.writeObject(bean);
@@ -812,7 +818,8 @@ public class ConnectionHandler implements Runnable, Observer {
 			if (command.length == 2) {
 				Integer id = Integer.parseInt(command[1]);
 
-				BranchLightBean bean = beanConstructor.prepareLightBranchBean(id);
+				Branch br = ClassFactory.getInstance().getBranch(id);
+				BranchLightBean bean = beanConstructor.prepareLightBranchBean(br);
 				bean.setRequestId(ro.getRequestId());
 				sendLock.lock();
 				oos.writeObject(bean);

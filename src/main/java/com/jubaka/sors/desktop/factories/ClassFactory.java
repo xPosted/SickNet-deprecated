@@ -21,6 +21,7 @@ public class ClassFactory extends Observable implements Serializable {
 	private String homeLive = "Live";
 	private String homeRemote = "Remote";
 
+
 	/**
 	 * 
 	 * 
@@ -37,11 +38,11 @@ public class ClassFactory extends Observable implements Serializable {
 	private String configPath = "/usr/local/etc/sors/sors.cfg";
 
 
-	private ClassFactory(String home) {
+	private ClassFactory(String home,String nodeName, String desc) {
 	//	standaloneInstance = this;
 
 		try {
-			ll = new LoadLimits(home,-1,null,-1,new HashSet<>(),new HashSet<>());
+			ll = new LoadLimits(this, home,-1,(long)1000,-1,new HashSet<>(),new HashSet<>(), nodeName,desc);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -50,12 +51,12 @@ public class ClassFactory extends Observable implements Serializable {
 
 	private ClassFactory() {
 
-			LoadInfo li = new LoadInfo();
-			String osarch = li.getOsArch();
+
+			String osarch = LoadInfo.getOsArch();
 			ConfigIO rc;
 			if (osarch.contains("Linux")) {
 				File cfg = new File(configPath);
-				rc = new ConfigIO(cfg);
+				rc = new ConfigIO(cfg,this);
 				ll = rc.read();
 				if (ll==null) return;
 				checkDirsExist();
@@ -68,9 +69,9 @@ public class ClassFactory extends Observable implements Serializable {
 
 	}
 
-	public static ClassFactory getStandaloneInstance(String home) {
+	public static ClassFactory getStandaloneInstance(String home,String nodeName, String desc) {
 
-		return new ClassFactory(home);
+		return new ClassFactory(home,nodeName, desc);
 	}
 
 	public static ClassFactory getInstance() {
@@ -85,7 +86,7 @@ public class ClassFactory extends Observable implements Serializable {
 
 	public void saveConfig() {
 		File cfg = new File(configPath);
-		ConfigIO cio = new ConfigIO(cfg);
+		ConfigIO cio = new ConfigIO(cfg,this);
 		cio.saveLimits(ll);
 	}
 	
@@ -354,9 +355,7 @@ public class ClassFactory extends Observable implements Serializable {
 
 class memViewer implements Runnable {
 	public void run() {
-		LoadInfo li = new LoadInfo();
 
-		li.print();
-
+		LoadInfo.print();
 	}
 }

@@ -65,5 +65,6 @@
     <orderEntry type="library" name="Maven: net.java.dev.jna:jna-platform:4.2.2" level="project" />
     <orderEntry type="library" name="Maven: net.java.dev.jna:jna:4.2.2" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.22" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>

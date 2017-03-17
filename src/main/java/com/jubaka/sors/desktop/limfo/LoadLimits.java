@@ -28,15 +28,23 @@ public class LoadLimits {
 	private byte sessionViewMode = 0;	// 0 panel 1 compaq 2 table
 	private boolean separSessionView = false;
 	private boolean separSesDataView = false;
+	private ClassFactory factory;
+
+	private String nodeName = "Sors_production";
+	private String desc = "SORS analyze node";
 	
 
-	public LoadLimits(String home, Integer status, Long unid,
+	public LoadLimits(ClassFactory factory ,String home, Integer status, Long unid,
 			double homeMaxRemote, Set<SecPolicy> ipPolicies,
-			Set<SecPolicy> usersPolicies) throws Exception {
+			Set<SecPolicy> usersPolicies, String nodeName, String desc) throws Exception {
 		this.home = home;
 		this.status = status;
 		this.unid = unid;
 		this.homeMaxRemote = homeMaxRemote;
+		this.nodeName = nodeName;
+		this.desc = desc;
+		this.factory = factory;
+
 		for (SecPolicy item : ipPolicies)
 			addIpPolicy(item);
 		for (SecPolicy item : usersPolicies)
@@ -106,11 +114,26 @@ public class LoadLimits {
 		homeMaxRemote = newSize;
 
 	}
+	public String getNodeName() {
+		return nodeName;
+	}
+
+	public void setNodeName(String nodeName) {
+		this.nodeName = nodeName;
+	}
+
+	public String getDesc() {
+		return desc;
+	}
+
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
 
 	public boolean checkHomeRemote(double needed) {
 		if (homeMaxRemote == -1)
 			return true;
-		LoadInfo li = new LoadInfo();
+		LoadInfo li = new LoadInfo(factory);
 
 		if ((li.getHomeUsedRemote() + needed) > homeMaxRemote) {
 			return false;

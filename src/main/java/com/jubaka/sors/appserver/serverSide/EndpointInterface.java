@@ -22,13 +22,14 @@ public interface EndpointInterface {
 
     boolean createLiveBranch(String ifsName, String byUser, String branchName, String ip);
 
-    boolean createBranch(String pathToFile, String byUser, String fileName, String branchName);
+    Integer createBranch(String pathToFile, String byUser, String fileName, String branchName);
 
-    boolean createBranch(String byUser, Part filePart, String branchName);
+    Integer createBranch(String byUser, Part filePart, String branchName);
 
     void startBranch(Integer brId);
 
     void removeObserver(Integer brId, String obj);
+
 
     void stopBranch(Integer brId);
 

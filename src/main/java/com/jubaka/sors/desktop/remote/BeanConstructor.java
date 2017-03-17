@@ -433,8 +433,7 @@ public class BeanConstructor {
         return bib;
     }
 
-    public Set<BranchInfoBean> prepareBranchInfoSet(Branch br, String userName) {
-        ClassFactory cf = br.getFactory();
+    public Set<BranchInfoBean> prepareBranchInfoSet(ClassFactory cf, String userName) {
         LoadLimits ll = cf.getLimits();
         SecPolicy sp = cf.getLimits().getPolicyByUser(userName);
         HashSet<BranchInfoBean> res = new HashSet<BranchInfoBean>();

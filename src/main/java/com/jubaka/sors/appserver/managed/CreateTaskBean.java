@@ -92,8 +92,8 @@ public class CreateTaskBean {
             newBr.startCapture(null);
             API api =  fuckingFactory.getAPIinstance(branchId);
             api.waitForCaptureOff();
-            BranchBean bBean = beanConstructor.prepareBranchBean(branchId);
-            com.jubaka.sors.appserver.entities.Branch persistedBranch = branchService.persistBranch(bBean);
+          //  BranchBean bBean = beanConstructor.prepareBranchBean(branchId);
+           // com.jubaka.sors.appserver.entities.Branch persistedBranch = branchService.persistBranch(bBean);
 
         } catch (IOException io) {
             io.printStackTrace();

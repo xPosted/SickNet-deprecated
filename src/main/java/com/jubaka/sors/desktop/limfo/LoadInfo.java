@@ -14,15 +14,18 @@ import com.jubaka.sors.desktop.sessions.Branch;
 //import org.apache.*;
 
 public class LoadInfo {
-	static String nodeName = "Sors_production";
-	static String desc = "SORS analyze node";
 
+	private ClassFactory currentFactory = null;
+
+	public LoadInfo(ClassFactory currentFactory) {
+		this.currentFactory = currentFactory;
+	}
 	public boolean checkMem() {
 
 		return false;
 	}
 
-	public void print() {
+	public static  void print() {
 		byte[] buf;
 		MemoryMXBean memBean = ManagementFactory.getMemoryMXBean();
 		MemoryUsage memUseHeap = memBean.getHeapMemoryUsage();
@@ -71,12 +74,12 @@ public class LoadInfo {
 
 	}
 
-	public long getUsedMem() {
+	public static  long getUsedMem() {
 		return (Runtime.getRuntime().totalMemory() - Runtime.getRuntime()
 				.freeMemory());
 	}
 
-	public long getAvailableMem() {
+	public static long getAvailableMem() {
 		return (getMaxMem() - getUsedMem());
 	}
 
@@ -84,21 +87,16 @@ public class LoadInfo {
 		return Runtime.getRuntime().availableProcessors();
 	}
 
-	public long getMaxMem() {
+	public static long   getMaxMem() {
 		return Runtime.getRuntime().maxMemory();
 
 	}
 
-	public String getOsArch() {
+	public static String getOsArch() {
 
 		return (System.getProperty("os.name") + "/" + System
 				.getProperty("os.arch"));
 
-	}
-
-	public static   String getDesc() {
-
-		return desc;
 	}
 
 	public Collection<Branch> getBranches() {
@@ -106,10 +104,6 @@ public class LoadInfo {
 		return ClassFactory.getInstance().getBranches();
 	}
 
-	
-	public static  void setDesc(String d) {
-		desc = d;
-	}
 	public long getHomeUsedRemote() {
 		
 		ClassFactory cf = ClassFactory.getInstance();
@@ -136,14 +130,6 @@ public class LoadInfo {
 	            length += folderSize(file);
 	    }
 	    return length;
-	}
-
-	public static String getNodeName() {
-		return nodeName;
-	}
-
-	public static void setNodeName(String nodeName) {
-		LoadInfo.nodeName = nodeName;
 	}
 
 }

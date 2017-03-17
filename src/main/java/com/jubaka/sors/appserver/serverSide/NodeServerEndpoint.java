@@ -39,6 +39,7 @@ public class NodeServerEndpoint extends Observable implements EndpointInterface 
 
 
 
+
 	public void createStreams(ObjectInputStream ois) {
 		try {
 			if (s != null) {
@@ -56,7 +57,9 @@ public class NodeServerEndpoint extends Observable implements EndpointInterface 
 			disconnect();
 		}
 	}
-
+	public String getFullName() {
+		return fullName;
+	}
 	private Bean getResponse(Long requestId) {
 		Bean response = null;
 		try {

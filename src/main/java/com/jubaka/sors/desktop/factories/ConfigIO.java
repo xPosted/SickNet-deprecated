@@ -36,15 +36,15 @@ public class ConfigIO {
 	byte sessionViewMode;
 	boolean separSessionView;
 	boolean separSesDataView;
-	
+	private ClassFactory factory;
 	
 	Long unid = null;
 	HashSet<SecPolicy> ipPoliciesTmp = new HashSet<SecPolicy>();
 	HashSet<SecPolicy> usersPoliciesTmp = new HashSet<SecPolicy>();
 
-	public ConfigIO(File cfg) {
+	public ConfigIO(File cfg, ClassFactory factory) {
 		this.cfg = cfg;
-
+		this.factory = factory;
 	}
 
 	public void saveLimits(LoadLimits item) {
@@ -88,12 +88,12 @@ public class ConfigIO {
 		pw.println(homeMaxRemote);
 		pw.println("</homeRemoteMax>");
 
-		desc = LoadInfo.getDesc();
+		desc = item.getDesc();
 		pw.println("<desc>");
 		pw.println(desc);
 		pw.println("</desc>");
 
-		nodeName = LoadInfo.getNodeName();
+		nodeName = item.getNodeName();
 		pw.println("<nodeName>");
 		pw.println(nodeName);
 		pw.println("</nodeName>");
@@ -147,8 +147,8 @@ public class ConfigIO {
 				chooser.setToolTipText("Select home folder");
 				chooser.setName("Select home folder");
 				home = chooser.getSelectedFile().getAbsolutePath();
-				li = new LoadLimits(home, status,unid, homeMaxRemote, ipPoliciesTmp,
-						usersPoliciesTmp);
+				li = new LoadLimits(factory,home, status,unid, homeMaxRemote, ipPoliciesTmp,
+						usersPoliciesTmp, nodeName, desc);
 			} catch (Exception e) {
 				return null;
 				
@@ -219,14 +219,12 @@ public class ConfigIO {
 					if (!newDesc.equals(""))
 						desc = newDesc;
 					System.out.println("deslic class ReadConfig {c: " + desc);
-					LoadInfo.setDesc(desc);
+
 				}
 				if (elem.getNodeName().equals("nodeName")) {
 					String newNodeName = elem.getTextContent().trim();
 					if (!newNodeName.equals(""))
 						nodeName = newNodeName;
-
-					LoadInfo.setNodeName(nodeName);
 				}
 				if (elem.getNodeName().equals("sessionViewMode")) {
 					String sessionViewModeStr = elem.getTextContent().trim();
@@ -260,8 +258,8 @@ public class ConfigIO {
 				}
 
 			}
-			li = new LoadLimits(home, status,unid, homeMaxRemote, ipPoliciesTmp,
-					usersPoliciesTmp);
+			li = new LoadLimits(factory,home, status,unid, homeMaxRemote, ipPoliciesTmp,
+					usersPoliciesTmp,nodeName,desc);
 			li.setSessionViewMode(sessionViewMode);
 			li.setSeparSesDataView(separSesDataView);
 			li.setSeparSessionView(separSessionView);
@@ -277,8 +275,8 @@ public class ConfigIO {
 			ipPoliciesTmp.add(new SecPolicy("*"));
 			usersPoliciesTmp.add(new SecPolicy("*"));
 			try {
-				li = new LoadLimits(home, status,unid, homeMaxRemote, ipPoliciesTmp,
-						usersPoliciesTmp);
+				li = new LoadLimits(factory, home, status,unid, homeMaxRemote, ipPoliciesTmp,
+						usersPoliciesTmp,nodeName,desc);
 			} catch (Exception e1) {
 				
 				return null;

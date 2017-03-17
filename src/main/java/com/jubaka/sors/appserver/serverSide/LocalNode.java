@@ -4,12 +4,19 @@ import com.jubaka.sors.beans.*;
 import com.jubaka.sors.beans.branch.*;
 import com.jubaka.sors.desktop.factories.ClassFactory;
 import com.jubaka.sors.desktop.remote.BeanConstructor;
+import com.jubaka.sors.desktop.sessions.API;
+import com.jubaka.sors.desktop.sessions.Branch;
 import org.jfree.data.time.TimeSeries;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import javax.swing.table.DefaultTableModel;
+import java.io.File;
+import java.io.IOException;
 import java.net.InetAddress;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Set;
 
@@ -21,8 +28,14 @@ public class LocalNode implements EndpointInterface {
     private ClassFactory localFactory;
     private BeanConstructor constructor;
 
-    public LocalNode(AuthorisationBean authorisation, String home) {
-        localFactory = ClassFactory.getStandaloneInstance(home);
+    public LocalNode(AuthorisationBean authorisation, String home,String desc) {
+        localFactory = ClassFactory.getStandaloneInstance(home, authorisation.getNodeName(),desc);
+    }
+
+    public void waitForCaptureOff(Integer branchId) {
+        API api =  localFactory.getAPIinstance(branchId);
+        api.waitForCaptureOff();
+
     }
 
     @Override
@@ -36,13 +49,26 @@ public class LocalNode implements EndpointInterface {
     }
 
     @Override
-    public boolean createBranch(String pathToFile, String byUser, String fileName, String branchName) {
-        return false;
+    public Integer createBranch(String pathToFile, String byUser, String fileName, String branchName) {
+        return -1;
     }
 
     @Override
-    public boolean createBranch(String byUser, Part filePart, String branchName) {
-        return false;
+    public Integer createBranch(String byUser, Part filePart, String branchName) {
+        String dumpPath = localFactory.getHome()+ File.separator+filePart.getSubmittedFileName();
+        try {
+
+        Files.copy(filePart.getInputStream(),Paths.get(dumpPath), StandardCopyOption.REPLACE_EXISTING);
+    } catch (IOException io) {
+        io.printStackTrace();
+    }
+
+
+        int branchId = localFactory.createBranch(byUser,branchName,dumpPath,null,null);
+        Branch newBr = localFactory.getBranch(branchId);
+        newBr.startCapture(null);
+        return branchId;
+
     }
 
     @Override
@@ -188,7 +214,11 @@ public class LocalNode implements EndpointInterface {
 
     @Override
     public BranchBean getBranch(Integer id) {
-        return null;
+
+        Branch br = localFactory.getBranch(id);
+        BeanConstructor constructor = new BeanConstructor();
+        BranchBean brBean =  constructor.prepareBranchBean(br);
+        return brBean;
     }
 
     @Override

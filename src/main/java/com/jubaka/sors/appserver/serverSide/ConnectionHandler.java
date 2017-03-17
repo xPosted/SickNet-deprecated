@@ -1,24 +1,30 @@
 package com.jubaka.sors.appserver.serverSide;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Observable;
 
-import com.jubaka.sors.beans.AuthorisationBean;
-import com.jubaka.sors.beans.InfoBean;
+
 import com.jubaka.sors.appserver.entities.Node;
 import com.jubaka.sors.appserver.entities.User;
 import com.jubaka.sors.appserver.managed.PassEncoder;
+import com.jubaka.sors.appserver.managed.ServerArgumentsBean;
 import com.jubaka.sors.appserver.serverSide.bean.StreamTransportBean;
 import com.jubaka.sors.appserver.serverSide.dbManagement.DBManager;
 import com.jubaka.sors.appserver.service.NodeActiveCheckPointService;
 import com.jubaka.sors.appserver.service.NodeService;
 import com.jubaka.sors.appserver.service.UserService;
+import com.jubaka.sors.beans.AuthorisationBean;
+import com.jubaka.sors.beans.InfoBean;
+import com.jubaka.sors.desktop.factories.ClassFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -32,6 +38,8 @@ public class ConnectionHandler  extends Observable {
 	private UserService userService;
 	@Inject
 	private NodeService nodeService;
+	@Inject
+	private ServerArgumentsBean args;
 
 	@Inject
 	private NodeActiveCheckPointService checkPointService;
@@ -43,6 +51,7 @@ public class ConnectionHandler  extends Observable {
 	private ConnectionListener listener = null;
 	private static HashMap<String, NodeServerEndpoint> nodeList = new HashMap<String, NodeServerEndpoint>();
 	private static HashMap<Long, NodeServerEndpoint> idNodeList = new HashMap<Long, NodeServerEndpoint>();
+	private static LocalNode localNode = null;
 
 	
 	/*
@@ -76,6 +85,25 @@ public class ConnectionHandler  extends Observable {
 		listener = new ConnectionListener();
 		listener.startListener(this,port);
 		
+	}
+
+	public void initLocalNode() {
+		AuthorisationBean auth = new AuthorisationBean();
+		auth.setNodeName("SorsPublicNode");
+		auth.setNodeUserName("public");
+		auth.setNodeUserPass("pass");
+
+		String usersHome = args.getUploadPath() + File.separator+ auth.getNodeUserName()+File.separator;
+		String usersPcapPath = usersHome+"pcaps"+File.separator;
+
+		try {
+			Files.createDirectories(Paths.get(usersPcapPath));
+		} catch (IOException io) {
+			io.printStackTrace();
+		}
+
+		localNode = new LocalNode(auth,usersPcapPath,"desc");
+		autorise(auth,localNode.getInfo());
 	}
 
 	public void updateConnectionListener(Integer port) {
