@@ -83,7 +83,7 @@ public class LoadInfo {
 		return (getMaxMem() - getUsedMem());
 	}
 
-	public int getProcCount() {
+	public static int getProcCount() {
 		return Runtime.getRuntime().availableProcessors();
 	}
 
@@ -101,22 +101,21 @@ public class LoadInfo {
 
 	public Collection<Branch> getBranches() {
 
-		return ClassFactory.getInstance().getBranches();
+		return currentFactory.getBranches();
 	}
 
 	public long getHomeUsedRemote() {
 		
-		ClassFactory cf = ClassFactory.getInstance();
-		String hf = cf.getHomeRemote();
+
+		String hf = currentFactory.getHomeRemote();
 		File directory = new File(hf);
 		Long size = folderSize(directory);
 		return size;
 	}
 	
 	public long getHomeUsedLive() {
-		
-		ClassFactory cf = ClassFactory.getInstance();
-		String hf = cf.getHomeLive();
+
+		String hf = currentFactory.getHomeLive();
 		File directory = new File(hf);
 		Long size = folderSize(directory);
 		return size;
@@ -130,6 +129,13 @@ public class LoadInfo {
 	            length += folderSize(file);
 	    }
 	    return length;
+	}
+
+	public String getNodeName() {
+		return currentFactory.getLimits().getNodeName();
+	}
+	public String getDesc() {
+		return currentFactory.getLimits().getDesc();
 	}
 
 }

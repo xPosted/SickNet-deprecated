@@ -150,13 +150,13 @@ public class NodeServerEndpoint extends Observable implements EndpointInterface 
 	}
 	
 	@Override
-	public   boolean createBranch(String pathToFile, String byUser, String fileName, String branchName) {
+	public   Integer createBranch(String pathToFile, String byUser, String fileName, String branchName) {
 		if  (checkConnection()==false) {
-			return false;
+			return -1;
 		}
 		try {
 			File pcap = new File(pathToFile);
-			if (!pcap.exists()) return false;
+			if (!pcap.exists()) return -1;
 			long fileLen = pcap.length();
 			String[] command = new String[5];
 			command[0] = "createBranch_";
@@ -205,7 +205,7 @@ public class NodeServerEndpoint extends Observable implements EndpointInterface 
 			e.printStackTrace();
 			if (lock.isLocked()) lock.unlock();
 			disconnect();
-			return false;
+			return -1;
 		}
 
 		return true;

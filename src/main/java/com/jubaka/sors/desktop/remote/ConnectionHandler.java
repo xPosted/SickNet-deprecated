@@ -727,8 +727,7 @@ public class ConnectionHandler implements Runnable, Observer {
 				Integer branch_id = ClassFactory.getInstance()
 						.createBranch(byUser, branchName, path,
 								s.getInetAddress().getHostName(), null);
-				System.out.println("TaskViewBean " + branch_id
-						+ " created");
+
 			}
 		}
 

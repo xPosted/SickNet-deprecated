@@ -24,7 +24,6 @@ import com.jubaka.sors.appserver.service.NodeService;
 import com.jubaka.sors.appserver.service.UserService;
 import com.jubaka.sors.beans.AuthorisationBean;
 import com.jubaka.sors.beans.InfoBean;
-import com.jubaka.sors.desktop.factories.ClassFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

@@ -36,7 +36,7 @@ private AuthorisationBean prepareAutorisationBean() {
 	LoadLimits lim = ClassFactory.getInstance().getLimits();
 	auth.setNodeUserName(userName);			
 	auth.setNodeUserPass(password);				
-	auth.setNodeName(LoadInfo.getNodeName());
+	auth.setNodeName(lim.getNodeName());
 	auth.setUnid(lim.getUnid());
 	return auth;
 }

@@ -413,7 +413,9 @@ public class BeanConstructor {
 
     public BranchInfoBean prepareBranchInfoBean(Branch br) {
 
-        SessionsAPI sApi = br.getFactory().getSesionInstance(br.getId());
+        ClassFactory currentFactory = br.getFactory();
+        SessionsAPI sApi = currentFactory.getSesionInstance(br.getId());
+        LoadInfo lInfo = new LoadInfo(currentFactory);
 
         BranchInfoBean bib = new BranchInfoBean();
         bib.setId(br.getId());
@@ -424,7 +426,7 @@ public class BeanConstructor {
         bib.setUploadSize(br.getDumpLen());
         bib.setUserName(br.getUserName());
         bib.setWebIP(br.getWebIP());
-        bib.setNodeName("capricornus@" + LoadInfo.getNodeName());
+        bib.setNodeName("capricornus@" + lInfo.getNodeName());
         bib.setBranchName(br.getName());
         bib.setState(br.getState());
         bib.setSubnetCount(sApi.getSubnetCount());
@@ -467,13 +469,13 @@ public class BeanConstructor {
 
 
     public InfoBean prepareInfoBean(ClassFactory cf) {
-        LoadInfo li = new LoadInfo();
+        LoadInfo li = new LoadInfo(cf);
         LoadLimits ll = cf.getLimits();
         InfoBean ib = new InfoBean();
-        ib.setNodeName(LoadInfo.getNodeName());
+        ib.setNodeName(li.getNodeName());
         ib.setOwner(WebConnection.getUserName());
         ib.setAvailableMem(li.getAvailableMem());
-        ib.setDesc(LoadInfo.getDesc());
+        ib.setDesc(li.getDesc());
         ib.setHomeMax(ll.getHomeRemoteMaxSize());
         ib.setHomeUsed(li.getHomeUsedRemote());
         ib.setUsedMem(li.getUsedMem());
