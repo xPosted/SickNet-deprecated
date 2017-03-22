@@ -180,8 +180,9 @@ public class ConnectionHandler  extends Observable {
 		if (uObj==null) {return false;}
 		String encodedPass = PassEncoder.encode(auth.getNodeUserPass());
 		if ( ! uObj.getPass().equals(encodedPass))  {
-			nodeService.insertUpdateNode(infoBean,uObj);
+			return false;
 		}
+		nodeService.insertUpdateNode(infoBean,uObj);
 		return true;
 
 	}
@@ -249,6 +250,10 @@ public class ConnectionHandler  extends Observable {
 	public static void setDbManager(DBManager dbManager) {
 		ConnectionHandler.dbManager = dbManager;
 	}
-	
+	public static LocalNode getLocalNode() {
+		return localNode;
+	}
+
+
 
 }

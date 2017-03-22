@@ -36,7 +36,7 @@ public class LoadLimits {
 
 	public LoadLimits(ClassFactory factory ,String home, Integer status, Long unid,
 			double homeMaxRemote, Set<SecPolicy> ipPolicies,
-			Set<SecPolicy> usersPolicies, String nodeName, String desc) throws Exception {
+			Set<SecPolicy> usersPolicies, String nodeName, String desc,boolean silent) throws Exception {
 		this.home = home;
 		this.status = status;
 		this.unid = unid;
@@ -52,7 +52,11 @@ public class LoadLimits {
 		File homeDir = new File(home);
 
 		if (homeDir.list().length != 0) {
-			int res = JOptionPane.showConfirmDialog(null,
+			int res = -1;
+			if (silent)
+				res = 0;
+			else
+				res = JOptionPane.showConfirmDialog(null,
 					"Your home directory is not empty, clear it?");
 			if (res == 0) {
 				for (File item : homeDir.listFiles()) {

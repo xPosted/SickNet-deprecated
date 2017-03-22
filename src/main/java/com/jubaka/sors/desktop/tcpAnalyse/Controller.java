@@ -259,7 +259,7 @@ public class Controller {
 		sesApi = ClassFactory.getInstance().getSesionInstance(id);
 		factory = ClassFactory.getInstance();
 		api = factory.getAPIinstance(id);
-		factory.getSesionInstance(id).activate();
+		factory.getSesionInstance(id).activatePacketHandling();
 		view = MainWin.instance;
 	}
 

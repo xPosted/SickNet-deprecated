@@ -197,6 +197,13 @@ public class NodeServerEndpoint extends Observable implements EndpointInterface 
 					}
 					oos.flush();
 				}
+			Bean response_branchid = getResponse(requestId);
+				Object brIdObject = response_branchid.getObject();
+				if (brIdObject instanceof Integer) {
+					Integer brId = (Integer) brIdObject;
+					return brId;
+				}
+
 
 			
 
@@ -208,17 +215,17 @@ public class NodeServerEndpoint extends Observable implements EndpointInterface 
 			return -1;
 		}
 
-		return true;
+		return -1;
 	}
 
 	@Override
-	public   boolean createBranch(String byUser, Part filePart, String branchName) {
+	public   Integer createBranch(String byUser, Part filePart, String branchName) {
 		if  (checkConnection()==false) {
-			return false;
+			return -1;
 		}
 		try {
 
-			if (filePart == null) return false;
+			if (filePart == null) return -1;
 			long fileLen = filePart.getSize();
 			String[] command = new String[5];
 			command[0] = "createBranch_";
@@ -260,6 +267,13 @@ public class NodeServerEndpoint extends Observable implements EndpointInterface 
 				oos.flush();
 			}
 
+			Bean response_branchid = getResponse(requestId);
+			Object brIdObject = response_branchid.getObject();
+			if (brIdObject instanceof Integer) {
+				Integer brId = (Integer) brIdObject;
+				return brId;
+			}
+
 
 
 		} catch (IOException e) {
@@ -267,10 +281,10 @@ public class NodeServerEndpoint extends Observable implements EndpointInterface 
 			e.printStackTrace();
 			if (lock.isLocked()) lock.unlock();
 			disconnect();
-			return false;
+			return -1;
 		}
 
-		return true;
+		return -1;
 	}
 	
 	@Override

@@ -148,7 +148,7 @@ public class ConfigIO {
 				chooser.setName("Select home folder");
 				home = chooser.getSelectedFile().getAbsolutePath();
 				li = new LoadLimits(factory,home, status,unid, homeMaxRemote, ipPoliciesTmp,
-						usersPoliciesTmp, nodeName, desc);
+						usersPoliciesTmp, nodeName, desc,false);
 			} catch (Exception e) {
 				return null;
 				
@@ -259,7 +259,7 @@ public class ConfigIO {
 
 			}
 			li = new LoadLimits(factory,home, status,unid, homeMaxRemote, ipPoliciesTmp,
-					usersPoliciesTmp,nodeName,desc);
+					usersPoliciesTmp,nodeName,desc,false);
 			li.setSessionViewMode(sessionViewMode);
 			li.setSeparSesDataView(separSesDataView);
 			li.setSeparSessionView(separSessionView);
@@ -276,7 +276,7 @@ public class ConfigIO {
 			usersPoliciesTmp.add(new SecPolicy("*"));
 			try {
 				li = new LoadLimits(factory, home, status,unid, homeMaxRemote, ipPoliciesTmp,
-						usersPoliciesTmp,nodeName,desc);
+						usersPoliciesTmp,nodeName,desc,false);
 			} catch (Exception e1) {
 				
 				return null;

@@ -1,5 +1,7 @@
 package com.jubaka.sors.appserver.managed;
 
+import com.jubaka.sors.appserver.serverSide.EndpointInterface;
+import com.jubaka.sors.appserver.serverSide.LocalNode;
 import com.jubaka.sors.beans.branch.BranchBean;
 import com.jubaka.sors.desktop.factories.ClassFactory;
 import com.jubaka.sors.desktop.remote.BeanConstructor;
@@ -76,8 +78,19 @@ public class CreateTaskBean {
     }
 
     private void createTask() {
-        if (upFilePart == null | taskName == null) return;
 
+        if (upFilePart == null | taskName == null) return;
+        if (cHandler.getLocalNode() == null) return;
+
+        LocalNode endpoint =  cHandler.getLocalNode();
+        Integer newBrId =  endpoint.createBranch(loginBean.getLogin(),upFilePart,taskName);
+
+        endpoint.waitForCaptureOff(newBrId);
+
+        BranchBean bb = endpoint.getBranch(newBrId);
+        branchService.persistBranch(bb);
+
+        /*
         BeanConstructor beanConstructor = new BeanConstructor();
         String usersHome = args.getUploadPath() +File.separator+ loginBean.getLogin()+File.separator;
         ClassFactory fuckingFactory = ClassFactory.getStandaloneInstance(usersHome);
@@ -102,7 +115,7 @@ public class CreateTaskBean {
 
         //NodeServerEndpoint nodeEndpoint =  cHandler.getNodeServerEndPoint(nodeId);
         //nodeEndpoint.createBranch(loginBean.getLogin(),upFilePart,taskName);
-
+*/
 
     }
 }

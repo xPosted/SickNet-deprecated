@@ -36,13 +36,16 @@ public class ClassFactory extends Observable implements Serializable {
 	private HashMap<Integer, Branch> branchList = new HashMap<Integer, Branch>();
 	private HashMap<Integer, DataSaverInfo> dsList = new HashMap<Integer, DataSaverInfo>();
 	private String configPath = "/usr/local/etc/sors/sors.cfg";
+	private boolean silent = true;
 
 
 	private ClassFactory(String home,String nodeName, String desc) {
 	//	standaloneInstance = this;
 
 		try {
-			ll = new LoadLimits(this, home,-1,(long)1000,-1,new HashSet<>(),new HashSet<>(), nodeName,desc);
+			ll = new LoadLimits(this, home,-1,(long)1000,-1,new HashSet<>(),new HashSet<>(), nodeName,desc,silent);
+			checkDirsExist();
+			setPathToForemost(ll.getPathToForemost());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -51,7 +54,7 @@ public class ClassFactory extends Observable implements Serializable {
 
 	private ClassFactory() {
 
-
+			silent = false;
 			String osarch = LoadInfo.getOsArch();
 			ConfigIO rc;
 			if (osarch.contains("Linux")) {
@@ -187,21 +190,27 @@ public class ClassFactory extends Observable implements Serializable {
 	public Integer createBranch(String owner, String name,String path_toDump, String ip,String ifs) {
 		
 		try {
-			Controller cntr = new Controller();
+
 			Branch b;
 			if (this == instance)
 				b = new Branch(id,name, ip, path_toDump, ifs,null);
 			else b = new Branch(id,name, ip, path_toDump, ifs,this);
 
+			SessionsAPI sesApi = new SessionsAPI(b,this);
 			apiList.put(id,new API(id));
-			sesApiList.put(id,new SessionsAPI(b,this));
-			cntrList.put(id,cntr);
+			sesApiList.put(id,sesApi);
 			dsList.put(id,new DataSaverInfo(id));
-			
-			cntr.init(id, false);
+
+			if (!silent) {
+				Controller cntr = new Controller();
+				cntrList.put(id,cntr);
+				cntr.init(id, false);
+			}
 
 			b.setUserName(owner);
 			branchList.put(id,b);
+
+			sesApi.activatePacketHandling();
 		//	getAPIinstance(id).startCapture(null, null, path_toDump);
 
 			setChanged();

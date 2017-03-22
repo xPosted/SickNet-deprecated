@@ -83,7 +83,7 @@ public class SessionsAPI implements Observer, Serializable {
 		return ses_count;
 	}
 
-	public void activate() throws Exception {
+	public void activatePacketHandling() throws Exception {
 		myFactory.getAPIinstance(getBranchId()).addObserver(this);
 	}
 
@@ -91,7 +91,7 @@ public class SessionsAPI implements Observer, Serializable {
 		return br.getId();
 	}
 
-	public void deactivate() throws Exception {
+	public void deactivatePacketHandling() throws Exception {
 		myFactory.getAPIinstance(getBranchId()).deleteObserver(this);
 	}
 

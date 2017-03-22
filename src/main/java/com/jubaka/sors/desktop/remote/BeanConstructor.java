@@ -91,11 +91,12 @@ public class BeanConstructor {
     }
 
     public IPItemBean prepareIpBean(Branch br, IPaddr ip) {
-        DataSaverInfo dsi = ClassFactory.getInstance().getDataSaverInfo(
+        ClassFactory currentFactory = br.getFactory();
+        DataSaverInfo dsi = currentFactory.getDataSaverInfo(
                 br.getId());
         IPItemBean ipInfo = new IPItemBean();
         try {
-            SessionsAPI cntr = ClassFactory.getInstance().getSesionInstance(
+            SessionsAPI cntr = currentFactory.getSesionInstance(
                     br.getId());
             IPaddr ipaddr = ip;
             String ipStr = ip.getAddr().getHostAddress();
@@ -416,9 +417,11 @@ public class BeanConstructor {
         ClassFactory currentFactory = br.getFactory();
         SessionsAPI sApi = currentFactory.getSesionInstance(br.getId());
         LoadInfo lInfo = new LoadInfo(currentFactory);
+        LoadLimits ll = currentFactory.getLimits();
 
         BranchInfoBean bib = new BranchInfoBean();
         bib.setId(br.getId());
+        bib.setNodeId(ll.getUnid());
         bib.setFileName(br.getFileName());
         bib.setDesc(br.getDesc());
         bib.setIface(br.getIface());
@@ -471,8 +474,10 @@ public class BeanConstructor {
     public InfoBean prepareInfoBean(ClassFactory cf) {
         LoadInfo li = new LoadInfo(cf);
         LoadLimits ll = cf.getLimits();
+
         InfoBean ib = new InfoBean();
-        ib.setNodeName(li.getNodeName());
+        ib.setNodeName(ll.getNodeName());
+        ib.setUnid(ll.getUnid());
         ib.setOwner(WebConnection.getUserName());
         ib.setAvailableMem(li.getAvailableMem());
         ib.setDesc(li.getDesc());

@@ -24,7 +24,9 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JPasswordField;
 
+import com.jubaka.sors.desktop.factories.ClassFactory;
 import com.jubaka.sors.desktop.limfo.LoadInfo;
+import com.jubaka.sors.desktop.limfo.LoadLimits;
 import com.jubaka.sors.desktop.remote.WebConnection;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -255,8 +257,9 @@ setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 					WebConnection.getInstance().closeConnection();
 					setActive(true);
 				} else {
-					LoadInfo.setNodeName(txtNodeName.getText());
-					LoadInfo.setDesc(txtAreaNodeDesc.getText());
+					LoadLimits lims =  ClassFactory.getInstance().getLimits();
+					lims.setNodeName(txtNodeName.getText());
+					lims.setDesc(txtAreaNodeDesc.getText());
 					WebConnection.setUserName(txtUser.getText());
 					WebConnection.setPassword(new String(txtPass.getPassword()));
 					WebConnection.setServerName(txtServerName.getText());
@@ -271,8 +274,9 @@ setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 	}
 	public void init_2() {
-		txtNodeName.setText(LoadInfo.getNodeName());
-		txtAreaNodeDesc.setText(LoadInfo.getDesc());
+		LoadLimits lims =  ClassFactory.getInstance().getLimits();
+		txtNodeName.setText(lims.getNodeName());
+		txtAreaNodeDesc.setText(lims.getDesc());
 		String userName = WebConnection.getUserName();
 		String password = WebConnection.getPassword();
 		if (userName!=null) {

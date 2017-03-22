@@ -3,17 +3,9 @@ package com.jubaka.sors.desktop.sessions;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Observable;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.*;
+import java.util.concurrent.*;
 //import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.JTextArea;
@@ -27,6 +19,7 @@ import org.jnetpcap.packet.PcapPacketHandler;
 public class API extends Observable implements PcapPacketHandler<String>, Serializable {
 
 	private ExecutorService exec = Executors.newCachedThreadPool();
+	private Future f;
 	private API instance = null;
 
 	private ArrayList<Dumper> dumps = new ArrayList<Dumper>();
@@ -67,12 +60,18 @@ public class API extends Observable implements PcapPacketHandler<String>, Serial
 	}
 
 	public void waitForCaptureOff() {
-		if (captor == null) return;
-		exec.shutdown();
+	//	if (captor == null) return;
+
 		try {
-			exec.awaitTermination(8, TimeUnit.HOURS);
+			f.get();
+			exec.shutdown();
+			exec.awaitTermination(2, TimeUnit.MINUTES);
+			executor.shutdown();
+			executor.awaitTermination(5, TimeUnit.MINUTES);
 		} catch (InterruptedException ie) {
 			ie.printStackTrace();
+		} catch (ExecutionException ex) {
+			ex.printStackTrace();
 		}
 
 	}
@@ -80,7 +79,7 @@ public class API extends Observable implements PcapPacketHandler<String>, Serial
 	public void startCapture(String dev, String expression, String fileName) {
 
 				CaptureThread capTh = new CaptureThread(captor, dev, expression, fileName, this);
-				exec.submit(capTh);
+				f = exec.submit(capTh);
 				captor = capTh.getCaptor();
 	}
 	

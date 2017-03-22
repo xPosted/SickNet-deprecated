@@ -728,6 +728,14 @@ public class ConnectionHandler implements Runnable, Observer {
 						.createBranch(byUser, branchName, path,
 								s.getInetAddress().getHostName(), null);
 
+				Bean transportBean_taskid = new Bean();
+				transportBean_taskid.setRequestId(ro.getRequestId());
+				transportBean_taskid.setObject(branch_id);
+				sendLock.lock();
+				oos.writeObject(transportBean);
+				oos.flush();
+				sendLock.unlock();
+
 			}
 		}
 

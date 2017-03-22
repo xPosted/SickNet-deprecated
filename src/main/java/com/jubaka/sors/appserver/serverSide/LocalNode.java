@@ -14,9 +14,11 @@ import javax.swing.table.DefaultTableModel;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -26,7 +28,8 @@ import java.util.Set;
 
 public class LocalNode implements EndpointInterface {
     private ClassFactory localFactory;
-    private BeanConstructor constructor;
+    private BeanConstructor constructor = new BeanConstructor();
+    private Date creationTime = new Date();
 
     public LocalNode(AuthorisationBean authorisation, String home,String desc) {
         localFactory = ClassFactory.getStandaloneInstance(home, authorisation.getNodeName(),desc);
@@ -184,7 +187,15 @@ public class LocalNode implements EndpointInterface {
     @Override
     public InfoBean getInfo() {
 
-        return constructor.prepareInfoBean(localFactory);
+        InfoBean info = constructor.prepareInfoBean(localFactory);
+        info.setConnectedDate(creationTime);
+        try {
+            info.setPubAddr(InetAddress.getLocalHost());
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+        return info;
     }
 
     @Override

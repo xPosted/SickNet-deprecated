@@ -43,6 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 		ch.initConnectionListener(args.getPortListenTo());
+		ch.initLocalNode();
 	//	ch.initDBManager();
 		System.out.println("NodeListener started");
 		// TODO Auto-generated method stub
