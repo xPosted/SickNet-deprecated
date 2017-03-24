@@ -3,7 +3,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:p="http://primefaces.org/ui">
 
 <head>
     <base href="http://localhost:8080/Sors_JSFDeveloping-1.0-SNAPSHOT/"/>
@@ -47,6 +48,8 @@
                         <li><a class="page-scroll" href="#pricing">Download</a></li>
                         <li><a class="page-scroll" href="#contact">Contact</a></li>
                         <h:form enctype="multipart/form-data">
+
+                            <p:fileUpload></p:fileUpload>
                             <li><h:inputText value="#{createTaskBean.taskName}"></h:inputText></li>
                         <li><h:inputFile id="file" value="#{createTaskBean.upFilePart}"></h:inputFile> </li>
                         <li><h:commandButton value="Upload" action="#{createTaskBean.upload()}" ></h:commandButton></li>

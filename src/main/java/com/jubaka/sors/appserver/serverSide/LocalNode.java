@@ -7,6 +7,7 @@ import com.jubaka.sors.desktop.remote.BeanConstructor;
 import com.jubaka.sors.desktop.sessions.API;
 import com.jubaka.sors.desktop.sessions.Branch;
 import org.jfree.data.time.TimeSeries;
+import org.primefaces.model.UploadedFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
@@ -57,11 +58,11 @@ public class LocalNode implements EndpointInterface {
     }
 
     @Override
-    public Integer createBranch(String byUser, Part filePart, String branchName) {
-        String dumpPath = localFactory.getHome()+ File.separator+filePart.getSubmittedFileName();
+    public Integer createBranch(String byUser, UploadedFile filePart, String branchName) {
+        String dumpPath = localFactory.getHome()+ File.separator+filePart.getFileName();
         try {
 
-        Files.copy(filePart.getInputStream(),Paths.get(dumpPath), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(filePart.getInputstream(),Paths.get(dumpPath), StandardCopyOption.REPLACE_EXISTING);
     } catch (IOException io) {
         io.printStackTrace();
     }

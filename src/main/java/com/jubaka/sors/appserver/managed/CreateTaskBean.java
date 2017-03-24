@@ -9,6 +9,7 @@ import com.jubaka.sors.appserver.serverSide.ConnectionHandler;
 import com.jubaka.sors.appserver.service.BranchService;
 import com.jubaka.sors.desktop.sessions.API;
 import com.jubaka.sors.desktop.sessions.Branch;
+import org.primefaces.model.UploadedFile;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -39,7 +40,8 @@ public class CreateTaskBean {
     private String taskName;
     private String nodeName;
     private Long nodeId;
-    private Part upFilePart;
+    private UploadedFile upFilePart;
+
 
     public Long getNodeId() {
         return nodeId;
@@ -65,11 +67,11 @@ public class CreateTaskBean {
         this.taskName = taskName;
     }
 
-    public Part getUpFilePart() {
+    public UploadedFile getUpFilePart() {
         return upFilePart;
     }
 
-    public void setUpFilePart(Part upFilePart) {
+    public void setUpFilePart(UploadedFile upFilePart) {
         this.upFilePart = upFilePart;
     }
 

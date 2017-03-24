@@ -16,6 +16,7 @@ import com.jubaka.sors.beans.*;
 import com.jubaka.sors.beans.branch.*;
 import com.jubaka.sors.appserver.serverSide.bean.StreamTransportBean;
 import org.jfree.data.time.TimeSeries;
+import org.primefaces.model.UploadedFile;
 
 public class NodeServerEndpoint extends Observable implements EndpointInterface {
 
@@ -219,7 +220,7 @@ public class NodeServerEndpoint extends Observable implements EndpointInterface 
 	}
 
 	@Override
-	public   Integer createBranch(String byUser, Part filePart, String branchName) {
+	public   Integer createBranch(String byUser, UploadedFile filePart, String branchName) {
 		if  (checkConnection()==false) {
 			return -1;
 		}
@@ -231,7 +232,7 @@ public class NodeServerEndpoint extends Observable implements EndpointInterface 
 			command[0] = "createBranch_";
 			command[1] = Long.toString(fileLen) ;
 			command[2] = byUser;
-			command[3] = filePart.getName();
+			command[3] = filePart.getFileName();
 			command[4] = branchName;
 
 			Long requestId = random.nextLong();
@@ -245,7 +246,7 @@ public class NodeServerEndpoint extends Observable implements EndpointInterface 
 			Bean response = getResponse(requestId);
 
 			if (response.getObject().equals("getPcap")) {
-				InputStream fin = filePart.getInputStream();
+				InputStream fin = filePart.getInputstream();
 				long  counter = 0;
 				while (counter < fileLen) {
 					byte[] smallBuf;
