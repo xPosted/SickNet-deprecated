@@ -1,0 +1,149 @@
+.statisticTable {
+    display: inline-block;
+    color: #ACACAD;
+    width: 250px;
+    font-size: 12pt;;
+}
+.mainTableDiv {
+    margin-top: 10px;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+        
+.statisticTableTr {
+    display: inline-block;
+    width: 100%;
+    padding-top: 5px;
+    padding-right: 20px;
+    padding-bottom: 5px;
+    padding-left: 20px;
+    border-top: 1px solid black;
+}
+
+.statisticTableTd {
+    width: 100%;
+    text-align: justify;
+}
+
+.bodyContainer {
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+}
+
+.mainLogo_signed {
+    position: relative;
+    z-index: 9;
+    left: 925px;
+    width: 110px;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+.task_list_content{
+	display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-align-content: stretch;
+    -ms-flex-line-pack: stretch;
+    align-content: stretch;
+    -webkit-align-items: flex-start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+}
+.nodes_table{
+    -webkit-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+}
+.table{
+	margin: 0;
+}
+.ibox-content{
+	padding: 15px 20px;
+}
+.table_and_search{
+	-webkit-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+}
+.main_table > table > thead{
+	font-weight: bold;
+}
+.info_and_search{
+	display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-align-content: stretch;
+    -ms-flex-line-pack: stretch;
+    align-content: stretch;
+    -webkit-align-items: flex-start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+}
+.task_list_content > div{
+	margin: 10px;
+}
+.table_config{
+	margin-top: 43px !important;
+	position: relative;
+}
+
+#table_config > tbody > tr > td:nth-child(1) {
+	text-align: left;
+}
+.task_list__panelt{
+    font-size: 14px;
+	text-align: center;
+	vertical-align: middle;
+	height: 34px;
+    background-color: #fff;	
+    padding: 6px;
+    border: 1px solid #e5e6e7;
+    border-radius: 7px;
+}
+.search_by_name{
+	position: relative;
+}
+.task_list_widget{
+	margin-top: 34px;
+}
+.task_list_search_form__input {
+    border-radius: 7px 0 0 7px;
+    width: calc(100% - 35px);
+    z-index: 1;
+}
+.task_list_search_form__button {
+    z-index: 0;
+    border-radius: 0 7px 7px 0;
+    height: 34px;
+    top: 0px;
+    right: -2px;
+    position: absolute;
+}
+#hide_button{
+	position: absolute;
+	top: 15px;
+	left: -5px;
+}

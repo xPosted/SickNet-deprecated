@@ -6,7 +6,7 @@
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:p="http://primefaces.org/ui">
 
-<head>
+<h:head>
     <base href="http://localhost:8080/Sors_JSFDeveloping-1.0-SNAPSHOT/"/>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -17,6 +17,8 @@
     <link href="jsf/inspinia/font-awesome/css/font-awesome.css" rel="stylesheet"/>
     <link href="jsf/inspinia/css/animate.css" rel="stylesheet"/>
     <link href="jsf/inspinia/css/style.css" rel="stylesheet"/>
+    <link href="jsf/inspinia/css/TaskList.css" rel="stylesheet"/>
+    <link href="jsf/inspinia/css/NodesView.css" rel="stylesheet"/>
 
     <style type="text/css">
 
@@ -72,9 +74,9 @@
             z-index: 9;
         }
     </style>
-</head>
+</h:head>
 
-<body class="">
+<h:body>
 
 <div id="wrapper">
 
@@ -99,11 +101,11 @@
                             <li>
                                 <div class="dropdown-messages-box">
                                     <a href="profile.html" class="pull-left">
-                                        <img alt="image" class="img-circle" src="../img/a7.jpg">
+                                        <img alt="image" class="img-circle" src="../img/a7.jpg"></img>
                                     </a>
                                     <div class="media-body">
                                         <small class="pull-right">46h ago</small>
-                                        <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
+                                        <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br></br>
                                         <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
                                     </div>
                                 </div>
@@ -112,11 +114,11 @@
                             <li>
                                 <div class="dropdown-messages-box">
                                     <a href="profile.html" class="pull-left">
-                                        <img alt="image" class="img-circle" src="../img/a4.jpg">
+                                        <img alt="image" class="img-circle" src="../img/a4.jpg"></img>
                                     </a>
                                     <div class="media-body ">
                                         <small class="pull-right text-navy">5h ago</small>
-                                        <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
+                                        <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br></br>
                                         <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
                                     </div>
                                 </div>
@@ -125,11 +127,11 @@
                             <li>
                                 <div class="dropdown-messages-box">
                                     <a href="profile.html" class="pull-left">
-                                        <img alt="image" class="img-circle" src="../img/profile.jpg">
+                                        <img alt="image" class="img-circle" src="../img/profile.jpg"></img>
                                     </a>
                                     <div class="media-body ">
                                         <small class="pull-right">23h ago</small>
-                                        <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                                        <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br></br>
                                         <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
                                     </div>
                                 </div>
@@ -206,11 +208,11 @@
                             <div class="table_and_search">
                                 <div class="info_and_search">
                                     <div class="task_list__panelt">
-                                        Found <span class="badge">#{taskListBean.inMemoryCount}</span> captures on <span class="badge"> 1 </span> Nodes
+                                        Found <span class="badge">#{taskListBean.databaseCount}</span> captures on <span class="badge"> 1 </span> Nodes
                                     </div>
 
                                     <form action="#" class="search_by_name">
-                                        <input type="text" class="form-control task_list_search_form__input">
+                                        <input type="text" class="form-control task_list_search_form__input"></input>
                                         <button type="submit" class="btn btn-default fa fa-search task_list_search_form__button"></button>
                                     </form>
                                 </div>
@@ -227,9 +229,9 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <ui:repeat value="#{taskListBean.tasks}" var="bib">
+                                        <ui:repeat id="tableBody" value="#{taskListBean.dbTasks}" var="bib">
                                             <tr>
-                                                <td><a href="app/jsf/inspinia/content/AppView.xhtml?nodeId=#{bib.nodeId}&amp;taskId=#{bib.id}"> <span class="block" style=""> #{bib.branchName} </span></a></td>
+                                                <td><a href="app/jsf/inspinia/content/AppView.xhtml?dbtaskId=#{bib.dbid}"> <span class="block" style=""> #{bib.branchName} </span></a></td>
                                                 <td>
 
                                                     <span class="label label-primary">#{bib.subnetCount}</span>
@@ -318,15 +320,13 @@
                         <h2 class="text-center nodesView_modal__heading">Create Task</h2>
                         <div class="modal_content nodesView_modal">
 
-                            <h:form class="modal_main">
+                            <h:form enctype="multipart/form-data" styleClass="modal_main">
                                 <div class="modal_form_main">
                                     <div class="modal_main__inputs modal_Border_bottom">
-                                        <input type="text" class="nodesView_modal__buttom form-control NodesView_control" placeholder="Branch Name"> </input>
+                                        <p:inputText styleClass="nodesView_modal__buttom form-control NodesView_control" value="#{createTaskBean.taskName}" placeholder="BranchName"> </p:inputText>
                                         <div class="spase_between nodesView_modal__buttom">
                                             <p class="help-block">path/to/file.txt</p>
-                                            <span class="btn btn-primary btn-file">
-                                                Select <p:fileUpload id="file" value="#{createTaskBean.upFilePart}"></p:fileUpload>
-                                    </span>
+                                                 <p:fileUpload id="file" styleClass="btn btn-file" mode="simple" value="#{createTaskBean.upFilePart}">Select</p:fileUpload>
                                         </div>
 
                                     </div>
@@ -345,11 +345,11 @@
 
                                 <div class="modal_footer">
                                     <div class="spase_between">
-                                        <p:commandButton id="create" styleClass="btn btn-primary NodesView_control" action="#{createTaskBean.upload()}">Create</p:commandButton>
+                                        <p:commandButton id="create" ajax="false" styleClass="btn btn-primary" action="#{createTaskBean.upload()}" value="Create" update="tableBody"></p:commandButton>
                                         <button id="cancel" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                     </div>
                                 </div>
-                            </h:form>>
+                            </h:form>
                         </div>
                     </div>
                 </div>
@@ -359,7 +359,7 @@
                     10GB of <strong>250GB</strong> Free.
                 </div>
                 <div>
-                    <strong>Copyright</strong> Example Company &copy; 2014-2015
+                    <strong>Copyright</strong> Example Company &amp;copy; 2014-2015
                 </div>
             </div>
 
@@ -368,7 +368,7 @@
 </div>
 
 <!-- Mainly scripts -->
-<script src="jsf/inspinia/js/jquery-2.1.1.js"></script>
+<!--<script src="jsf/inspinia/js/jquery-2.1.1.js"></script> -->
 <script src="jsf/inspinia/js/bootstrap.min.js"></script>
 <script src="jsf/inspinia/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 <script src="jsf/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
@@ -376,8 +376,8 @@
 <!-- Custom and plugin javascript -->
 <script src="jsf/inspinia/js/inspinia.js"></script>
 <script src="jsf/inspinia/js/plugins/pace/pace.min.js"></script>
+    <script src="jsf/inspinia/js/custom/TaskList.js"></script>
 
-
-</body>
+</h:body>
 
 </html>

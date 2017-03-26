@@ -1,5 +1,8 @@
 package com.jubaka.sors.appserver.entities;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +42,7 @@ public class Session {
     private List<HttpRequest> requestList;
 
     @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<HttpResponse> responseList;
 
     public Date getClosed() {

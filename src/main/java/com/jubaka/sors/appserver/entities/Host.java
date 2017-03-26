@@ -1,5 +1,8 @@
 package com.jubaka.sors.appserver.entities;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -32,6 +35,7 @@ public class Host {
     private List<Session> sessionsInput;
 
     @OneToMany(mappedBy = "srcHost", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<Session> sessionsOutput;
 
 
