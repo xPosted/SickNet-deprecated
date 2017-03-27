@@ -1,0 +1,306 @@
+* {
+    max-height: inherit;
+}
+
+.large_numbers{
+	font-weight: 600;
+	font-size: 16px;
+}
+.mb10{margin-bottom: 10px;}
+.border_1{border-top: 1px;}
+.ip_in_out{margin-top: -5px;}
+.ipInfo_title_in_out{
+	margin-top: 5px;
+}
+.widget{margin-top: 0;}
+.info_body__table{
+	font-weight: 600;
+	margin-top: 10px;
+	width: 50%;
+}
+
+.info_body__table_nochart{						<!-- jubaka -->
+	font-weight: 600;
+	margin-top: 10px;
+}
+
+#subnetInfoBody{padding: 15px 20px;}
+#ipInfoTitle{
+	display: none;
+	height: 60px;
+}
+#ipInfoBody .table,
+#subnetInfoBody .table{margin-bottom: 0;}
+.filter_button_ip{
+	font-family: Verdana;
+	font-size: 11pt; 
+	display: inline-block; 
+}
+.title_sort{
+	text-align: right;
+	margin: -12px -5px 5px 0px;
+	padding: 14px 15px 7px;
+	padding-bottom: 7px;
+}
+#filterView{margin-top: 27px;}
+#filterViewDirect > .ibox-content{padding-top: 15px;}
+#subnetInfoTitle{display: none;}
+.large_ip{
+	font-size: 21px;
+	font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: 500;
+	padding-left: 5px;
+}
+#subnetList{
+	display: none; 
+	padding: 0px 10px 0px 0px; 
+	position: absolute; 
+	z-index: 4;
+}
+.vcenter{
+	display: inline-block;
+	margin-top: 9px;
+}
+.header__info{
+	font-size: 12px;
+}
+#sel1{
+	border: none;
+	padding: 6px 9px;
+	text-align: right;
+}
+#grapth{
+	text-align: center;
+	line-height: 2;
+}
+#flot-line-chart-moving{
+	width: calc(100% + 40px);
+	top: -20px;
+	left: -20px;
+	height: 110%;
+}
+#flot-line-chart-moving2{
+	top: 0;
+    right: 35px;
+    width: calc(100% + 50px);
+    height: 110%;
+}
+.select_ip{
+	padding: 10px 2px 10px 2px; 
+	text-align: center;
+	text-align: right;
+}
+.select_ip > span{
+	font-size: 21px;
+}
+.select_ip__button{
+	padding-top: 2px;
+	height: 20px; 
+	width: 20px;
+}
+.select_ip__button > i{
+	font-size: 15px;
+}
+.filter_ip_info_clors{
+	margin-top: 1px;
+	display: inline-block; 
+	text-align: right;
+}
+.filter_ip_info_clors > span{
+	padding: 2px;
+	color: #ebebed;
+}
+.filter_ip_info_clors > span:nth-child(1){
+	background-color: #0d8ddb;
+}
+.filter_ip_info_clors > span:nth-child(2){
+	background-color: #1ab394;
+}
+.filter_ip_info_clors > span:nth-child(3){
+	background-color: #009900;
+}
+.filter_view > .filter_ip_info_clors,
+.filter_view{
+	display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-align-content: flex-end;
+    -ms-flex-line-pack: end;
+    align-content: flex-end;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    text-align: center;
+}
+.filter_view{
+	margin: 2px;
+	padding: 5px;
+}
+.filter_view > .filter_ip_info_clors > span{
+	margin: 2px;
+}
+.filter_view .filter_button_ip{
+	display: block;
+	-webkit-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+}
+.filter_view__site{
+	font-family: Verdana; 
+	font-size: 11pt; 
+	display: inline-block;
+}
+.filter_view__dDown_info{
+	display: block;
+	margin: 2px;
+}
+.buttons_sort{
+	padding: 4px 12px;
+	margin-top: -3px;
+}
+.sort_ip{
+	padding: 15px 5px 10px 0px;
+}
+
+
+.modal__table{
+	margin-left: 8%;
+	background-color: transparent;
+	width: 92%;
+	max-width: 92%;
+	overflow-wrap: normal;
+	word-wrap: normal;
+	table-layout: fixed;
+}
+.modal__table > tbody{
+	width: 92%;
+}
+.modal__table > tbody > tr > td{
+	 word-wrap: break-word;
+}
+.modal__table > tbody > tr > td:nth-child(1){
+	width: 10%;
+}
+.table-hover>tbody>tr:hover {
+    background-color: #fff;
+}
+#visiblePart{position:relative;}
+#frame_visiblePart{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index: -1;
+}
+.ibox-title{min-height: 0;}
+.search_ip__form{
+	position: relative;
+	padding: 0 5px; 
+	width: calc(100% - 24px); 	
+}
+.to_search_ip{ 
+	padding: 0;
+	position: absolute;
+	width: 30px;
+	height: 34px;
+	border-radius: 3px;
+	right: -24px;
+	border: none;
+}
+.to_search_ip > button{
+    border-radius: 0 3px 3px 0;
+	padding: 0;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+}
+.ip_and_adress{
+	padding-top: 10px;
+	padding-bottom: 5px;
+	margin-left: -10px;
+}
+.ip_and_adress > h3{
+	font-size: 14px;
+}
+.buttons_state{
+	width: 100%;
+}
+.buttons_state > .btn-group{
+	width: 100%;
+	margin-bottom: 1px;
+}
+.buttons_state > .btn-group > label{
+	border-radius: 4px !important;
+	width: calc(50% - 4px);
+}
+#sessionViewGrid{
+	margin-top: 5px;
+	font-size:11pt; 
+	width:100%; 
+	height: 100%;
+}
+.no-bottom-border{border-bottom: none !important;}
+.vertical_center {
+	display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-flex-wrap: nowrap;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-align-content: center;
+    -ms-flex-line-pack: center;
+    align-content: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+
+.mainLogo_signed {
+    position: relative;
+    left: 925px;
+    width: 110px;
+    padding: 0;
+    margin: 0;
+    z-index: 9;
+}
+
+.nodeTable {
+    width: 100%;
+}
+
+.closeIcon {
+    visibility: hidden;
+    border-radius: 50;
+    border: 0;
+}
+
+table.nodeTable td {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid black;
+}
+
+table.nodeTable th {
+    text-align: center;
+    padding: 10px;
+}
+
+
+
