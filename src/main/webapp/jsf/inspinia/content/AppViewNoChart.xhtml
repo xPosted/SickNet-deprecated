@@ -360,7 +360,7 @@
                                 <div class="form-group">
                                     <div style="background-color: #e6e6e6;"  class="select_ip">                    <!-- jubaka -->
                                         <h:panelGroup id="selectedSubnetAddr">
-                                            <span  id="change_text_select">#{taskViewBean.selectedSubnetAddr}</span>
+                                            <span>#{taskViewBean.selectedSubnetAddr}</span>
                                         </h:panelGroup>
 
                                         <button id="showSelect" class="select_ip__button btn btn-default btn-circle">
@@ -372,8 +372,9 @@
                                     <h:form>
                                         <ui:repeat value="#{taskViewBean.getSubnetList()}" var="subnetBean">
                                             <p:commandButton styleClass="block full-width btn btn-default select_ip__value" value="#{subnetBean.subnet.getHostName()}"
-                                                             action="#{taskViewBean.selectSubnet(subnetBean.getSubnet().getHostName())}">
-                                                <f:ajax render="subnetPanHeader subnetInfo onlineIpList allIpList"/>
+                                                             action="#{taskViewBean.selectSubnet(subnetBean.getSubnet().getHostName())}"
+                                                             update="selectedSubnetAddr subnetPanHeader subnetInfo onlineIpList allIpList">
+
                                             </p:commandButton>
                                         </ui:repeat>
 
@@ -451,7 +452,7 @@
                                                    var="ipBean">
                                             <li class="list-group-item no-padding">
                                                 <h:form>
-                                                    <p:commandButton actionListener="#{taskViewBean.selectIp(ipBean.ip)}"
+                                                    <p:commandLink actionListener="#{taskViewBean.selectIp(ipBean.ip)}"
                                                                      styleClass="text-center btn btn-default full-width full-height"
                                                                      update="ipInfo ipInfoHeader sessionList jsf_filterView"
                                                                      oncomplete="updateEventListeners();">
@@ -461,7 +462,7 @@
                                                             <span>#{ipBean.inputCount} / #{ipBean.outputCount}</span>
                                                             <span>#{ipBean.activeCount}</span>
                                                         </div>
-                                                    </p:commandButton>
+                                                    </p:commandLink>
                                                 </h:form>
                                             </li>
                                         </ui:repeat>
@@ -482,7 +483,7 @@
                                                    var="ipBean">
                                             <li class="list-group-item no-padding">
                                                 <h:form>
-                                                    <p:commandButton actionListener="#{taskViewBean.selectIp(ipBean.ip)}"
+                                                    <p:commandLink actionListener="#{taskViewBean.selectIp(ipBean.ip)}"
                                                                      styleClass="text-center btn btn-default full-width full-height"
                                                                      update="ipInfo ipInfoHeader sessionList jsf_filterView"
                                                                      oncomplete="updateEventListeners();">
@@ -492,7 +493,7 @@
                                                             <span>#{ipBean.inputCount} / #{ipBean.outputCount}</span>
                                                             <span>#{ipBean.activeCount}</span>
                                                         </div>
-                                                    </p:commandButton>
+                                                    </p:commandLink>
                                                 </h:form>
                                             </li>
                                         </ui:repeat>
@@ -654,7 +655,7 @@
                                                 </div>
                                             </a>
                                             <p:commandLink action="#{taskViewBean.setSelectedCat(category)}"
-                                            update="sessionList">
+                                            update="sessionList" oncomplete="buildFoo();">
 
                                                 <div class="col-md-11 active ibox-title no-borders no-padding btn-default">
                                                     <div class="filter_view">
@@ -676,7 +677,7 @@
                                                 <div style="display: none;" class="ibox-content gray-bg no-padding">
                                                     <p:commandLink styleClass="ibox filter_view__dDown_info"
                                                             actionListener="#{taskViewBean.setSelectedCat(subCat)}"
-                                                            update="sessionList">
+                                                            update="sessionList" oncomplete="buildFoo();">
 
                                                         <div class="filter_view">
                                                             <span class="filter_button_ip">#{subCat.name}</span>
@@ -736,28 +737,28 @@
                                 <h:form>
                                 <div class="btn-group" data-toggle="buttons">
 
-                                    <p:commandButton action="#{taskViewBean.changeActiveFilter()}"
+                                    <p:commandLink action="#{taskViewBean.changeActiveFilter()}"
                                                      update="sessionFilterBlock sessionList"
                                                      styleClass="btn btn-default active">
                                         <input type="checkbox" />  Active
-                                    </p:commandButton>
-                                    <p:commandButton action="#{taskViewBean.changeSavedFilter()}"
+                                    </p:commandLink>
+                                    <p:commandLink action="#{taskViewBean.changeSavedFilter()}"
                                                      update="sessionFilterBlock sessionList"
                                                      styleClass="btn btn-default">
                                         <input type="checkbox" />  Saved
-                                    </p:commandButton>
+                                    </p:commandLink>
                                 </div>
                                 <div class="btn-group" data-toggle="buttons">
-                                    <p:commandButton action="#{taskViewBean.changeInFilter()}"
+                                    <p:commandLink action="#{taskViewBean.changeInFilter()}"
                                                      update="sessionFilterBlock sessionList"
                                                      styleClass="btn btn-default active">
                                         <input type="checkbox" />  Input
-                                    </p:commandButton>
-                                    <p:commandButton action="#{taskViewBean.changeOutFilter()}"
+                                    </p:commandLink>
+                                    <p:commandLink action="#{taskViewBean.changeOutFilter()}"
                                                      update="sessionFilterBlock sessionList"
                                                      styleClass="btn btn-default">
                                         <input type="checkbox" />  Output
-                                    </p:commandButton>
+                                    </p:commandLink>
                                 </div>
                                 </h:form>
                             </h:panelGroup>
@@ -927,10 +928,11 @@
 
 <script>
     $(document).ready(function() {
-
-        $('.footable').footable();
-
+        buildFoo();
     });
+    function buildFoo() {
+        $('.footable').footable();
+    }
 
 </script>
 

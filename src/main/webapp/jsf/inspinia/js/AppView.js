@@ -135,11 +135,6 @@ $('.select_ip__value').click(function(){
 	$('#showSelect')
 })
 
-$('#subnetList').click(function() {
-theEl= $(event.target).text();
-$('#change_text_select').text(theEl);
-});
-
 $(window).resize(function(){
 	resizeBody();
 })
