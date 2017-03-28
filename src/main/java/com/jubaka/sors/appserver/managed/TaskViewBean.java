@@ -266,7 +266,12 @@ public class TaskViewBean implements Serializable, Observer {
             ipBean =  nodeServerEndpoint.getIpItemBean(blb.getBib().getId(),address,true);
             nodeServerEndpoint.addObserver(this);
         }
-        //refreshFilter(null);
+
+        refreshFilters();
+
+    }
+
+    public void refreshFilters() {
         if (filters.size()>0)
             refreshFiltersNew(getSelectedIp(),null,filters.get(0));
     }
@@ -763,6 +768,41 @@ public class TaskViewBean implements Serializable, Observer {
         return true;
     }
 
+
+    public boolean isHostCategorised() {
+        SmartFilter mainFilter = filters.get(0);
+
+        if (mainFilter != null) {
+            if (mainFilter instanceof HostSessionFilter) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isPortCategorised() {
+        SmartFilter mainFilter = filters.get(0);
+
+        if (mainFilter != null) {
+            if (mainFilter instanceof PortSessionFilter) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setHostPortCategorised() {
+        filters.clear();
+        filters.add(new HostSessionFilter());
+        filters.add(new PortSessionFilter(portService));
+        refreshFilters();
+    }
+    public void setPortHostCategorised() {
+        filters.clear();
+        filters.add(new PortSessionFilter(portService));
+        filters.add(new HostSessionFilter());
+        refreshFilters();
+    }
 
 
     public void addHostFilter() {

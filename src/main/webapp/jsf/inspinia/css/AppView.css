@@ -141,10 +141,7 @@
     align-items: center;
     text-align: center;
 }
-.filter_view{
-	margin: 2px;
-	padding: 5px;
-}
+
 .filter_view > .filter_ip_info_clors > span{
 	margin: 2px;
 }

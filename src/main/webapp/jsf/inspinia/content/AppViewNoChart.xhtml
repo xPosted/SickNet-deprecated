@@ -455,7 +455,7 @@
                                                     <p:commandLink actionListener="#{taskViewBean.selectIp(ipBean.ip)}"
                                                                      styleClass="text-center btn btn-default full-width full-height"
                                                                      update="ipInfo ipInfoHeader sessionList jsf_filterView"
-                                                                     oncomplete="updateEventListeners();">
+                                                                     oncomplete="updateEventListeners(); buildFoo();">
                                                         <span class="filter_button_ip pull-left">#{ipBean.getIp()}</span>                <!-- pull-left jubaka -->
                                                         <div class="filter_ip_info_clors pull-right">
                                                             <span>#{taskViewBean.longToStr(ipBean.dataUp)} / #{taskViewBean.longToStr(ipBean.dataDown)}</span>
@@ -486,7 +486,7 @@
                                                     <p:commandLink actionListener="#{taskViewBean.selectIp(ipBean.ip)}"
                                                                      styleClass="text-center btn btn-default full-width full-height"
                                                                      update="ipInfo ipInfoHeader sessionList jsf_filterView"
-                                                                     oncomplete="updateEventListeners();">
+                                                                     oncomplete="updateEventListeners(); buildFoo();">
                                                         <span class="filter_button_ip pull-left">#{ipBean.getIp()}</span>                <!-- pull-left jubaka -->
                                                         <div class="filter_ip_info_clors pull-right">
                                                             <span>#{taskViewBean.longToStr(ipBean.dataUp)} / #{taskViewBean.longToStr(ipBean.dataDown)}</span>
@@ -629,12 +629,19 @@
                         <div class="title_sort">
                             <span>Сортировать по:</span>
                             <div class="btn-group mb10" data-toggle="buttons">
-                                <label class="btn btn-default active buttons_sort">
-                                    <input type="radio" name="options1" id="option1"/> Хостам
-                                </label>
-                                <label class="btn btn-default buttons_sort">
-                                    <input type="radio" name="options2" id="option2"/> Портам
-                                </label>
+                                <h:form>
+                                    <p:commandLink styleClass="btn btn-default buttons_sort #{taskViewBean.isHostCategorised() ? 'active' : ''}"
+                                                   action="#{taskViewBean.setHostPortCategorised()}" update="jsf_filterView"
+                                                    oncomplete="updateEventListeners();">
+                                         Хостам
+                                    </p:commandLink>
+                                    <p:commandLink styleClass="btn btn-default buttons_sort #{taskViewBean.isPortCategorised() ? 'active' : ''}"
+                                                   action="#{taskViewBean.setPortHostCategorised()}" update="jsf_filterView"
+                                                   oncomplete="updateEventListeners();">
+                                         Портам
+                                    </p:commandLink>
+                                </h:form>
+
                             </div>
                             <div class="input-group search_ip__form">
                                 <input type="text" class="form-control" placeholder="Search"/>
@@ -649,7 +656,7 @@
                                     <ui:repeat id="catsBlock" value="#{taskViewBean.categories}" var="category">
 
                                         <div style="margin-bottom: 10px;" class="ibox no-padding fa-border row">
-                                            <a class="collapse-link" ondblclick="console.log('niga');">
+                                            <a class="collapse-link">
                                                 <div class="col-md-1 no-padding" style="text-align: center; font-size: 20px;">
                                                     <i class="fa fa-plus-square-o"></i>
                                                 </div>
@@ -657,7 +664,7 @@
                                             <p:commandLink action="#{taskViewBean.setSelectedCat(category)}"
                                             update="sessionList" oncomplete="buildFoo();">
 
-                                                <div class="col-md-11 active ibox-title no-borders no-padding btn-default">
+                                                <div style="padding: 2px;" class="col-md-11 ibox-title no-borders no-padding btn-default">
                                                     <div class="filter_view">
                                                         <span class="filter_button_ip">#{category.name}</span>
                                                         <div class="filter_ip_info_clors">
@@ -710,8 +717,8 @@
                 </div>
             </div>
 
-            <div class="col-md-6 widget no-padding">
-                <div class="ibox no-margins">
+            <div class="col-md-6 widget no-padding full-height">
+                <div class="ibox no-margins full-height">
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -739,24 +746,28 @@
 
                                     <p:commandLink action="#{taskViewBean.changeActiveFilter()}"
                                                      update="sessionFilterBlock sessionList"
-                                                     styleClass="btn btn-default active">
+                                                     styleClass="btn btn-default #{taskViewBean.sessionActiveFilter ? 'active' : ''}"
+                                                        oncomplete="buildFoo();">
                                         <input type="checkbox" />  Active
                                     </p:commandLink>
                                     <p:commandLink action="#{taskViewBean.changeSavedFilter()}"
                                                      update="sessionFilterBlock sessionList"
-                                                     styleClass="btn btn-default">
+                                                     styleClass="btn btn-default #{taskViewBean.sessionSavedFilter ? 'active' : ''}"
+                                                   oncomplete="buildFoo();">
                                         <input type="checkbox" />  Saved
                                     </p:commandLink>
                                 </div>
                                 <div class="btn-group" data-toggle="buttons">
                                     <p:commandLink action="#{taskViewBean.changeInFilter()}"
                                                      update="sessionFilterBlock sessionList"
-                                                     styleClass="btn btn-default active">
+                                                     styleClass="btn btn-default #{taskViewBean.sessionInFilter ? 'active' : ''}"
+                                                   oncomplete="buildFoo();">
                                         <input type="checkbox" />  Input
                                     </p:commandLink>
                                     <p:commandLink action="#{taskViewBean.changeOutFilter()}"
                                                      update="sessionFilterBlock sessionList"
-                                                     styleClass="btn btn-default">
+                                                     styleClass="btn btn-default #{taskViewBean.sessionOutFilter ? 'active' : ''}"
+                                                   oncomplete="buildFoo();">
                                         <input type="checkbox" />  Output
                                     </p:commandLink>
                                 </div>
