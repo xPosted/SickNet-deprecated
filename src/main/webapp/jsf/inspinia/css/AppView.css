@@ -42,7 +42,10 @@
 	padding: 14px 15px 7px;
 	padding-bottom: 7px;
 }
-#filterView{margin-top: 27px;}
+#filterView{
+	margin-top: 27px;
+	padding: 4px;
+}
 #filterViewDirect > .ibox-content{padding-top: 15px;}
 #subnetInfoTitle{display: none;}
 .large_ip{
@@ -224,8 +227,8 @@
 .ip_and_adress{
 	padding-top: 10px;
 	padding-bottom: 5px;
-	margin-left: -10px;
 }
+
 .ip_and_adress > h3{
 	font-size: 14px;
 }
@@ -299,5 +302,10 @@ table.nodeTable th {
     padding: 10px;
 }
 
+
+.smallerColPadding {
+	padding-right: 4px;
+	padding-left: 4px;
+}
 
 
