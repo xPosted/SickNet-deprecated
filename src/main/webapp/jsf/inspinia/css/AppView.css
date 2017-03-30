@@ -38,7 +38,7 @@
 }
 .title_sort{
 	text-align: right;
-	margin: -12px -5px 5px 0px;
+	margin: 0px -5px 5px 0px;
 	padding: 14px 15px 7px;
 	padding-bottom: 7px;
 }
@@ -168,7 +168,7 @@
 	margin-top: -3px;
 }
 .sort_ip{
-	padding: 15px 5px 10px 0px;
+	padding: 0px 5px 10px 0px;
 }
 
 
@@ -234,6 +234,7 @@
 }
 .buttons_state{
 	width: 100%;
+	border-bottom: groove;
 }
 .buttons_state > .btn-group{
 	width: 100%;

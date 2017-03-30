@@ -58,31 +58,31 @@ public class SessionEntitiesCreator {
             chart.setDstDataTime(sesBean.getDstDataTimeBinding());
 
             entity.setChartData(chart);
-            entity.setRequestList(getHttpRequestList(sesBean.getHttpBuf()));
-            entity.setResponseList(getHttpResponseList(sesBean.getHttpBuf()));
+            entity.setRequestList(getHttpRequestList(entity, sesBean));
+            entity.setResponseList(getHttpResponseList(entity,sesBean));
 
     }
 
-    private List<HttpRequest> getHttpRequestList(List<HTTP> https) {
+    private List<HttpRequest> getHttpRequestList(Session entity, SessionBean sesBean) {
         Integer counter = 0;
         List<HttpRequest> requests = new ArrayList<>();
-        for (HTTP http : https) {
+        for (HTTP http : sesBean.getHttpBuf()) {
             if (http instanceof HTTPRequest) {
                 HTTPRequest req = (HTTPRequest) http;
-                requests.add(HttpRequestService.prepareEntity(req,counter));
+                requests.add(HttpRequestService.prepareEntity(req,counter,entity));
             }
             counter++;
         }
         return requests;
     }
 
-    private List<HttpResponse> getHttpResponseList(List<HTTP> https) {
+    private List<HttpResponse> getHttpResponseList(Session entity, SessionBean sesBean) {
         Integer counter = 0;
         List<HttpResponse> responses = new ArrayList<>();
-        for (HTTP http : https) {
+        for (HTTP http : sesBean.getHttpBuf()) {
             if (http instanceof HTTPResponse) {
                 HTTPResponse resp = (HTTPResponse) http;
-                responses.add(HttpResponseService.prepareEntity(resp,counter));
+                responses.add(HttpResponseService.prepareEntity(resp,counter, entity));
 
             }
             counter++;

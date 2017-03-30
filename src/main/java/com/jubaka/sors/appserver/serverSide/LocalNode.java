@@ -67,7 +67,6 @@ public class LocalNode implements EndpointInterface {
         io.printStackTrace();
     }
 
-
         int branchId = localFactory.createBranch(byUser,branchName,dumpPath,null,null);
         Branch newBr = localFactory.getBranch(branchId);
         newBr.startCapture(null);

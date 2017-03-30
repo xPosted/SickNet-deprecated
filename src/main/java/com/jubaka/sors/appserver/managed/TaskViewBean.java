@@ -18,6 +18,8 @@ import javax.inject.Named;
 import javax.websocket.Session;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -280,6 +282,7 @@ public class TaskViewBean implements Serializable, Observer {
         Branch b =  branchService.selectById(dbtaskId);
         blb = branchService.castToBean(b);
 
+        categories.clear();
         ipBean = null;
         sbl = null;
         onlineIps.clear();
@@ -815,6 +818,18 @@ public class TaskViewBean implements Serializable, Observer {
         filters.add(new PortSessionFilter(portService));
      //   refreshFilter(null);
         System.out.println(" add fileter");
+    }
+    public String getDnsNameIfNotEquals(String ip) {
+        try{
+
+        String dns = InetAddress.getByName(ip).getHostName();
+        if (!dns.equals(ip)) {
+            return dns;
+        }
+        } catch (UnknownHostException un) {
+            un.printStackTrace();
+        }
+        return "";
     }
 
 

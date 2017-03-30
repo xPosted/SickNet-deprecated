@@ -68,7 +68,7 @@
     <script src="jsf/inspinia/js/plugins/chartJs/Chart.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="loader.js"></script>
 </h:head>
-<h:body styleClass="fixed-navigation">
+<h:body styleClass="top-navigation">
     <h:inputHidden id="sessionId" value="#{taskViewBean.sessionId}"/>
     <h:form>
         <p:remoteCommand name="updateSubnetInfo"
@@ -83,141 +83,67 @@
 
 
 <div id="wrapper">
-    <nav class="navbar-default navbar-static-side" role="navigation">
-        <div class="sidebar-collapse">
-            <ul class="nav metismenu" id="side-menu">
-                <li class="nav-header">
-                    <div class="dropdown profile-element"> <span>
-                            <img alt="image" class="img-circle" src="../img/profile_small.jpg" />
-                             </span>
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">David Williams</strong>
-                             </span> <span class="text-muted text-xs block">Art Director <b class="caret"></b></span> </span> </a>
-                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li><a href="../profile.html">Profile</a></li>
-                            <li><a href="../contacts.html">Contacts</a></li>
-                            <li><a href="../mailbox.html">Mailbox</a></li>
-                            <li class="divider"></li>
-                            <li><a href="../login.html">Logout</a></li>
-                        </ul>
-                    </div>
-                    <div class="logo-element">
-                        IN+
-                    </div>
-                </li>
-                <li class="active">
-                    <a href="../index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboards</span> <span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
-                        <li><a href="../index.html">Dashboard v.1</a></li>
-                        <li><a href="../dashboard_2.html">Dashboard v.2</a></li>
-                        <li class="active"><a href="../dashboard_3.html">Dashboard v.3</a></li>
-                        <li><a href="../dashboard_4_1.html">Dashboard v.4</a></li>
-                        <li><a href="../dashboard_5.html">Dashboard v.5 <span class="label label-primary pull-right">NEW</span></a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="../layouts.html"><i class="fa fa-diamond"></i> <span class="nav-label">Layouts</span></a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Graphs</span><span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level collapse">
-                        <li><a href="../graph_flot.html">Flot Charts</a></li>
-                        <li><a href="../graph_morris.html">Morris.js Charts</a></li>
-                        <li><a href="../graph_rickshaw.html">Rickshaw Charts</a></li>
-                        <li><a href="../graph_chartjs.html">Chart.js</a></li>
-                        <li><a href="../graph_chartist.html">Chartist</a></li>
-                        <li><a href="../c3.html">c3 charts</a></li>
-                        <li><a href="../graph_peity.html">Peity Charts</a></li>
-                        <li><a href="../graph_sparkline.html">Sparkline Charts</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="../mailbox.html"><i class="fa fa-envelope"></i> <span class="nav-label">Mailbox </span><span class="label label-warning pull-right">16/24</span></a>
-                    <ul class="nav nav-second-level collapse">
-                        <li><a href="../mailbox.html">Inbox</a></li>
-                        <li><a href="../mail_detail.html">Email view</a></li>
-                        <li><a href="../mail_compose.html">Compose email</a></li>
-                        <li><a href="../email_template.html">Email templates</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="../metrics.html"><i class="fa fa-pie-chart"></i> <span class="nav-label">Metrics</span>  </a>
-                </li>
-                <li>
-                    <a href="../widgets.html"><i class="fa fa-flask"></i> <span class="nav-label">Widgets</span></a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">Forms</span><span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level collapse">
-                        <li><a href="../form_basic.html">Basic form</a></li>
-                        <li><a href="../form_advanced.html">Advanced Plugins</a></li>
-                        <li><a href="../form_wizard.html">Wizard</a></li>
-                        <li><a href="../form_file_upload.html">File Upload</a></li>
-                        <li><a href="../form_editors.html">Text Editor</a></li>
-                        <li><a href="../form_markdown.html">Markdown</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-desktop"></i> <span class="nav-label">App Views</span>  <span class="pull-right label label-primary">SPECIAL</span></a>
-                    <ul class="nav nav-second-level collapse">
-                        <li><a href="../contacts.html">Contacts</a></li>
-                        <li><a href="../profile.html">Profile</a></li>
-                        <li><a href="../profile_2.html">Profile v.2</a></li>
-                        <li><a href="../contacts_2.html">Contacts v.2</a></li>
-                        <li><a href="../projects.html">Projects</a></li>
-                        <li><a href="../project_detail.html">Project detail</a></li>
-                        <li><a href="../teams_board.html">Teams board</a></li>
-                        <li><a href="../social_feed.html">Social feed</a></li>
-                        <li><a href="../clients.html">Clients</a></li>
-                        <li><a href="../full_height.html">Outlook view</a></li>
-                        <li><a href="../vote_list.html">Vote list</a></li>
-                        <li><a href="../file_manager.html">File manager</a></li>
-                        <li><a href="../calendar.html">Calendar</a></li>
-                        <li><a href="../issue_tracker.html">Issue tracker</a></li>
-                        <li><a href="../blog.html">Blog</a></li>
-                        <li><a href="../article.html">Article</a></li>
-                        <li><a href="../faq.html">FAQ</a></li>
-                        <li><a href="../timeline.html">Timeline</a></li>
-                        <li><a href="../pin_board.html">Pin board</a></li>
-                    </ul>
-                </li>
 
-                <li>
-                    <a href="../css_animation.html"><i class="fa fa-magic"></i> <span class="nav-label">CSS Animations </span><span class="label label-info pull-right">62</span></a>
-                </li>
-                <li class="landing_link">
-                    <a target="_blank" href="../landing.html"><i class="fa fa-star"></i> <span class="nav-label">Landing Page</span> <span class="label label-warning pull-right">NEW</span></a>
-                </li>
-                <li class="special_link">
-                    <a href="../package.html"><i class="fa fa-database"></i> <span class="nav-label">Package</span></a>
-                </li>
-            </ul>
-
-        </div>
-    </nav>
-    <div id="page-wrapper" class="gray-bg sidebar-content">
-        <div class="row border-bottom ">
-            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom white-bg">
+            <nav class="navbar navbar-static-top" role="navigation">
                 <div class="navbar-header">
-                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary "><i class="fa fa-bars"></i> </a>
+                    <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+                        <i class="fa fa-reorder"></i>
+                    </button>
+                    <a href="#" class="navbar-brand">Inspinia</a>
                 </div>
-                <ul class="nav navbar-nav">
-                    <li><a href="#" class="large_numbers border-left">SORS</a></li>
-                    <li><a href="#" class="large_numbers border-left">Node Name</a></li>
-                    <li><a href="#" class="large_numbers border-left-right">Branch Name</a></li>
-                </ul>
-                <ul class="nav navbar-top-links navbar-right">
-                    <li>
-                        <span class="m-r-sm text-muted welcome-message">Welcome to INSPINIA+ Admin Theme.</span>
-                    </li>
+                <div class="navbar-collapse collapse" id="navbar">
+                    <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a aria-expanded="false" role="button" href="layouts.html"> Back to main Layout page</a>
+                        </li>
+                        <li class="dropdown">
+                            <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> Menu item <span class="caret"></span></a>
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a href="">Menu item</a></li>
+                                <li><a href="">Menu item</a></li>
+                                <li><a href="">Menu item</a></li>
+                                <li><a href="">Menu item</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> Menu item <span class="caret"></span></a>
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a href="">Menu item</a></li>
+                                <li><a href="">Menu item</a></li>
+                                <li><a href="">Menu item</a></li>
+                                <li><a href="">Menu item</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> Menu item <span class="caret"></span></a>
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a href="">Menu item</a></li>
+                                <li><a href="">Menu item</a></li>
+                                <li><a href="">Menu item</a></li>
+                                <li><a href="">Menu item</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> Menu item <span class="caret"></span></a>
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a href="">Menu item</a></li>
+                                <li><a href="">Menu item</a></li>
+                                <li><a href="">Menu item</a></li>
+                                <li><a href="">Menu item</a></li>
+                            </ul>
+                        </li>
 
-                    <li>
-                        <a class="smallerColPadding" href="../login.html">
-                            <i class="fa fa-sign-out"></i> Log out
-                        </a>
-                    </li>
-                </ul>
-
+                    </ul>
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li>
+                            <a href="login.html">
+                                <i class="fa fa-sign-out"></i> Log out
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </nav>
         </div>
         <div id="visiblePart" class="row">
@@ -530,21 +456,57 @@
                         </a>
                     </div>
                     <div id="sort_ip_body_collapse" class="ibox-content sort_ip">
+                        <h:panelGroup layout="block" id="sessionFilterBlock" styleClass="buttons_state">
+
+                                <div class="btn-group col-md-6 col-sm-6 no-padding" data-toggle="buttons">
+                                    <h:form>
+                                    <p:commandLink action="#{taskViewBean.changeActiveFilter()}"
+                                                   update="sessionFilterBlock sessionList"
+                                                   styleClass="btn btn-default #{taskViewBean.sessionActiveFilter ? 'active' : ''}"
+                                                   oncomplete="buildFoo();">
+                                        <input type="checkbox" />  Active
+                                    </p:commandLink>
+                                    <p:commandLink action="#{taskViewBean.changeSavedFilter()}"
+                                                   update="sessionFilterBlock sessionList"
+                                                   styleClass="btn btn-default #{taskViewBean.sessionSavedFilter ? 'active' : ''}"
+                                                   oncomplete="buildFoo();">
+                                        <input type="checkbox" />  Saved
+                                    </p:commandLink>
+                                    </h:form>
+                                </div>
+                                <div class="btn-group col-md-5 col-sm-5 no-padding" data-toggle="buttons">
+                                    <h:form>
+                                    <p:commandLink action="#{taskViewBean.changeInFilter()}"
+                                                   update="sessionFilterBlock sessionList"
+                                                   styleClass="btn btn-default #{taskViewBean.sessionInFilter ? 'active' : ''}"
+                                                   oncomplete="buildFoo();">
+                                        <input type="checkbox" />  Input
+                                    </p:commandLink>
+                                    <p:commandLink action="#{taskViewBean.changeOutFilter()}"
+                                                   update="sessionFilterBlock sessionList"
+                                                   styleClass="btn btn-default #{taskViewBean.sessionOutFilter ? 'active' : ''}"
+                                                   oncomplete="buildFoo();">
+                                        <input type="checkbox" />  Output
+                                    </p:commandLink>
+                                    </h:form>
+                                </div>
+
+                        </h:panelGroup>
                         <div class="title_sort">
                             <span>Сортировать по:</span>
                             <div class="btn-group mb10" data-toggle="buttons">
-                                <h:form>
-                                    <p:commandLink styleClass="btn btn-default buttons_sort #{taskViewBean.isHostCategorised() ? 'active' : ''}"
-                                                   action="#{taskViewBean.setHostPortCategorised()}" update="jsf_filterView"
-                                                    oncomplete="updateEventListeners();">
-                                         Хостам
-                                    </p:commandLink>
-                                    <p:commandLink styleClass="btn btn-default buttons_sort #{taskViewBean.isPortCategorised() ? 'active' : ''}"
-                                                   action="#{taskViewBean.setPortHostCategorised()}" update="jsf_filterView"
-                                                   oncomplete="updateEventListeners();">
-                                         Портам
-                                    </p:commandLink>
-                                </h:form>
+                                <h:form id="sessionFilterbtns">
+                                <p:commandLink styleClass="btn btn-default buttons_sort #{taskViewBean.isHostCategorised() ? 'active' : ''}"
+                                               action="#{taskViewBean.setHostPortCategorised()}" update="jsf_filterView sessionFilterbtns"
+                                               oncomplete="updateEventListeners(); buildFoo();">
+                                    Хостам
+                                </p:commandLink>
+                                <p:commandLink styleClass="btn btn-default buttons_sort #{taskViewBean.isPortCategorised() ? 'active' : ''}"
+                                               action="#{taskViewBean.setPortHostCategorised()}" update="jsf_filterView sessionFilterbtns"
+                                               oncomplete="updateEventListeners(); buildFoo();">
+                                    Портам
+                                </p:commandLink>
+                            </h:form>
 
                             </div>
                             <div class="input-group search_ip__form">
@@ -601,11 +563,7 @@
                                                         </div>
                                                     </p:commandLink>
                                                 </div>
-
-
                                             </ui:repeat>
-
-
 
                                         </div>
 
@@ -642,43 +600,6 @@
                     </div>
 
                     <div id="box_with_buttons" class="ibox-content vertical_center smallerColPadding">
-
-
-                            <h:panelGroup layout="block" id="sessionFilterBlock" styleClass="buttons_state">
-                                <h:form>
-                                <div class="btn-group" data-toggle="buttons">
-
-                                    <p:commandLink action="#{taskViewBean.changeActiveFilter()}"
-                                                     update="sessionFilterBlock sessionList"
-                                                     styleClass="btn btn-default #{taskViewBean.sessionActiveFilter ? 'active' : ''}"
-                                                        oncomplete="buildFoo();">
-                                        <input type="checkbox" />  Active
-                                    </p:commandLink>
-                                    <p:commandLink action="#{taskViewBean.changeSavedFilter()}"
-                                                     update="sessionFilterBlock sessionList"
-                                                     styleClass="btn btn-default #{taskViewBean.sessionSavedFilter ? 'active' : ''}"
-                                                   oncomplete="buildFoo();">
-                                        <input type="checkbox" />  Saved
-                                    </p:commandLink>
-                                </div>
-                                <div class="btn-group" data-toggle="buttons">
-                                    <p:commandLink action="#{taskViewBean.changeInFilter()}"
-                                                     update="sessionFilterBlock sessionList"
-                                                     styleClass="btn btn-default #{taskViewBean.sessionInFilter ? 'active' : ''}"
-                                                   oncomplete="buildFoo();">
-                                        <input type="checkbox" />  Input
-                                    </p:commandLink>
-                                    <p:commandLink action="#{taskViewBean.changeOutFilter()}"
-                                                     update="sessionFilterBlock sessionList"
-                                                     styleClass="btn btn-default #{taskViewBean.sessionOutFilter ? 'active' : ''}"
-                                                   oncomplete="buildFoo();">
-                                        <input type="checkbox" />  Output
-                                    </p:commandLink>
-                                </div>
-                                </h:form>
-                            </h:panelGroup>
-
-
 
                         <h:panelGroup layout="block" id="sessionList"  styleClass="full-width">
                             <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="11">
@@ -720,12 +641,12 @@
                                         <td>
                                             #{taskViewBean.sizeToStr(sessionBean.getDstDataLen(),2)}
                                         </td>
-                                        <td>???</td>
+                                        <td>#{sessionBean.httpBuf().size}</td>
                                         <td>
-                                            #{sessionBean.getSrcIP()}
+                                            #{sessionBean.getSrcIP() + taskListBean.getDnsNameIfNotEquals(sessionBean.getSrcIP())}
                                         </td>
                                         <td>
-                                            #{sessionBean.getDstIP()} ???.amazon.ebay.com
+                                            #{sessionBean.getDstIP() + taskListBean.getDnsNameIfNotEquals(sessionBean.getDstIP())}
                                         </td>
                                         <td><div class="full-width">5 sec<button class="btn btn-default pull-right">Info</button></div> </td>
                                         <td></td>
