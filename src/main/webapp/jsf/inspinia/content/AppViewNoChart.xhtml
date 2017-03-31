@@ -456,37 +456,37 @@
                         </a>
                     </div>
                     <div id="sort_ip_body_collapse" class="ibox-content sort_ip">
-                        <h:panelGroup layout="block" id="sessionFilterBlock" styleClass="buttons_state">
+                        <h:panelGroup layout="block" id="sessionFilterBlock" styleClass="buttons_state row">
 
-                                <div class="btn-group col-md-6 col-sm-6 no-padding" data-toggle="buttons">
+                                <div class="btn-group col-md-6 col-sm-6 no-padding inline" data-toggle="buttons">
                                     <h:form>
                                     <p:commandLink action="#{taskViewBean.changeActiveFilter()}"
                                                    update="sessionFilterBlock sessionList"
                                                    styleClass="btn btn-default #{taskViewBean.sessionActiveFilter ? 'active' : ''}"
                                                    oncomplete="buildFoo();">
-                                        <input type="checkbox" />  Active
+                                          Active
                                     </p:commandLink>
                                     <p:commandLink action="#{taskViewBean.changeSavedFilter()}"
                                                    update="sessionFilterBlock sessionList"
                                                    styleClass="btn btn-default #{taskViewBean.sessionSavedFilter ? 'active' : ''}"
                                                    oncomplete="buildFoo();">
-                                        <input type="checkbox" />  Saved
+                                          Saved
                                     </p:commandLink>
                                     </h:form>
                                 </div>
-                                <div class="btn-group col-md-5 col-sm-5 no-padding" data-toggle="buttons">
+                                <div class="btn-group col-md-5 col-sm-5 no-padding inline" data-toggle="buttons">
                                     <h:form>
                                     <p:commandLink action="#{taskViewBean.changeInFilter()}"
                                                    update="sessionFilterBlock sessionList"
                                                    styleClass="btn btn-default #{taskViewBean.sessionInFilter ? 'active' : ''}"
                                                    oncomplete="buildFoo();">
-                                        <input type="checkbox" />  Input
+                                          Input
                                     </p:commandLink>
                                     <p:commandLink action="#{taskViewBean.changeOutFilter()}"
                                                    update="sessionFilterBlock sessionList"
                                                    styleClass="btn btn-default #{taskViewBean.sessionOutFilter ? 'active' : ''}"
                                                    oncomplete="buildFoo();">
-                                        <input type="checkbox" />  Output
+                                          Output
                                     </p:commandLink>
                                     </h:form>
                                 </div>
@@ -602,67 +602,150 @@
                     <div id="box_with_buttons" class="ibox-content vertical_center smallerColPadding">
 
                         <h:panelGroup layout="block" id="sessionList"  styleClass="full-width">
-                            <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="11">
-                                <thead>
-                                <tr>
-                                    <th data-toggle="true">Time start</th>
-                                    <th>Time end</th>
-                                    <th>Src port</th>
-                                    <th>Dst port</th>
-                                    <th>Src data</th>
-                                    <th>Dst data</th>
-                                    <th>HTTP</th>
-                                    <th data-hide="all">SRC host</th>
-                                    <th data-hide="all">DST host</th>
-                                    <th data-hide="all">Duration</th>
-                                    <th data-hide="all"></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-
-                            <c:if test="#{taskViewBean.ipBean != null}">
-                                <ui:repeat value="#{taskViewBean.sessionList}" var="sessionBean">
+                            <c:if test="#{taskViewBean.isHostCategorised()}">
+                                <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="11">
+                                    <thead>
                                     <tr>
-                                        <td>
-                                            #{sessionBean.getEstablishedWebStr()}
-                                        </td>
-                                        <td>
-                                            #{sessionBean.getClosedWebStr()}
-                                        </td>
-                                        <td>
-                                            #{sessionBean.getSrcP()}
-                                        </td>
-                                        <td>
-                                            #{sessionBean.getDstP()} (???)
-                                        </td>
-                                        <td>
-                                            #{taskViewBean.sizeToStr(sessionBean.getSrcDataLen(),2)}
-                                        </td>
-                                        <td>
-                                            #{taskViewBean.sizeToStr(sessionBean.getDstDataLen(),2)}
-                                        </td>
-                                        <td>#{sessionBean.httpBuf().size}</td>
-                                        <td>
-                                            #{sessionBean.getSrcIP() + taskListBean.getDnsNameIfNotEquals(sessionBean.getSrcIP())}
-                                        </td>
-                                        <td>
-                                            #{sessionBean.getDstIP() + taskListBean.getDnsNameIfNotEquals(sessionBean.getDstIP())}
-                                        </td>
-                                        <td><div class="full-width">5 sec<button class="btn btn-default pull-right">Info</button></div> </td>
-                                        <td></td>
-
+                                        <th data-toggle="true">Time start</th>
+                                        <th>Time end</th>
+                                        <th>Src port</th>
+                                        <th>Dst port</th>
+                                        <th>Src data</th>
+                                        <th>Dst data</th>
+                                        <th>HTTP</th>
+                                        <th data-hide="all">SRC host</th>
+                                        <th data-hide="all">DST host</th>
+                                        <th data-hide="all">Duration</th>
+                                        <th data-hide="all"></th>
                                     </tr>
-                                </ui:repeat>
+                                    </thead>
+                                    <tbody>
+
+                                    <c:if test="#{taskViewBean.ipBean != null}">
+                                        <ui:repeat value="#{taskViewBean.sessionList}" var="sessionBean">
+                                            <tr>
+                                                <td>
+                                                    #{sessionBean.getEstablishedWebStr()}
+                                                </td>
+                                                <td>
+                                                    #{sessionBean.getClosedWebStr()}
+                                                </td>
+                                                <td>
+                                                    #{sessionBean.getSrcP()}
+                                                </td>
+                                                <td>
+                                                    #{sessionBean.getDstP()} (???)
+                                                </td>
+                                                <td>
+                                                    #{taskViewBean.sizeToStr(sessionBean.getSrcDataLen(),2)}
+                                                </td>
+                                                <td>
+                                                    #{taskViewBean.sizeToStr(sessionBean.getDstDataLen(),2)}
+                                                </td>
+                                                <td>#{sessionBean.httpBuf.size()}</td>
+                                                <td>
+                                                    #{sessionBean.getSrcIP()}  Host name: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getSrcIP())}
+                                                </td>
+                                                <td>
+                                                    #{sessionBean.getDstIP()} Host name: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getDstIP())}
+                                                </td>
+                                                <td><div class="full-width">5 sec<button class="btn btn-default pull-right">Info</button></div> </td>
+                                                <td></td>
+
+                                            </tr>
+                                        </ui:repeat>
+                                    </c:if>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td colspan="7">
+                                            <ul class="pagination pull-right"></ul>
+                                        </td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
                             </c:if>
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colspan="7">
-                                        <ul class="pagination pull-right"></ul>
-                                    </td>
-                                </tr>
-                                </tfoot>
-                            </table>
+
+                            <c:if test="#{taskViewBean.isPortCategorised()}">
+
+                                <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="11">
+                                    <thead>
+                                    <tr>
+                                        <th data-toggle="true">Time start</th>
+                                        <th>Time end</th>
+                                        <th>SRC host</th>
+                                        <th>DST host</th>
+                                        <th>Src data</th>
+                                        <th>Dst data</th>
+                                        <th>HTTP</th>
+
+                                        <th  data-hide="all">Src port</th>
+                                        <th  data-hide="all">Dst port</th>
+                                        <th  data-hide="all">SRC host</th>
+                                        <th  data-hide="all">DST host</th>
+                                        <th  data-hide="all">Duration</th>
+                                        <th  data-hide="all"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <c:if test="#{taskViewBean.ipBean != null}">
+                                        <ui:repeat value="#{taskViewBean.sessionList}" var="sessionBean">
+                                            <tr>
+                                                <td>
+                                                    #{sessionBean.getEstablishedWebStr()}
+                                                </td>
+                                                <td>
+                                                    #{sessionBean.getClosedWebStr()}
+                                                </td>
+
+                                                <td>
+                                                    #{sessionBean.getSrcIP()}
+                                                </td>
+                                                <td>
+                                                    #{sessionBean.getDstIP()}
+                                                </td>
+
+                                                <td>
+                                                    #{taskViewBean.sizeToStr(sessionBean.getSrcDataLen(),2)}
+                                                </td>
+                                                <td>
+                                                    #{taskViewBean.sizeToStr(sessionBean.getDstDataLen(),2)}
+                                                </td>
+                                                <td>#{sessionBean.httpBuf.size()}</td>
+
+                                                <td>
+                                                    #{sessionBean.getSrcP()} (???)
+                                                </td>
+                                                <td>
+                                                    #{sessionBean.getDstP()} (???)
+                                                </td>
+
+                                                <td>
+                                                    #{sessionBean.getSrcIP()}  Host name: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getSrcIP())}
+                                                </td>
+                                                <td>
+                                                    #{sessionBean.getDstIP()}  Host name: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getDstIP())}
+                                                </td>
+                                                <td><div class="full-width">5 sec<button class="btn btn-default pull-right">Info</button></div> </td>
+                                                <td></td>
+
+                                            </tr>
+                                        </ui:repeat>
+                                    </c:if>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td colspan="7">
+                                            <ul class="pagination pull-right"></ul>
+                                        </td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </c:if>
+
+
+
                         </h:panelGroup>
 
 
