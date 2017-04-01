@@ -3,6 +3,7 @@ package com.jubaka.sors.beans;
 import com.jubaka.sors.beans.branch.SessionBean;
 import com.jubaka.sors.appserver.serverSide.ConnectionHandler;
 import com.jubaka.sors.appserver.serverSide.SmartFilter;
+import com.jubaka.sors.desktop.http.HTTP;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +28,7 @@ public class Category {
     private SmartFilter parentType;
     private List<Category> subCategories = new ArrayList<>();
     private List<SessionBean> sessionList;
+    private List<HTTP> httpList = new ArrayList<>();
 
     public Category(SmartFilter parentType) {
         this.parentType = parentType;
@@ -42,6 +44,9 @@ public class Category {
 
     public void setSessionList(List<SessionBean> sessionList) {
         this.sessionList = Collections.synchronizedList(sessionList);
+        for (SessionBean sesBean : sessionList) {
+            httpList.addAll(sesBean.getHttpBuf());
+        }
     }
 
 
@@ -132,10 +137,19 @@ public class Category {
     public void setSubCategories(List<Category> subCategories) {
         this.subCategories = Collections.synchronizedList(subCategories);
     }
+    public List<HTTP> getHttpList() {
+        return httpList;
+    }
+
+    public void setHttpList(List<HTTP> httpList) {
+        this.httpList = httpList;
+    }
+
 
     public boolean checkForEquals(Category cat) {
         if (cat.getName().equals(this.name)){
             sessionList.addAll(cat.getSessionList());
+            httpList.addAll(cat.getHttpList());
             synchronized (subCategories) {
                 for (Category subCat : subCategories) {
                     for (Category subNewCat : cat.subCategories) {
@@ -157,6 +171,8 @@ public class Category {
         this.sesFrom = this.sesFrom + someCat.getSesFrom();
         this.sendTo = this.sendTo + someCat.getSendTo();
         this.receivedFrom = this.receivedFrom + someCat.getReceivedFrom();
+
+
     }
 
 

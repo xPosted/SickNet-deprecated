@@ -9,6 +9,7 @@ import java.util.List;
  * Created by root on 14.01.17.
  */
 public class CommonFilterUtils {
+
     protected void calcStatCategorised(List<Category> categories) {
         for (Category cat : categories) {
             calcStatCategorised(cat);

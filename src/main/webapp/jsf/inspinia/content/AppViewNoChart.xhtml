@@ -456,9 +456,9 @@
                         </a>
                     </div>
                     <div id="sort_ip_body_collapse" class="ibox-content sort_ip">
-                        <h:panelGroup layout="block" id="sessionFilterBlock" styleClass="buttons_state row">
+                        <h:panelGroup layout="block" id="sessionFilterBlock" styleClass="buttons_state">
 
-                                <div class="btn-group col-md-6 col-sm-6 no-padding inline" data-toggle="buttons">
+                                <div class="col-md-6 col-sm-6 no-padding inline" data-toggle="buttons">
                                     <h:form>
                                     <p:commandLink action="#{taskViewBean.changeActiveFilter()}"
                                                    update="sessionFilterBlock sessionList"
@@ -474,7 +474,7 @@
                                     </p:commandLink>
                                     </h:form>
                                 </div>
-                                <div class="btn-group col-md-5 col-sm-5 no-padding inline" data-toggle="buttons">
+                                <div class="col-md-5 col-sm-5 no-padding inline" data-toggle="buttons">
                                     <h:form>
                                     <p:commandLink action="#{taskViewBean.changeInFilter()}"
                                                    update="sessionFilterBlock sessionList"
@@ -517,7 +517,7 @@
                             </div>
                         </div>
                         <div id="filterViewDirect" class="ibox">
-                            <div class="ibox-content" style="overflow: auto;">
+                            <div class="ibox-content no-padding" style="overflow: auto;">
                                 <h:form id="jsf_filterView">
                                     <ui:repeat id="catsBlock" value="#{taskViewBean.categories}" var="category">
 
@@ -579,7 +579,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6 widget no-padding full-height">
+            <h:panelGroup id="sessionList" styleClass="col-md-6 widget no-padding full-height">
                 <div class="ibox no-margins full-height">
                     <div class="ibox-tools">
                         <a class="collapse-link">
@@ -601,7 +601,29 @@
 
                     <div id="box_with_buttons" class="ibox-content vertical_center smallerColPadding">
 
-                        <h:panelGroup layout="block" id="sessionList"  styleClass="full-width">
+                        <div class="full-width">
+
+                            <c:if test="#{taskViewBean.isSessionViewMode()}">
+
+
+                            </c:if>
+
+                            <c:if test="#{taskViewBean.isHttpViewMode()}">
+                                <table class="footable table table-stripped toggle-arrow-tiny">
+                                    <thead>
+                                    <tr>
+                                        <th data-toggle="true">Type</th>
+                                        <th>Resource</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+
+                            </c:if>
+
                             <c:if test="#{taskViewBean.isHostCategorised()}">
                                 <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="11">
                                     <thead>
@@ -644,10 +666,10 @@
                                                 </td>
                                                 <td>#{sessionBean.httpBuf.size()}</td>
                                                 <td>
-                                                    #{sessionBean.getSrcIP()}  Host name: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getSrcIP())}
+                                                    #{sessionBean.getSrcIP()}  Dns: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getSrcIP())}
                                                 </td>
                                                 <td>
-                                                    #{sessionBean.getDstIP()} Host name: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getDstIP())}
+                                                    #{sessionBean.getDstIP()} Dns: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getDstIP())}
                                                 </td>
                                                 <td><div class="full-width">5 sec<button class="btn btn-default pull-right">Info</button></div> </td>
                                                 <td></td>
@@ -722,10 +744,10 @@
                                                 </td>
 
                                                 <td>
-                                                    #{sessionBean.getSrcIP()}  Host name: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getSrcIP())}
+                                                    #{sessionBean.getSrcIP()}  Dns: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getSrcIP())}
                                                 </td>
                                                 <td>
-                                                    #{sessionBean.getDstIP()}  Host name: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getDstIP())}
+                                                    #{sessionBean.getDstIP()}  Dns: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getDstIP())}
                                                 </td>
                                                 <td><div class="full-width">5 sec<button class="btn btn-default pull-right">Info</button></div> </td>
                                                 <td></td>
@@ -746,13 +768,13 @@
 
 
 
-                        </h:panelGroup>
+                        </div>
 
 
                     </div>
 
                 </div>
-            </div>
+            </h:panelGroup>
 
         </div>
 
