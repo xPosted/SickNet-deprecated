@@ -6,6 +6,7 @@ import com.jubaka.sors.appserver.entities.Branch;
 import com.jubaka.sors.appserver.serverSide.*;
 import com.jubaka.sors.appserver.service.BranchService;
 import com.jubaka.sors.appserver.service.PortServiceService;
+import com.jubaka.sors.desktop.http.HTTP;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.TimeSeries;
 
@@ -51,8 +52,10 @@ public class TaskViewBean implements Serializable, Observer {
     private List<?> onlineIps = new ArrayList<>();
     private List<?> allIps = new ArrayList<>();
     private List<SessionBean> sessionList = new ArrayList<>();
+    private List<HTTP> httpList = new ArrayList<>();
+
     private List<Category> newCategories = new ArrayList<>();
-    private List<SessionBean> newSessions = new ArrayList<>();
+  //  private List<SessionBean> newSessions = new ArrayList<>();
 
     private SessionBean selectedSesBean = null;
 
@@ -70,9 +73,11 @@ public class TaskViewBean implements Serializable, Observer {
     private boolean sessionActiveFilter = true;
     private boolean sessionSavedFilter = false;
 
-    private boolean httpViewMode = false;
-    private boolean sessionViewMode = true;
 
+            /// VIEW MODE
+    private boolean httpViewMode = true;
+    private boolean sessionViewMode = false;
+/////////////
     private String nodeIdStr = null;
     private String taskIdStr = null;
     private String dbTaskIdStr = null;
@@ -171,11 +176,12 @@ public class TaskViewBean implements Serializable, Observer {
     public void setSelectedCat(Category selectedCat) {
         this.selectedCat = selectedCat;
       sessionList = selectedCat.getSessionList();
+      httpList = selectedCat.getHttpList();
         System.out.println("select cat - " + selectedCat.getName());
        /// / refreshFilter(selectedCat);
     }
 
-    public void setSelectedCat(String listId) {
+   /* public void setSelectedCat(String listId) {
         int id = 0;
         try {
             id = Integer.decode(listId);
@@ -187,7 +193,7 @@ public class TaskViewBean implements Serializable, Observer {
         this.selectedCat =  categories.get(id);
         sessionList = selectedCat.getSessionList();
     }
-
+*/
 
     public List<Category> getCategories() {
 
@@ -424,6 +430,14 @@ public class TaskViewBean implements Serializable, Observer {
 
     public List<SmartFilter> getFilters() {
         return filters;
+    }
+
+    public List<HTTP> getHttpList() {
+        return httpList;
+    }
+
+    public void setHttpList(List<HTTP> httpList) {
+        this.httpList = httpList;
     }
 
 
@@ -697,6 +711,12 @@ public class TaskViewBean implements Serializable, Observer {
             if (sessionActiveFilter & sessionOutFilter) sessionList.addAll(ipBean.getActiveOutSes());
             if (sessionSavedFilter & sessionInFilter) sessionList.addAll(ipBean.getStoredInSes());
             if (sessionSavedFilter & sessionOutFilter) sessionList.addAll(ipBean.getStoredOutSes());
+            /// gather http from sessions
+            httpList.clear();
+            for (SessionBean sesBean : sessionList) {
+                httpList.addAll(sesBean.getHttpBuf());
+            }
+            ///
             categories = filter.sort(selectedIp,sessionList);
             if (currentIndexofFilter < (filters.size()-1)) {
                 SmartFilter nextFilter = filters.get(currentIndexofFilter+1);
@@ -714,8 +734,6 @@ public class TaskViewBean implements Serializable, Observer {
                 }
             }
         }
-
-
     }
 
     public List<Category> categorise(String selectedIp, List<SessionBean> sessions, List<SmartFilter> filters, SmartFilter currentFilter) {

@@ -330,6 +330,36 @@ public class BranchService {
 
     }
 
+    public SubnetBean addNet(InetAddress addr, int mask, BranchBean bb) {
+
+        SubnetBean notKnown =  bb.getSubnetByName("0.0.0.0");
+        SubnetBean res = new SubnetBean();
+        res.setSubnet(addr);
+        res.setSubnetMask(mask);
+
+        Set<IPItemBean> ipToRemoveSet = new HashSet<IPItemBean>();
+        try {
+            for (IPItemBean item : notKnown.getIps()) {
+                InetAddress addrItem = InetAddress.getByName(item.getIp());
+                if (res.inSubnet(addrItem)) {
+                    res.addIPmanualy(item);
+                    ipToRemoveSet.add(item);
+
+                }
+
+            }
+        } catch (UnknownHostException ex) {
+            ex.printStackTrace();
+        }
+
+        for (IPItemBean removeItem : ipToRemoveSet)
+            notKnown.deleteIP(removeItem);
+
+        bb.addSubnet(res);
+        //	System.out.println("Net added");
+        return res;
+    }
+
 
 
 

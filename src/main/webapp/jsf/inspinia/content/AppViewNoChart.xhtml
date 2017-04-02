@@ -523,7 +523,7 @@
                                 <h:form id="jsf_filterView">
                                     <ui:repeat id="catsBlock" value="#{taskViewBean.categories}" var="category">
 
-                                        <div style="margin-bottom: 10px;" class="ibox no-padding fa-border row">
+                                        <div style="margin-bottom: 10px;" class="ibox no-padding fa-border">
                                             <a class="collapse-link">
                                                 <div class="col-md-1 no-padding" style="text-align: center; font-size: 20px;">
                                                     <i class="fa fa-plus-square-o"></i>
@@ -606,79 +606,222 @@
                         <div class="full-width">
 
                             <c:if test="#{taskViewBean.isSessionViewMode()}">
+                                <c:if test="#{taskViewBean.isHostCategorised()}">
+                                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="11">
+                                        <thead>
+                                        <tr>
+                                            <th data-toggle="true">Time start</th>
+                                            <th>Time end</th>
+                                            <th>Src port</th>
+                                            <th>Dst port</th>
+                                            <th>Src data</th>
+                                            <th>Dst data</th>
+                                            <th>HTTP</th>
+                                            <th data-hide="all">SRC host</th>
+                                            <th data-hide="all">DST host</th>
+                                            <th data-hide="all">Duration</th>
+                                            <th data-hide="all"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
 
+                                        <c:if test="#{taskViewBean.ipBean != null}">
+                                            <ui:repeat value="#{taskViewBean.sessionList}" var="sessionBean">
+                                                <tr>
+                                                    <td>
+                                                        #{sessionBean.getEstablishedWebStr()}
+                                                    </td>
+                                                    <td>
+                                                        #{sessionBean.getClosedWebStr()}
+                                                    </td>
+                                                    <td>
+                                                        #{sessionBean.getSrcP()}
+                                                    </td>
+                                                    <td>
+                                                        #{sessionBean.getDstP()} (???)
+                                                    </td>
+                                                    <td>
+                                                        #{taskViewBean.sizeToStr(sessionBean.getSrcDataLen(),2)}
+                                                    </td>
+                                                    <td>
+                                                        #{taskViewBean.sizeToStr(sessionBean.getDstDataLen(),2)}
+                                                    </td>
+                                                    <td>#{sessionBean.httpBuf.size()}</td>
+                                                    <td>
+                                                        #{sessionBean.getSrcIP()}  Dns: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getSrcIP())}
+                                                    </td>
+                                                    <td>
+                                                        #{sessionBean.getDstIP()} Dns: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getDstIP())}
+                                                    </td>
+                                                    <td><div class="full-width">5 sec<button class="btn btn-default pull-right">Info</button></div> </td>
+                                                    <td></td>
+
+                                                </tr>
+                                            </ui:repeat>
+                                        </c:if>
+                                        </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <td colspan="7">
+                                                <ul class="pagination pull-right"></ul>
+                                            </td>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </c:if>
+
+                                <c:if test="#{taskViewBean.isPortCategorised()}">
+
+                                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="11">
+                                        <thead>
+                                        <tr>
+                                            <th data-toggle="true">Time start</th>
+                                            <th>Time end</th>
+                                            <th>SRC host</th>
+                                            <th>DST host</th>
+                                            <th>Src data</th>
+                                            <th>Dst data</th>
+                                            <th>HTTP</th>
+
+                                            <th  data-hide="all">Src port</th>
+                                            <th  data-hide="all">Dst port</th>
+                                            <th  data-hide="all">SRC host</th>
+                                            <th  data-hide="all">DST host</th>
+                                            <th  data-hide="all">Duration</th>
+                                            <th  data-hide="all"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        <c:if test="#{taskViewBean.ipBean != null}">
+                                            <ui:repeat value="#{taskViewBean.sessionList}" var="sessionBean">
+                                                <tr>
+                                                    <td>
+                                                        #{sessionBean.getEstablishedWebStr()}
+                                                    </td>
+                                                    <td>
+                                                        #{sessionBean.getClosedWebStr()}
+                                                    </td>
+
+                                                    <td>
+                                                        #{sessionBean.getSrcIP()}
+                                                    </td>
+                                                    <td>
+                                                        #{sessionBean.getDstIP()}
+                                                    </td>
+
+                                                    <td>
+                                                        #{taskViewBean.sizeToStr(sessionBean.getSrcDataLen(),2)}
+                                                    </td>
+                                                    <td>
+                                                        #{taskViewBean.sizeToStr(sessionBean.getDstDataLen(),2)}
+                                                    </td>
+                                                    <td>#{sessionBean.httpBuf.size()}</td>
+
+                                                    <td>
+                                                        #{sessionBean.getSrcP()} (???)
+                                                    </td>
+                                                    <td>
+                                                        #{sessionBean.getDstP()} (???)
+                                                    </td>
+
+                                                    <td>
+                                                        #{sessionBean.getSrcIP()}  Dns: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getSrcIP())}
+                                                    </td>
+                                                    <td>
+                                                        #{sessionBean.getDstIP()}  Dns: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getDstIP())}
+                                                    </td>
+                                                    <td><div class="full-width">5 sec<button class="btn btn-default pull-right">Info</button></div> </td>
+                                                    <td></td>
+
+                                                </tr>
+                                            </ui:repeat>
+                                        </c:if>
+                                        </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <td colspan="7">
+                                                <ul class="pagination pull-right"></ul>
+                                            </td>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </c:if>
 
                             </c:if>
 
                             <c:if test="#{taskViewBean.isHttpViewMode()}">
-                                <table class="footable table table-stripped toggle-arrow-tiny">
-                                    <thead>
-                                    <tr>
-                                        <th data-toggle="true">Type</th>
-                                        <th>Resource</th>
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-                                </table>
-
-                            </c:if>
-
-                            <c:if test="#{taskViewBean.isHostCategorised()}">
                                 <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="11">
                                     <thead>
                                     <tr>
-                                        <th data-toggle="true">Time start</th>
-                                        <th>Time end</th>
-                                        <th>Src port</th>
-                                        <th>Dst port</th>
-                                        <th>Src data</th>
-                                        <th>Dst data</th>
-                                        <th>HTTP</th>
-                                        <th data-hide="all">SRC host</th>
-                                        <th data-hide="all">DST host</th>
-                                        <th data-hide="all">Duration</th>
-                                        <th data-hide="all"></th>
+                                        <th class="col-md-1 inline no-borders" data-toggle="true">Type</th>
+                                        <th class="col-md-6 inline no-borders">Resource</th>
+                                        <th class="col-md-4 inline no-borders">User-Agent</th>
+                                        <th data-hide="all">Host</th>
+                                        <th data-hide="all">User-Agent</th>
+                                        <th data-hide="all">RequestVersion</th>
+                                        <th data-hide="all">Accept_Charset</th>
+                                        <th data-hide="all">Accept_Encoding</th>
+                                        <th data-hide="all">Cookie</th>
+                                        <th data-hide="all">Date</th>
+                                        <th data-hide="all">Referer</th>
                                     </tr>
+
                                     </thead>
                                     <tbody>
-
-                                    <c:if test="#{taskViewBean.ipBean != null}">
-                                        <ui:repeat value="#{taskViewBean.sessionList}" var="sessionBean">
+                                    <ui:repeat value="#{taskViewBean.httpList}" var="http">
+                                        <ui:fragment rendered="#{http.isRequest()}">
+                                            <c:set var="httpRequest" value="#{http.castToRequest()}"></c:set>
                                             <tr>
-                                                <td>
-                                                    #{sessionBean.getEstablishedWebStr()}
-                                                </td>
-                                                <td>
-                                                    #{sessionBean.getClosedWebStr()}
-                                                </td>
-                                                <td>
-                                                    #{sessionBean.getSrcP()}
-                                                </td>
-                                                <td>
-                                                    #{sessionBean.getDstP()} (???)
-                                                </td>
-                                                <td>
-                                                    #{taskViewBean.sizeToStr(sessionBean.getSrcDataLen(),2)}
-                                                </td>
-                                                <td>
-                                                    #{taskViewBean.sizeToStr(sessionBean.getDstDataLen(),2)}
-                                                </td>
-                                                <td>#{sessionBean.httpBuf.size()}</td>
-                                                <td>
-                                                    #{sessionBean.getSrcIP()}  Dns: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getSrcIP())}
-                                                </td>
-                                                <td>
-                                                    #{sessionBean.getDstIP()} Dns: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getDstIP())}
-                                                </td>
-                                                <td><div class="full-width">5 sec<button class="btn btn-default pull-right">Info</button></div> </td>
-                                                <td></td>
+                                                <td class="col-md-1 inline">#{httpRequest.getRequestMethod()}</td>
+                                                <td class="col-md-6 inline"> <div style="overflow: hidden; text-overflow: ellipsis;"><span>#{httpRequest.getFullRequestUrl()}</span></div></td>
+                                                <td class="col-md-4 inline"> <div style="overflow: hidden; text-overflow: ellipsis;"><span>#{httpRequest.getUser_Agent()} </span></div></td>
+                                                    <td>#{httpRequest.getHost()}</td>
+                                                    <td>#{httpRequest.getUser_Agent()}</td>
+                                                    <td>#{httpRequest.getRequestVersion()}</td>
+                                                    <td>#{httpRequest.getAccept_Charset()}</td>
+                                                    <td>#{httpRequest.getAccept_Encoding()}</td>
+                                                    <td>#{httpRequest.getCookie()}</td>
+                                                    <td>#{httpRequest.getDate()}</td>
+                                                    <td>#{httpRequest.getReferer()}</td>
+
+                                                <!--
+                                                <ui:fragment rendered="#{httpRequest.getHost().length()>0}">
+
+                                                        <td>#{httpRequest.getHost()}</td>
+                                                </ui:fragment>
+                                                <ui:fragment rendered="#{httpRequest.getUser_Agent().length()>0}">
+                                                        <td>#{httpRequest.getUser_Agent()}</td>
+
+                                                </ui:fragment>
+                                                <ui:fragment rendered="#{httpRequest.getRequestVersion().length()>0}">
+                                                        <td>#{httpRequest.getRequestVersion()}</td>
+                                                </ui:fragment>
+                                                <ui:fragment rendered="#{httpRequest.getAccept_Charset().length()>0}">
+                                                        <td>#{httpRequest.getAccept_Charset()}</td>
+
+                                                </ui:fragment>
+                                                <ui:fragment rendered="#{httpRequest.getAccept_Encoding().length()>0}">
+                                                        <td>#{httpRequest.getAccept_Encoding()}</td>
+
+                                                </ui:fragment>
+                                                <ui:fragment rendered="#{httpRequest.getCookie().length()>0}">
+                                                        <td>#{httpRequest.getCookie()}</td>
+
+                                                </ui:fragment>
+                                                <ui:fragment rendered="#{httpRequest.getDate().length()>0}">
+                                                        <td>#{httpRequest.getDate()}</td>
+                                                </ui:fragment>
+                                                <ui:fragment rendered="#{httpRequest.getReferer().length()>0}">
+                                                        <td>#{httpRequest.getReferer()}</td>
+
+                                                </ui:fragment>
+                                                -->
 
                                             </tr>
-                                        </ui:repeat>
-                                    </c:if>
+                                        </ui:fragment>
+                                    </ui:repeat>
+
                                     </tbody>
                                     <tfoot>
                                     <tr>
@@ -688,85 +831,10 @@
                                     </tr>
                                     </tfoot>
                                 </table>
+
                             </c:if>
 
-                            <c:if test="#{taskViewBean.isPortCategorised()}">
 
-                                <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="11">
-                                    <thead>
-                                    <tr>
-                                        <th data-toggle="true">Time start</th>
-                                        <th>Time end</th>
-                                        <th>SRC host</th>
-                                        <th>DST host</th>
-                                        <th>Src data</th>
-                                        <th>Dst data</th>
-                                        <th>HTTP</th>
-
-                                        <th  data-hide="all">Src port</th>
-                                        <th  data-hide="all">Dst port</th>
-                                        <th  data-hide="all">SRC host</th>
-                                        <th  data-hide="all">DST host</th>
-                                        <th  data-hide="all">Duration</th>
-                                        <th  data-hide="all"></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    <c:if test="#{taskViewBean.ipBean != null}">
-                                        <ui:repeat value="#{taskViewBean.sessionList}" var="sessionBean">
-                                            <tr>
-                                                <td>
-                                                    #{sessionBean.getEstablishedWebStr()}
-                                                </td>
-                                                <td>
-                                                    #{sessionBean.getClosedWebStr()}
-                                                </td>
-
-                                                <td>
-                                                    #{sessionBean.getSrcIP()}
-                                                </td>
-                                                <td>
-                                                    #{sessionBean.getDstIP()}
-                                                </td>
-
-                                                <td>
-                                                    #{taskViewBean.sizeToStr(sessionBean.getSrcDataLen(),2)}
-                                                </td>
-                                                <td>
-                                                    #{taskViewBean.sizeToStr(sessionBean.getDstDataLen(),2)}
-                                                </td>
-                                                <td>#{sessionBean.httpBuf.size()}</td>
-
-                                                <td>
-                                                    #{sessionBean.getSrcP()} (???)
-                                                </td>
-                                                <td>
-                                                    #{sessionBean.getDstP()} (???)
-                                                </td>
-
-                                                <td>
-                                                    #{sessionBean.getSrcIP()}  Dns: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getSrcIP())}
-                                                </td>
-                                                <td>
-                                                    #{sessionBean.getDstIP()}  Dns: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getDstIP())}
-                                                </td>
-                                                <td><div class="full-width">5 sec<button class="btn btn-default pull-right">Info</button></div> </td>
-                                                <td></td>
-
-                                            </tr>
-                                        </ui:repeat>
-                                    </c:if>
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <td colspan="7">
-                                            <ul class="pagination pull-right"></ul>
-                                        </td>
-                                    </tr>
-                                    </tfoot>
-                                </table>
-                            </c:if>
 
 
 
