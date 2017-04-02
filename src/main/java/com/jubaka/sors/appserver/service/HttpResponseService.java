@@ -2,6 +2,7 @@ package com.jubaka.sors.appserver.service;
 
 import com.jubaka.sors.appserver.dao.HttpResponseDao;
 import com.jubaka.sors.appserver.entities.HttpResponse;
+import com.jubaka.sors.appserver.entities.Session;
 import com.jubaka.sors.desktop.http.HTTPResponse;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -31,7 +32,7 @@ public class HttpResponseService {
         return responseDao.selectById(id);
     }
 
-    public static HttpResponse prepareEntity(HTTPResponse resp, Integer seq) {
+    public static HttpResponse prepareEntity(HTTPResponse resp, Integer seq, Session ses) {
         HttpResponse entity = new HttpResponse();
 
         entity.setSequence(seq);
@@ -53,6 +54,7 @@ public class HttpResponseService {
         entity.setResponseCodeMsg(resp.getResponseCodeMsg());
         entity.setServer(resp.getServer());
         entity.setSet_Cookie(resp.getSet_Cookie());
+        entity.setSession(ses);
 
         return entity;
 

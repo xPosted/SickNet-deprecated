@@ -258,5 +258,13 @@ public class HttpRequest {
         User_Agent = user_Agent;
     }
 
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
 
 }

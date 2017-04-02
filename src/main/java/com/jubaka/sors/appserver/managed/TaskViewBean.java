@@ -18,6 +18,8 @@ import javax.inject.Named;
 import javax.websocket.Session;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -67,6 +69,9 @@ public class TaskViewBean implements Serializable, Observer {
     private boolean sessionOutFilter = true;
     private boolean sessionActiveFilter = true;
     private boolean sessionSavedFilter = false;
+
+    private boolean httpViewMode = false;
+    private boolean sessionViewMode = true;
 
     private String nodeIdStr = null;
     private String taskIdStr = null;
@@ -232,6 +237,8 @@ public class TaskViewBean implements Serializable, Observer {
     }
 
 
+
+
     public void selectSubnet(String subnet) {
 
         if (blb instanceof BranchBean){
@@ -280,6 +287,7 @@ public class TaskViewBean implements Serializable, Observer {
         Branch b =  branchService.selectById(dbtaskId);
         blb = branchService.castToBean(b);
 
+        categories.clear();
         ipBean = null;
         sbl = null;
         onlineIps.clear();
@@ -338,6 +346,13 @@ public class TaskViewBean implements Serializable, Observer {
        // initBeans();
     }
 
+    public boolean isHttpViewMode() {
+        return httpViewMode;
+    }
+
+    public boolean isSessionViewMode() {
+        return sessionViewMode;
+    }
     public String getNodeIdStr() {
         return nodeIdStr;
     }
@@ -513,6 +528,15 @@ public class TaskViewBean implements Serializable, Observer {
         this.sessionActiveFilter = !sessionActiveFilter;
   //      refreshFilter(null);
 
+    }
+    public void setHttpViewMode() {
+      httpViewMode = true;
+      sessionViewMode = false;
+    }
+
+    public void setSessionViewMode() {
+      sessionViewMode = true;
+      httpViewMode = false;
     }
 
     public String getChartDataStr() {
@@ -815,6 +839,18 @@ public class TaskViewBean implements Serializable, Observer {
         filters.add(new PortSessionFilter(portService));
      //   refreshFilter(null);
         System.out.println(" add fileter");
+    }
+    public String getDnsNameIfNotEquals(String ip) {
+        try{
+
+        String dns = InetAddress.getByName(ip).getHostName();
+        if (!dns.equals(ip)) {
+            return dns;
+        }
+        } catch (UnknownHostException un) {
+            un.printStackTrace();
+        }
+        return "";
     }
 
 
