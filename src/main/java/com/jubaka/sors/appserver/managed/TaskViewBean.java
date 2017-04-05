@@ -87,11 +87,11 @@ public class TaskViewBean implements Serializable, Observer {
 
     private Long sessionId = null;
     private Session webSession = null;
-
     private String chartDataStr="";
-
-
     private String selectedCategoryId = "";
+
+    private String netAddr="";
+    private String mask="";
 
 
 
@@ -294,6 +294,7 @@ public class TaskViewBean implements Serializable, Observer {
         blb = branchService.castToBean(b);
 
         categories.clear();
+        httpList.clear();
         ipBean = null;
         sbl = null;
         onlineIps.clear();
@@ -438,6 +439,22 @@ public class TaskViewBean implements Serializable, Observer {
 
     public void setHttpList(List<HTTP> httpList) {
         this.httpList = httpList;
+    }
+
+    public String getNetAddr() {
+        return netAddr;
+    }
+
+    public void setNetAddr(String netAddr) {
+        this.netAddr = netAddr;
+    }
+
+    public String getMask() {
+        return mask;
+    }
+
+    public void setMask(String mask) {
+        this.mask = mask;
     }
 
 
@@ -871,6 +888,23 @@ public class TaskViewBean implements Serializable, Observer {
         return "";
     }
 
+
+    public void addNetwork() {
+        System.out.println(netAddr + " " + mask);
+        BranchBean bb = null;
+        if (blb instanceof BranchBean)
+            bb = (BranchBean) blb;
+        try {
+            InetAddress addr = InetAddress.getByName(netAddr);
+            int m = Integer.parseInt(mask);
+
+            branchService.addNet(addr,m,bb);
+
+        }   catch(UnknownHostException ex) {
+            ex.printStackTrace();
+        }
+
+    }
 
     @Override
     public void update(Observable o, Object arg) {

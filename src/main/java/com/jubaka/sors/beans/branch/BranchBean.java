@@ -45,7 +45,7 @@ public class BranchBean extends BranchLightBean implements Serializable {
 
 	public void addSubnet(SubnetBean subnetBean) {
 		subnets.add(subnetBean);
-		sdfgsfg updateInfoBean sgsdfg
+		getBib().setSubnetCount(subnets.size());
 	}
 
 

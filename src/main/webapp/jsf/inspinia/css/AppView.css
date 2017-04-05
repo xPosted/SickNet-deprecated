@@ -19,7 +19,7 @@
 	width: 50%;
 }
 
-.info_body__table_nochart{						<!-- jubaka -->
+.info_body__table_nochart{						/* jubaka */
 	font-weight: 600;
 	margin-top: 10px;
 }
@@ -43,7 +43,7 @@
 	padding-bottom: 7px;
 }
 #filterView{
-<!--	margin-top: 27px; -->
+/*	margin-top: 27px; */
 	padding: 4px;
 }
 #filterViewDirect > .ibox-content{padding-top: 15px;}
@@ -57,7 +57,7 @@
 #subnetList{
 	display: none; 
 	padding: 0px 10px 0px 0px; 
-	position: absolute; 
+/*	position: absolute; */
 	z-index: 4;
 }
 .vcenter{
@@ -299,8 +299,8 @@ table.nodeTable td {
 }
 
 table.nodeTable th {
-    text-align: center;
-    padding: 10px;
+	text-align: center;
+	padding: 10px;
 }
 
 
@@ -310,3 +310,43 @@ table.nodeTable th {
 }
 
 
+#http_foo_view .footable-row-detail {
+	display: block;
+	width:100%
+}
+
+#http_foo_view  .footable-row-detail-cell {
+
+	display: inline-block;
+	width:100%;
+
+}
+
+#http_foo_view .footable-row-detail-inner {
+	padding-left: 20px;
+	display: inline-block;
+	width:100%;
+
+}
+#http_foo_view  .footable-row-detail-row {
+	display: block;
+	width:100%;
+
+}
+
+#http_foo_view .footable-row-detail-name {
+	display: none;
+	width: 0%;
+}
+
+#http_foo_view .footable-row-detail-value {
+	display: inline-block;
+	width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+
+}
+
+.httpHeader {
+	font-weight: bold;
+}

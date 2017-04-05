@@ -12,7 +12,9 @@ public class SubnetBean extends SubnetLightBean implements Serializable {
 	List<IPItemBean> ips = new ArrayList<>();    // all captured ips
 	List<IPItemBean> liveIps = new ArrayList<>();	// ips that are online
 	private static final int BYTE_MASK = 0xFF;
+	private static final int IP_MASK = 0x80000000;
 	private int subnetInt;
+	private int sMask;
 	
 
     private SesDataCapBean sesDataCapBean=null;
@@ -43,6 +45,8 @@ public class SubnetBean extends SubnetLightBean implements Serializable {
 		this.sesDataCapBean = sesDataCapBean;
 	}
 
+
+
 	public IPItemBean getIpByName(String name) {
 		for (IPItemBean ipBean : ips) {
 			if (ipBean.getIp().equals(name))
@@ -50,6 +54,7 @@ public class SubnetBean extends SubnetLightBean implements Serializable {
 		}
 		return null;
 	}
+
 
 	/**
 	 * Converts an IP address into an integer
@@ -72,7 +77,7 @@ public class SubnetBean extends SubnetLightBean implements Serializable {
 	 * @return The subnet as an integer
 	 */
 	private int toSubnet(InetAddress address) {
-		return toInt(address) & subnetMask;
+		return toInt(address) & sMask;
 	}
 
 	/**
@@ -81,7 +86,7 @@ public class SubnetBean extends SubnetLightBean implements Serializable {
 	 * @return True if the address is within this subnet, false otherwise
 	 */
 	public boolean inSubnet(InetAddress address) {
-		this.subnetInt = toInt(subnet);
+
 		return toSubnet(address) == subnetInt;
 	}
 
@@ -125,5 +130,15 @@ public class SubnetBean extends SubnetLightBean implements Serializable {
 
 		}
 
+	}
+
+	public void setSubnetMask(int subnetMask) {
+		this.subnetMask = subnetMask;
+		this.sMask = IP_MASK >> (subnetMask - 1);
+	}
+
+	public void setSubnet(InetAddress subnet) {
+		this.subnet = subnet;
+		this.subnetInt = toInt(subnet);
 	}
 }

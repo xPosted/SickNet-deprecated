@@ -71,7 +71,7 @@ public class LoginBean implements Serializable {
 
     public void loginAction() throws IOException {
         if (user != null)  {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("NodesView.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("TaskList_tmp.xhtml");
             return;
         }
         if (pass!=null & login!= null) {
@@ -80,7 +80,7 @@ public class LoginBean implements Serializable {
         }
         if (user != null) {
             linked = true;
-            FacesContext.getCurrentInstance().getExternalContext().redirect("NodesView.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("TaskList_tmp.xhtml");
         }
 
     }

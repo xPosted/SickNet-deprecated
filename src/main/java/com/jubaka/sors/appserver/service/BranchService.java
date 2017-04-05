@@ -356,6 +356,9 @@ public class BranchService {
             notKnown.deleteIP(removeItem);
 
         bb.addSubnet(res);
+        Node node = nodeService.getNodeByUnid(bb.getBib().getNodeId());
+        deleteIfExist(bb.getBib().getTime(),node);
+        persistBranch(bb);
         //	System.out.println("Net added");
         return res;
     }

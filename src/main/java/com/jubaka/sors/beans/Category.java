@@ -123,11 +123,11 @@ public class Category {
     }
 
     public String getReceivedFromStr() {
-        return ConnectionHandler.processSize(receivedFrom,2);
+        return ConnectionHandler.processSize(receivedFrom,0);
     }
 
     public String getSendToStr() {
-        return ConnectionHandler.processSize(sendTo,2);
+        return ConnectionHandler.processSize(sendTo,0);
     }
 
     public List<Category> getSubCategories() {
