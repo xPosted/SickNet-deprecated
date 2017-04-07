@@ -25,7 +25,7 @@ public interface EndpointInterface {
 
     Integer createBranch(String pathToFile, String byUser, String fileName, String branchName);
 
-    Integer createBranch(String byUser, UploadedFile filePart, String branchName);
+//    Integer createBranch(String byUser, String pcapPath, String branchName);
 
     void startBranch(Integer brId);
 

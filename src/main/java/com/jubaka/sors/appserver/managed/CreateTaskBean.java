@@ -9,14 +9,17 @@ import com.jubaka.sors.appserver.serverSide.ConnectionHandler;
 import com.jubaka.sors.appserver.service.BranchService;
 import com.jubaka.sors.desktop.sessions.API;
 import com.jubaka.sors.desktop.sessions.Branch;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -26,8 +29,8 @@ import java.nio.file.StandardCopyOption;
  */
 
 @Named
-@RequestScoped
-public class CreateTaskBean {
+@SessionScoped
+public class CreateTaskBean implements Serializable {
 
     @Inject
     private ServerArgumentsBean args;
@@ -41,7 +44,7 @@ public class CreateTaskBean {
     private String nodeName;
     private Long nodeId;
     private UploadedFile upFilePart;
-
+    private String uploadedPcapPath = null;
 
     public Long getNodeId() {
         return nodeId;
@@ -72,20 +75,29 @@ public class CreateTaskBean {
     }
 
     public void setUpFilePart(UploadedFile upFilePart) {
+
         this.upFilePart = upFilePart;
+        LocalNode endpoint =  cHandler.getLocalNode();
+        uploadedPcapPath = endpoint.preparePcap(upFilePart);
+
     }
 
     public void upload() {
         createTask();
     }
 
+    public void handleFileUpload(FileUploadEvent event) {
+        upFilePart = event.getFile();
+        LocalNode endpoint =  cHandler.getLocalNode();
+        uploadedPcapPath = endpoint.preparePcap(upFilePart);
+    }
     private void createTask() {
 
         if (upFilePart == null | taskName == null) return;
         if (cHandler.getLocalNode() == null) return;
 
         LocalNode endpoint =  cHandler.getLocalNode();
-        Integer newBrId =  endpoint.createBranch(loginBean.getLogin(),upFilePart,taskName);
+        Integer newBrId =  endpoint.createBranch(uploadedPcapPath,loginBean.getLogin(),upFilePart.getFileName(),taskName);
 
         endpoint.waitForCaptureOff(newBrId);
 
@@ -119,5 +131,16 @@ public class CreateTaskBean {
         //nodeEndpoint.createBranch(loginBean.getLogin(),upFilePart,taskName);
 */
 
+    }
+
+    public boolean isUploaded() {
+        if (upFilePart!=null) return true;
+        return false;
+    }
+    public String getUploadedFileName() {
+        if (upFilePart != null) {
+            return upFilePart.getFileName();
+        }
+        return "[Uploaded files not found]";
     }
 }

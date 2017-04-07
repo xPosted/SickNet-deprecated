@@ -84,72 +84,9 @@
     <div id="wrapper">
 
         <div id="page-wrapper" class="gray-bg">
-            <div class="row border-bottom white-bg">
-                <nav class="navbar navbar-static-top" role="navigation">
-                    <div class="navbar-header">
-                        <button aria-controls="navbar" aria-expanded="false" data-target="#navbar"
-                                data-toggle="collapse" class="navbar-toggle collapsed" type="button">
-                            <i class="fa fa-reorder"></i>
-                        </button>
-                        <a href="#" class="navbar-brand">Inspinia</a>
-                    </div>
-                    <div class="navbar-collapse collapse" id="navbar">
-                        <ul class="nav navbar-nav">
-                            <li class="active">
-                                <a aria-expanded="false" role="button" href="layouts.html"> Back to main Layout page</a>
-                            </li>
-                            <li class="dropdown">
-                                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle"
-                                   data-toggle="dropdown"> Menu item <span class="caret"></span></a>
-                                <ul role="menu" class="dropdown-menu">
-                                    <li><a href="">Menu item</a></li>
-                                    <li><a href="">Menu item</a></li>
-                                    <li><a href="">Menu item</a></li>
-                                    <li><a href="">Menu item</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle"
-                                   data-toggle="dropdown"> Menu item <span class="caret"></span></a>
-                                <ul role="menu" class="dropdown-menu">
-                                    <li><a href="">Menu item</a></li>
-                                    <li><a href="">Menu item</a></li>
-                                    <li><a href="">Menu item</a></li>
-                                    <li><a href="">Menu item</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle"
-                                   data-toggle="dropdown"> Menu item <span class="caret"></span></a>
-                                <ul role="menu" class="dropdown-menu">
-                                    <li><a href="">Menu item</a></li>
-                                    <li><a href="">Menu item</a></li>
-                                    <li><a href="">Menu item</a></li>
-                                    <li><a href="">Menu item</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle"
-                                   data-toggle="dropdown"> Menu item <span class="caret"></span></a>
-                                <ul role="menu" class="dropdown-menu">
-                                    <li><a href="">Menu item</a></li>
-                                    <li><a href="">Menu item</a></li>
-                                    <li><a href="">Menu item</a></li>
-                                    <li><a href="">Menu item</a></li>
-                                </ul>
-                            </li>
 
-                        </ul>
-                        <ul class="nav navbar-top-links navbar-right">
-                            <li>
-                                <a href="login.html">
-                                    <i class="fa fa-sign-out"></i> Log out
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
+            <ui:include src="MenuTop.xhtml"/>
+
             <div id="visiblePart" class="row">
                 <div class=" col-md-3 widget no-padding">
                     <div class="ibox mb10">
@@ -638,22 +575,38 @@
                         </div>
 
                         <div id="box_with_buttons" class="ibox-content vertical_center smallerColPadding">
-                            <div class="full-width border-bottom">
-                                <h:form>
-                                    <p:commandLink styleClass="btn btn-default pull-right"
-                                                   action="#{taskViewBean.setSessionViewMode()}" value="Session mode"
-                                                   update="ses_http_view" oncomplete="buildFoo();"></p:commandLink>
-                                    <p:commandLink styleClass="btn btn-default pull-right"
-                                                   action="#{taskViewBean.setHttpViewMode()}" value="HTTP mode"
-                                                   update="ses_http_view" oncomplete="buildFoo();"></p:commandLink>
-                                </h:form>
+
+                            <div class="row">
+                                <div class="col-sm-6 col-md-6 border-bottom pull-left">
+                                    <h:form>
+                                        <p:commandLink styleClass="btn btn-default pull-right"
+                                                       action="#{taskViewBean.setSessionViewMode()}" value="Session mode"
+                                                       update="ses_http_view" oncomplete="buildFoo();"></p:commandLink>
+                                        <p:commandLink styleClass="btn btn-default pull-right"
+                                                       action="#{taskViewBean.setHttpViewMode()}" value="HTTP mode"
+                                                       update="ses_http_view" oncomplete="buildFoo();"></p:commandLink>
+                                    </h:form>
+                                </div>
+                                <div class="col-sm-6 col-md-6 pull-right">
+
+                                    <div class="input-group"><input  id="searchIn" onkeyup="mySearchFunc()" type="text" class="form-control"></input>
+                                        <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default">
+                                        <span class="fa fa-search"></span>
+                                    </button>
+                                </span>
+                                    </div>
+                                </div>
+
                             </div>
+
+
 
                             <h:panelGroup id="ses_http_view" layout="block" styleClass="full-width">
 
                                 <c:if test="#{taskViewBean.isSessionViewMode()}">
                                     <c:if test="#{taskViewBean.isHostCategorised()}">
-                                        <table class="footable table table-stripped toggle-arrow-tiny"
+                                        <table  id="fooTable" class="footable table table-stripped toggle-arrow-tiny"
                                                data-page-size="11">
                                             <thead>
                                             <tr>
@@ -723,7 +676,7 @@
 
                                     <c:if test="#{taskViewBean.isPortCategorised()}">
 
-                                        <table class="footable table table-stripped toggle-arrow-tiny"
+                                        <table id="fooTable" class="footable table table-stripped toggle-arrow-tiny"
                                                data-page-size="11">
                                             <thead>
                                             <tr>

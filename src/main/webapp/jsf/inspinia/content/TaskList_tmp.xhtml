@@ -76,15 +76,17 @@
     </style>
 </h:head>
 
-<h:body>
+<h:body styleClass="top-navigation">
 
 <div id="wrapper">
 
-    <ui:include src="LeftNavbar.xhtml"/>
+
 
     <div id="page-wrapper" class="gray-bg">
+        <ui:include src="MenuTop.xhtml"/>
+
         <div class="row border-bottom">
-            <nav class="navbar navbar-static-top  " role="navigation" style="margin-bottom: 0">
+         <!--   <nav class="navbar navbar-static-top  " role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header">
                     <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
                     <h2 class="main__title">Tasks</h2>
@@ -197,7 +199,7 @@
                     </li>
                 </ul>
 
-            </nav>
+            </nav> -->
         </div>
 
         <div class="wrapper wrapper-content">
@@ -210,7 +212,7 @@
                                     <div class="task_list__panelt">
                                         Found <span class="badge">#{taskListBean.databaseCount}</span> captures on <span class="badge"> 1 </span> Nodes
                                     </div>
-
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Modal</button>
                                     <form action="#" class="search_by_name">
                                         <input type="text" class="form-control task_list_search_form__input"></input>
                                         <button type="submit" class="btn btn-default fa fa-search task_list_search_form__button"></button>
@@ -312,7 +314,7 @@
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Modal</button>
+
 
             <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-lg" role="document">
@@ -323,11 +325,22 @@
                             <h:form enctype="multipart/form-data" styleClass="modal_main">
                                 <div class="modal_form_main">
                                     <div class="modal_main__inputs modal_Border_bottom">
-                                        <p:inputText styleClass="nodesView_modal__buttom form-control NodesView_control" value="#{createTaskBean.taskName}" placeholder="BranchName"> </p:inputText>
-                                        <div class="spase_between nodesView_modal__buttom">
-                                            <p class="help-block">path/to/file.txt</p>
-                                                 <p:fileUpload id="file" styleClass="btn btn-file" mode="simple" value="#{createTaskBean.upFilePart}">Select</p:fileUpload>
+
+                                        <div class="spase_between nodesView_modal__buttom full-width border-bottom">
+                                                 <p:fileUpload id="file" fileUploadListener="#{createTaskBean.handleFileUpload}" fileLimit="1" multiple="false" styleClass="btn btn-file" update="uploadedContent create" mode="advanced" value="#{createTaskBean.upFilePart}">Select
+                                                 </p:fileUpload>
                                         </div>
+                                        <h:panelGroup layout="block" id="uploadedContent" class="panel panel-default">
+                                            <div class="col-md-12">
+                                                <div style="padding: 10px;">
+                                                    <span>#{createTaskBean.getUploadedFileName()}</span>
+                                                </div>
+                                                <p:inputText disabled="#{ ! createTaskBean.isUploaded()}" styleClass="nodesView_modal__buttom form-control NodesView_control" value="#{createTaskBean.taskName}" placeholder="Task name"> </p:inputText>
+
+                                            </div>
+                                        </h:panelGroup>
+
+
 
                                     </div>
                                     <div class="modal_main__progressBar modal_Border_bottom clearfix">
@@ -345,7 +358,7 @@
 
                                 <div class="modal_footer">
                                     <div class="spase_between">
-                                        <p:commandButton id="create" ajax="false" styleClass="btn btn-primary" action="#{createTaskBean.upload()}" value="Create" update="tableBody"></p:commandButton>
+                                        <p:commandButton id="create" data-dismiss="modal" ajax="true" styleClass="btn btn-primary" disabled="#{ ! createTaskBean.isUploaded()}" action="#{createTaskBean.upload()}" value="Create" update="tableBody"></p:commandButton>
                                         <button id="cancel" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                     </div>
                                 </div>

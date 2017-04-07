@@ -218,9 +218,9 @@ public class NodeServerEndpoint extends Observable implements EndpointInterface 
 
 		return -1;
 	}
-
+/*
 	@Override
-	public   Integer createBranch(String byUser, UploadedFile filePart, String branchName) {
+	public   Integer createBranch(String byUser, UploadedFile filePar, String branchName) {
 		if  (checkConnection()==false) {
 			return -1;
 		}
@@ -287,7 +287,8 @@ public class NodeServerEndpoint extends Observable implements EndpointInterface 
 
 		return -1;
 	}
-	
+
+	*/
 	@Override
 	public  void startBranch(Integer brId) {
 		if  (checkConnection()==false) {

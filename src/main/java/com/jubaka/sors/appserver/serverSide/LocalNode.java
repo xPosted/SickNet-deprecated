@@ -54,26 +54,36 @@ public class LocalNode implements EndpointInterface {
 
     @Override
     public Integer createBranch(String pathToFile, String byUser, String fileName, String branchName) {
-        return -1;
+        int branchId = localFactory.createBranch(byUser,branchName,pathToFile,null,null);
+        Branch newBr = localFactory.getBranch(branchId);
+        newBr.startCapture(null);
+        return branchId;
     }
 
-    @Override
-    public Integer createBranch(String byUser, UploadedFile filePart, String branchName) {
-        String dumpPath = localFactory.getHome()+ File.separator+filePart.getFileName();
+    public String preparePcap(UploadedFile upload) {
+        String dumpPath = localFactory.getHome()+ File.separator+upload.getFileName();
         try {
 
-        Files.copy(filePart.getInputstream(),Paths.get(dumpPath), StandardCopyOption.REPLACE_EXISTING);
-    } catch (IOException io) {
-        io.printStackTrace();
-    }
+            Files.copy(upload.getInputstream(),Paths.get(dumpPath), StandardCopyOption.REPLACE_EXISTING);
+            return dumpPath;
+        } catch (IOException io) {
+            io.printStackTrace();
+        }
+        return null;
 
-        int branchId = localFactory.createBranch(byUser,branchName,dumpPath,null,null);
+    }
+/*
+    @Override
+    public Integer createBranch(String byUser, String pcapPath, String branchName) {
+
+
+        int branchId = localFactory.createBranch(byUser,branchName,pcapPath,null,null);
         Branch newBr = localFactory.getBranch(branchId);
         newBr.startCapture(null);
         return branchId;
 
     }
-
+*/
     @Override
     public void startBranch(Integer brId) {
 
