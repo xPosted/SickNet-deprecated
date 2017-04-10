@@ -3,8 +3,10 @@ package com.jubaka.sors.appserver.service;
 import com.jubaka.sors.appserver.dao.HttpRequestDao;
 import com.jubaka.sors.appserver.entities.HttpRequest;
 import com.jubaka.sors.appserver.entities.Session;
+import com.jubaka.sors.appserver.entities.TcpPacket;
 import com.jubaka.sors.beans.branch.SessionBean;
 import com.jubaka.sors.desktop.http.HTTPRequest;
+import sun.rmi.transport.tcp.TCPEndpoint;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -33,7 +35,7 @@ public class HttpRequestService {
         return requestDao.selectById(id);
     }
 
-    public static HttpRequest prepareEntity(HTTPRequest req, Integer seq, Session ses) {
+    public static HttpRequest prepareEntity(TcpPacket tcp,HTTPRequest req, Integer seq, Session ses) {
 
         HttpRequest entity = new HttpRequest();
         entity.setAccept(req.getAccept());
@@ -59,6 +61,7 @@ public class HttpRequestService {
         entity.setUA_CPU(req.getUA_CPU());
         entity.setUser_Agent(req.getUser_Agent());
         entity.setSequence(seq);
+        entity.setTcpP(tcp);
         entity.setSession(ses);
 
         return entity;

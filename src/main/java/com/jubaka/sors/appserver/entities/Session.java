@@ -45,6 +45,10 @@ public class Session {
     @Fetch(value = FetchMode.SUBSELECT)
     private List<HttpResponse> responseList;
 
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<TcpPacket> tcps;
+
     public Date getClosed() {
         return closed;
     }
@@ -151,5 +155,11 @@ public class Session {
         this.responseList = responseList;
     }
 
+    public List<TcpPacket> getTcps() {
+        return tcps;
+    }
 
+    public void setTcps(List<TcpPacket> tcps) {
+        this.tcps = tcps;
+    }
 }

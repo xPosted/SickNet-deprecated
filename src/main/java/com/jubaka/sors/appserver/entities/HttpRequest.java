@@ -66,6 +66,13 @@ public class HttpRequest {
     @Column(length = 1024)
     private String User_Agent;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tcpId")
+    private TcpPacket tcpP;
+
+
+
+
     public String getAccept() {
         return Accept;
     }
@@ -265,6 +272,15 @@ public class HttpRequest {
     public void setSession(Session session) {
         this.session = session;
     }
+
+    public TcpPacket getTcpP() {
+        return tcpP;
+    }
+
+    public void setTcpP(TcpPacket tcpP) {
+        this.tcpP = tcpP;
+    }
+
 
 
 }

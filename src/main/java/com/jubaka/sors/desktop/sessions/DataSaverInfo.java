@@ -8,8 +8,8 @@ public  class DataSaverInfo {
 	HashMap<Subnet, SesCaptureInfo> subnetDataCatchList = new HashMap<Subnet, SesCaptureInfo>();
 	
 	
-	boolean catchAll=false;
-	boolean catchNothing = true;
+	boolean catchAll=true;
+	boolean catchNothing = false;
 	static DataSaverInfo instance = null;
 	private Integer id;
 	

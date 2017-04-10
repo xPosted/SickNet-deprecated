@@ -102,7 +102,11 @@ public class ConnectionHandler  extends Observable {
 		}
 
 		localNode = new LocalNode(auth,usersPcapPath,"desc");
-		autorise(auth,localNode.getInfo());
+		if (autorise(auth,localNode.getInfo())) {
+			System.out.println("LocalNodeOk");
+		} else {
+			System.out.println("LocalNode auth problem !!!");
+		}
 	}
 
 	public void updateConnectionListener(Integer port) {

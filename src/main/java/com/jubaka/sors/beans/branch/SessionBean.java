@@ -1,6 +1,8 @@
 package com.jubaka.sors.beans.branch;
 
+import com.jubaka.sors.appserver.entities.TcpPacket;
 import com.jubaka.sors.desktop.http.HTTP;
+import com.jubaka.sors.desktop.http.protocol.tcp.TCP;
 
 import java.io.Serializable;
 import java.util.List;
@@ -10,8 +12,9 @@ public class SessionBean extends SessionLightBean implements Serializable {
 
 	private TreeMap<Long, Integer> srcDataTimeBinding = null;
 	private TreeMap<Long, Integer> dstDataTimeBinding = null;
-	private List<HTTP> httpBuf = null;
 
+	private List<HTTP> httpBuf = null;
+	private List<TCP> tcpBuf = null;
 
 	public List<HTTP> getHttpBuf() {
 		return httpBuf;
@@ -34,6 +37,14 @@ public class SessionBean extends SessionLightBean implements Serializable {
 
 	public void setDstDataTimeBinding(TreeMap<Long, Integer> dstDataTimeBinding) {
 		this.dstDataTimeBinding = dstDataTimeBinding;
+	}
+
+	public List<TCP> getTcpBuf() {
+		return tcpBuf;
+	}
+
+	public void setTcpBuf(List<TCP> tcpBuf) {
+		this.tcpBuf = tcpBuf;
 	}
 
 

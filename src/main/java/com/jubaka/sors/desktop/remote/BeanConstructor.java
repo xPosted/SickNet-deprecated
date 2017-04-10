@@ -48,6 +48,8 @@ public class BeanConstructor {
         sb.setSrcDataTimeBinding(ses.getDataSaver().getSrcTimeBinding());
         sb.setDstDataTimeBinding(ses.getDataSaver().getDstTimeBinding());
         sb.setHttpBuf(ses.getHTTPList());
+        sb.setTcpBuf(ses.getPacketList());
+
         return sb;
     }
 

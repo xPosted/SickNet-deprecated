@@ -3,6 +3,8 @@ package com.jubaka.sors.desktop.http.protocol.tcp;
 import com.jubaka.sors.desktop.sessions.IPaddr;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
 /**
  * Created by root on 18.11.16.
@@ -89,6 +91,22 @@ public class TCP {
 
     public void setStraight(boolean straight) {
         this.straight = straight;
+    }
+
+    public byte[] getPayload() {
+        byte[] buf = null;
+        try {
+            if (getDataFile() == null) return null;
+            RandomAccessFile  raf = new RandomAccessFile(getDataFile(),"r");
+            raf.seek(getDataPointer());
+            buf = new byte[getPayloadLen()];
+            raf.read(buf);
+            raf.close();
+        } catch (IOException io) {
+            io.printStackTrace();
+        }
+        return buf;
+
     }
 
 }

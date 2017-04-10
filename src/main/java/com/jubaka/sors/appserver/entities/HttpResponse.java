@@ -57,6 +57,12 @@ public class HttpResponse {
     @Column(length = 4096)
     private String Set_Cookie;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tcpId")
+    private TcpPacket tcpP;
+
+
+
     public String getAccept_Ranges() {
         return Accept_Ranges;
     }
@@ -223,6 +229,14 @@ public class HttpResponse {
 
     public void setSet_Cookie(String set_Cookie) {
         Set_Cookie = set_Cookie;
+    }
+
+    public TcpPacket getTcpP() {
+        return tcpP;
+    }
+
+    public void setTcpP(TcpPacket tcpP) {
+        this.tcpP = tcpP;
     }
 
 
