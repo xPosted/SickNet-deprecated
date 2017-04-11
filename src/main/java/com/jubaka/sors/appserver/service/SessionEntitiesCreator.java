@@ -2,10 +2,10 @@ package com.jubaka.sors.appserver.service;
 
 import com.jubaka.sors.beans.branch.SessionBean;
 import com.jubaka.sors.appserver.entities.*;
-import com.jubaka.sors.desktop.http.HTTP;
-import com.jubaka.sors.desktop.http.HTTPRequest;
-import com.jubaka.sors.desktop.http.HTTPResponse;
-import com.jubaka.sors.desktop.http.protocol.tcp.TCP;
+import com.jubaka.sors.desktop.protocol.application.HTTP;
+import com.jubaka.sors.desktop.protocol.application.HTTPRequest;
+import com.jubaka.sors.desktop.protocol.application.HTTPResponse;
+import com.jubaka.sors.desktop.protocol.tcp.TCP;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,14 +22,16 @@ public class SessionEntitiesCreator {
         Session entity = null;
         if (sessionMap.containsKey(sesBean.getInitSeq())) {
             entity = sessionMap.get(sesBean.getInitSeq());
+            entity.setDstHost(host);
             fillEntity(entity, sesBean);
         }
         else {
             entity = new Session();
+            entity.setDstHost(host);
             sessionMap.put(sesBean.getInitSeq(),entity);
         }
 
-        entity.setDstHost(host);
+
         return entity;
     }
 
@@ -37,14 +39,15 @@ public class SessionEntitiesCreator {
         Session entity = null;
         if (sessionMap.containsKey(sesBean.getInitSeq())) {
             entity = sessionMap.get(sesBean.getInitSeq());
+            entity.setSrcHost(host);
             fillEntity(entity, sesBean);
         }
         else {
             entity = new Session();
+            entity.setSrcHost(host);
             sessionMap.put(sesBean.getInitSeq(),entity);
-        }
 
-        entity.setSrcHost(host);
+        }
         return entity;
     }
 

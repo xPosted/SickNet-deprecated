@@ -57,6 +57,8 @@ public class HttpResponse {
     @Column(length = 4096)
     private String Set_Cookie;
 
+    private int payloadOffset;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tcpId")
     private TcpPacket tcpP;
@@ -237,6 +239,14 @@ public class HttpResponse {
 
     public void setTcpP(TcpPacket tcpP) {
         this.tcpP = tcpP;
+    }
+
+    public int getPayloadOffset() {
+        return payloadOffset;
+    }
+
+    public void setPayloadOffset(int payloadOffset) {
+        this.payloadOffset = payloadOffset;
     }
 
 

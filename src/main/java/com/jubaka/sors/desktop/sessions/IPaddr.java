@@ -2,13 +2,10 @@ package com.jubaka.sors.desktop.sessions;
 
 import java.io.Serializable;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.*;
 
 import com.jubaka.sors.desktop.factories.ClassFactory;
-import com.jubaka.sors.desktop.http.HTTP;
-import org.jnetpcap.protocol.network.Ip4;
-import org.jnetpcap.protocol.tcpip.Tcp;
+import com.jubaka.sors.desktop.protocol.application.HTTP;
 
 
 public class IPaddr extends Observable implements Serializable, CustomObserver {

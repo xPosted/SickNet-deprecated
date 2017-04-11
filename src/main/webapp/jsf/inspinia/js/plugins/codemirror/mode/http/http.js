@@ -11,7 +11,7 @@
 })(function(CodeMirror) {
 "use strict";
 
-CodeMirror.defineMode("http", function() {
+CodeMirror.defineMode("protocol", function() {
   function failFirstLine(stream, state) {
     stream.skipToEnd();
     state.cur = header;
@@ -108,6 +108,6 @@ CodeMirror.defineMode("http", function() {
   };
 });
 
-CodeMirror.defineMIME("message/http", "http");
+CodeMirror.defineMIME("message/protocol", "protocol");
 
 });

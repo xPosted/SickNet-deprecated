@@ -1,8 +1,8 @@
-package com.jubaka.sors.desktop.http;
+package com.jubaka.sors.desktop.protocol.application;
 
 import java.io.Serializable;
 
-import com.jubaka.sors.desktop.http.protocol.tcp.TCP;
+import com.jubaka.sors.desktop.protocol.tcp.TCP;
 import org.jnetpcap.packet.AbstractMessageHeader.MessageType;
 import org.jnetpcap.protocol.tcpip.Http;
 import org.jnetpcap.protocol.tcpip.Http.Request;
@@ -11,10 +11,11 @@ import org.jnetpcap.protocol.tcpip.Http.Response;
 
 public abstract class HTTP extends TCP implements Serializable {
 
-	protected Long httpHeaderPointer;
-	protected Long httpDataPointer;
+	//	protected Long httpHeaderPointer;
+//	protected Long httpDataPointer;
+	protected  int payloadOffset;
 
-	public Long getHttpDataPointer() {
+/*	public Long getHttpDataPointer() {
 		return httpDataPointer;
 	}
 
@@ -29,7 +30,7 @@ public abstract class HTTP extends TCP implements Serializable {
 	public void setHttpHeaderPointer(Long httpHeaderPointer) {
 		this.httpHeaderPointer = httpHeaderPointer;
 	}
-
+*/
 
 	public static HTTP build(Http http)  {
 		if (http.getMessageType() == MessageType.REQUEST) {
@@ -56,6 +57,7 @@ public abstract class HTTP extends TCP implements Serializable {
 			request.setRequestVersion(http.fieldValue(Request.RequestVersion));
 			request.setUA_CPU(http.fieldValue(Request.UA_CPU));
 			request.setUser_Agent(http.fieldValue(Request.User_Agent));
+
 			return request;
 			
 		}
@@ -79,6 +81,8 @@ public abstract class HTTP extends TCP implements Serializable {
 			response.setResponseCodeMsg(http.fieldValue(Response.ResponseCodeMsg));
 			response.setServer(http.fieldValue(Response.Server));
 			response.setSet_Cookie(http.fieldValue(Response.Set_Cookie));
+
+
 			return response;
 		}
 		return null;
@@ -104,6 +108,14 @@ public abstract class HTTP extends TCP implements Serializable {
 
 	public HTTPResponse castToResponse() {
 		return (HTTPResponse) this;
+	}
+
+	public int getPayloadOffset() {
+		return payloadOffset;
+	}
+
+	public void setPayloadOffset(int payloadOffset) {
+		this.payloadOffset = payloadOffset;
 	}
 
 }

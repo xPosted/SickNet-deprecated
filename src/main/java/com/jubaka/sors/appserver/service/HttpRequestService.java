@@ -4,9 +4,7 @@ import com.jubaka.sors.appserver.dao.HttpRequestDao;
 import com.jubaka.sors.appserver.entities.HttpRequest;
 import com.jubaka.sors.appserver.entities.Session;
 import com.jubaka.sors.appserver.entities.TcpPacket;
-import com.jubaka.sors.beans.branch.SessionBean;
-import com.jubaka.sors.desktop.http.HTTPRequest;
-import sun.rmi.transport.tcp.TCPEndpoint;
+import com.jubaka.sors.desktop.protocol.application.HTTPRequest;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -62,6 +60,7 @@ public class HttpRequestService {
         entity.setUser_Agent(req.getUser_Agent());
         entity.setSequence(seq);
         entity.setTcpP(tcp);
+        entity.setPayloadOffset(req.getPayloadOffset());
         entity.setSession(ses);
 
         return entity;

@@ -19,9 +19,9 @@ import java.awt.Color;
 import javax.swing.JSeparator;
 import javax.swing.UIManager;
 
-import com.jubaka.sors.desktop.http.HTTP;
-import com.jubaka.sors.desktop.http.HTTPRequest;
-import com.jubaka.sors.desktop.http.HTTPResponse;
+import com.jubaka.sors.desktop.protocol.application.HTTP;
+import com.jubaka.sors.desktop.protocol.application.HTTPRequest;
+import com.jubaka.sors.desktop.protocol.application.HTTPResponse;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

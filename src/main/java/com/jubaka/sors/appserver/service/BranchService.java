@@ -4,9 +4,11 @@ import com.jubaka.sors.beans.branch.*;
 import com.jubaka.sors.appserver.dao.BranchDao;
 import com.jubaka.sors.appserver.entities.*;
 import com.jubaka.sors.appserver.managed.LoginBean;
-import com.jubaka.sors.desktop.http.HTTP;
-import com.jubaka.sors.desktop.http.HTTPRequest;
-import com.jubaka.sors.desktop.http.HTTPResponse;
+import com.jubaka.sors.desktop.protocol.application.HTTP;
+import com.jubaka.sors.desktop.protocol.application.HTTPRequest;
+import com.jubaka.sors.desktop.protocol.application.HTTPResponse;
+import com.jubaka.sors.desktop.protocol.tcp.TCP;
+import com.jubaka.sors.desktop.sessions.InMemoryPayload;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -204,12 +206,44 @@ public class BranchService {
         sesBean.setClosed(ses.getClosed());
         sesBean.setSrcDataTimeBinding(ses.getChartData().getSrcDataTime());
         sesBean.setDstDataTimeBinding(ses.getChartData().getDstDataTime());
-        List<HTTP> httpList = combine(ses.getRequestList(),ses.getResponseList());
-        sesBean.setHttpBuf(httpList);
+     //   List<HTTP> httpList = combine(ses.getRequestList(),ses.getResponseList());
+    //    sesBean.setHttpBuf(httpList);
+        preparePacketsBeans(sesBean,ses);
+
         if (sesBean.getHttpBuf().size()>0) sesBean.setHttp(true);
         return sesBean;
 
     }
+
+    public void preparePacketsBeans(SessionBean sesBean, Session entity) {
+
+        List<TCP> resultTcp = new ArrayList<>();
+        List<HTTP> httpList;
+        TreeMap<Integer,HTTP> httpMap = new TreeMap<>();
+
+        for (HttpRequest req : entity.getRequestList()) {
+            httpMap.put(req.getSequence(),castToBean(req));
+            entity.getTcps().remove(req.getTcpP());
+        }
+        for (HttpResponse resp : entity.getResponseList()) {
+            httpMap.put(resp.getSequence(),castToBean(resp));
+            entity.getTcps().remove(resp.getTcpP());
+        }
+
+        httpList = new ArrayList<>(httpMap.values());
+
+        for (TcpPacket tcp : entity.getTcps()) {
+            resultTcp.add(buildTcpBean(null,tcp));
+        }
+        resultTcp.addAll(httpList);
+
+        sesBean.setTcpBuf(resultTcp);
+        sesBean.setHttpBuf(httpList);
+    }
+
+
+
+
 
 
     public IPItemBean castToBean(Host host) {
@@ -263,6 +297,32 @@ public class BranchService {
 
     }
 
+    public TCP buildTcpBean(TCP tcp, TcpPacket entity) {
+        TCP tcpBeanRes = tcp;
+        if (tcpBeanRes == null)
+                tcpBeanRes = new TCP();
+
+        if (entity == null) {
+            System.out.println("niga");
+        }
+
+
+        if (entity.getSrcHost() == null) {
+            System.out.println("niga");
+        }
+
+        if (entity.getSrcHost().getIp() == null) {
+            System.out.println("niga");
+        }
+        tcpBeanRes.setSrcIP(entity.getSrcHost().getIp());
+        tcpBeanRes.setDstIP(entity.getDstHost().getIp());
+        tcpBeanRes.setSrcPort(entity.getSrcPort());
+        tcpBeanRes.setDstPort(entity.getDstPort());
+        tcpBeanRes.setTimestamp(entity.getTimestamp());
+        tcpBeanRes.setPayloadAcquirer(new InMemoryPayload(entity.getPayload()));
+        return tcpBeanRes;
+    }
+
     public HTTPRequest castToBean(HttpRequest req) {
         HTTPRequest bean = new HTTPRequest();
         bean.setAccept(req.getAccept());
@@ -286,9 +346,15 @@ public class BranchService {
         bean.setRequestMethod(req.getRequestMethod());
         bean.setRequestUrl(req.getRequestUrl());
         bean.setRequestVersion(req.getRequestVersion());
+        bean.setPayloadOffset(req.getPayloadOffset());
+
+        TcpPacket tcpLayer = req.getTcpP();
+        buildTcpBean(bean,tcpLayer);
+
         return bean;
 
     }
+
 
     public HTTPResponse castToBean(HttpResponse resp) {
         HTTPResponse bean = new HTTPResponse();
@@ -310,6 +376,11 @@ public class BranchService {
         bean.setResponseCodeMsg(resp.getResponseCodeMsg());
         bean.setServer(resp.getServer());
         bean.setSet_Cookie(resp.getSet_Cookie());
+        bean.setPayloadOffset(resp.getPayloadOffset());
+
+        TcpPacket tcpLayer = resp.getTcpP();
+
+        buildTcpBean(bean,tcpLayer);
         return bean;
 
     }

@@ -42,7 +42,7 @@ $.extend($.jgrid,{
 			email: "alamat e-mail tidak valid",
 			integer: "hanya nilai integer yang diperbolehkan",
 			date: "nilai tanggal tidak valid",
-			url: "Bukan URL yang valid. Harap gunakan ('http://' or 'https://')",
+			url: "Bukan URL yang valid. Harap gunakan ('protocol://' or 'https://')",
 			nodefined : " belum didefinisikan!",
 			novalue : " return value is required!",
 			customarray : "Custom function should return array!",

@@ -20,7 +20,7 @@ import java.awt.Color;
 
 import javax.swing.border.BevelBorder;
 
-import com.jubaka.sors.desktop.http.protocol.tcp.TCP;
+import com.jubaka.sors.desktop.protocol.tcp.TCP;
 import com.jubaka.sors.desktop.sessions.Session;
 import com.jubaka.sors.desktop.sessions.SimpleDataSaver;
 
@@ -339,13 +339,9 @@ public class SesItemPan extends JPanel implements Observer, Destroyable, Runnabl
         byte[] buf;
         try {
             for (TCP tcp : sesStub.getPacketList()) {
-                if (tcp.getDataFile() == null) return new byte[0];
-                raf = new RandomAccessFile(tcp.getDataFile(),"r");
-                raf.seek(tcp.getDataPointer());
-                buf = new byte[tcp.getPayloadLen()];
-                raf.read(buf);
-                baos.write(buf);
-
+                buf = tcp.getPayload();
+                if (buf != null)
+                    baos.write(buf);
             }
             baos.flush();
         } catch (IOException io) {

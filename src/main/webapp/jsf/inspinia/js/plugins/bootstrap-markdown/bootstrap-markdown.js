@@ -1045,10 +1045,10 @@
               chunk = selected.text;
             }
 
-            link = prompt(e.__localize('Insert Hyperlink'),'http://');
+            link = prompt(e.__localize('Insert Hyperlink'),'protocol://');
 
-            var urlRegex = new RegExp('^((http|https)://|(mailto:)|(//))[a-z0-9]', 'i');
-            if (link !== null && link !== '' && link !== 'http://' && urlRegex.test(link)) {
+            var urlRegex = new RegExp('^((protocol|https)://|(mailto:)|(//))[a-z0-9]', 'i');
+            if (link !== null && link !== '' && link !== 'protocol://' && urlRegex.test(link)) {
               var sanitizedLink = $('<div>'+link+'</div>').text();
 
               // transform selection and set the cursor into chunked text
@@ -1075,10 +1075,10 @@
               chunk = selected.text;
             }
 
-            link = prompt(e.__localize('Insert Image Hyperlink'),'http://');
+            link = prompt(e.__localize('Insert Image Hyperlink'),'protocol://');
 
-            var urlRegex = new RegExp('^((http|https)://|(//))[a-z0-9]', 'i');
-            if (link !== null && link !== '' && link !== 'http://' && urlRegex.test(link)) {
+            var urlRegex = new RegExp('^((protocol|https)://|(//))[a-z0-9]', 'i');
+            if (link !== null && link !== '' && link !== 'protocol://' && urlRegex.test(link)) {
               var sanitizedLink = $('<div>'+link+'</div>').text();
 
               // transform selection and set the cursor into chunked text

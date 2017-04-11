@@ -66,6 +66,8 @@ public class HttpRequest {
     @Column(length = 1024)
     private String User_Agent;
 
+    private int payloadOffset;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tcpId")
     private TcpPacket tcpP;
@@ -279,6 +281,14 @@ public class HttpRequest {
 
     public void setTcpP(TcpPacket tcpP) {
         this.tcpP = tcpP;
+    }
+
+    public int getPayloadOffset() {
+        return payloadOffset;
+    }
+
+    public void setPayloadOffset(int payloadOffset) {
+        this.payloadOffset = payloadOffset;
     }
 
 

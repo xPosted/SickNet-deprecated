@@ -1,8 +1,7 @@
 package com.jubaka.sors.beans.branch;
 
-import com.jubaka.sors.appserver.entities.TcpPacket;
-import com.jubaka.sors.desktop.http.HTTP;
-import com.jubaka.sors.desktop.http.protocol.tcp.TCP;
+import com.jubaka.sors.desktop.protocol.application.HTTP;
+import com.jubaka.sors.desktop.protocol.tcp.TCP;
 
 import java.io.Serializable;
 import java.util.List;

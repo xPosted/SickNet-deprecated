@@ -21,9 +21,9 @@ public class HTTPTreeView extends JPanel {
 		
 		MyNode top = new MyNode(new JPanel());
 		DefaultTreeModel model = new DefaultTreeModel(top);
-		for (HTTP http : ses.getHTTPList()) {
-			HTTPPanelHead pHead = new HTTPPanelHead(http);
-			HTTPPanelBody pBody = new HTTPPanelBody(http);
+		for (HTTP protocol : ses.getHTTPList()) {
+			HTTPPanelHead pHead = new HTTPPanelHead(protocol);
+			HTTPPanelBody pBody = new HTTPPanelBody(protocol);
 			MyNode nodeHead = new MyNode(pHead);
 			MyNode nodeBody = new MyNode(pBody);
 			nodeHead.add(nodeBody);

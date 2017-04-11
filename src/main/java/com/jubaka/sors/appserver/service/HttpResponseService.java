@@ -4,7 +4,7 @@ import com.jubaka.sors.appserver.dao.HttpResponseDao;
 import com.jubaka.sors.appserver.entities.HttpResponse;
 import com.jubaka.sors.appserver.entities.Session;
 import com.jubaka.sors.appserver.entities.TcpPacket;
-import com.jubaka.sors.desktop.http.HTTPResponse;
+import com.jubaka.sors.desktop.protocol.application.HTTPResponse;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -56,6 +56,7 @@ public class HttpResponseService {
         entity.setServer(resp.getServer());
         entity.setSet_Cookie(resp.getSet_Cookie());
         entity.setTcpP(tcp);
+        entity.setPayloadOffset(resp.getPayloadOffset());
         entity.setSession(ses);
 
         return entity;

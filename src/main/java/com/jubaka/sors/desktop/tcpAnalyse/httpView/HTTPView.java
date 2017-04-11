@@ -6,7 +6,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JScrollPane;
 
-import com.jubaka.sors.desktop.http.HTTP;
+import com.jubaka.sors.desktop.protocol.application.HTTP;
 import com.jubaka.sors.desktop.sessions.Session;
 import javax.swing.BoxLayout;
 

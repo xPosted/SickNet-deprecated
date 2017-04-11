@@ -1,8 +1,8 @@
 package com.jubaka.sors.desktop.tcpAnalyse.httpView;
 
-import com.jubaka.sors.desktop.http.HTTP;
-import com.jubaka.sors.desktop.http.HTTPRequest;
-import com.jubaka.sors.desktop.http.HTTPResponse;
+import com.jubaka.sors.desktop.protocol.application.HTTP;
+import com.jubaka.sors.desktop.protocol.application.HTTPRequest;
+import com.jubaka.sors.desktop.protocol.application.HTTPResponse;
 
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;

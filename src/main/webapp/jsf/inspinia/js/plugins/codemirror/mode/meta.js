@@ -46,7 +46,7 @@
     {name: "HXML", mime: "text/x-hxml", mode: "haxe", ext: ["hxml"]},
     {name: "ASP.NET", mime: "application/x-aspx", mode: "htmlembedded", ext: ["aspx"]},
     {name: "HTML", mime: "text/html", mode: "htmlmixed", ext: ["html", "htm"]},
-    {name: "HTTP", mime: "message/http", mode: "http"},
+    {name: "HTTP", mime: "message/protocol", mode: "protocol"},
     {name: "Jade", mime: "text/x-jade", mode: "jade", ext: ["jade"]},
     {name: "Java", mime: "text/x-java", mode: "clike", ext: ["java"]},
     {name: "Java Server Pages", mime: "application/x-jsp", mode: "htmlembedded", ext: ["jsp"]},

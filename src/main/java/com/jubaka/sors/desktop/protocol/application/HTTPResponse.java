@@ -1,4 +1,4 @@
-package com.jubaka.sors.desktop.http;
+package com.jubaka.sors.desktop.protocol.application;
 
 import java.io.Serializable;
 

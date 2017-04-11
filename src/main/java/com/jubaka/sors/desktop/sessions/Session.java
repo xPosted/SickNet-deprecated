@@ -15,8 +15,8 @@ import java.util.concurrent.Executors;
 
 import javax.swing.JPanel;
 
-import com.jubaka.sors.desktop.http.HTTP;
-import com.jubaka.sors.desktop.http.protocol.tcp.TCP;
+import com.jubaka.sors.desktop.protocol.application.HTTP;
+import com.jubaka.sors.desktop.protocol.tcp.TCP;
 import org.jnetpcap.protocol.tcpip.Http;
 import org.jnetpcap.protocol.tcpip.Tcp;
 
@@ -94,15 +94,15 @@ public class Session extends Observable implements Serializable, CustomObserver 
 
     private TCP buildTcpLayer(Tcp tcp, TCP tcpObj, InetAddress srcAddress, Long time) {
         if (srcAddress.equals(this.srcIP.getAddr())) {
-            tcpObj.setSrcIP(this.srcIP);
-            tcpObj.setDstIP(this.dstIP);
+            tcpObj.setSrcIP(this.srcIP.getAddr().getHostAddress());
+            tcpObj.setDstIP(this.dstIP.getAddr().getHostAddress());
             tcpObj.setSrcPort(this.srcP);
             tcpObj.setDstPort(this.dstP);
             tcpObj.setTimestamp(time);
             tcpObj.setStraight(true);
         } else {
-            tcpObj.setSrcIP(this.dstIP);
-            tcpObj.setDstIP(this.srcIP);
+            tcpObj.setSrcIP(this.dstIP.getAddr().getHostAddress());
+            tcpObj.setDstIP(this.srcIP.getAddr().getHostAddress());
             tcpObj.setSrcPort(this.dstP);
             tcpObj.setDstPort(this.srcP);
             tcpObj.setTimestamp(time);
@@ -112,8 +112,8 @@ public class Session extends Observable implements Serializable, CustomObserver 
 
     }
 
-    /*	public void addHttp(Http http) {
-            HTTP myHttpHeader =  HTTP.build(http);
+    /*	public void addHttp(Http protocol) {
+            HTTP myHttpHeader =  HTTP.build(protocol);
             httpBuf.add(myHttpHeader);
         //	System.out.println("httpadded");
         }
@@ -142,11 +142,13 @@ public class Session extends Observable implements Serializable, CustomObserver 
             byte[] buf = tcp.getPayload();
             Long pointer = null;
             File dataFile = null;
+
             if (tcph.isStraight()) {
                 this.srcIP.updateCounters((long) buf.length, false);
                 this.dstIP.updateCounters((long) buf.length, true);
                 pointer = dsaver.putSrcData(buf, time);
                 dataFile = dsaver.getSrcDataFile();
+
 
             } else {
                 this.srcIP.updateCounters((long) buf.length, true);
@@ -155,12 +157,13 @@ public class Session extends Observable implements Serializable, CustomObserver 
                 dataFile = dsaver.getDstDataFile();
             }
             if (pointer != null) {
-                tcph.setDataPointer(pointer - buf.length);
-                tcph.setDataFile(dataFile);
+
+                LocalPayloadAcquirer acquire = new LocalPayloadAcquirer(pointer,buf.length, dataFile);
+           //     tcph.setDataPointer(pointer - buf.length);
+           //     tcph.setDataFile(dataFile);
+                tcph.setPayloadAcquirer(acquire);
                 tcph.setPayloadLen(buf.length);
             }
-
-
 
         setChanged();
     }
@@ -187,14 +190,17 @@ public class Session extends Observable implements Serializable, CustomObserver 
                 dataFile = dsaver.getDstDataFile();
             }
             if (pointer != null) {
-                httph.setDataPointer(pointer - totalLen);
-                httph.setHttpHeaderPointer(pointer - totalLen);
-                httph.setHttpDataPointer(pointer - bufPayload.length);
-                httph.setDataFile(dataFile);
+                LocalPayloadAcquirer acquire = new LocalPayloadAcquirer(pointer,totalLen.intValue(), dataFile);
+
+              //  httph.setDataPointer(pointer - totalLen);
+            //    httph.setHttpHeaderPointer(pointer - totalLen);
+             //   httph.setHttpDataPointer(pointer - bufPayload.length);
+            //    httph.setDataFile(dataFile);
                 httph.setPayloadLen(totalLen.intValue());
+                httph.setPayloadOffset(bufHeader.length);
+                httph.setPayloadAcquirer(acquire);
 
             }
-
         setChanged();
 
 

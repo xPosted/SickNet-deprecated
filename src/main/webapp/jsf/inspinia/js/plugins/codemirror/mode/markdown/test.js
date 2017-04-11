@@ -41,14 +41,14 @@
      "[variable-2&formatting&formatting-list&formatting-list-ol 1. ][variable-2 foo]");
 
   FT("formatting_link",
-     "[link&formatting&formatting-link [][link foo][link&formatting&formatting-link ]]][string&formatting&formatting-link-string (][string http://example.com/][string&formatting&formatting-link-string )]");
+     "[link&formatting&formatting-link [][link foo][link&formatting&formatting-link ]]][string&formatting&formatting-link-string (][string protocol://example.com/][string&formatting&formatting-link-string )]");
 
   FT("formatting_linkReference",
      "[link&formatting&formatting-link [][link foo][link&formatting&formatting-link ]]][string&formatting&formatting-link-string [][string bar][string&formatting&formatting-link-string ]]]",
-     "[link&formatting&formatting-link [][link bar][link&formatting&formatting-link ]]:] [string http://example.com/]");
+     "[link&formatting&formatting-link [][link bar][link&formatting&formatting-link ]]:] [string protocol://example.com/]");
 
   FT("formatting_linkWeb",
-     "[link&formatting&formatting-link <][link http://example.com/][link&formatting&formatting-link >]");
+     "[link&formatting&formatting-link <][link protocol://example.com/][link&formatting&formatting-link >]");
 
   FT("formatting_linkEmail",
      "[link&formatting&formatting-link <][link user@example.com][link&formatting&formatting-link >]");
@@ -498,39 +498,39 @@
 
   // Inline link with title
   MT("linkTitle",
-     "[link [[foo]]][string (http://example.com/ \"bar\")] hello");
+     "[link [[foo]]][string (protocol://example.com/ \"bar\")] hello");
 
   // Inline link without title
   MT("linkNoTitle",
-     "[link [[foo]]][string (http://example.com/)] bar");
+     "[link [[foo]]][string (protocol://example.com/)] bar");
 
   // Inline link with image
   MT("linkImage",
-     "[link [[][tag ![[foo]]][string (http://example.com/)][link ]]][string (http://example.com/)] bar");
+     "[link [[][tag ![[foo]]][string (protocol://example.com/)][link ]]][string (protocol://example.com/)] bar");
 
   // Inline link with Em
   MT("linkEm",
-     "[link [[][link&em *foo*][link ]]][string (http://example.com/)] bar");
+     "[link [[][link&em *foo*][link ]]][string (protocol://example.com/)] bar");
 
   // Inline link with Strong
   MT("linkStrong",
-     "[link [[][link&strong **foo**][link ]]][string (http://example.com/)] bar");
+     "[link [[][link&strong **foo**][link ]]][string (protocol://example.com/)] bar");
 
   // Inline link with EmStrong
   MT("linkEmStrong",
-     "[link [[][link&strong **][link&em&strong *foo**][link&em *][link ]]][string (http://example.com/)] bar");
+     "[link [[][link&strong **][link&em&strong *foo**][link&em *][link ]]][string (protocol://example.com/)] bar");
 
   // Image with title
   MT("imageTitle",
-     "[tag ![[foo]]][string (http://example.com/ \"bar\")] hello");
+     "[tag ![[foo]]][string (protocol://example.com/ \"bar\")] hello");
 
   // Image without title
   MT("imageNoTitle",
-     "[tag ![[foo]]][string (http://example.com/)] bar");
+     "[tag ![[foo]]][string (protocol://example.com/)] bar");
 
   // Image with asterisks
   MT("imageAsterisks",
-     "[tag ![[*foo*]]][string (http://example.com/)] bar");
+     "[tag ![[*foo*]]][string (protocol://example.com/)] bar");
 
   // Not a link. Should be normal text due to square brackets being used
   // regularly in text, especially in quoted material, and no space is allowed
@@ -573,53 +573,53 @@
   // Link label, for reference-style links (taken from documentation)
 
   MT("labelNoTitle",
-     "[link [[foo]]:] [string http://example.com/]");
+     "[link [[foo]]:] [string protocol://example.com/]");
 
   MT("labelIndented",
-     "   [link [[foo]]:] [string http://example.com/]");
+     "   [link [[foo]]:] [string protocol://example.com/]");
 
   MT("labelSpaceTitle",
-     "[link [[foo bar]]:] [string http://example.com/ \"hello\"]");
+     "[link [[foo bar]]:] [string protocol://example.com/ \"hello\"]");
 
   MT("labelDoubleTitle",
-     "[link [[foo bar]]:] [string http://example.com/ \"hello\"] \"world\"");
+     "[link [[foo bar]]:] [string protocol://example.com/ \"hello\"] \"world\"");
 
   MT("labelTitleDoubleQuotes",
-     "[link [[foo]]:] [string http://example.com/  \"bar\"]");
+     "[link [[foo]]:] [string protocol://example.com/  \"bar\"]");
 
   MT("labelTitleSingleQuotes",
-     "[link [[foo]]:] [string http://example.com/  'bar']");
+     "[link [[foo]]:] [string protocol://example.com/  'bar']");
 
   MT("labelTitleParenthese",
-     "[link [[foo]]:] [string http://example.com/  (bar)]");
+     "[link [[foo]]:] [string protocol://example.com/  (bar)]");
 
   MT("labelTitleInvalid",
-     "[link [[foo]]:] [string http://example.com/] bar");
+     "[link [[foo]]:] [string protocol://example.com/] bar");
 
   MT("labelLinkAngleBrackets",
-     "[link [[foo]]:] [string <http://example.com/>  \"bar\"]");
+     "[link [[foo]]:] [string <protocol://example.com/>  \"bar\"]");
 
   MT("labelTitleNextDoubleQuotes",
-     "[link [[foo]]:] [string http://example.com/]",
+     "[link [[foo]]:] [string protocol://example.com/]",
      "[string \"bar\"] hello");
 
   MT("labelTitleNextSingleQuotes",
-     "[link [[foo]]:] [string http://example.com/]",
+     "[link [[foo]]:] [string protocol://example.com/]",
      "[string 'bar'] hello");
 
   MT("labelTitleNextParenthese",
-     "[link [[foo]]:] [string http://example.com/]",
+     "[link [[foo]]:] [string protocol://example.com/]",
      "[string (bar)] hello");
 
   MT("labelTitleNextMixed",
-     "[link [[foo]]:] [string http://example.com/]",
+     "[link [[foo]]:] [string protocol://example.com/]",
      "(bar\" hello");
 
   MT("linkWeb",
-     "[link <http://example.com/>] foo");
+     "[link <protocol://example.com/>] foo");
 
   MT("linkWebDouble",
-     "[link <http://example.com/>] foo [link <http://example.com/>]");
+     "[link <protocol://example.com/>] foo [link <protocol://example.com/>]");
 
   MT("linkEmail",
      "[link <user@example.com>] foo");
@@ -738,16 +738,16 @@
   MT("xmlMode",
      "[tag&bracket <][tag div][tag&bracket >]",
      "*foo*",
-     "[tag&bracket <][tag http://github.com][tag&bracket />]",
+     "[tag&bracket <][tag protocol://github.com][tag&bracket />]",
      "[tag&bracket </][tag div][tag&bracket >]",
-     "[link <http://github.com/>]");
+     "[link <protocol://github.com/>]");
 
   MT("xmlModeWithMarkdownInside",
      "[tag&bracket <][tag div] [attribute markdown]=[string 1][tag&bracket >]",
      "[em *foo*]",
-     "[link <http://github.com/>]",
+     "[link <protocol://github.com/>]",
      "[tag </div>]",
-     "[link <http://github.com/>]",
+     "[link <protocol://github.com/>]",
      "[tag&bracket <][tag div][tag&bracket >]",
      "[tag&bracket </][tag div][tag&bracket >]");
 

@@ -6,7 +6,7 @@ import com.jubaka.sors.appserver.entities.Branch;
 import com.jubaka.sors.appserver.serverSide.*;
 import com.jubaka.sors.appserver.service.BranchService;
 import com.jubaka.sors.appserver.service.PortServiceService;
-import com.jubaka.sors.desktop.http.HTTP;
+import com.jubaka.sors.desktop.protocol.application.HTTP;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.TimeSeries;
 
@@ -728,7 +728,7 @@ public class TaskViewBean implements Serializable, Observer {
             if (sessionActiveFilter & sessionOutFilter) sessionList.addAll(ipBean.getActiveOutSes());
             if (sessionSavedFilter & sessionInFilter) sessionList.addAll(ipBean.getStoredInSes());
             if (sessionSavedFilter & sessionOutFilter) sessionList.addAll(ipBean.getStoredOutSes());
-            /// gather http from sessions
+            /// gather protocol from sessions
             httpList.clear();
             for (SessionBean sesBean : sessionList) {
                 httpList.addAll(sesBean.getHttpBuf());

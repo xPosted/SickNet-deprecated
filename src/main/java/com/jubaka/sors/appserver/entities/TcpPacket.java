@@ -29,6 +29,7 @@ public class TcpPacket {
     private Integer srcPort = null;
     private Integer dstPort = null;
     private Long timestamp = null;
+
     @Lob
     private byte[] payload;
 

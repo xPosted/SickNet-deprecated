@@ -3,7 +3,7 @@ package com.jubaka.sors.beans;
 import com.jubaka.sors.beans.branch.SessionBean;
 import com.jubaka.sors.appserver.serverSide.ConnectionHandler;
 import com.jubaka.sors.appserver.serverSide.SmartFilter;
-import com.jubaka.sors.desktop.http.HTTP;
+import com.jubaka.sors.desktop.protocol.application.HTTP;
 
 import java.util.ArrayList;
 import java.util.Collections;

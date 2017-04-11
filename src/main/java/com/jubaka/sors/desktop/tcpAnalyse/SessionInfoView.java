@@ -103,7 +103,7 @@ public class SessionInfoView extends JFrame {
 		JRadioButton rdbtnHttp = new JRadioButton("HTTP");
 		rdbtnHttp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("http");
+				System.out.println("protocol");
 				setHTTPMode();
 				
 			}

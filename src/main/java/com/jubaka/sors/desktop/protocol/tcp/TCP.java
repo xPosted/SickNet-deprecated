@@ -1,6 +1,7 @@
-package com.jubaka.sors.desktop.http.protocol.tcp;
+package com.jubaka.sors.desktop.protocol.tcp;
 
 import com.jubaka.sors.desktop.sessions.IPaddr;
+import com.jubaka.sors.desktop.sessions.PayloadAcquirer;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,13 +11,12 @@ import java.io.RandomAccessFile;
  * Created by root on 18.11.16.
  */
 public class TCP {
-    protected IPaddr srcIP = null;
-    protected IPaddr dstIP = null;
+    protected String srcIP = null;
+    protected String dstIP = null;
     protected Integer srcPort = null;
     protected Integer dstPort = null;
     protected int payloadLen = 0;
-    protected Long dataPointer = null;
-    protected File dataFile;
+    protected PayloadAcquirer payloadAcquirer;
     protected Long timestamp = null;
     protected boolean straight;
 
@@ -29,7 +29,7 @@ public class TCP {
         this.timestamp = timestamp;
     }
 
-    public File getDataFile() {
+ /*   public File getDataFile() {
         return dataFile;
     }
 
@@ -44,12 +44,12 @@ public class TCP {
     public void setDataPointer(Long dataPointer) {
         this.dataPointer = dataPointer;
     }
-
-    public IPaddr getDstIP() {
+*/
+    public String getDstIP() {
         return dstIP;
     }
 
-    public void setDstIP(IPaddr dstIP) {
+    public void setDstIP(String dstIP) {
         this.dstIP = dstIP;
     }
 
@@ -69,11 +69,11 @@ public class TCP {
         this.payloadLen = payloadLen;
     }
 
-    public IPaddr getSrcIP() {
+    public String getSrcIP() {
         return srcIP;
     }
 
-    public void setSrcIP(IPaddr srcIP) {
+    public void setSrcIP(String srcIP) {
         this.srcIP = srcIP;
     }
 
@@ -93,20 +93,17 @@ public class TCP {
         this.straight = straight;
     }
 
-    public byte[] getPayload() {
-        byte[] buf = null;
-        try {
-            if (getDataFile() == null) return null;
-            RandomAccessFile  raf = new RandomAccessFile(getDataFile(),"r");
-            raf.seek(getDataPointer());
-            buf = new byte[getPayloadLen()];
-            raf.read(buf);
-            raf.close();
-        } catch (IOException io) {
-            io.printStackTrace();
-        }
-        return buf;
+    public PayloadAcquirer getPayloadAcquirer() {
+        return payloadAcquirer;
+    }
 
+    public void setPayloadAcquirer(PayloadAcquirer payloadAcquirer) {
+        this.payloadAcquirer = payloadAcquirer;
+    }
+
+
+    public byte[] getPayload() {
+      return payloadAcquirer.getPayload();
     }
 
 }
