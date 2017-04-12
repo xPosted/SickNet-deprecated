@@ -119,7 +119,7 @@ public class StatisticBean {
     }
 
     private void readStatFromDB(Long brId) {
-        Branch b = branchService.selectById(brId);
+        Branch b = branchService.eagerAllSelectById(brId);
         BranchBean bb = branchService.castToBean(b);
         DefaultTableModel model = null;
         TimeSeries ts = null;

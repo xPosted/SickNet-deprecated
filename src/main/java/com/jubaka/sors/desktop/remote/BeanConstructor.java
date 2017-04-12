@@ -156,8 +156,8 @@ public class BeanConstructor {
         sb.setInSesCnt(net.getInputSesCount());
         sb.setOutSesCnt(net.getOutputSesCount());
 
-        HashSet<IPItemLightBean> ipBeans = new HashSet<IPItemLightBean>();
-        HashSet<IPItemLightBean> liveIpBeans = new HashSet<IPItemLightBean>();
+        List<IPItemLightBean> ipBeans = new ArrayList<>();
+        List<IPItemLightBean> liveIpBeans = new ArrayList<>();
         for (IPaddr ip : net.getIps()) {
             ipBeans.add(prepareIPItemLightBean(net.getId(),ip,null));
         }

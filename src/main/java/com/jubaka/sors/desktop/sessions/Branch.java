@@ -64,6 +64,15 @@ public class Branch {
 		active=false;
 	}
 
+	public void captureFin() {
+		SessionsAPI sesApi = factory.getSesionInstance(id);
+		for (Subnet net : sesApi.getAllSubnets()) {
+			for (IPaddr addr : net.getIps()) {
+				addr.closeAllDataSavers();
+			}
+		}
+	}
+
 	public ClassFactory getFactory() {
 		if (factory == null) return ClassFactory.getInstance();
 		return factory;

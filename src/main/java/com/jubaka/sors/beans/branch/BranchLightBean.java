@@ -35,7 +35,16 @@ public class BranchLightBean extends Bean implements Serializable{
         this.subnetsLight = subnetsLight;
     }
 
-    public List<SubnetLightBean> getSubnetsLightBeanList() {
+  /*  public List<SubnetLightBean> getSubnetsLightBeanList() {
         return new ArrayList<SubnetLightBean>(subnetsLight);
+    }
+*/
+    public SubnetLightBean getSubnetByName(String subnet) {
+        for (SubnetLightBean sb : getSubnetsLight()) {
+            if (sb.getSubnet().getHostAddress().equals(subnet)) {
+                return sb;
+            }
+        }
+        return null;
     }
 }

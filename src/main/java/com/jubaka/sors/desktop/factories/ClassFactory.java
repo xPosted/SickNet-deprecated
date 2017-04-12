@@ -168,7 +168,7 @@ public class ClassFactory extends Observable implements Serializable {
 			branchList.put(id,b);
 			
 			Controller cntr = new Controller();
-			apiList.put(id,new API(id));
+			apiList.put(id,new API(id,this));
 			sesApiList.put(id,new SessionsAPI(b,this));
 			cntrList.put(id,cntr);
 			dsList.put(id,new DataSaverInfo(id));
@@ -197,7 +197,7 @@ public class ClassFactory extends Observable implements Serializable {
 			else b = new Branch(id,name, ip, path_toDump, ifs,this);
 
 			SessionsAPI sesApi = new SessionsAPI(b,this);
-			apiList.put(id,new API(id));
+			apiList.put(id,new API(id,this));
 			sesApiList.put(id,sesApi);
 			dsList.put(id,new DataSaverInfo(id));
 

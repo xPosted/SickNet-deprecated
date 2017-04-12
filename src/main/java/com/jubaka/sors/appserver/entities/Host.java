@@ -31,10 +31,10 @@ public class Host {
     @JoinColumn(name="subnetId")
     private Subnet subnet;
 
-    @OneToMany(mappedBy = "dstHost", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "dstHost", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Session> sessionsInput;
 
-    @OneToMany(mappedBy = "srcHost", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "srcHost", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Session> sessionsOutput;
 

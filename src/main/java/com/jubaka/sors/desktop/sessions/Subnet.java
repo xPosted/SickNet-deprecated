@@ -30,10 +30,10 @@ public class Subnet extends Observable implements Serializable, CustomObserver  
 	protected Map<Integer, HashSet<Session>> srcPMapStore=  Collections.synchronizedMap( new HashMap<Integer, HashSet<Session>>());
 	protected Map<Integer, HashSet<Session>> dstPMapStore=  Collections.synchronizedMap( new HashMap<Integer, HashSet<Session>>());
 	protected Map<Long, Session> timeSesMap =  Collections.synchronizedMap( new HashMap<Long, Session>());
-	private ReentrantLock mutex = new ReentrantLock();
+	//private ReentrantLock mutex = new ReentrantLock();
 	
-	Timer t = new Timer();
-	TimerTask task = null;
+//	Timer t = new Timer();
+//	TimerTask task = null;
 	protected HashSet<Session> treeItem;
 	protected Long dataSend = (long) 0;
 	protected Long dataReceive = (long) 0;

@@ -37,6 +37,10 @@ public class SubnetService {
         return subnetDao.selectById(id);
     }
 
+    public Subnet eagerSelectById(Long id) {
+        return subnetDao.eagerSelectById(id);
+    }
+
     public Subnet update(Subnet br) {
         return subnetDao.update(br);
     }

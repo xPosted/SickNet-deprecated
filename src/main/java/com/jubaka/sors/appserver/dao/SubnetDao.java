@@ -24,6 +24,13 @@ public class SubnetDao {
     }
 
     @Transactional
+    public Subnet eagerSelectById(Long id) {
+        Subnet s = entityManager.find(Subnet.class,id);
+        if (s!=null) s.getHosts().size();
+        return s;
+    }
+
+    @Transactional
     public Subnet update(Subnet sub) {
         Subnet resBr = entityManager.merge(sub);
         entityManager.flush();

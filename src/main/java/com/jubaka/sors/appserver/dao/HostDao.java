@@ -26,6 +26,16 @@ public class HostDao implements Serializable {
     }
 
     @Transactional
+    public Host eagerSelectById(Long id) {
+        Host h = entityManager.find(Host.class,id);
+        if (h != null) {
+            h.getSessionsInput().size();
+            h.getSessionsOutput().size();
+        }
+        return h;
+    }
+
+    @Transactional
     public Host update(Host h) {
         Host resBr = entityManager.merge(h);
         entityManager.flush();

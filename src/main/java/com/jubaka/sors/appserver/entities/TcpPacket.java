@@ -31,6 +31,7 @@ public class TcpPacket {
     private Long timestamp = null;
 
     @Lob
+    @Basic(fetch = FetchType.LAZY)
     private byte[] payload;
 
 

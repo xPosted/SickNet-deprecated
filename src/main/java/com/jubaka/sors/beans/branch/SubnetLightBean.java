@@ -31,9 +31,10 @@ public class SubnetLightBean extends Bean implements Serializable {
     protected int subnetMask;
     public boolean selected= false;
     protected Integer brId;
+    protected Long dbId;
 
-    private HashSet<IPItemLightBean> ips = new HashSet<IPItemLightBean>();	// all captured ips
-    private HashSet<IPItemLightBean> liveIps = new HashSet<IPItemLightBean>();	// ips that are online
+    private List<IPItemLightBean> ips = new ArrayList<>();// all captured ips
+    private List<IPItemLightBean> liveIps = new ArrayList<>();	// ips that are online
 
     public Long getDataSend() {
         return dataSend;
@@ -96,19 +97,19 @@ public class SubnetLightBean extends Bean implements Serializable {
         this.addrCnt = addrCnt;
     }
 
-    public HashSet<IPItemLightBean> getLightIps() {
+    public List<IPItemLightBean> getLightIps() {
         return ips;
     }
 
-    public void setLightIps(HashSet<IPItemLightBean> ips) {
+    public void setLightIps(List<IPItemLightBean> ips) {
         this.ips = ips;
     }
 
-    public HashSet<IPItemLightBean> getLightLiveIps() {
+    public List<IPItemLightBean> getLightLiveIps() {
         return liveIps;
     }
 
-    public void setLightLiveIps(HashSet<IPItemLightBean> liveIps) {
+    public void setLightLiveIps(List<IPItemLightBean> liveIps) {
         this.liveIps = liveIps;
     }
 
@@ -151,6 +152,21 @@ public class SubnetLightBean extends Bean implements Serializable {
         this.outSesCnt = outSesCnt;
     }
 
+    public Long getDbId() {
+        return dbId;
+    }
+
+    public void setDbId(Long dbId) {
+        this.dbId = dbId;
+    }
+
+    public IPItemLightBean getIpByName(String name) {
+        for (IPItemLightBean ipBean : ips) {
+            if (ipBean.getIp().equals(name))
+                return ipBean;
+        }
+        return null;
+    }
 
 
 

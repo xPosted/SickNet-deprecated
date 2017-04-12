@@ -223,6 +223,7 @@ public class SimpleDataSaver implements Serializable, DataSaver {
             BufferedInputStream bis = new BufferedInputStream(new FileInputStream(path + "/" + srcDataFileName));
             byte[] resBytes = new byte[bis.available()];
             bis.read(resBytes);
+            bis.close();
             return resBytes;
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -252,6 +253,7 @@ public class SimpleDataSaver implements Serializable, DataSaver {
             BufferedInputStream bis = new BufferedInputStream(new FileInputStream(path + File.separator + dstDataFileName));
             byte[] resBytes = new byte[bis.available()];
             bis.read(resBytes);
+            bis.close();
             return resBytes;
         } catch (IOException e) {
             // TODO Auto-generated catch block

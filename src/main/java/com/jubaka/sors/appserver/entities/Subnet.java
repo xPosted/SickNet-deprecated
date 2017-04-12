@@ -31,7 +31,7 @@ public class Subnet {
     @JoinColumn(name = "branchId")
     private Branch branch;
 
-    @OneToMany(mappedBy = "subnet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "subnet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Host> hosts;
 
 

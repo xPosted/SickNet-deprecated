@@ -1,8 +1,6 @@
 package com.jubaka.sors.appserver.dao;
 
-import com.jubaka.sors.appserver.entities.Branch;
-import com.jubaka.sors.appserver.entities.Node;
-import com.jubaka.sors.appserver.entities.User;
+import com.jubaka.sors.appserver.entities.*;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
@@ -23,8 +21,32 @@ public class BranchDao  {
     @PersistenceContext(unitName = "SorsPersistence",type = PersistenceContextType.TRANSACTION)
     protected EntityManager entityManager;
 
+    @Transactional
     public Branch selectById(Long id) {
         return entityManager.find(Branch.class,id);
+    }
+
+    @Transactional
+    public Branch eagerSelectById(Long id) {
+        Branch b = entityManager.find(Branch.class,id);
+        if (b != null) b.getSubntes().size();
+        return b;
+    }
+
+    @Transactional
+    public Branch eagerAllSelectById(Long id) {
+        Branch b = entityManager.find(Branch.class,id);
+        if (b != null) {
+            b.getSubntes().size();
+            for (Subnet s : b.getSubntes()) {
+                s.getHosts().size();
+                for (Host h : s.getHosts()) {
+                    h.getSessionsOutput().size();
+                    h.getSessionsInput().size();
+                }
+            }
+        }
+        return b;
     }
 
     @Transactional

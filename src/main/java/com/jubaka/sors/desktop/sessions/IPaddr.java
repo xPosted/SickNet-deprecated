@@ -255,6 +255,21 @@ public class IPaddr extends Observable implements Serializable, CustomObserver {
 		}
 		return resultSet;
 	}
+
+	public void closeAllDataSavers() {
+		for (Session ses : getInputActiveSessions()){
+			ses.getDataSaver().closeConnection();
+		}
+		for (Session ses : getInputStoredSessions()){
+			ses.getDataSaver().closeConnection();
+		}
+		for (Session ses : getOutputActiveSessions()){
+			ses.getDataSaver().closeConnection();
+		}
+		for (Session ses : getOutputStoredSessions()){
+			ses.getDataSaver().closeConnection();
+		}
+	}
 	
 	public Set<Session> getOutputActiveSessions(Long onTime) {
 		Set<Session> resultSet = new HashSet<Session>();

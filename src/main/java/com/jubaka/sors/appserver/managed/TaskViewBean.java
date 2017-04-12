@@ -1,5 +1,9 @@
 package com.jubaka.sors.appserver.managed;
 
+import com.jubaka.sors.appserver.entities.Host;
+import com.jubaka.sors.appserver.entities.Subnet;
+import com.jubaka.sors.appserver.service.HostService;
+import com.jubaka.sors.appserver.service.SubnetService;
 import com.jubaka.sors.beans.Category;
 import com.jubaka.sors.beans.branch.*;
 import com.jubaka.sors.appserver.entities.Branch;
@@ -16,6 +20,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.transaction.Transactional;
 import javax.websocket.Session;
 import java.io.IOException;
 import java.io.Serializable;
@@ -42,6 +47,12 @@ public class TaskViewBean implements Serializable, Observer {
 
     @Inject
     private BranchService branchService;
+
+    @Inject
+    private SubnetService subnetService;
+
+    @Inject
+    private HostService hostService;
 
     @Inject
     private PortServiceService portService;
@@ -92,6 +103,8 @@ public class TaskViewBean implements Serializable, Observer {
 
     private String netAddr="";
     private String mask="";
+
+    private boolean dbMode = false;
 
 
 
@@ -211,7 +224,7 @@ public class TaskViewBean implements Serializable, Observer {
         return false;
     }
    public void initTask(Long nodeUnid, Integer taskId) {
-
+       dbMode = false;
        if (nodeServerEndpoint != null) {
            if (nodeServerEndpoint.getUnid().equals(nodeUnid)) {
                if (blb.getBib().getId().equals(taskId))
@@ -247,13 +260,7 @@ public class TaskViewBean implements Serializable, Observer {
 
     public void selectSubnet(String subnet) {
 
-        if (blb instanceof BranchBean){
-            BranchBean bb = (BranchBean) blb;
-            SubnetBean sb = bb.getSubnetByName(subnet);
-            sbl = sb;
-            onlineIps = sb.getLiveIps();
-            allIps = sb.getIps();
-        } else {
+        if ( ! dbMode) {
             if (sbl != null) {
                 nodeServerEndpoint.removeObserver(blb.getBib().getId(),sbl.getSubnet().getHostAddress());
             }
@@ -261,23 +268,48 @@ public class TaskViewBean implements Serializable, Observer {
             onlineIps = new ArrayList<>(sbl.getLightLiveIps());
             allIps = new ArrayList<>(sbl.getLightIps());
             nodeServerEndpoint.addObserver(this);
+        } else {
+            if (blb instanceof BranchBean){
+                BranchBean bb = (BranchBean) blb;
+                SubnetBean sb = bb.getSubnetByName(subnet);
+                sbl = sb;
+                onlineIps = sb.getLiveIps();
+                allIps = sb.getIps();
+            } else {
+                SubnetLightBean subnetLightBean = blb.getSubnetByName(subnet);
+                sbl = subnetLightBean;
+                if (sbl.getAllIpList().size() == 0) {
+                    Subnet subEnt = subnetService.eagerSelectById(sbl.getDbId());
+                    sbl = branchService.castToLightBean(null,subEnt);
+                }
+                onlineIps = sbl.getLightLiveIps();
+                allIps = sbl.getLightIps();
+            }
         }
+
         if (sbl == null) return;
-
-
-
     }
 
     public void selectIp(String address) {
-        if (sbl instanceof SubnetBean) {
-            SubnetBean sb = (SubnetBean) sbl;
-            ipBean = sb.getIpByName(address);
-        } else {
+        if ( ! dbMode)  {
             if (ipBean!=null) {
                 nodeServerEndpoint.removeObserver(blb.getBib().getId(),ipBean.getIp());
             }
             ipBean =  nodeServerEndpoint.getIpItemBean(blb.getBib().getId(),address,true);
             nodeServerEndpoint.addObserver(this);
+        } else {
+            if (sbl instanceof SubnetBean) {
+                SubnetBean sb = (SubnetBean) sbl;
+                IPItemBean fullBean = sb.getIpByName(address);
+                ipBean = fullBean;
+            } else {
+               IPItemLightBean ipBeanLight = sbl.getIpByName(address);
+                Host h = hostService.eagerSelectById(ipBeanLight.getDbId());
+                ipBean = branchService.castToBean(h);
+
+
+            }
+
         }
 
         refreshFilters();
@@ -289,9 +321,11 @@ public class TaskViewBean implements Serializable, Observer {
             refreshFiltersNew(getSelectedIp(),null,filters.get(0));
     }
 
+
     public void initTask(Long dbtaskId) {
-        Branch b =  branchService.selectById(dbtaskId);
-        blb = branchService.castToBean(b);
+        dbMode = true;
+        Branch b =  branchService.eagerSelectById(dbtaskId);
+        blb = branchService.castToLightBean(null,b);
 
         categories.clear();
         httpList.clear();

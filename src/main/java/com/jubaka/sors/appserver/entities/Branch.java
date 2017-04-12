@@ -33,7 +33,7 @@ public class Branch {
     @JoinColumn(name = "userId")
     private User user;
 
-    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Subnet> subntes;
 
     // make subnet list here ... security(node history view)

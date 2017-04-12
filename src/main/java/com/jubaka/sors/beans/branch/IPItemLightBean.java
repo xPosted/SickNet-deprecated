@@ -25,6 +25,8 @@ public class IPItemLightBean extends Bean implements Serializable {
     protected Integer brId=null;
     protected List<SessionBean> newSessionsForCC=null;
 
+    protected Long dbId;
+
     public synchronized Long getDataDown() {
         return dataDown;
     }
@@ -114,6 +116,14 @@ public class IPItemLightBean extends Bean implements Serializable {
 
     public void setNewSessionsForCC(List<SessionBean> newSessionsForCC) {
         this.newSessionsForCC = newSessionsForCC;
+    }
+
+    public Long getDbId() {
+        return dbId;
+    }
+
+    public void setDbId(Long dbId) {
+        this.dbId = dbId;
     }
 
 }

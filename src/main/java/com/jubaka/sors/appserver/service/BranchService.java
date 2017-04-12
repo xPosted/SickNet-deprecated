@@ -46,6 +46,14 @@ public class BranchService {
         return branchDao.insert(br);
     }
 
+    public Branch eagerAllSelectById(Long id) {
+        return branchDao.eagerAllSelectById(id);
+    }
+
+    public Branch eagerSelectById(Long id) {
+        return branchDao.eagerSelectById(id);
+    }
+
     public Branch selectById(Long id) {
         return branchDao.selectById(id);
     }
@@ -85,6 +93,8 @@ public class BranchService {
     public void deleteIfExist(Date createionTime, Node node) {
         branchDao.deleteIfExist(createionTime,node);
     }
+
+
     public Branch persistBranch(BranchBean bb) {
 
         SessionEntitiesCreator sessionCreator = new SessionEntitiesCreator();
@@ -137,14 +147,37 @@ public class BranchService {
         return bib;
     }
 
+    public BranchLightBean castToLightBean(BranchLightBean preCreated, Branch b) {
+        BranchLightBean lightBean;
+        if (preCreated == null) {
+            lightBean = new BranchLightBean();
+        } else {
+            lightBean = preCreated;
+        }
+        lightBean.setBib(castToInfoBean(b));
+        List<SubnetLightBean> subnets = new ArrayList<>();
+        SubnetLightBean sb = null;
+
+        for (Subnet sEntity : b.getSubntes()) {
+
+            sb =  castToLightBeanNoHost(null,sEntity);
+            subnets.add(sb);
+        }
+
+        lightBean.setSubnetsLight(subnets);
+        return lightBean;
+
+    }
+
     public BranchBean castToBean(Branch b) {
         BranchBean bb = new BranchBean();
 
         bb.setBib(castToInfoBean(b));
         List<SubnetBean> subnets = new ArrayList<>();
         SubnetBean sb = null;
+
         for (Subnet sEntity : b.getSubntes()) {
-            sb = castToBean(sEntity);
+            sb =  castToBean(sEntity);
             subnets.add(sb);
         }
 
@@ -153,28 +186,72 @@ public class BranchService {
 
     }
 
+    public SubnetLightBean castToLightBean(SubnetLightBean preCreated, Subnet ent) {
+        SubnetLightBean lightBean;
+        if (preCreated == null) {
+            lightBean = new SubnetLightBean();
+        } else
+            lightBean = preCreated;
+        lightBean = castToLightBeanNoHost(lightBean,ent);
+
+        List<IPItemLightBean> hosts = new ArrayList<>();
+        List<IPItemLightBean> liveHosts = new ArrayList<>();
+        for (Host host : ent.getHosts()) {
+            IPItemLightBean ipBean;
+            ipBean =  castToLightBean(null,host);
+            hosts.add(ipBean);
+            if (ipBean.getActiveCount() > 0) {
+                liveHosts.add(ipBean);
+            }
+        }
+
+        lightBean.setLightIps(hosts);
+        lightBean.setLightLiveIps(liveHosts);
+        return lightBean;
+
+    }
+
+    public SubnetLightBean castToLightBeanNoHost(SubnetLightBean preCreated, Subnet ent) {
+        SubnetLightBean lightBean;
+        if (preCreated == null) {
+            lightBean = new SubnetLightBean();
+        } else
+            lightBean = preCreated;
+
+        try {
+            lightBean.setSubnet(InetAddress.getByName (ent.getSubnet()));
+            lightBean.setSubnetMask(ent.getSubnetMask());
+            lightBean.setSesCnt(ent.getSesCnt());
+            lightBean.setAddrCnt(ent.getAddrCnt());
+            lightBean.setActiveAddrCnt(ent.getActiveAddrCnt());
+            lightBean.setActiveSesCnt(ent.getActiveSesCnt());
+            lightBean.setActiveInSesCnt(ent.getActiveInSesCnt());
+            lightBean.setInSesCnt(ent.getInSesCnt());
+            lightBean.setActiveOutSesCnt(ent.getActiveOutSesCnt());
+            lightBean.setOutSesCnt(ent.getOutSesCnt());
+            lightBean.setDataSend(ent.getDataSend());
+            lightBean.setDataReceive(ent.getDataReceive());
+            lightBean.setDbId(ent.getId());
+
+        } catch(UnknownHostException un) {
+            un.printStackTrace();
+
+        }
+        return lightBean;
+
+    }
+
     public SubnetBean castToBean(Subnet ent) {
         SubnetBean sb = new SubnetBean();
-        try {
 
 
-            sb.setSubnet(InetAddress.getByName (ent.getSubnet()));
-            sb.setSubnetMask(ent.getSubnetMask());
-            sb.setSesCnt(ent.getSesCnt());
-            sb.setAddrCnt(ent.getAddrCnt());
-            sb.setActiveAddrCnt(ent.getActiveAddrCnt());
-            sb.setActiveSesCnt(ent.getActiveSesCnt());
-            sb.setActiveInSesCnt(ent.getActiveInSesCnt());
-            sb.setInSesCnt(ent.getInSesCnt());
-            sb.setActiveOutSesCnt(ent.getActiveOutSesCnt());
-            sb.setOutSesCnt(ent.getOutSesCnt());
-            sb.setDataSend(ent.getDataSend());
-            sb.setDataReceive(ent.getDataReceive());
+            sb = (SubnetBean) castToLightBean(sb,ent);
 
             List<IPItemBean> hosts = new ArrayList<>();
             List<IPItemBean> liveHosts = new ArrayList<>();
             for (Host host : ent.getHosts()) {
-                IPItemBean ipBean = castToBean(host);
+                IPItemBean ipBean;
+                ipBean = castToBean(host);
                 hosts.add(ipBean);
                 if (ipBean.getActiveCount() > 0) {
                     liveHosts.add(ipBean);
@@ -184,10 +261,6 @@ public class BranchService {
             sb.setIps(hosts);
             sb.setLiveIps(liveHosts);
 
-        } catch(UnknownHostException un) {
-            un.printStackTrace();
-
-        }
         return sb;
 
 
@@ -244,23 +317,35 @@ public class BranchService {
 
 
 
+    public IPItemLightBean castToLightBean(IPItemLightBean preCreated, Host host) {
+        IPItemLightBean lightBean;
+        if (preCreated == null) {
+            lightBean = new IPItemLightBean();
+        } else {
+            lightBean = preCreated;
+        }
+
+        lightBean.setIp(host.getIp());
+        lightBean.setDnsName(host.getDnsName());
+        lightBean.setActiveCount(host.getActiveCount());
+        lightBean.setSavedCount(host.getSavedCount());
+        lightBean.setDataDown(host.getDataDown());
+        lightBean.setDataUp(host.getDataUp());
+
+
+        lightBean.setInputActiveCount(host.getInputActiveCount());
+        lightBean.setOutputActiveCount(host.getOutputActiveCount());
+        lightBean.setInputCount(host.getInputCount());
+        lightBean.setOutputCount(host.getOutputCount());
+        lightBean.setDbId(host.getId());
+        return lightBean;
+
+    }
 
 
     public IPItemBean castToBean(Host host) {
         IPItemBean bean = new IPItemBean();
-        bean.setIp(host.getIp());
-        bean.setDnsName(host.getDnsName());
-        bean.setActiveCount(host.getActiveCount());
-        bean.setSavedCount(host.getSavedCount());
-        bean.setDataDown(host.getDataDown());
-        bean.setDataUp(host.getDataUp());
-
-
-        bean.setInputActiveCount(host.getInputActiveCount());
-        bean.setOutputActiveCount(host.getOutputActiveCount());
-        bean.setInputCount(host.getInputCount());
-        bean.setOutputCount(host.getOutputCount());
-
+        bean = (IPItemBean) castToLightBean(bean,host);
 
         HashSet<SessionBean> activeInSes = new HashSet<>();
         HashSet<SessionBean> activeOutSes = new HashSet<>();

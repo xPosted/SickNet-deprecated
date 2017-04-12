@@ -10,6 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.JTextArea;
 
+import com.jubaka.sors.desktop.factories.ClassFactory;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapBpfProgram;
 import org.jnetpcap.PcapIf;
@@ -20,7 +21,7 @@ public class API extends Observable implements PcapPacketHandler<String>, Serial
 
 	private ExecutorService exec = Executors.newCachedThreadPool();
 	private Future f;
-	private API instance = null;
+	//private API instance = null;
 
 	private ArrayList<Dumper> dumps = new ArrayList<Dumper>();
 
@@ -30,15 +31,24 @@ public class API extends Observable implements PcapPacketHandler<String>, Serial
 
 	private ReentrantLock mutex = new ReentrantLock();
 
-
 	private Pcap captor = null;
+
 	private Integer id;
+	private ClassFactory customFactory;
 
-
-
-	public API(Integer id) throws Exception {
+	public API(Integer id, ClassFactory customFactory) throws Exception {
 		this.id = id;
-		instance = this;
+	//	instance = this;
+		this.customFactory = customFactory;
+
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public Dumper setDump(String iface,String dumpFile, boolean promisc,
@@ -78,7 +88,7 @@ public class API extends Observable implements PcapPacketHandler<String>, Serial
 
 	public void startCapture(String dev, String expression, String fileName) {
 
-				CaptureThread capTh = new CaptureThread(captor, dev, expression, fileName, this);
+				CaptureThread capTh = new CaptureThread(captor, dev, expression, fileName, this,customFactory);
 				f = exec.submit(capTh);
 				captor = capTh.getCaptor();
 	}
@@ -117,7 +127,7 @@ public class API extends Observable implements PcapPacketHandler<String>, Serial
 		public void run() {
 			if (mutex.isLocked()) return;
 				mutex.lock();
-				instance.notifyObservers(queue);
+				notifyObservers(queue);
 				mutex.unlock();
 			
 		}
@@ -132,17 +142,19 @@ class CaptureThread implements Runnable {
 	String pcapExp;
 	String fileName;
 	API api;
-	ReentrantLock lock = new ReentrantLock();
+	ClassFactory customFactory;
+	//ReentrantLock lock = new ReentrantLock();
 	//Semaphore sem = new Semaphore(1);
 	StringBuilder errbuf = new StringBuilder();
 
 	public CaptureThread(Pcap captor, String dev, String pcapExp,
-			String fileName, API api) {
+			String fileName, API api, ClassFactory customFactory) {
 		this.captor = captor;
 		this.dev = dev;
 		this.pcapExp = pcapExp;
 		this.fileName = fileName;
 		this.api = api;
+		this.customFactory = customFactory;
 	/*	try {
 			sem.acquire();
 		} catch (InterruptedException e) {
@@ -180,5 +192,8 @@ class CaptureThread implements Runnable {
 			}
 				
 			captor.loop(-1, api, null);
+			customFactory.getBranch(api.getId()).captureFin();
+
+
 	}
 }
