@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:h="http://xmlns.jcp.org/jsf/html"
-        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-        xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-        xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions">
 
-<head>
+<h:head>
     <base href="http://localhost:8080/Sors_JSFDeveloping-1.0-SNAPSHOT/"/>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -17,289 +20,104 @@
     <link href="jsf/inspinia/css/animate.css" rel="stylesheet"/>
     <link href="jsf/inspinia/css/style.css" rel="stylesheet"/>
 
-</head>
+</h:head>
 
-<body class="top-navigation">
+<h:body styleClass="top-navigation">
 
 <div id="wrapper">
 
-
-
     <div id="page-wrapper" class="gray-bg">
         <ui:include src="MenuTop.xhtml"/>
-        <div class="row border-bottom">
-            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-                <div class="navbar-header">
-                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-                    <form role="search" class="navbar-form-custom" action="search_results.html">
-                        <div class="form-group">
-                            <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search"/>
-                        </div>
-                    </form>
-                </div>
-                <ul class="nav navbar-top-links navbar-right">
-                    <li>
-                        <span class="m-r-sm text-muted welcome-message">Welcome to INSPINIA+ Admin Theme.</span>
-                    </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-                            <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-messages">
-                            <li>
-                                <div class="dropdown-messages-box">
-                                    <a href="profile.html" class="pull-left">
-                                        <img alt="image" class="img-circle" src="img/a7.jpg"/>
-                                    </a>
-                                    <div class="media-body">
-                                        <small class="pull-right">46h ago</small>
-                                        <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br/>
-                                        <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <div class="dropdown-messages-box">
-                                    <a href="profile.html" class="pull-left">
-                                        <img alt="image" class="img-circle" src="img/a4.jpg"/>
-                                    </a>
-                                    <div class="media-body ">
-                                        <small class="pull-right text-navy">5h ago</small>
-                                        <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br/>
-                                        <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <div class="dropdown-messages-box">
-                                    <a href="profile.html" class="pull-left">
-                                        <img alt="image" class="img-circle" src="img/profile.jpg"/>
-                                    </a>
-                                    <div class="media-body ">
-                                        <small class="pull-right">23h ago</small>
-                                        <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br/>
-                                        <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <div class="text-center link-block">
-                                    <a href="mailbox.html">
-                                        <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
-                                    </a>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-                            <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-alerts">
-                            <li>
-                                <a href="mailbox.html">
-                                    <div>
-                                        <i class="fa fa-envelope fa-fw"></i> You have 16 messages
-                                        <span class="pull-right text-muted small">4 minutes ago</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a href="profile.html">
-                                    <div>
-                                        <i class="fa fa-twitter fa-fw"></i> 3 New Followers
-                                        <span class="pull-right text-muted small">12 minutes ago</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a href="grid_options.html">
-                                    <div>
-                                        <i class="fa fa-upload fa-fw"></i> Server Rebooted
-                                        <span class="pull-right text-muted small">4 minutes ago</span>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <div class="text-center link-block">
-                                    <a href="notifications.html">
-                                        <strong>See All Alerts</strong>
-                                        <i class="fa fa-angle-right"></i>
-                                    </a>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-
-
-                    <li>
-                        <a href="login.html">
-                            <i class="fa fa-sign-out"></i> Log out
-                        </a>
-                    </li>
-                </ul>
-
-            </nav>
-        </div>
-        <div class="row wrapper border-bottom white-bg page-heading">
-            <div class="col-lg-10">
-                <h2>Profile</h2>
-                <ol class="breadcrumb">
-                    <li>
-                        <a href="index.html">Home</a>
-                    </li>
-                    <li>
-                        <a>Extra Pages</a>
-                    </li>
-                    <li class="active">
-                        <strong>Profile</strong>
-                    </li>
-                </ol>
-            </div>
-            <div class="col-lg-2">
-
-            </div>
-        </div>
         <div class="wrapper wrapper-content animated fadeInRight">
 
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
 
-            <div class="row m-b-lg m-t-lg">
-                <div class="col-md-6">
-
-                    <div class="profile-image">
-                        <img src="img/a4.jpg" class="img-circle circle-border m-b-md" alt="profile"/>
-                    </div>
-                    <div class="profile-info">
+                    <div class="m-b-lg m-t-lg col-md-6">
                         <div class="">
-                            <div>
-                                <h2 class="no-margins">
-                                    Alex Smith
-                                </h2>
-                                <h4>exception.box@gmail.com</h4>
-                                <small>
-                                    There are many variations of passages of Lorem Ipsum available, but the majority
-                                    have suffered alteration in some form Ipsum available.
-                                </small>
+
+                            <div class="profile-image">
+                                <img src="jsf/inspinia/img/a4.jpg" class="img-circle circle-border m-b-md" alt="profile"/>
+                            </div>
+                            <div class="profile-info">
+                                <div class="">
+                                    <div>
+                                        <h2 class="no-margins">
+                                            Alex Smith
+                                        </h2>
+                                        <h4>exception.box@gmail.com</h4>
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <table class="table small m-b-xs text-center">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <strong>14</strong> Tasks
+                                </td>
+
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>145 MB</strong> Total size
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>5/145/297</strong> NETs/HOSTs/SESSIONs
+                                </td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+
+
+
                 </div>
-                <div class="col-md-3">
-                    <table class="table m-b-xs">
-                        <tbody>
-                        <tr>
-                            <td>
-                                <strong>14</strong> ever connected nodeServerEndpoints
-                            </td>
-
-
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong>18</strong> created branches
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong>154</strong> hours nodeServerEndpoint uptime
-                            </td>
-
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="col-md-3">
-                    <small>Sales in last 24h</small>
-                    <h2 class="no-margins">206 480</h2>
-                    <div id="sparkline1"></div>
-                </div>
-
-
+                <div class="col-md-2"></div>
             </div>
-
-        </div>
-
-
-        <div class="ibox col-md-6">
-            <div class="ibox-content">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th></th>
-                        <th>Cloud</th>
-                        <th>Local</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th>
-                            Branchs available
-                        </th>
-                    </tr>
-                    <tr>
-                        <td>
-                            own branches
-                        </td>
-                        <td>
-                            3
-                        </td>
-                        <td>
-                            0
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            community branches
-                        </td>
-                        <td>
-                            2
-                        </td>
-                        <td>
-                            1
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <th>
-                            Home Used
-                        </th>
-                    </tr>
-                    <tr>
-                        <td>
-                            by me
-                        </td>
-                        <td>
-                            1 MB
-                        </td>
-                        <td>
-                            32 MB
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Community
-                        </td>
-                        <td>
-                            13 MB
-                        </td>
-                        <td>
-                            70 MB
-                        </td>
-                    </tr>
-                    </tbody>
-
-                </table>
+            <div class="row">
+                <div class="col-lg-4"></div>
+                <div class="col-md-4">
+                    <h:form>
+                    <div class="form-group">
+                        <h:inputText  value="#{loginBean.user.nickName}" styleClass="form-control" onclick="toggleSaveBtn()" placeholder="Nickname"/>
+                    </div>
+                    <div class="form-group">
+                        <h:inputText  value="#{loginBean.user.firstName}" styleClass="form-control" onclick="toggleSaveBtn()" placeholder="First name"/>
+                    </div>
+                    <div class="form-group">
+                        <h:inputText  value="#{loginBean.user.secondName}" styleClass="form-control" onclick="toggleSaveBtn()" placeholder="Second Name"/>
+                    </div>
+                    <div class="form-group">
+                        <h:inputText id="email"  onclick="toggleSaveBtn()" size="40" styleClass="form-control" value="#{loginBean.user.email}">
+                        </h:inputText>
+                    </div>
+                    <div class="form-group">
+                        <h:form>
+                        <p:commandButton action="#{loginBean.test()}" value="Change Password" styleClass="btn btn-danger pull-left"></p:commandButton>
+                        </h:form>
+                        <p:commandLink action="#{loginBean.updateUser()}" id="saveBtn" style="display: none;" styleClass="saveBtn pull-right btn btn-primary" value="Save"></p:commandLink>
+                    </div>
+                    </h:form>
+                </div>
+                <div class="col-lg-4"></div>
             </div>
 
 
+
         </div>
+
         <div class="footer">
             <div class="pull-right">
                 10GB of <strong>250GB</strong> Free.
@@ -315,7 +133,6 @@
 
 
 <!-- Mainly scripts -->
-<script src="jsf/inspinia/js/jquery-2.1.1.js"></script>
 <script src="jsf/inspinia/js/bootstrap.js"></script>
 <script src="jsf/inspinia/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 <script src="jsf/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
@@ -324,25 +141,12 @@
 <script src="jsf/inspinia/js/inspinia.js"></script>
 <script src="jsf/inspinia/js/plugins/pace/pace.min.js"></script>
 
-<!-- Sparkline -->
-<script src="../js/plugins/sparkline/jquery.sparkline.min.js"></script>
-
 <script>
-    $(document).ready(function() {
-
-
-        $("#sparkline1").sparkline([34, 43, 43, 35, 44, 32, 44, 48], {
-            type: 'line',
-            width: '100%',
-            height: '50',
-            lineColor: '#1ab394',
-            fillColor: "transparent"
-        });
-
-
-    });
+    function toggleSaveBtn() {
+        $('.saveBtn').fadeIn();
+    }
 </script>
 
-</body>
+</h:body>
 
 </html>

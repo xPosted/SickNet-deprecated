@@ -6,6 +6,7 @@ import com.jubaka.sors.appserver.service.UserService;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -86,6 +87,14 @@ public class LoginBean implements Serializable {
     }
 
 
+    public void updateUser() {
+
+        user = userService.updateUser(user);
+        FacesContext.getCurrentInstance().addMessage("Update user info:", new FacesMessage("Update Success!"));
+    }
+    public void test() {
+        System.out.println("niga");
+    }
 
 
     public void logoutAction() throws IOException{
