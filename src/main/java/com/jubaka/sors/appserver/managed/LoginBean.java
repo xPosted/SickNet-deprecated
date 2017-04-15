@@ -90,7 +90,9 @@ public class LoginBean implements Serializable {
     public void updateUser() {
 
         user = userService.updateUser(user);
-        FacesContext.getCurrentInstance().addMessage("Update user info:", new FacesMessage("Update Success!"));
+       // FacesContext.getCurrentInstance().addMessage("Update user info:", new FacesMessage("Update Success!"));
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Account Info", "Your personal data had been updated!");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
     public void test() {
         System.out.println("niga");

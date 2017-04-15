@@ -73,17 +73,25 @@ public class API extends Observable implements PcapPacketHandler<String>, Serial
 	//	if (captor == null) return;
 
 		try {
-			f.get();
+
 			exec.shutdown();
 			exec.awaitTermination(2, TimeUnit.MINUTES);
-			executor.shutdown();
-			executor.awaitTermination(5, TimeUnit.MINUTES);
+			waitForPacketHandlingOff();
+
 		} catch (InterruptedException ie) {
 			ie.printStackTrace();
-		} catch (ExecutionException ex) {
-			ex.printStackTrace();
 		}
 
+	}
+
+	public void waitForPacketHandlingOff() {
+		try {
+			executor.shutdown();
+			executor.awaitTermination(5, TimeUnit.MINUTES);
+
+		} catch (InterruptedException ie) {
+			ie.printStackTrace();
+		}
 	}
 
 	public void startCapture(String dev, String expression, String fileName) {
@@ -192,7 +200,9 @@ class CaptureThread implements Runnable {
 			}
 				
 			captor.loop(-1, api, null);
-			customFactory.getBranch(api.getId()).captureFin();
+
+			api.waitForPacketHandlingOff();  //waiting for packet handling code finish
+			customFactory.getBranch(api.getId()).captureFin();		// close all session data files
 
 
 	}

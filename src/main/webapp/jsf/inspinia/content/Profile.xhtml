@@ -20,6 +20,34 @@
     <link href="jsf/inspinia/css/animate.css" rel="stylesheet"/>
     <link href="jsf/inspinia/css/style.css" rel="stylesheet"/>
 
+    <style type="text/css">
+        .ui-button {
+
+        }
+
+        .ui-widget {
+
+        }
+
+        .ui-state-default {
+
+        }
+        .ui-corner-all{
+
+        }
+        .ui-button-text-only {
+
+        }
+        .ui-state-focus {
+
+        }
+        .ui-state-hover {
+
+        }
+
+    </style>
+
+
 </h:head>
 
 <h:body styleClass="top-navigation">
@@ -28,6 +56,15 @@
 
     <div id="page-wrapper" class="gray-bg">
         <ui:include src="MenuTop.xhtml"/>
+        <div class="row">
+            <div class="pull-right">
+                <p:messages id="servermessage" styleClass="pull-right" autoUpdate="true" globalOnly="true" closable="true" showDetail="true">
+                    <p:effect type="shake" event="load"/>
+                </p:messages>
+            </div>
+
+        </div>
+
         <div class="wrapper wrapper-content animated fadeInRight">
 
             <div class="row">
@@ -58,20 +95,20 @@
                             <tbody>
                             <tr>
                                 <td>
-                                    <strong>14</strong> Tasks
+                                    <strong>#{profileBaen.totalTasks}</strong> Tasks
                                 </td>
 
 
                             </tr>
                             <tr>
                                 <td>
-                                    <strong>145 MB</strong> Total size
+                                    <strong>#{profileBaen.getTotalHumanSize()}</strong> Total size
                                 </td>
 
                             </tr>
                             <tr>
                                 <td>
-                                    <strong>5/145/297</strong> NETs/HOSTs/SESSIONs
+                                    <strong>#{profileBaen.totalNetCount}/#{profileBaen.totalHostCount}/#{profileBaen.totalSesCount}</strong> NETs/HOSTs/SESSIONs
                                 </td>
 
                             </tr>
@@ -105,7 +142,7 @@
                     </div>
                     <div class="form-group">
                         <h:form>
-                        <p:commandButton action="#{loginBean.test()}" value="Change Password" styleClass="btn btn-danger pull-left"></p:commandButton>
+                        <p:commandLink action="#{loginBean.test()}" value="Change Password" styleClass="btn btn-danger pull-left"></p:commandLink>
                         </h:form>
                         <p:commandLink action="#{loginBean.updateUser()}" id="saveBtn" style="display: none;" styleClass="saveBtn pull-right btn btn-primary" value="Save"></p:commandLink>
                     </div>

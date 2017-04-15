@@ -1,5 +1,6 @@
 package com.jubaka.sors.desktop.protocol.tcp;
 
+import com.jubaka.sors.beans.branch.SessionBean;
 import com.jubaka.sors.desktop.sessions.IPaddr;
 import com.jubaka.sors.desktop.sessions.PayloadAcquirer;
 
@@ -19,6 +20,8 @@ public class TCP {
     protected PayloadAcquirer payloadAcquirer;
     protected Long timestamp = null;
     protected boolean straight;
+
+    protected SessionBean sessionBean;
 
 
     public Long getTimestamp() {
@@ -105,5 +108,14 @@ public class TCP {
     public byte[] getPayload() {
       return payloadAcquirer.getPayload();
     }
+
+    public SessionBean getSessionBean() {
+        return sessionBean;
+    }
+
+    public void setSessionBean(SessionBean sessionBean) {
+        this.sessionBean = sessionBean;
+    }
+
 
 }

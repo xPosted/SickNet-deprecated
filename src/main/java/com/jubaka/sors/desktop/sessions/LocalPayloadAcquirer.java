@@ -17,6 +17,9 @@ public class LocalPayloadAcquirer implements PayloadAcquirer {
         this.dataFile = dataFile;
         this.pointer = pointer;
         this.length = length;
+        if (pointer < 0 ) {
+            System.out.println("filePointer is less then 0 ------------");
+        }
     }
     @Override
     public byte[] getPayload() {

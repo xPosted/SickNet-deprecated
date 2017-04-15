@@ -295,18 +295,18 @@ public class BranchService {
         TreeMap<Integer,HTTP> httpMap = new TreeMap<>();
 
         for (HttpRequest req : entity.getRequestList()) {
-            httpMap.put(req.getSequence(),castToBean(req));
+            httpMap.put(req.getSequence(),castToBean(sesBean,req));
             entity.getTcps().remove(req.getTcpP());
         }
         for (HttpResponse resp : entity.getResponseList()) {
-            httpMap.put(resp.getSequence(),castToBean(resp));
+            httpMap.put(resp.getSequence(),castToBean(sesBean,resp));
             entity.getTcps().remove(resp.getTcpP());
         }
 
         httpList = new ArrayList<>(httpMap.values());
 
         for (TcpPacket tcp : entity.getTcps()) {
-            resultTcp.add(buildTcpBean(null,tcp));
+            resultTcp.add(buildTcpBean(sesBean,null,tcp));
         }
         resultTcp.addAll(httpList);
 
@@ -382,33 +382,22 @@ public class BranchService {
 
     }
 
-    public TCP buildTcpBean(TCP tcp, TcpPacket entity) {
+    public TCP buildTcpBean(SessionBean sessionBean,TCP tcp, TcpPacket entity) {
         TCP tcpBeanRes = tcp;
         if (tcpBeanRes == null)
                 tcpBeanRes = new TCP();
 
-        if (entity == null) {
-            System.out.println("niga");
-        }
-
-
-        if (entity.getSrcHost() == null) {
-            System.out.println("niga");
-        }
-
-        if (entity.getSrcHost().getIp() == null) {
-            System.out.println("niga");
-        }
         tcpBeanRes.setSrcIP(entity.getSrcHost().getIp());
         tcpBeanRes.setDstIP(entity.getDstHost().getIp());
         tcpBeanRes.setSrcPort(entity.getSrcPort());
         tcpBeanRes.setDstPort(entity.getDstPort());
         tcpBeanRes.setTimestamp(entity.getTimestamp());
         tcpBeanRes.setPayloadAcquirer(new InMemoryPayload(entity.getPayload()));
+        tcpBeanRes.setSessionBean(sessionBean);
         return tcpBeanRes;
     }
 
-    public HTTPRequest castToBean(HttpRequest req) {
+    public HTTPRequest castToBean(SessionBean sessionBean, HttpRequest req) {
         HTTPRequest bean = new HTTPRequest();
         bean.setAccept(req.getAccept());
         bean.setAccept_Charset(req.getAccept_Charset());
@@ -434,14 +423,14 @@ public class BranchService {
         bean.setPayloadOffset(req.getPayloadOffset());
 
         TcpPacket tcpLayer = req.getTcpP();
-        buildTcpBean(bean,tcpLayer);
+        buildTcpBean(sessionBean, bean,tcpLayer);
 
         return bean;
 
     }
 
 
-    public HTTPResponse castToBean(HttpResponse resp) {
+    public HTTPResponse castToBean(SessionBean sessionBean, HttpResponse resp) {
         HTTPResponse bean = new HTTPResponse();
         bean.setRequestVersion(resp.getRequestVersion());
         bean.setRequestUrl(resp.getRequestUrl());
@@ -465,20 +454,20 @@ public class BranchService {
 
         TcpPacket tcpLayer = resp.getTcpP();
 
-        buildTcpBean(bean,tcpLayer);
+        buildTcpBean(sessionBean, bean,tcpLayer);
         return bean;
 
     }
 
-    public List<HTTP>  combine(List<HttpRequest> reqs, List<HttpResponse> resps) {
+    public List<HTTP>  combine(SessionBean sessionBean, List<HttpRequest> reqs, List<HttpResponse> resps) {
 
         TreeMap<Integer,HTTP> httpMap = new TreeMap<>();
 
         for (HttpRequest req : reqs) {
-            httpMap.put(req.getSequence(),castToBean(req));
+            httpMap.put(req.getSequence(),castToBean(sessionBean,req));
         }
         for (HttpResponse resp : resps) {
-            httpMap.put(resp.getSequence(),castToBean(resp));
+            httpMap.put(resp.getSequence(),castToBean(sessionBean,resp));
         }
 
         List<HTTP> httpList = new ArrayList<>(httpMap.values());

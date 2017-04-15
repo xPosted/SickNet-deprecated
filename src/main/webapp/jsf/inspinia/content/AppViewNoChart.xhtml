@@ -144,13 +144,13 @@
                                     <div id="subnetList" class="full-width">
                                         <h:form>
                                             <ui:repeat value="#{taskViewBean.getSubnetList()}" var="subnetBean">
-                                                <p:commandButton
+                                                <p:commandLink
                                                         styleClass="block full-width btn btn-default select_ip__value"
                                                         value="#{subnetBean.subnet.getHostName()}"
                                                         action="#{taskViewBean.selectSubnet(subnetBean.getSubnet().getHostName())}"
                                                         update="selectedSubnetAddr subnetPanHeader subnetInfo filterView">
 
-                                                </p:commandButton>
+                                                </p:commandLink>
                                             </ui:repeat>
                                         </h:form>
                                         <hr class="no-margins"/>
@@ -161,9 +161,9 @@
                                                 /
                                                 <p:inputText style="width: 20%"
                                                              value="#{taskViewBean.mask}"></p:inputText>
-                                                <p:commandButton style="width: 25%;" styleClass="btn btn-primary"
+                                                <p:commandLink style="width: 25%;" styleClass="btn btn-primary"
                                                                  action="#{taskViewBean.addNetwork()}"
-                                                                 value="add NET"></p:commandButton>
+                                                                 value="add NET"></p:commandLink>
                                             </h:form>
 
                                         </div>

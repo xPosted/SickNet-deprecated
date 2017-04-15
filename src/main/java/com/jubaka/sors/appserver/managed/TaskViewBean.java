@@ -69,6 +69,7 @@ public class TaskViewBean implements Serializable, Observer {
   //  private List<SessionBean> newSessions = new ArrayList<>();
 
     private SessionBean selectedSesBean = null;
+    private HTTP selectedHttpPacket = null;
 
     private List<Category> categories= Collections.synchronizedList(new ArrayList<>());
     private List<SmartFilter> filters = new ArrayList<>();
@@ -491,6 +492,13 @@ public class TaskViewBean implements Serializable, Observer {
         this.mask = mask;
     }
 
+    public HTTP getSelectedHttpPacket() {
+        return selectedHttpPacket;
+    }
+
+    public void setSelectedHttpPacket(HTTP selectedHttpPacket) {
+        this.selectedHttpPacket = selectedHttpPacket;
+    }
 
     public List<?> setToList(Set<?> set) {
         return new ArrayList<>(set);
