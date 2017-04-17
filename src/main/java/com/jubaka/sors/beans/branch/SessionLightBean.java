@@ -24,6 +24,7 @@ public class SessionLightBean extends Bean implements Serializable {
     protected Integer srcP;
     protected Integer dstP;
     protected boolean http=false;
+    protected long dbId = -1;
 
 
 
@@ -99,7 +100,13 @@ public class SessionLightBean extends Bean implements Serializable {
     public void setSrcDataLen(Long srcDataLen) {
         this.srcDataLen = srcDataLen;
     }
+    public long getDbId() {
+        return dbId;
+    }
 
+    public void setDbId(long dbId) {
+        this.dbId = dbId;
+    }
 
     public String getNiga() {
         System.out.println("Niga");

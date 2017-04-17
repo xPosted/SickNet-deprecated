@@ -66,6 +66,8 @@
 
     <!-- ChartJS-->
     <script src="jsf/inspinia/js/plugins/chartJs/Chart.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+ <!--   <script src="jsf/inspinia/js/loader.js"></script> -->
 </h:head>
 <h:body styleClass="top-navigation">
     <h:inputHidden id="sessionId" value="#{taskViewBean.sessionId}"/>
@@ -913,6 +915,14 @@
                                                                 class="httpHeader">UA_CPU: </span>#{httpRequest.getUA_CPU()}</span>
                                                         </td>
                                                     </ui:fragment>
+                                                    <td>
+                                                        <p:commandLink action="#{taskViewBean.expandedViewOn(httpRequest)}"
+                                                                       styleClass="btn btn-default" update="expandedModal chartDataForm"
+                                                                       oncomplete="$('#sessionDataModal').modal('toggle'); drawChart(); updateEventListeners();"
+                                                                       value="Expanded view">
+
+                                                        </p:commandLink>
+                                                    </td>
 
                                                 </tr>
                                             </ui:fragment>
@@ -1038,6 +1048,14 @@
                                                                     class="httpHeader">Set_Cookie: </span>#{httpResponse.getSet_Cookie()}</span>
                                                             </td>
                                                         </ui:fragment>
+                                                        <td>
+                                                            <p:commandLink action="#{taskViewBean.expandedViewOn(httpResponse)}"
+                                                                           styleClass="btn btn-default" update="expandedModal chartDataForm"
+                                                                           oncomplete="$('#sessionDataModal').modal('toggle'); drawChart(); updateEventListeners();"
+                                                                           value="Expanded view">
+
+                                                            </p:commandLink>
+                                                        </td>
                                                     </tr>
 
                                             </ui:fragment>
@@ -1071,7 +1089,7 @@
 
 
     <div id="sessionDataModal" class="modal inmodal" tabindex="-1" aria-hidden="true" role="dialog">
-        <div class="modal-dialog modal-lg">
+        <h:panelGroup layout="block" id="expandedModal" styleClass="modal-dialog modal-lg">
             <div class="modal-content animated fadeIn">
                 <div class="modal-header">
                     <span style="font-size: medium;">Session Info</span>
@@ -1084,77 +1102,115 @@
                         <ul class="nav nav-tabs">
                             <li class="active"><a data-toggle="tab" href="#tabHttp">HTTP</a></li>
                             <li><a data-toggle="tab" href="#tabChart" onmouseup="drawChart();">Chart</a></li>
-                            <li><a data-toggle="tab" href="#tabRaw">Raw data</a></li>
+                            <li><a data-toggle="tab" href="#tabRawSrc">Raw Src data</a></li>
+                            <li><a data-toggle="tab" href="#tabRawDst">Raw Dst data</a></li>
+                            <li><a data-toggle="tab" href="#tabSelectedPacket">SelectedPacket</a></li>
                         </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tabHttp">
+                                <div class="panel-body">
+                                    <div class="ibox clearfix">
+                                        <div class="ibox-title">
+                                            <a class="collapse-link">
+                                                <div class="inline col-lg-11 no-padding">
+                                                    <div class="col-md-1 no-padding"><span
+                                                            style="display: inline-block; font-family: Verdana; font-size: 12pt; color: #ebebed; background-color: #0a6aa1; padding: 2px  5px  2px 5px;">GET</span>
+                                                    </div>
+                                                    <div id="content" class="col-md-11"
+                                                         style="overflow: hidden; text-overflow: ellipsis;"><span
+                                                            style="font-size: 12pt; font-style: inherit; ">binupdate.mail.ru/updater/version.xmlfgfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff </span>
+                                                    </div>
 
-                    </div>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="tabHttp">
-                            <div class="panel-body">
-                                <div class="ibox clearfix">
-                                    <div class="ibox-title">
-                                        <a class="collapse-link">
-                                            <div class="inline col-lg-11 no-padding">
-                                                <div class="col-md-1 no-padding"><span
-                                                        style="display: inline-block; font-family: Verdana; font-size: 12pt; color: #ebebed; background-color: #0a6aa1; padding: 2px  5px  2px 5px;">GET</span>
                                                 </div>
-                                                <div id="content" class="col-md-11"
-                                                     style="overflow: hidden; text-overflow: ellipsis;"><span
-                                                        style="font-size: 12pt; font-style: inherit; ">binupdate.mail.ru/updater/version.xmlfgfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff </span>
-                                                </div>
+                                            </a>
+                                            <div class="text-right ibox-tools inline col-lg-1">
+
+                                                <a id="copy-button" data-clipboard-target="#content"
+                                                   class="copy-text dropdown-toggle">
+                                                    <i class="fa fa-wrench"></i>
+                                                </a>
 
                                             </div>
-                                        </a>
-                                        <div class="text-right ibox-tools inline col-lg-1">
 
-                                            <a id="copy-button" data-clipboard-target="#content"
-                                               class="copy-text dropdown-toggle">
-                                                <i class="fa fa-wrench"></i>
-                                            </a>
 
                                         </div>
-
-
+                                        <table class="table table-hover modal__table">
+                                            <tbody>
+                                            <tr>
+                                                <td class="text-center border-right">HOST</td>
+                                                <td>amazon.comnmazonamazonamazonamaznamazonamaznamazonamazonamazonamdfdfdfdfdfdfdfdfdfdfdfddfazonamazonamazonamazonamazon amazonamazonamazon</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center border-right">HOST</td>
+                                                <td style="overflow: auto;">amazon.com</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center border-right">HOST</td>
+                                                <td>amazon.com</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
-                                    <table class="table table-hover modal__table">
-                                        <tbody>
-                                        <tr>
-                                            <td class="text-center border-right">HOST</td>
-                                            <td>amazon.comnmazonamazonamazonamaznamazonamaznamazonamazonamazonamdfdfdfdfdfdfdfdfdfdfdfddfazonamazonamazonamazonamazon amazonamazonamazon</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center border-right">HOST</td>
-                                            <td style="overflow: auto;">amazon.com</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center border-right">HOST</td>
-                                            <td>amazon.com</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
                                 </div>
                             </div>
-                        </div>
-                        <div class="tab-pane" id="tabChart">
-                            <div class="panel-body">
-                                <div id="sessionModalChart" class="full-width full-height"></div>
+                            <div class="tab-pane" id="tabChart">
+                                <div class="panel-body">
+                                    <div id="sessionModalChart" class="full-width full-height"></div>
+
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tabRawSrc">
+                                <div class="panel-body">
+                                    <p:inputTextarea id="dstDataArea" autoResize="true" readonly="true" style="overflow: scroll; height: 500px;" styleClass="full-width full-height"  value="#{taskViewBean.selectedSesSrcData}"></p:inputTextarea>
+                                 <!--   <div class="tabs-container">
+                                        <ul class="nav nav-tabs">
+                                            <li class="active"><a data-toggle="tab" href="#Source">Source</a></li>
+                                            <li><a data-toggle="tab" href="#Destination">Destination</a></li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div class="tab-pane active" id="Source">
+                                                <p:inputTextarea autoResize="true" readonly="true" value="#{taskViewBean.selectedSesSrcData}"></p:inputTextarea>
+                                            </div>
+                                            <div class="tab-pane" id="Destination">
+                                                <p:inputTextarea autoResize="true" readonly="true" value="#{taskViewBean.selectedSesDstData}"></p:inputTextarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    -->
+
+                                </div>
 
                             </div>
-                        </div>
-                        <div class="tab-pane" id="tabRaw">
-                            <div id="sessionChart" class="panel-body">
-
+                            <div class="tab-pane" id="tabRawDst">
+                                <div class="panel-body">
+                                    <p:inputTextarea id="srcDataArea" autoResize="true"  readonly="true" style="overflow: scroll; height: 500px;" styleClass="full-width full-height"  value="#{taskViewBean.selectedSesDstData}"></p:inputTextarea>
+                                </div>
                             </div>
-                        </div>
+                            <div class="tab-pane" id="tabSelectedPacket">
+                                <div class="panel-body">
+                                    <p:inputTextarea id="packetArea" autoResize="true"  readonly="true" style="overflow: scroll; height: 500px;" styleClass="full-width full-height"  value="#{taskViewBean.selectedPacketData}"></p:inputTextarea>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tabSessionRawData">
+                                <div class="panel-body">
+                                    <p:inputTextarea id="sesArea" autoResize="true"  readonly="true" style="overflow: scroll; height: 500px;" styleClass="full-width full-height"  value="#{taskViewBean.selectedPacSessionData}"></p:inputTextarea>
+                                </div>
+                            </div>
 
+                        </div>
                     </div>
+
 
                 </div>
             </div>
 
-        </div>
+        </h:panelGroup>
 
     </div>
+
+    <h:form id="chartDataForm">
+        <h:inputText style="display: none;" styleClass="chartData" value="#{taskViewBean.chartDataStr}"></h:inputText>
+    </h:form>
 
     <script src="jsf/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
     <script src="jsf/inspinia/js/plugins/footable/footable.all.min.js"></script>

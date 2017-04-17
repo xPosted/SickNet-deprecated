@@ -33,10 +33,10 @@ public class HttpResponseService {
         return responseDao.selectById(id);
     }
 
-    public static HttpResponse prepareEntity(TcpPacket tcp, HTTPResponse resp, Integer seq, Session ses) {
+    public static HttpResponse prepareEntity(TcpPacket tcp, HTTPResponse resp, Session ses) {
         HttpResponse entity = new HttpResponse();
 
-        entity.setSequence(seq);
+
         entity.setRequestVersion(resp.getRequestVersion());
         entity.setRequestUrl(resp.getRequestUrl());
         entity.setAccept_Ranges(resp.getAccept_Ranges());

@@ -12,7 +12,6 @@ public class HttpRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer sequence;
 
     @ManyToOne
     @JoinColumn(name = "sessionId")
@@ -241,14 +240,6 @@ public class HttpRequest {
 
     public void setRequestVersion(String requestVersion) {
         RequestVersion = requestVersion;
-    }
-
-    public Integer getSequence() {
-        return sequence;
-    }
-
-    public void setSequence(Integer sequence) {
-        this.sequence = sequence;
     }
 
     public String getUA_CPU() {

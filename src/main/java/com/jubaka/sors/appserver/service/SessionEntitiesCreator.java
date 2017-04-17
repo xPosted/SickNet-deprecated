@@ -72,13 +72,22 @@ public class SessionEntitiesCreator {
             fillPackets(entity,sesBean);
     }
 
+
+
     private void fillPackets(Session entity, SessionBean sesBean) {
         Integer counterTcp = 0;
         List<TcpPacket> tcps = new ArrayList<>();
         List<HttpRequest> requests = new ArrayList<>();
         List<HttpResponse> responses = new ArrayList<>();
+        PacketPayload payload;
 
         for (TCP tcp : sesBean.getTcpBuf()) {
+            if (tcp.getPayload().length>0) {
+                payload = new PacketPayload();
+                payload.setPayload(tcp.getPayload());
+            } else {
+                payload = null;
+            }
             TcpPacket tcpEnt = new TcpPacket();
             tcpEnt.setSession(entity);
             if (tcp.isStraight()) {
@@ -91,15 +100,16 @@ public class SessionEntitiesCreator {
             tcpEnt.setDstPort(tcp.getDstPort());
             tcpEnt.setSrcPort(tcp.getSrcPort());
             tcpEnt.setTimestamp(tcp.getTimestamp());
-            tcpEnt.setPayload(tcp.getPayload());
+            tcpEnt.setPayload(payload);
+            tcpEnt.setSequence(counterTcp);
             if (tcp instanceof HTTPRequest) {
                HTTPRequest req = (HTTPRequest) tcp;
-                requests.add(HttpRequestService.prepareEntity(tcpEnt,req,counterTcp,entity));
+                requests.add(HttpRequestService.prepareEntity(tcpEnt,req,entity));
 
             }
             if (tcp instanceof HTTPResponse) {
                 HTTPResponse resp = (HTTPResponse) tcp;
-                responses.add(HttpResponseService.prepareEntity(tcpEnt,resp,counterTcp, entity));
+                responses.add(HttpResponseService.prepareEntity(tcpEnt,resp, entity));
             }
             tcps.add(tcpEnt);
             counterTcp++;
@@ -108,14 +118,14 @@ public class SessionEntitiesCreator {
         entity.setRequestList(requests);
         entity.setResponseList(responses);
     }
-
+/*
     private List<HttpRequest> getHttpRequestList(Session entity, SessionBean sesBean) {
         Integer counter = 0;
         List<HttpRequest> requests = new ArrayList<>();
         for (HTTP http : sesBean.getHttpBuf()) {
             if (http instanceof HTTPRequest) {
                 HTTPRequest req = (HTTPRequest) http;
-                requests.add(HttpRequestService.prepareEntity(null,req,counter,entity));
+                requests.add(HttpRequestService.prepareEntity(null,req,entity));
             }
             counter++;
         }
@@ -128,14 +138,14 @@ public class SessionEntitiesCreator {
         for (HTTP http : sesBean.getHttpBuf()) {
             if (http instanceof HTTPResponse) {
                 HTTPResponse resp = (HTTPResponse) http;
-                responses.add(HttpResponseService.prepareEntity(null,resp,counter, entity));
+                responses.add(HttpResponseService.prepareEntity(null,resp, entity));
 
             }
             counter++;
         }
         return responses;
     }
-
+*/
 
 
 }

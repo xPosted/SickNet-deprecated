@@ -25,6 +25,10 @@ public class SessionService {
         return sessionDao.insert(ses);
     }
 
+    public Session selectByIdWithData(Long id) {
+        return sessionDao.selectByIdWithData(id);
+    }
+
     public Session selectById(Long id) {
         return sessionDao.selectById(id);
     }

@@ -23,6 +23,7 @@ public class TCP {
 
     protected SessionBean sessionBean;
 
+    protected int sequence;
 
     public Long getTimestamp() {
         return timestamp;
@@ -117,5 +118,12 @@ public class TCP {
         this.sessionBean = sessionBean;
     }
 
+    public int getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(int sequence) {
+        this.sequence = sequence;
+    }
 
 }

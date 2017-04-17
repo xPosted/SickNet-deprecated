@@ -2,15 +2,14 @@ package com.jubaka.sors.appserver.managed;
 
 import com.jubaka.sors.appserver.entities.Host;
 import com.jubaka.sors.appserver.entities.Subnet;
-import com.jubaka.sors.appserver.service.HostService;
-import com.jubaka.sors.appserver.service.SubnetService;
+import com.jubaka.sors.appserver.service.*;
+import com.jubaka.sors.appserver.servlet.Statistic;
 import com.jubaka.sors.beans.Category;
 import com.jubaka.sors.beans.branch.*;
 import com.jubaka.sors.appserver.entities.Branch;
 import com.jubaka.sors.appserver.serverSide.*;
-import com.jubaka.sors.appserver.service.BranchService;
-import com.jubaka.sors.appserver.service.PortServiceService;
 import com.jubaka.sors.desktop.protocol.application.HTTP;
+import com.jubaka.sors.desktop.protocol.tcp.TCP;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.TimeSeries;
 
@@ -22,10 +21,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
 import javax.websocket.Session;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -54,6 +53,8 @@ public class TaskViewBean implements Serializable, Observer {
     @Inject
     private HostService hostService;
 
+    @Inject SessionService sessionService;
+
     @Inject
     private PortServiceService portService;
 
@@ -70,6 +71,13 @@ public class TaskViewBean implements Serializable, Observer {
 
     private SessionBean selectedSesBean = null;
     private HTTP selectedHttpPacket = null;
+
+    private String selectedSesSrcData = "";
+    private String selectedSesDstData = "";
+    private String selectedPacSessionData="";
+    private String selectedPacketData = "";
+
+
 
     private List<Category> categories= Collections.synchronizedList(new ArrayList<>());
     private List<SmartFilter> filters = new ArrayList<>();
@@ -350,6 +358,81 @@ public class TaskViewBean implements Serializable, Observer {
         return selectedSesBean;
     }
 
+    public void expandedViewOn(HTTP packet) {
+
+        SessionBean sesBean =  packet.getSessionBean();
+        setSelectedSesBean(sesBean);
+        com.jubaka.sors.appserver.entities.Session sesEntity = sessionService.selectByIdWithData(sesBean.getDbId());
+        sesBean = BranchService.castToBean(sesEntity);
+
+        ByteArrayOutputStream baosPacket = new ByteArrayOutputStream();
+        ByteArrayOutputStream baosSrc = new ByteArrayOutputStream();
+        ByteArrayOutputStream baosDst = new ByteArrayOutputStream();
+        ByteArrayOutputStream baosAll = new ByteArrayOutputStream();
+        byte[] targetPacketByte = null;
+
+        for (TCP tcp : sesBean.getTcpBuf()) {
+            try {
+                baosAll.write(tcp.getPayload());
+                if (tcp.getSrcIP().equals(sesBean.getSrcIP()))
+                    baosSrc.write(tcp.getPayload());
+                if (tcp.getSrcIP().equals((sesBean.getDstIP())))
+                    baosDst.write(tcp.getPayload());
+                if (tcp.getSequence() == packet.getSequence())
+                    baosPacket.write(tcp.getPayload());
+            } catch (IOException io) {
+                io.printStackTrace();
+            }
+        }
+        try {
+            baosDst.flush();
+            baosSrc.flush();
+            baosPacket.flush();
+            baosAll.flush();
+            targetPacketByte = baosPacket.toByteArray();
+            selectedPacketData = decodeData(targetPacketByte);
+            selectedSesSrcData = decodeData(baosSrc.toByteArray());
+            selectedSesDstData = decodeData(baosDst.toByteArray());
+            selectedPacSessionData = decodeData(baosAll.toByteArray());
+            baosDst.close();
+            baosSrc.close();
+            baosAll.close();
+            baosPacket.close();
+
+        }   catch (IOException io) {
+            io.printStackTrace();
+        }
+
+
+    }
+
+    public static String decodeData (byte[] buf) {
+        StringBuilder strBuilder = new StringBuilder();
+        if (buf==null) return strBuilder.toString();
+        if (buf.length != 0) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(buf)));
+            try {
+                while (reader.ready())
+                    strBuilder.append(reader.readLine()+"\n");
+            } catch (IOException io) {
+                io.printStackTrace();
+            }
+
+
+        }
+        String result = strBuilder.toString();
+
+      //  result = Normalizer.normalize(result, Normalizer.Form.NFD);
+      //  result = result.replaceAll("[^\\x20-\\x7e]", "");
+
+        result = result.replaceAll("[[^\\p{Print}]&&[^\\n]&&[^\\r]]", ".");
+        result = result.replace('<','_');
+        result = result.replace('>','_');
+        result = result.replace('&','_');
+       // result = result.replace("\\","\\\\");
+        return result;
+    }
+
     public void setSelectedSesBean(SessionBean selectedSesBean) {
         System.out.println("Session "+selectedSesBean.getDstIP()+" https size "+ selectedSesBean.getHttpBuf().size());
         this.selectedSesBean = selectedSesBean;
@@ -504,6 +587,39 @@ public class TaskViewBean implements Serializable, Observer {
         return new ArrayList<>(set);
 
     }
+
+    public String getSelectedSesSrcData() {
+        return selectedSesSrcData;
+    }
+
+    public void setSelectedSesSrcData(String selectedSesSrcData) {
+        this.selectedSesSrcData = selectedSesSrcData;
+    }
+
+    public String getSelectedSesDstData() {
+        return selectedSesDstData;
+    }
+
+    public void setSelectedSesDstData(String selectedSesDstData) {
+        this.selectedSesDstData = selectedSesDstData;
+    }
+
+    public String getSelectedPacketData() {
+        return selectedPacketData;
+    }
+
+    public void setSelectedPacketData(String selectedPacketData) {
+        this.selectedPacketData = selectedPacketData;
+    }
+
+    public String getSelectedPacSessionData() {
+        return selectedPacSessionData;
+    }
+
+    public void setSelectedPacSessionData(String selectedPacSessionData) {
+        this.selectedPacSessionData = selectedPacSessionData;
+    }
+
     public String getSelectedSubnetAddr() {
         if (sbl !=null) return sbl.getSubnet().getHostName();
         else return "--/--";
@@ -625,10 +741,17 @@ public class TaskViewBean implements Serializable, Observer {
 
     public String buildSessionChartStr() {
 
+        TimeSeries tsDst;
+        TimeSeries tsSrc;
         if (selectedSesBean==null) return "";
+if (dbMode) {
+    tsDst = StatisticLogic.createSessionDstTS(selectedSesBean);
+    tsSrc = StatisticLogic.createSessionSrcTS(selectedSesBean);
+} else {
+     tsDst = nodeServerEndpoint.getSesDstDataChart(blb.getBib().getId(),sbl.getSubnet().getHostAddress(),selectedSesBean.getEstablished().getTime());
+     tsSrc = nodeServerEndpoint.getSesSrcDataChart(blb.getBib().getId(),sbl.getSubnet().getHostAddress(),selectedSesBean.getEstablished().getTime());
+}
 
-       TimeSeries tsDst = nodeServerEndpoint.getSesDstDataChart(blb.getBib().getId(),sbl.getSubnet().getHostAddress(),selectedSesBean.getEstablished().getTime());
-        TimeSeries tsSrc = nodeServerEndpoint.getSesSrcDataChart(blb.getBib().getId(),sbl.getSubnet().getHostAddress(),selectedSesBean.getEstablished().getTime());
         return handleTimeSeries(tsDst,tsSrc);
     }
 

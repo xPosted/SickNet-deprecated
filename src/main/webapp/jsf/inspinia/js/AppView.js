@@ -1,34 +1,31 @@
+
+$(function () {
+    google.charts.load('current', {packages: ['corechart']});
+});
+
+
 $(function(){
+
             new Clipboard('.copy-text');
         });
 
-        function drawChart() {
 
-            var jsonData = $.ajax({
-                url: "../dataSrc/sample.json",
-                dataType: "json",
-                async: false
-            }).responseText;
+function drawChart() {
 
-            var dataModel = new google.visualization.DataTable(
-                    jsonData
-            );
+    var chartData = $(".chartData").val();
+    var dataModel = new google.visualization.DataTable(chartData);
 
-            var options = {
-                title: 'Weight vs. Volume',
-                hAxis: {title: 'Weight (kg)', minValue: 53, maxValue: 100}, //55
-                vAxis: {title: 'Volume (l)'},//, minValue: 20, maxValue: 40},   //20
-                legend: 'none',
-                width: '850',
-                height: '400'
-            };
-
-
-            var chart = new google.visualization.LineChart(document.getElementById('sessionModalChart'));
-            chart.draw(dataModel,options);
-
-        }
-
+    var options = {
+        title: 'Payload in second',
+        hAxis: {title: 'Time'},
+        vAxis: {title: 'Paylaoad'},
+        legend: 'none',
+        width: '850',
+        height: '400'
+    };
+    var chart = new google.visualization.LineChart(document.getElementById('sessionModalChart'));
+    chart.draw(dataModel, options);
+}
 
         function updateEventListeners() {
             // Collapse ibox function

@@ -158,7 +158,7 @@ public class Session extends Observable implements Serializable, CustomObserver 
             }
             if (pointer != null) {
 
-                LocalPayloadAcquirer acquire = new LocalPayloadAcquirer(pointer,buf.length, dataFile);
+                LocalPayloadAcquirer acquire = new LocalPayloadAcquirer(pointer-buf.length,buf.length, dataFile);
            //     tcph.setDataPointer(pointer - buf.length);
            //     tcph.setDataFile(dataFile);
                 tcph.setPayloadAcquirer(acquire);
@@ -190,7 +190,7 @@ public class Session extends Observable implements Serializable, CustomObserver 
                 dataFile = dsaver.getDstDataFile();
             }
             if (pointer != null) {
-                LocalPayloadAcquirer acquire = new LocalPayloadAcquirer(pointer,totalLen.intValue(), dataFile);
+                LocalPayloadAcquirer acquire = new LocalPayloadAcquirer(pointer-totalLen,totalLen.intValue(), dataFile);
 
               //  httph.setDataPointer(pointer - totalLen);
             //    httph.setHttpHeaderPointer(pointer - totalLen);

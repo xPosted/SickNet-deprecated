@@ -12,7 +12,6 @@ public class HttpResponse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer sequence;
     @ManyToOne
     @JoinColumn(name = "sessionId")
     private Session session;
@@ -199,14 +198,6 @@ public class HttpResponse {
 
     public void setResponseCodeMsg(String responseCodeMsg) {
         ResponseCodeMsg = responseCodeMsg;
-    }
-
-    public Integer getSequence() {
-        return sequence;
-    }
-
-    public void setSequence(Integer sequence) {
-        this.sequence = sequence;
     }
 
     public String getServer() {

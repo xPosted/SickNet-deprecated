@@ -33,7 +33,7 @@ public class HttpRequestService {
         return requestDao.selectById(id);
     }
 
-    public static HttpRequest prepareEntity(TcpPacket tcp,HTTPRequest req, Integer seq, Session ses) {
+    public static HttpRequest prepareEntity(TcpPacket tcp,HTTPRequest req, Session ses) {
 
         HttpRequest entity = new HttpRequest();
         entity.setAccept(req.getAccept());
@@ -58,7 +58,6 @@ public class HttpRequestService {
         entity.setRequestVersion(req.getRequestVersion());
         entity.setUA_CPU(req.getUA_CPU());
         entity.setUser_Agent(req.getUser_Agent());
-        entity.setSequence(seq);
         entity.setTcpP(tcp);
         entity.setPayloadOffset(req.getPayloadOffset());
         entity.setSession(ses);

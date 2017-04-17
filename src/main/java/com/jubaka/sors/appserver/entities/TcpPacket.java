@@ -1,6 +1,7 @@
 package com.jubaka.sors.appserver.entities;
 
 import com.jubaka.sors.desktop.sessions.IPaddr;
+import org.hibernate.LazyInitializationException;
 
 import javax.persistence.*;
 
@@ -30,9 +31,14 @@ public class TcpPacket {
     private Integer dstPort = null;
     private Long timestamp = null;
 
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    private byte[] payload;
+    private int sequence=-1;
+
+  //  @Lob
+  //  @Basic(fetch = FetchType.LAZY)
+  //  private byte[] payload;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "payloadId")
+    private PacketPayload  payload;
 
 
     public Host getSrcHost() {
@@ -76,10 +82,18 @@ public class TcpPacket {
     }
 
     public byte[] getPayload() {
-        return payload;
+        if (payload == null) return null;
+        byte[] data;
+        try {
+            data = payload.getPayload();
+        } catch(LazyInitializationException lazy) {
+            return null;
+        }
+
+        return data;
     }
 
-    public void setPayload(byte[] payload) {
+    public void setPayload(PacketPayload payload) {
         this.payload = payload;
     }
 
@@ -89,6 +103,22 @@ public class TcpPacket {
 
     public void setSession(Session session) {
         this.session = session;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public int getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(int sequence) {
+        this.sequence = sequence;
     }
 
 }

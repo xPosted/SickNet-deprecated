@@ -266,7 +266,7 @@ public class BranchService {
 
     }
 
-    public SessionBean castToBean(Session ses) {
+    public static SessionBean castToBean(Session ses) {
         SessionBean sesBean = new SessionBean();
         sesBean.setInitSeq(ses.getInitSeq());
         sesBean.setSrcIP(ses.getSrcHost().getIp());
@@ -279,6 +279,7 @@ public class BranchService {
         sesBean.setClosed(ses.getClosed());
         sesBean.setSrcDataTimeBinding(ses.getChartData().getSrcDataTime());
         sesBean.setDstDataTimeBinding(ses.getChartData().getDstDataTime());
+        sesBean.setDbId(ses.getId());
      //   List<HTTP> httpList = combine(ses.getRequestList(),ses.getResponseList());
     //    sesBean.setHttpBuf(httpList);
         preparePacketsBeans(sesBean,ses);
@@ -288,29 +289,37 @@ public class BranchService {
 
     }
 
-    public void preparePacketsBeans(SessionBean sesBean, Session entity) {
+    public static void preparePacketsBeans(SessionBean sesBean, Session entity) {
 
-        List<TCP> resultTcp = new ArrayList<>();
+        List<TCP> tcpList = new ArrayList<>();
         List<HTTP> httpList;
         TreeMap<Integer,HTTP> httpMap = new TreeMap<>();
-
+        TreeMap<Integer,TCP> tcpMap = new TreeMap<>();
+        int seq=-1;
         for (HttpRequest req : entity.getRequestList()) {
-            httpMap.put(req.getSequence(),castToBean(sesBean,req));
+            HTTP http = castToBean(sesBean,req);
+            seq = req.getTcpP().getSequence();
+            httpMap.put(seq,http);
+            tcpMap.put(seq,http);
             entity.getTcps().remove(req.getTcpP());
         }
         for (HttpResponse resp : entity.getResponseList()) {
-            httpMap.put(resp.getSequence(),castToBean(sesBean,resp));
+
+            HTTP http = castToBean(sesBean,resp);
+            seq = resp.getTcpP().getSequence();
+            httpMap.put(seq,http);
+            tcpMap.put(seq,http);
             entity.getTcps().remove(resp.getTcpP());
         }
 
-        httpList = new ArrayList<>(httpMap.values());
+
 
         for (TcpPacket tcp : entity.getTcps()) {
-            resultTcp.add(buildTcpBean(sesBean,null,tcp));
+            tcpMap.put(tcp.getSequence(),buildTcpBean(sesBean,null,tcp));
         }
-        resultTcp.addAll(httpList);
-
-        sesBean.setTcpBuf(resultTcp);
+        httpList = new ArrayList<>(httpMap.values());
+        tcpList = new ArrayList<>(tcpMap.values());
+        sesBean.setTcpBuf(tcpList);
         sesBean.setHttpBuf(httpList);
     }
 
@@ -382,7 +391,7 @@ public class BranchService {
 
     }
 
-    public TCP buildTcpBean(SessionBean sessionBean,TCP tcp, TcpPacket entity) {
+    public static TCP buildTcpBean(SessionBean sessionBean,TCP tcp, TcpPacket entity) {
         TCP tcpBeanRes = tcp;
         if (tcpBeanRes == null)
                 tcpBeanRes = new TCP();
@@ -394,10 +403,11 @@ public class BranchService {
         tcpBeanRes.setTimestamp(entity.getTimestamp());
         tcpBeanRes.setPayloadAcquirer(new InMemoryPayload(entity.getPayload()));
         tcpBeanRes.setSessionBean(sessionBean);
+        tcpBeanRes.setSequence(entity.getSequence());
         return tcpBeanRes;
     }
 
-    public HTTPRequest castToBean(SessionBean sessionBean, HttpRequest req) {
+    public static HTTPRequest castToBean(SessionBean sessionBean, HttpRequest req) {
         HTTPRequest bean = new HTTPRequest();
         bean.setAccept(req.getAccept());
         bean.setAccept_Charset(req.getAccept_Charset());
@@ -430,7 +440,7 @@ public class BranchService {
     }
 
 
-    public HTTPResponse castToBean(SessionBean sessionBean, HttpResponse resp) {
+    public static HTTPResponse castToBean(SessionBean sessionBean, HttpResponse resp) {
         HTTPResponse bean = new HTTPResponse();
         bean.setRequestVersion(resp.getRequestVersion());
         bean.setRequestUrl(resp.getRequestUrl());
@@ -458,23 +468,23 @@ public class BranchService {
         return bean;
 
     }
-
+/*
     public List<HTTP>  combine(SessionBean sessionBean, List<HttpRequest> reqs, List<HttpResponse> resps) {
 
         TreeMap<Integer,HTTP> httpMap = new TreeMap<>();
 
         for (HttpRequest req : reqs) {
-            httpMap.put(req.getSequence(),castToBean(sessionBean,req));
+            httpMap.put(req.getTcpP().getSequence(),castToBean(sessionBean,req));
         }
         for (HttpResponse resp : resps) {
-            httpMap.put(resp.getSequence(),castToBean(sessionBean,resp));
+            httpMap.put(resp.getTcpP().getSequence(),castToBean(sessionBean,resp));
         }
 
         List<HTTP> httpList = new ArrayList<>(httpMap.values());
         return httpList;
 
     }
-
+*/
     public SubnetBean addNet(InetAddress addr, int mask, BranchBean bb) {
 
         SubnetBean notKnown =  bb.getSubnetByName("0.0.0.0");
