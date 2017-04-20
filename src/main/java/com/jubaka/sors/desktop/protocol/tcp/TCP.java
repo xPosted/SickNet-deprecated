@@ -21,7 +21,11 @@ public class TCP {
     protected Long timestamp = null;
     protected boolean straight;
 
-    protected SessionBean sessionBean;
+
+
+    protected Long sessionId;
+
+//    protected SessionBean sessionBean;
 
     protected int sequence;
 
@@ -110,20 +114,20 @@ public class TCP {
       return payloadAcquirer.getPayload();
     }
 
-    public SessionBean getSessionBean() {
-        return sessionBean;
-    }
-
-    public void setSessionBean(SessionBean sessionBean) {
-        this.sessionBean = sessionBean;
-    }
-
     public int getSequence() {
         return sequence;
     }
 
     public void setSequence(int sequence) {
         this.sequence = sequence;
+    }
+
+    public Long getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(Long sessionId) {
+        this.sessionId = sessionId;
     }
 
 }

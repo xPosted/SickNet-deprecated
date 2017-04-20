@@ -4,8 +4,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by root on 28.08.16.
@@ -38,16 +37,16 @@ public class Session {
     @JoinColumn(name = "chartId")
     private SessionChart chartData;
 
-    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<HttpRequest> requestList;
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<HttpRequest> requestList;
 
-    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Fetch(value = FetchMode.SUBSELECT)
-    private List<HttpResponse> responseList;
+    private Set<HttpResponse> responseList;
 
-    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Fetch(value = FetchMode.SUBSELECT)
-    private List<TcpPacket> tcps;
+    private Set<TcpPacket> tcps;
 
     public Date getClosed() {
         return closed;
@@ -140,26 +139,26 @@ public class Session {
     }
 
     public List<HttpRequest> getRequestList() {
-        return requestList;
+        return new ArrayList<>(requestList);
     }
 
     public void setRequestList(List<HttpRequest> requestList) {
-        this.requestList = requestList;
+        this.requestList = new HashSet<>(requestList);
     }
 
     public List<HttpResponse> getResponseList() {
-        return responseList;
+        return  new ArrayList<>(responseList);
     }
 
     public void setResponseList(List<HttpResponse> responseList) {
-        this.responseList = responseList;
+        this.responseList = new HashSet<>(responseList);
     }
 
     public List<TcpPacket> getTcps() {
-        return tcps;
+        return  new ArrayList<>(tcps);
     }
 
     public void setTcps(List<TcpPacket> tcps) {
-        this.tcps = tcps;
+        this.tcps = new HashSet<>(tcps);
     }
 }

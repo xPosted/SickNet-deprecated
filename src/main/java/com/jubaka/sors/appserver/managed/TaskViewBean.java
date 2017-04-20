@@ -53,7 +53,7 @@ public class TaskViewBean implements Serializable, Observer {
     @Inject
     private HostService hostService;
 
-    @Inject SessionService sessionService;
+    @Inject private SessionService sessionService;
 
     @Inject
     private PortServiceService portService;
@@ -289,7 +289,7 @@ public class TaskViewBean implements Serializable, Observer {
                 sbl = subnetLightBean;
                 if (sbl.getAllIpList().size() == 0) {
                     Subnet subEnt = subnetService.eagerSelectById(sbl.getDbId());
-                    sbl = branchService.castToLightBean(null,subEnt);
+                    sbl = BeanEntityConverter.castToLightBean(null,subEnt);
                 }
                 onlineIps = sbl.getLightLiveIps();
                 allIps = sbl.getLightIps();
@@ -313,16 +313,12 @@ public class TaskViewBean implements Serializable, Observer {
                 ipBean = fullBean;
             } else {
                IPItemLightBean ipBeanLight = sbl.getIpByName(address);
-                Host h = hostService.eagerSelectById(ipBeanLight.getDbId());
-                ipBean = branchService.castToBean(h);
-
-
+                Host h = hostService.selectByIdWithSesWithHttp(ipBeanLight.getDbId());
+                ipBean = BeanEntityConverter.castToBean(h,false);
             }
 
         }
-
         refreshFilters();
-
     }
 
     public void refreshFilters() {
@@ -334,7 +330,7 @@ public class TaskViewBean implements Serializable, Observer {
     public void initTask(Long dbtaskId) {
         dbMode = true;
         Branch b =  branchService.eagerSelectById(dbtaskId);
-        blb = branchService.castToLightBean(null,b);
+        blb = BeanEntityConverter.castToLightBean(null,b);
 
         categories.clear();
         httpList.clear();
@@ -360,11 +356,11 @@ public class TaskViewBean implements Serializable, Observer {
 
     public void expandedViewOn(HTTP packet) {
 
-        SessionBean sesBean =  packet.getSessionBean();
-        setSelectedSesBean(sesBean);
-        com.jubaka.sors.appserver.entities.Session sesEntity = sessionService.selectByIdWithData(sesBean.getDbId());
-        sesBean = BranchService.castToBean(sesEntity);
 
+
+        com.jubaka.sors.appserver.entities.Session sesEntity = sessionService.selectByIdWithData(packet.getSessionId());
+        SessionBean sesBean = BeanEntityConverter.castToBean(sesEntity,true);
+        setSelectedSesBean(sesBean);
         ByteArrayOutputStream baosPacket = new ByteArrayOutputStream();
         ByteArrayOutputStream baosSrc = new ByteArrayOutputStream();
         ByteArrayOutputStream baosDst = new ByteArrayOutputStream();

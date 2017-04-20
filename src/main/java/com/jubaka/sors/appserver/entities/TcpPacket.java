@@ -30,7 +30,6 @@ public class TcpPacket {
     private Integer srcPort = null;
     private Integer dstPort = null;
     private Long timestamp = null;
-
     private int sequence=-1;
 
   //  @Lob
@@ -81,19 +80,13 @@ public class TcpPacket {
         this.timestamp = timestamp;
     }
 
-    public byte[] getPayload() {
-        if (payload == null) return null;
-        byte[] data;
-        try {
-            data = payload.getPayload();
-        } catch(LazyInitializationException lazy) {
-            return null;
-        }
-
-        return data;
+    public PacketPayload getPayload() {
+        if (payload == null) return new PacketPayload();
+        return payload;
     }
 
     public void setPayload(PacketPayload payload) {
+
         this.payload = payload;
     }
 

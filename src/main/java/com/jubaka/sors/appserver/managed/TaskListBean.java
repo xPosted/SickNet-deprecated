@@ -1,5 +1,6 @@
 package com.jubaka.sors.appserver.managed;
 
+import com.jubaka.sors.appserver.service.BeanEntityConverter;
 import com.jubaka.sors.beans.branch.BranchInfoBean;
 import com.jubaka.sors.appserver.entities.Branch;
 import com.jubaka.sors.appserver.serverSide.ConnectionHandler;
@@ -64,7 +65,7 @@ public class TaskListBean {
         dbTasks = new ArrayList<>();
         List<Branch> dbBranchs = branchService.selectByCurrentUser();
         for (Branch b : dbBranchs) {
-            BranchInfoBean bib = branchService.castToInfoBean(b);
+            BranchInfoBean bib = BeanEntityConverter.castToInfoBean(b);
             dbTasks.add(bib);
         }
 

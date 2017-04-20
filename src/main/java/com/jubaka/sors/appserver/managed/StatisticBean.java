@@ -1,5 +1,6 @@
 package com.jubaka.sors.appserver.managed;
 
+import com.jubaka.sors.appserver.service.BeanEntityConverter;
 import com.jubaka.sors.beans.branch.BranchBean;
 import com.jubaka.sors.beans.branch.IPItemBean;
 import com.jubaka.sors.beans.branch.SubnetBean;
@@ -120,7 +121,7 @@ public class StatisticBean {
 
     private void readStatFromDB(Long brId) {
         Branch b = branchService.eagerAllSelectById(brId);
-        BranchBean bb = branchService.castToBean(b);
+        BranchBean bb = BeanEntityConverter.castToBean(b,false);
         DefaultTableModel model = null;
         TimeSeries ts = null;
 

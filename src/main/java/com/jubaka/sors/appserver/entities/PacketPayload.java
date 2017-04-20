@@ -13,9 +13,9 @@ public class PacketPayload {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long id = -1;
     @Lob
-    private byte[] payload;
+    private byte[] payload = new byte[0];
 
     public long getId() {
         return id;

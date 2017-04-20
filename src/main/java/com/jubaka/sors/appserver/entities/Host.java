@@ -4,7 +4,10 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by root on 28.08.16.
@@ -32,11 +35,11 @@ public class Host {
     private Subnet subnet;
 
     @OneToMany(mappedBy = "dstHost", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Session> sessionsInput;
+    private Set<Session> sessionsInput;
 
     @OneToMany(mappedBy = "srcHost", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Fetch(value = FetchMode.SUBSELECT)
-    private List<Session> sessionsOutput;
+    private Set<Session> sessionsOutput;
 
 
     public Integer getActiveCount() {
@@ -121,19 +124,19 @@ public class Host {
     }
 
     public List<Session> getSessionsInput() {
-        return sessionsInput;
+        return new ArrayList<>(sessionsInput);
     }
 
     public void setSessionsInput(List<Session> sessionsInput) {
-        this.sessionsInput = sessionsInput;
+        this.sessionsInput = new HashSet<>(sessionsInput);
     }
 
     public List<Session> getSessionsOutput() {
-        return sessionsOutput;
+        return new ArrayList<>(sessionsOutput);
     }
 
     public void setSessionsOutput(List<Session> sessionsOutput) {
-        this.sessionsOutput = sessionsOutput;
+        this.sessionsOutput = new HashSet<>(sessionsOutput);
     }
 
     public Integer getInputActiveCount() {

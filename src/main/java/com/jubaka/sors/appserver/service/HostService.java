@@ -38,8 +38,8 @@ public class HostService {
     }
 
     @Transactional
-    public Host eagerSelectById(Long id) {
-        return hostDao.eagerSelectById(id);
+    public Host selectByIdWithSesWithHttp(Long id) {
+        return hostDao.selectByIdWithSesWithHttp(id);
 
     }
 
