@@ -100,6 +100,8 @@ public class TaskViewBean implements Serializable, Observer {
 /////////////
     private String nodeIdStr = null;
     private String taskIdStr = null;
+
+    private String currentTaskName = "";
     private String dbTaskIdStr = null;
     private String subnet = null;
     private String ipStr = null;
@@ -128,18 +130,23 @@ public class TaskViewBean implements Serializable, Observer {
     public void init() {
         ExternalContext externalContext =  FacesContext.getCurrentInstance().getExternalContext();
         Map<String,String> params = externalContext.getRequestParameterMap();
-        nodeIdStr = params.get("nodeId");
-        taskIdStr = params.get("taskId");
-        dbTaskIdStr = params.get("dbtaskId");
-        subnet = params.get("net");
-        ipStr = params.get("host");
+        String nodeIdStr = params.get("nodeId");
+        String taskIdStr = params.get("taskId");
+        String dbTaskIdStr = params.get("dbid");
+        String subnet = params.get("net");
+        String ipStr = params.get("host");
 
+        filters.clear();
         if (nodeIdStr != null & taskIdStr != null) {
+            if (subnet != null) this.subnet = subnet;
+            if (ipStr != null) this.ipStr = ipStr;
+
             Long nodeUnid = Long.parseLong(nodeIdStr);
             Integer taskId = Integer.parseInt(taskIdStr);
             initTask(nodeUnid,taskId);
         }
         if (dbTaskIdStr != null) {
+            this.dbTaskIdStr = dbTaskIdStr;
             Long dbTaskId = Long.parseLong(dbTaskIdStr);
             initTask(dbTaskId);
         }
@@ -313,7 +320,8 @@ public class TaskViewBean implements Serializable, Observer {
                 ipBean = fullBean;
             } else {
                IPItemLightBean ipBeanLight = sbl.getIpByName(address);
-                Host h = hostService.selectByIdWithSesWithHttp(ipBeanLight.getDbId());
+                Host h = hostService.selectByIdWithSesWithHttpv2(ipBeanLight.getDbId());    ////////////////////////////////////////////////
+              //  Host h = hostService.selectByIdWithSesWithHttp(ipBeanLight.getDbId());
                 ipBean = BeanEntityConverter.castToBean(h,false);
             }
 
@@ -331,13 +339,21 @@ public class TaskViewBean implements Serializable, Observer {
         dbMode = true;
         Branch b =  branchService.eagerSelectById(dbtaskId);
         blb = BeanEntityConverter.castToLightBean(null,b);
-
+        currentTaskName = blb.getBib().getBranchName();
         categories.clear();
         httpList.clear();
         ipBean = null;
         sbl = null;
         onlineIps.clear();
         allIps.clear();
+    }
+
+    public boolean isTaskViewReady() {
+        if (dbMode) {
+            if (dbTaskIdStr != null)
+                if (Long.parseLong(dbTaskIdStr)>=0) return true;
+        }
+        return false;
     }
 
     public List<?> getSubnetList() {
@@ -518,6 +534,9 @@ public class TaskViewBean implements Serializable, Observer {
         this.selectedCategoryId = selectedCategoryId;
     }
 
+    public String getDbTaskIdStr() {
+        return dbTaskIdStr;
+    }
 
     public BranchLightBean getBb() {
         return blb;
@@ -582,6 +601,13 @@ public class TaskViewBean implements Serializable, Observer {
     public List<?> setToList(Set<?> set) {
         return new ArrayList<>(set);
 
+    }
+    public String getCurrentTaskName() {
+        return currentTaskName;
+    }
+
+    public void setCurrentTaskName(String currentTaskName) {
+        this.currentTaskName = currentTaskName;
     }
 
     public String getSelectedSesSrcData() {

@@ -178,6 +178,13 @@ public class BranchService {
         return res;
     }
 
+    public Branch selectByIdFullBranchNoPayload(Long id) {
+       return branchDao.selectByIdFullBranchNoPayload(id);
+    }
+
+    public Branch selectByIdFullBranchNoPayloadv2(Long id) {
+        return branchDao.selectByIdFullBranchNoPayloadv2(id);
+    }
 
 
 

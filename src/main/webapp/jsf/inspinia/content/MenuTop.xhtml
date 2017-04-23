@@ -43,14 +43,21 @@
                             <li><a href="">Menu item</a></li>
                         </ul>   -->
                     </li>
-                    <li >
-                        <a  role="button" href="app/jsf/inspinia/content/AppViewNoChart.xhtml"> Task View </a>
-                     <!--   <ul role="menu" class="dropdown-menu">
-                            <li><a href="">Menu item</a></li>
-                            <li><a href="">Menu item</a></li>
-                            <li><a href="">Menu item</a></li>
-                            <li><a href="">Menu item</a></li>
-                          </ul>     -->
+                    <li class="dropdown">
+                        <ui:fragment rendered="#{ ! taskViewBean.isTaskViewReady()}">
+                            <div>
+                                <div style="font-weight: 600; margin-top: auto; margin-bottom: auto; text-align: center; padding-top: 15px; padding-right: 20px; padding-bottom: 15px; padding-left: 20px;">No selected task</div>
+                            </div>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{taskViewBean.isTaskViewReady()}">
+                            <a aria-expanded="false" class="dropdown-toggle" data-toggle="dropdown"  role="button"> #{taskViewBean.currentTaskName} </a>
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a href="app/jsf/inspinia/content/AppViewNoChart.xhtml">View</a></li>
+                                <li><a href="app/jsf/inspinia/content/Statistic.xhtml?dbid=#{dbid}">Statistic</a></li>
+
+                            </ul>
+                        </ui:fragment>
+
                     </li>
                 </ul>
                 <ul class="nav navbar-top-links navbar-right">

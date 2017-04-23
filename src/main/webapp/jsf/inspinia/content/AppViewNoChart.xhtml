@@ -87,11 +87,14 @@
 
         <div id="page-wrapper" class="gray-bg">
 
-            <ui:include src="MenuTop.xhtml"/>
+            <ui:include src="MenuTop.xhtml">
+                <ui:param name="dbid" value="#{taskViewBean.dbTaskIdStr}"></ui:param>
+            </ui:include>
 
             <div id="visiblePart" class="row">
                 <div class=" col-md-3 widget no-padding">
-                    <div class="ibox mb10">
+                    <div id="subnetBlock" class="ibox mb10">
+                        <iframe name="frame_subnetInfoResizeNotifier" class="frame_eventGenerator" id="frame_subnetInfoResizeNotifier"></iframe>
                         <div class="ibox-tools">
                             <a id="subnetExpander">
                                 <i class="fa fa-chevron-up"></i>
@@ -226,7 +229,7 @@
 
                         <div class="tabs-container ibox-content no-padding">
 
-                            <ul class="nav nav-tabs">
+                            <ul id="hostsTabHeader" class="nav nav-tabs">
                                 <li class="active">
                                     <a data-toggle="tab" href="#onlineIpList">Online</a>
                                 </li>
@@ -234,7 +237,7 @@
                                     <a data-toggle="tab" href="#allIpList">All</a>
                                 </li>
                             </ul>
-                            <div class="tab-content">
+                            <div id="hostListBlock" class="tab-content" style="overflow: auto;">
                                 <div id="onlineIpList" class="tab-pane active">
 
                                     <ul class="list-group fa-border">
@@ -312,7 +315,7 @@
 
                     <div class="ibox widget mb10">
                         <div id="blockBofore">
-                            <iframe name="frame_visiblePart" id="frame_visiblePart"></iframe>
+                            <iframe name="frame_ipInfoResizeNotifier" class="frame_eventGenerator" id="frame_ipInfoResizeNotifier"></iframe>
                             <div class="ibox-tools">
                                 <a id="ipExpander">
                                     <i class="fa fa-chevron-up"></i>
@@ -578,15 +581,15 @@
 
                         <div id="box_with_buttons" class="ibox-content vertical_center smallerColPadding">
 
-                            <div class="row">
+                            <div class="row full-width">
                                 <div class="col-sm-6 col-md-6 border-bottom pull-left">
-                                    <h:form>
-                                        <p:commandLink styleClass="btn btn-default pull-right"
+                                    <h:form id="sessionHttpMode">
+                                        <p:commandLink styleClass="btn btn-default pull-left #{taskViewBean.isSessionViewMode() ? 'active' : ''}"
                                                        action="#{taskViewBean.setSessionViewMode()}" value="Session mode"
-                                                       update="ses_http_view" oncomplete="buildFoo();"></p:commandLink>
-                                        <p:commandLink styleClass="btn btn-default pull-right"
+                                                       update="ses_http_view sessionHttpMode" oncomplete="buildFoo();"></p:commandLink>
+                                        <p:commandLink styleClass="btn btn-default pull-left   #{taskViewBean.isHttpViewMode() ? 'active' : ''}"
                                                        action="#{taskViewBean.setHttpViewMode()}" value="HTTP mode"
-                                                       update="ses_http_view" oncomplete="buildFoo();"></p:commandLink>
+                                                       update="ses_http_view sessionHttpMode" oncomplete="buildFoo();"></p:commandLink>
                                     </h:form>
                                 </div>
                                 <div class="col-sm-6 col-md-6 pull-right">
@@ -603,8 +606,7 @@
                             </div>
 
 
-
-                            <h:panelGroup id="ses_http_view" layout="block" styleClass="full-width">
+                            <h:panelGroup id="ses_http_view" layout="block" styleClass="full-width" style="overflow: auto;">
 
                                 <c:if test="#{taskViewBean.isSessionViewMode()}">
                                     <c:if test="#{taskViewBean.isHostCategorised()}">
@@ -769,6 +771,9 @@
                                             <th class="col-md-1 inline no-borders" data-toggle="true">Type</th>
                                             <th class="col-md-6 inline no-borders">Resource</th>
                                             <th class="col-md-4 inline no-borders">User-Agent</th>
+                                            <th data-hide="all"></th>
+                                            <th data-hide="all"></th>
+                                            <th data-hide="all"></th>
                                             <th data-hide="all"></th>
                                             <th data-hide="all"></th>
                                             <th data-hide="all"></th>

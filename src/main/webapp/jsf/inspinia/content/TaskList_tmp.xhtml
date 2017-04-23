@@ -233,7 +233,7 @@
                                         <tbody>
                                         <ui:repeat id="tableBody" value="#{taskListBean.dbTasks}" var="bib">
                                             <tr>
-                                                <td><a href="app/jsf/inspinia/content/AppViewNoChart.xhtml?dbtaskId=#{bib.dbid}"> <span class="block" style=""> #{bib.branchName} </span></a></td>
+                                                <td><a href="app/jsf/inspinia/content/AppViewNoChart.xhtml?dbid=#{bib.dbid}"> <span class="block" style=""> #{bib.branchName} </span></a></td>
                                                 <td>
 
                                                     <span class="label label-primary">#{bib.subnetCount}</span>

@@ -3,10 +3,12 @@ package com.jubaka.sors.appserver.dao;
 import com.jubaka.sors.appserver.entities.*;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +22,15 @@ public class BranchDao  {
 
     @PersistenceContext(unitName = "SorsPersistence",type = PersistenceContextType.TRANSACTION)
     protected EntityManager entityManager;
+
+    @Inject
+    private HostDao hostDao;
+
+    @Inject
+    private HttpRequestDao httpRequestDao;
+
+    @Inject
+    private HttpResponseDao httpResponseDao;
 
     @Transactional
     public Branch selectById(Long id) {
@@ -45,6 +56,50 @@ public class BranchDao  {
                     h.getSessionsInput().size();
                 }
             }
+        }
+        return b;
+    }
+
+    @Transactional
+    public Branch selectByIdFullBranchNoPayloadv2(Long id) {
+        Branch b = entityManager.find(Branch.class,id);
+
+        for (Subnet s : b.getSubntes()) {
+            for (Host h : s.getHosts()) {
+                for (Session ses : h.getSessionsInput()) {
+                    ses.getRequestList().size();
+                    ses.getResponseList().size();
+                    ses.setTcps(new ArrayList<>());
+                }
+                for (Session ses : h.getSessionsOutput()) {
+                    ses.getRequestList().size();
+                    ses.getResponseList().size();
+                    ses.setTcps(new ArrayList<>());
+                }
+            }
+        }
+        return b;
+    }
+
+    @Transactional
+    public Branch selectByIdFullBranchNoPayload(Long id) {
+        Branch b = null;
+        Query q = entityManager.createQuery("select b from Branch b left join fetch b.subntes where b.id = :id");
+        q.setParameter("id",id);
+        b = (Branch) q.getSingleResult();
+        for (Subnet s: b.getSubntes()) {
+            List<Host> hostVsSes = hostDao.selectBySubnetWithSessions(s);
+            for (Host h : hostVsSes) {
+                for (Session ses : h.getSessionsInput()) {
+                    ses.setRequestList(httpRequestDao.selectBySessionNoTcp(ses));
+                    ses.setResponseList(httpResponseDao.selectBySessionNoTcp(ses));
+                }
+                for (Session ses : h.getSessionsOutput()) {
+                    ses.setRequestList(httpRequestDao.selectBySessionNoTcp(ses));
+                    ses.setResponseList(httpResponseDao.selectBySessionNoTcp(ses));
+                }
+            }
+            s.setHosts(hostVsSes);
         }
         return b;
     }

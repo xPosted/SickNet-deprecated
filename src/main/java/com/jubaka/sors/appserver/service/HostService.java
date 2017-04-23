@@ -37,11 +37,15 @@ public class HostService {
         return hostDao.selectById(id);
     }
 
-    @Transactional
     public Host selectByIdWithSesWithHttp(Long id) {
         return hostDao.selectByIdWithSesWithHttp(id);
 
     }
+
+    public Host selectByIdWithSesWithHttpv2(Long id) {
+       return  hostDao.selectByIdWithSesWithHttpv2(id);
+    }
+
 
     public Host update(Host h) {
         return hostDao.update(h);

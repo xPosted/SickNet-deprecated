@@ -2,8 +2,10 @@ package com.jubaka.sors.appserver.dao;
 
 import com.jubaka.sors.appserver.entities.Host;
 import com.jubaka.sors.appserver.entities.Session;
+import com.jubaka.sors.appserver.entities.Subnet;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.TransientReference;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -13,6 +15,7 @@ import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by root on 03.11.16.
@@ -33,6 +36,23 @@ public class HostDao implements Serializable {
     }
 
     @Transactional
+    public Host selectByIdWithSesWithHttpv2(Long id) {
+      Host h = entityManager.find(Host.class,id);
+      for (Session s : h.getSessionsOutput()) {
+          s.getRequestList().size();
+          s.getResponseList().size();
+          s.setTcps(new ArrayList<>());
+      }
+      for (Session s : h.getSessionsInput()) {
+          s.getRequestList().size();
+          s.getResponseList().size();
+          s.setTcps(new ArrayList<>());
+      }
+      return h;
+
+    }
+
+    @Transactional
     public Host selectByIdWithSesWithHttp(Long id) {
 
       //  Host h = entityManager.find(Host.class,id);
@@ -47,12 +67,16 @@ public class HostDao implements Serializable {
         if (h != null) {
                 for (Session s : h.getSessionsInput()) s.setTcps(new ArrayList<>());
                 for (Session s : h.getSessionsOutput()) s.setTcps(new ArrayList<>());
-            //        h.setSessionsInput(sessionDao.selectWithHttpByDstHost(h));
-             //       h.setSessionsOutput(sessionDao.selectWithHttpBySrcHost(h));
-          //  h.getSessionsInput().size();
-          //  h.getSessionsOutput().size();
         }
         return h;
+    }
+
+    @Transactional
+    public List<Host> selectBySubnetWithSessions(Subnet s) {
+        Query q = entityManager.createQuery("select h from Host h left join h.sessionsInput sesIn left join h.sessionsOutput where h.subnet = :net");
+        q.setParameter("net",s);
+        return q.getResultList();
+
     }
 
     @Transactional

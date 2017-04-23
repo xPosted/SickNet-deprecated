@@ -44,5 +44,12 @@ public class HttpRequestDao {
         return q.getResultList();
     }
 
+    @Transactional
+    public List<HttpRequest> selectBySessionNoTcp(Session ses) {
+        Query q = entityManager.createQuery("select req from HttpRequest req where req.session = :ses");
+        q.setParameter("ses",ses);
+        return q.getResultList();
+    }
+
 
 }

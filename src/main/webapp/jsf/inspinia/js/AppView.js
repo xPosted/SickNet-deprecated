@@ -6,8 +6,8 @@ $(function () {
 
 $(function(){
 
-            new Clipboard('.copy-text');
-        });
+    new Clipboard('.copy-text');
+});
 
 
 function drawChart() {
@@ -27,122 +27,139 @@ function drawChart() {
     chart.draw(dataModel, options);
 }
 
-        function updateEventListeners() {
-            // Collapse ibox function
-            $('.collapse-link').click(function () {
-                var ibox = $(this).closest('div.ibox');
-                var button = $(this).find('i');
-                var content = ibox.find('div.ibox-content');
-                content.slideToggle(200);
-                button.toggleClass('fa-chevron-up').toggleClass('fa-chevron-down');
-                ibox.toggleClass('').toggleClass('border-bottom');
-                setTimeout(function () {
-                    ibox.resize();
-                    ibox.find('[id^=map-]').resize();
-                }, 50);
-            });
+function updateEventListeners() {
+    // Collapse ibox function
+    $('.collapse-link').click(function () {
+        var ibox = $(this).closest('div.ibox');
+        var button = $(this).find('i');
+        var content = ibox.find('div.ibox-content');
+        content.slideToggle(200);
+        button.toggleClass('fa-chevron-up').toggleClass('fa-chevron-down');
+        ibox.toggleClass('').toggleClass('border-bottom');
+        setTimeout(function () {
+            ibox.resize();
+            ibox.find('[id^=map-]').resize();
+        }, 50);
+    });
 
-            // Close ibox function
-            $('.close-link').click(function () {
-                var content = $(this).closest('div.ibox');
-                content.remove();
-            });
-        }
+    // Close ibox function
+    $('.close-link').click(function () {
+        var content = $(this).closest('div.ibox');
+        content.remove();
+    });
+}
 
-        $(document).ready(function() {
-            console.log('niga before');
-            var lineData = {
-                labels: ["January", "February", "March", "April", "May", "June", "July"],
-                datasets: [
-                    {
-                        label: "Example dataset",
-                        fillColor: "rgba(220,220,220,0.5)",
-                        strokeColor: "rgba(220,220,220,1)",
-                        pointColor: "rgba(220,220,220,1)",
-                        pointStrokeColor: "#fff",
-                        pointHighlightFill: "#fff",
-                        pointHighlightStroke: "rgba(220,220,220,1)",
-                        data: [65, 59, 80, 81, 56, 55, 40]
-                    },
-                    {
-                        label: "Example dataset",
-                        fillColor: "rgba(26,179,148,0.5)",
-                        strokeColor: "rgba(26,179,148,0.7)",
-                        pointColor: "rgba(26,179,148,1)",
-                        pointStrokeColor: "#fff",
-                        pointHighlightFill: "#fff",
-                        pointHighlightStroke: "rgba(26,179,148,1)",
-                        data: [28, 48, 40, 19, 86, 27, 90]
-                    }
-                ]
-            };
-
-            var lineOptions = {
-                scaleShowGridLines: true,
-                scaleGridLineColor: "rgba(0,0,0,.05)",
-                scaleGridLineWidth: 1,
-                bezierCurve: true,
-                bezierCurveTension: 0.4,
-                pointDot: true,
-                pointDotRadius: 4,
-                pointDotStrokeWidth: 1,
-                pointHitDetectionRadius: 20,
-                datasetStroke: true,
-                datasetStrokeWidth: 2,
-                datasetFill: true,
-                responsive: true,
-            };
-
-            var chartObj =  $('.line');
-            if (chartObj !== null && chartObj !== 'undefined') chartObj.peity('line',{height: 30, width: 100, fill: '#5791BC'});
-            console.log('niga');
-            frame_visiblePart.onresize = function(){
-                var height = $('body').height() -$('.navbar-static-top').outerHeight() - $('#blockBofore').outerHeight() -$('.title_sort').outerHeight() - 74;
-            $('#filterViewDirect').css('max-height', height);
+$(document).ready(function() {
+    console.log('niga before');
+    var lineData = {
+        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        datasets: [
+            {
+                label: "Example dataset",
+                fillColor: "rgba(220,220,220,0.5)",
+                strokeColor: "rgba(220,220,220,1)",
+                pointColor: "rgba(220,220,220,1)",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(220,220,220,1)",
+                data: [65, 59, 80, 81, 56, 55, 40]
+            },
+            {
+                label: "Example dataset",
+                fillColor: "rgba(26,179,148,0.5)",
+                strokeColor: "rgba(26,179,148,0.7)",
+                pointColor: "rgba(26,179,148,1)",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(26,179,148,1)",
+                data: [28, 48, 40, 19, 86, 27, 90]
             }
-            
-            $(window).resize(function heightAndScroll(){
-                var height = $('body').height() -$('.navbar-static-top').outerHeight() - $('#blockBofore').outerHeight() -$('.title_sort').outerHeight() - 74;
-            $('#filterViewDirect').css('max-height', height);
-            });
+        ]
+    };
 
-        });
+    var lineOptions = {
+        scaleShowGridLines: true,
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+        scaleGridLineWidth: 1,
+        bezierCurve: true,
+        bezierCurveTension: 0.4,
+        pointDot: true,
+        pointDotRadius: 4,
+        pointDotStrokeWidth: 1,
+        pointHitDetectionRadius: 20,
+        datasetStroke: true,
+        datasetStrokeWidth: 2,
+        datasetFill: true,
+        responsive: true,
+    };
 
+    var chartObj =  $('.line');
+    if (chartObj !== null && chartObj !== 'undefined') chartObj.peity('line',{height: 30, width: 100, fill: '#5791BC'});
+    //heightAndScroll();
+    resizeBodyHandler();
+
+    frame_ipInfoResizeNotifier.onresize = function(){
+        onIpInfoResize();
+    }
+    frame_subnetInfoResizeNotifier.onresize = function(){
+        onSubnetInfoResize();
+    }
+
+
+
+
+});
+
+function onSubnetInfoResize() {
+    var heightHosts = $('body').height() -$('.navbar-static-top').outerHeight() - $('#subnetBlock').outerHeight() -$('.hostsTabHeader').outerHeight() - 80;
+    $('#hostListBlock').css('max-height', heightHosts);
+}
+
+function onIpInfoResize(){
+    var heightCategories = $('body').height() -$('.navbar-static-top').outerHeight() - $('#blockBofore').outerHeight() -$('.title_sort').outerHeight() - 74;
+    $('#filterViewDirect').css('max-height', heightCategories);
+
+
+}
 
 $("#subnetExpander").click(function() {
     $('#subnetInfoBody').slideToggle(1000);
     $('#subnetInfoTitle').slideToggle(1000);
-    resizeBody();
+    //  resizeBodyHandler();
 
 });
 $('#ipExpander').click(function(){
-	$("#ipInfoBody").slideToggle(1000);
-	$('#ipInfoTitle').slideToggle(1000);
+    $("#ipInfoBody").slideToggle(1000);
+    $('#ipInfoTitle').slideToggle(1000);
 })
 $('#sort_ip_collapse').click(function(){
-	$("#sort_ip_body_collapse").slideToggle(800);
+    $("#sort_ip_body_collapse").slideToggle(800);
 })
 
 $('#showSelect').click(function(){
-	$("#subnetList").slideToggle(500);
+    $("#subnetList").slideToggle(500);
 })
 $('.select_ip__value').click(function(){
-	var elem = $('.select_ip__value');
-	$("#subnetList").slideToggle(500);
-	$('#showSelect')
+    var elem = $('.select_ip__value');
+    $("#subnetList").slideToggle(500);
+    $('#showSelect')
 })
 
 $(window).resize(function(){
-	resizeBody();
+    resizeBodyHandler();
 })
-function resizeBody(){
-	/**/
-	if($('#subnetInfoBody').outerHeight() > 5){
-		height = $('#subnetInfoBody').outerHeight();
-		$('#ipInfoBody').outerHeight(height);
-		$('#box_with_buttons').outerHeight(height);
 
-	}
+function resizeBodyHandler(){
+    /**/
+    var heightSesHttp = $('body').height() -$('.navbar-static-top').outerHeight()  - 90;
+    $('#ses_http_view').css('max-height', heightSesHttp);
+
+    if($('#subnetInfoBody').outerHeight() > 5){
+        height = $('#subnetInfoBody').outerHeight();
+        $('#ipInfoBody').outerHeight(height);
+        //   $('#box_with_buttons').outerHeight(height);
+
+    }
 }
 
 
@@ -153,6 +170,7 @@ function resizeBody(){
 function downToWindow() {
     var height = $('body').height() - $('.navbar-static-top').outerHeight() - $('#blockBofore').outerHeight() - $('.title_sort').outerHeight() - 74;
     $('#filterViewDirect').css('max-height', height);
+    $('#hostListBlock').css('max-height', height);
 }
 
 
@@ -269,7 +287,7 @@ $(function() {
 
     var maximum = container.outerWidth() / 1 || 300;
 
-      //  container.css(display, 'none');
+    //  container.css(display, 'none');
 
     //
 
