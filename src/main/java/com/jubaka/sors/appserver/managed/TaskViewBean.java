@@ -1079,8 +1079,10 @@ if (dbMode) {
     public void addNetwork() {
         System.out.println(netAddr + " " + mask);
         BranchBean bb = null;
-        if (blb instanceof BranchBean)
-            bb = (BranchBean) blb;
+        if (dbMode){
+            Branch bEntity = branchService.selectByIdFullBranchNoPayloadv2(blb.getBib().getDbid());
+            bb = BeanEntityConverter.castToBean(bEntity,false);
+        }
         try {
             InetAddress addr = InetAddress.getByName(netAddr);
             int m = Integer.parseInt(mask);

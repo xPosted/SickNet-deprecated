@@ -46,8 +46,8 @@ public class BranchService {
         return branchDao.insert(br);
     }
 
-    public Branch eagerAllSelectById(Long id) {
-        return branchDao.eagerAllSelectById(id);
+    public Branch eagerSelectByIdWithWithSubsHostsSess(Long id) {
+        return branchDao.eagerSelectByIdWithWithSubsHostsSess(id);
     }
 
     public Branch eagerSelectById(Long id) {
@@ -85,6 +85,10 @@ public class BranchService {
         return branchDao.selectByName(name);
     }
 
+    public Branch eagerSelectByIdWithWithSubsHosts(Long id) {
+        branchDao.eagerSelectByIdWithWithSubsHosts(id);
+    }
+
     public Branch selectByTimeAndNode(Date createionTime, Node node) {
        return branchDao.selectBranchByTimeAndNode(createionTime,node);
     }
@@ -97,6 +101,12 @@ public class BranchService {
 
     public Branch persistBranch(BranchBean bb) {
 
+        Branch b = prepareEntity(bb);
+        branchDao.insert(b);
+        return b;
+    }
+
+    public Branch prepareEntity(BranchBean bb) {
         SessionEntitiesCreator sessionCreator = new SessionEntitiesCreator();
         Timestamp creationTime = new Timestamp(bb.getBib().getTime().getTime());
         Node node = nodeService.getNodeByUnid(bb.getBib().getNodeId());
@@ -123,7 +133,6 @@ public class BranchService {
             subnets.add(subnetService.prepareSubnetToPrsist(sBean,b,sessionCreator));
         }
         b.setSubntes(subnets);
-        branchDao.insert(b);
         return b;
     }
 
@@ -145,16 +154,19 @@ public class BranchService {
 
     }
 */
-    public SubnetBean addNet(InetAddress addr, int mask, BranchBean bb) {
+    public SubnetLightBean addNet(InetAddress addr, int mask,Long id) {
+        Branch be = eagerSelectByIdWithWithSubsHosts(id);
+        BranchLightBean blb = BeanEntityConverter.castToLightBean(null, be);
 
-        SubnetBean notKnown =  bb.getSubnetByName("0.0.0.0");
-        SubnetBean res = new SubnetBean();
+
+        SubnetLightBean notKnown =  blb.getSubnetByName("0.0.0.0");
+        SubnetLightBean res = new SubnetLightBean();
         res.setSubnet(addr);
         res.setSubnetMask(mask);
 
-        Set<IPItemBean> ipToRemoveSet = new HashSet<IPItemBean>();
+        Set<IPItemLightBean> ipToRemoveSet = new HashSet<>();
         try {
-            for (IPItemBean item : notKnown.getIps()) {
+            for (IPItemLightBean item : notKnown.getAllIpList()) {
                 InetAddress addrItem = InetAddress.getByName(item.getIp());
                 if (res.inSubnet(addrItem)) {
                     res.addIPmanualy(item);
@@ -167,13 +179,16 @@ public class BranchService {
             ex.printStackTrace();
         }
 
-        for (IPItemBean removeItem : ipToRemoveSet)
+        for (IPItemLightBean removeItem : ipToRemoveSet)
             notKnown.deleteIP(removeItem);
 
-        bb.addSubnet(res);
-        Node node = nodeService.getNodeByUnid(bb.getBib().getNodeId());
-        deleteIfExist(bb.getBib().getTime(),node);
-        persistBranch(bb);
+        blb.addSubnet(res);
+        Node node = nodeService.getNodeByUnid(blb.getBib().getNodeId());
+
+        update(blb);
+
+       // deleteIfExist(blb.getBib().getTime(),node);
+       // persistBranch(blb);
         //	System.out.println("Net added");
         return res;
     }

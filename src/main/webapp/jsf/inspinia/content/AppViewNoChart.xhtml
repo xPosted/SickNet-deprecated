@@ -594,7 +594,8 @@
                                 </div>
                                 <div class="col-sm-6 col-md-6 pull-right">
 
-                                    <div class="input-group"><input  id="searchIn" onkeyup="mySearchFunc()" type="text" class="form-control"></input>
+                                    <div class="input-group"><!--<input  id="searchIn" onkeyup="mySearchFunc()" type="text" class="form-control"></input> -->
+                                        <input  id="filter" type="text" class="form-control"></input>
                                         <span class="input-group-btn">
                                     <button type="button" class="btn btn-default">
                                         <span class="fa fa-search"></span>
@@ -611,7 +612,7 @@
                                 <c:if test="#{taskViewBean.isSessionViewMode()}">
                                     <c:if test="#{taskViewBean.isHostCategorised()}">
                                         <table  id="fooTable" class="footable table table-stripped toggle-arrow-tiny"
-                                               data-page-size="11">
+                                               data-page-size="11" data-filter='#filter'>
                                             <thead>
                                             <tr>
                                                 <th data-toggle="true">Time start</th>
@@ -681,7 +682,7 @@
                                     <c:if test="#{taskViewBean.isPortCategorised()}">
 
                                         <table id="fooTable" class="footable table table-stripped toggle-arrow-tiny"
-                                               data-page-size="11">
+                                               data-page-size="11" data-filter='#filter'>
                                             <thead>
                                             <tr>
                                                 <th data-toggle="true">Time start</th>
@@ -765,7 +766,7 @@
 
                                 <c:if test="#{taskViewBean.isHttpViewMode()}">
                                     <table id="http_foo_view" class="footable table table-stripped toggle-arrow-tiny inline col-md-12 no-padding"
-                                           data-page-size="11">
+                                           data-page-size="11" data-filter='#filter'>
                                         <thead class="inline col-md-12 no-padding">
                                         <tr class="inline col-md-12 no-padding">
                                             <th class="col-md-1 inline no-borders" data-toggle="true">Type</th>
@@ -792,7 +793,7 @@
                                         <ui:repeat value="#{taskViewBean.httpList}" var="http">
                                             <ui:fragment rendered="#{http.isRequest()}">
                                                 <c:set var="httpRequest" value="#{http.castToRequest()}"></c:set>
-                                                <tr class="inline col-md-12 no-padding">
+                                                <tr class="inlineable col-md-12 no-padding">
                                                     <td style="padding: 8px;"
                                                         class="col-md-1 inline">#{httpRequest.getRequestMethod()}</td>
                                                     <td style="padding: 8px;" class="col-md-6 inline">
@@ -933,7 +934,7 @@
                                             </ui:fragment>
                                             <ui:fragment rendered="#{http.isResponse()}">
                                                 <c:set var="httpResponse" value="#{http.castToResponse()}"></c:set>
-                                                    <tr class="inline col-md-12 no-padding">
+                                                    <tr class="inlineable col-md-12 no-padding">
                                                         <td style="padding: 8px;"
                                                             class="col-md-1 inline">RESP</td>
                                                         <td style="padding: 8px;" class="col-md-4 inline">
@@ -1218,8 +1219,16 @@
     </h:form>
 
     <script src="jsf/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-    <script src="jsf/inspinia/js/plugins/footable/footable.all.min.js"></script>
+ <!-- <script src="jsf/inspinia/js/plugins/footable/footable.all.min.js"></script>  -->
     <script src="jsf/inspinia/js/AppView.js"></script>
+   <!-- <script src="jsf/inspinia/js/foomy.js"></script>  -->
+
+
+    <script src="jsf/inspinia/js/foov2/foomy.js"></script>
+    <script src="jsf/inspinia/js/foov2/foo.filter.js"></script>
+    <script src="jsf/inspinia/js/foov2/foo.paginate.js"></script>
+    <script src="jsf/inspinia/js/foov2/foo.sort.js"></script>
+
     <script src="jsf/inspinia/js/plugins/pace/pace.min.js"></script>
 
     <script>

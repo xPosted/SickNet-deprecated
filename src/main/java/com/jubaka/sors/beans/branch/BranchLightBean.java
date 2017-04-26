@@ -47,4 +47,9 @@ public class BranchLightBean extends Bean implements Serializable{
         }
         return null;
     }
+
+    public void addSubnet(SubnetLightBean subnetBean) {
+        subnetsLight.add(subnetBean);
+        getBib().setSubnetCount(subnetsLight.size());
+    }
 }

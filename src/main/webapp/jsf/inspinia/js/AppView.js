@@ -151,8 +151,8 @@ $(window).resize(function(){
 
 function resizeBodyHandler(){
     /**/
-    var heightSesHttp = $('body').height() -$('.navbar-static-top').outerHeight()  - 90;
-    $('#ses_http_view').css('max-height', heightSesHttp);
+    //var heightSesHttp = $('body').height() -$('.navbar-static-top').outerHeight()  - 90;
+   // $('#ses_http_view').css('max-height', heightSesHttp);
 
     if($('#subnetInfoBody').outerHeight() > 5){
         height = $('#subnetInfoBody').outerHeight();

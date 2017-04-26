@@ -210,9 +210,12 @@
                             <div class="table_and_search">
                                 <div class="info_and_search">
                                     <div class="task_list__panelt">
-                                        Found <span class="badge">#{taskListBean.databaseCount}</span> captures on <span class="badge"> 1 </span> Nodes
+                                        Found <span class="badge">#{taskListBean.databaseCount}</span> tasks
                                     </div>
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Modal</button>
+                                    <div style="display: inline-block;" class="pull-left">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Create Task</button>
+                                    </div>
+
                                     <form action="#" class="search_by_name">
                                         <input type="text" class="form-control task_list_search_form__input"></input>
                                         <button type="submit" class="btn btn-default fa fa-search task_list_search_form__button"></button>

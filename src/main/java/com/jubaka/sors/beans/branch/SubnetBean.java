@@ -11,10 +11,7 @@ import com.jubaka.sors.beans.SesDataCapBean;
 public class SubnetBean extends SubnetLightBean implements Serializable {
 	List<IPItemBean> ips = new ArrayList<>();    // all captured ips
 	List<IPItemBean> liveIps = new ArrayList<>();	// ips that are online
-	private static final int BYTE_MASK = 0xFF;
-	private static final int IP_MASK = 0x80000000;
-	private int subnetInt;
-	private int sMask;
+
 	
 
     private SesDataCapBean sesDataCapBean=null;
@@ -56,39 +53,6 @@ public class SubnetBean extends SubnetLightBean implements Serializable {
 	}
 
 
-	/**
-	 * Converts an IP address into an integer
-	 */
-	private int toInt(InetAddress inetAddress) {
-		byte[] address = inetAddress.getAddress();
-		int result = 0;
-		for (int i = 0; i < address.length; i++) {
-			result <<= 8;
-			result |= address[i] & BYTE_MASK;
-		}
-		return result;
-	}
-
-
-	/**
-	 * Converts an IP address to a subnet using the provided
-	 * mask
-	 * @param address The address to convert into a subnet
-	 * @return The subnet as an integer
-	 */
-	private int toSubnet(InetAddress address) {
-		return toInt(address) & sMask;
-	}
-
-	/**
-	 * Checks if the {@link InetAddress} is within this subnet
-	 * @param address The {@link InetAddress} to check
-	 * @return True if the address is within this subnet, false otherwise
-	 */
-	public boolean inSubnet(InetAddress address) {
-
-		return toSubnet(address) == subnetInt;
-	}
 
 	public void addIPmanualy(IPItemBean ip) {
 
@@ -132,13 +96,4 @@ public class SubnetBean extends SubnetLightBean implements Serializable {
 
 	}
 
-	public void setSubnetMask(int subnetMask) {
-		this.subnetMask = subnetMask;
-		this.sMask = IP_MASK >> (subnetMask - 1);
-	}
-
-	public void setSubnet(InetAddress subnet) {
-		this.subnet = subnet;
-		this.subnetInt = toInt(subnet);
-	}
 }

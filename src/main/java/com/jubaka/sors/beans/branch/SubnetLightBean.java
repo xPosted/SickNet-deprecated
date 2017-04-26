@@ -36,6 +36,13 @@ public class SubnetLightBean extends Bean implements Serializable {
     private List<IPItemLightBean> ips = new ArrayList<>();// all captured ips
     private List<IPItemLightBean> liveIps = new ArrayList<>();	// ips that are online
 
+    //////////
+    private static final int BYTE_MASK = 0xFF;
+    private static final int IP_MASK = 0x80000000;
+    private int subnetInt;
+    private int sMask;
+    /////////
+
     public Long getDataSend() {
         return dataSend;
     }
@@ -53,12 +60,14 @@ public class SubnetLightBean extends Bean implements Serializable {
     }
     public void setSubnet(InetAddress subnet) {
         this.subnet = subnet;
+        this.subnetInt = toInt(subnet);
     }
     public int getSubnetMask() {
         return subnetMask;
     }
     public void setSubnetMask(int subnetMask) {
         this.subnetMask = subnetMask;
+        this.sMask = IP_MASK >> (subnetMask - 1);
     }
     public boolean isSelected() {
         return selected;
@@ -167,7 +176,82 @@ public class SubnetLightBean extends Bean implements Serializable {
         }
         return null;
     }
+    public void addIPmanualy(IPItemLightBean ip) {
 
+        if (ip.getActiveCount()>0) liveIps.add(ip);
+        ips.add(ip);
+
+        dataReceive = dataReceive+ip.getDataDown();
+        dataSend = dataSend+ip.getDataUp();
+
+        activeInSesCnt += ip.getInputActiveCount();
+        activeOutSesCnt += ip.getOutputActiveCount();
+
+        inSesCnt += ip.getInputCount();
+        outSesCnt += ip.getOutputCount();
+
+        activeSesCnt += ip.getActiveCount();
+        if (ip.getActiveCount()>0) activeAddrCnt++;
+        sesCnt += (ip.getActiveCount() + ip.getSavedCount());
+        addrCnt++;
+    }
+
+    public void deleteIP(IPItemLightBean ip){
+        if (ips.contains(ip)) {
+            liveIps.remove(ip);
+            ips.remove(ip);
+
+            dataReceive = dataReceive-ip.getDataDown();
+            dataSend = dataSend-ip.getDataUp();
+
+            activeInSesCnt -= ip.getInputActiveCount();
+            activeOutSesCnt -= ip.getOutputActiveCount();
+
+            inSesCnt -= ip.getInputCount();
+            outSesCnt -= ip.getOutputCount();
+
+            activeSesCnt -= ip.getActiveCount();
+            if (ip.getActiveCount()>0) activeAddrCnt--;
+            sesCnt -= (ip.getActiveCount() + ip.getSavedCount());
+            addrCnt--;
+
+        }
+
+    }
+
+    /**
+     * Converts an IP address into an integer
+     */
+    private int toInt(InetAddress inetAddress) {
+        byte[] address = inetAddress.getAddress();
+        int result = 0;
+        for (int i = 0; i < address.length; i++) {
+            result <<= 8;
+            result |= address[i] & BYTE_MASK;
+        }
+        return result;
+    }
+
+
+    /**
+     * Converts an IP address to a subnet using the provided
+     * mask
+     * @param address The address to convert into a subnet
+     * @return The subnet as an integer
+     */
+    private int toSubnet(InetAddress address) {
+        return toInt(address) & sMask;
+    }
+
+    /**
+     * Checks if the {@link InetAddress} is within this subnet
+     * @param address The {@link InetAddress} to check
+     * @return True if the address is within this subnet, false otherwise
+     */
+    public boolean inSubnet(InetAddress address) {
+
+        return toSubnet(address) == subnetInt;
+    }
 
 
 }

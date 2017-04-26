@@ -107,14 +107,16 @@
 
 </h:head>
 
-<body class="">
+<h:body styleClass="top-navigation">
 
 
 <div id="wrapper">
 
-    <ui:include src="LeftNavbar.xhtml"/>
-
     <div id="page-wrapper" class="gray-bg">
+        <ui:include src="MenuTop.xhtml">
+            <ui:param name="dbid" value="#{taskViewBean.dbTaskIdStr}"></ui:param>
+        </ui:include>
+
         <div class="row border-bottom">
             <nav class="navbar navbar-static-top  " role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header">
@@ -321,6 +323,6 @@
 <script src="jsf/inspinia/js/plugins/pace/pace.min.js"></script>
 
 
-</body>
+</h:body>
 
 </html>

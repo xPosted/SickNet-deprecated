@@ -45,7 +45,7 @@ public class BranchDao  {
     }
 
     @Transactional
-    public Branch eagerAllSelectById(Long id) {
+    public Branch eagerSelectByIdWithWithSubsHostsSess(Long id) {
         Branch b = entityManager.find(Branch.class,id);
         if (b != null) {
             b.getSubntes().size();
@@ -55,6 +55,18 @@ public class BranchDao  {
                     h.getSessionsOutput().size();
                     h.getSessionsInput().size();
                 }
+            }
+        }
+        return b;
+    }
+
+    @Transactional
+    public Branch eagerSelectByIdWithWithSubsHosts(Long id) {
+        Branch b = entityManager.find(Branch.class,id);
+        if (b != null) {
+            b.getSubntes().size();
+            for (Subnet s : b.getSubntes()) {
+                s.getHosts().size();
             }
         }
         return b;
