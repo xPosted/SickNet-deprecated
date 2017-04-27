@@ -38,6 +38,28 @@ public class BeanEntityConverter {
         return bib;
     }
 
+    public static BranchLightBean castToLightBeanWithHosts(BranchLightBean preCreated, Branch b) {
+        BranchLightBean lightBean;
+        if (preCreated == null) {
+            lightBean = new BranchLightBean();
+        } else {
+            lightBean = preCreated;
+        }
+        lightBean.setBib(castToInfoBean(b));
+        List<SubnetLightBean> subnets = new ArrayList<>();
+        SubnetLightBean sb = null;
+
+        for (Subnet sEntity : b.getSubntes()) {
+
+            sb =  castToLightBean(null,sEntity);
+            subnets.add(sb);
+        }
+
+        lightBean.setSubnetsLight(subnets);
+        return lightBean;
+
+    }
+
     public static BranchLightBean castToLightBean(BranchLightBean preCreated, Branch b) {
         BranchLightBean lightBean;
         if (preCreated == null) {

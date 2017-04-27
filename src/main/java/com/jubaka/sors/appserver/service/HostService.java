@@ -1,6 +1,7 @@
 package com.jubaka.sors.appserver.service;
 
 import com.jubaka.sors.beans.branch.IPItemBean;
+import com.jubaka.sors.beans.branch.IPItemLightBean;
 import com.jubaka.sors.beans.branch.SessionBean;
 import com.jubaka.sors.appserver.dao.HostDao;
 import com.jubaka.sors.appserver.entities.Host;
@@ -10,6 +11,7 @@ import com.jubaka.sors.appserver.entities.Subnet;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +88,35 @@ public class HostService {
         host.setSessionsInput(sessionsInput);
         host.setSessionsOutput(sessionsOutput);
         return host;
+
+    }
+
+    public Host prepareHostToPersist(IPItemLightBean ipaddr, Subnet subnet, SessionEntitiesCreator sesCreator) {
+        Host host = new Host();
+        host.setIp(ipaddr.getIp());
+        host.setDataDown(ipaddr.getDataDown());
+        host.setDataUp(ipaddr.getDataUp());
+        host.setDnsName(ipaddr.getDnsName());
+        host.setActiveCount(ipaddr.getActiveCount());
+        host.setSavedCount(ipaddr.getSavedCount());
+        host.setInputCount(ipaddr.getInputCount());
+        host.setOutputCount(ipaddr.getOutputCount());
+        host.setInputActiveCount(ipaddr.getInputActiveCount());
+        host.setOutputActiveCount(ipaddr.getOutputActiveCount());
+        host.setSubnet(subnet);
+
+      //  List<Session> sessionsInput = new ArrayList<>();
+      //  List<Session> sessionsOutput = new ArrayList<>();
+
+        host.setSessionsInput(null);
+        host.setSessionsOutput(null);
+        return host;
+
+    }
+
+
+    public void moveToSubnet(List<Long> hostsIds,Subnet net) {
+hostDao.moveToSubnet(hostsIds,net);
 
     }
 

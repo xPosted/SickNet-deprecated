@@ -43,4 +43,25 @@ public class SubnetDao {
         return sub;
 
     }
+    @Transactional
+    public void updateStatData(Subnet net) {
+        Query q = entityManager.createQuery("update Subnet s set s.dataSend = :dataSend, s.dataReceive = :dataReceive," +
+                " s.activeSesCnt = :activeSesCnt, s.activeAddrCnt = :activeAddrCnt, s.activeInSesCnt = :activeInSesCnt," +
+                " s.activeOutSesCnt = :activeOutSesCnt, s.inSesCnt = :inSesCnt, s.outSesCnt = :outSesCnt," +
+                " s.sesCnt = :sesCnt, s.addrCnt = :addrCnt, s.subnetMask = :subnetMask where s.id = :id");
+        q.setParameter("dataSend",net.getDataSend());
+        q.setParameter("dataReceive",net.getDataReceive());
+        q.setParameter("activeSesCnt",net.getActiveSesCnt());
+        q.setParameter("activeAddrCnt",net.getActiveAddrCnt());
+        q.setParameter("activeInSesCnt",net.getActiveInSesCnt());
+        q.setParameter("activeOutSesCnt",net.getActiveOutSesCnt());
+        q.setParameter("inSesCnt",net.getInSesCnt());
+        q.setParameter("outSesCnt",net.getOutSesCnt());
+        q.setParameter("sesCnt",net.getSesCnt());
+        q.setParameter("addrCnt",net.getAddrCnt());
+        q.setParameter("subnetMask",net.getSubnetMask());
+        q.setParameter("id",net.getId());
+        q.executeUpdate();
+
+    }
 }

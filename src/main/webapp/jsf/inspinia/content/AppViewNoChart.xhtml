@@ -146,8 +146,8 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div id="subnetList" class="full-width">
-                                        <h:form>
+                                    <div id="subnetList" class="full-width border-bottom">
+                                        <h:form id="subnetListForm">
                                             <ui:repeat value="#{taskViewBean.getSubnetList()}" var="subnetBean">
                                                 <p:commandLink
                                                         styleClass="block full-width btn btn-default select_ip__value"
@@ -159,19 +159,21 @@
                                             </ui:repeat>
                                         </h:form>
                                         <hr class="no-margins"/>
-                                        <div class="full-width">
+                                        <div class="full-width fa-border">
                                             <h:form>
                                                 <p:inputText style="width: 50%"
                                                              value="#{taskViewBean.netAddr}"></p:inputText>
                                                 /
                                                 <p:inputText style="width: 20%"
                                                              value="#{taskViewBean.mask}"></p:inputText>
-                                                <p:commandLink style="width: 25%;" styleClass="btn btn-primary"
+                                                <p:commandLink style="width: 25%; padding: 2px 12px; margin-left: 10px;" styleClass="btn btn-primary"
                                                                  action="#{taskViewBean.addNetwork()}"
-                                                                 value="add NET"></p:commandLink>
+                                                                 value="add NET"
+                                                                update="subnetListForm selectedSubnetAddr subnetPanHeader subnetInfo filterView sessionList jsf_filterView"></p:commandLink>
                                             </h:form>
 
                                         </div>
+
                                     </div>
                                     <h:panelGroup id="subnetInfo">
                                         <table class="table no-padding">
@@ -401,14 +403,14 @@
                                     <div class="col-md-6 col-sm-6 no-padding inline" data-toggle="buttons">
                                         <h:form>
                                             <p:commandLink action="#{taskViewBean.changeActiveFilter()}"
-                                                           update="sessionFilterBlock sessionList"
+                                                           update="sessionFilterBlock sessionList jsf_filterView"
                                                            styleClass="btn btn-default #{taskViewBean.sessionActiveFilter ? 'active' : ''}"
                                                            oncomplete="buildFoo();"
                                                            style="width: 50%;">
                                                 Active
                                             </p:commandLink>
                                             <p:commandLink action="#{taskViewBean.changeSavedFilter()}"
-                                                           update="sessionFilterBlock sessionList"
+                                                           update="sessionFilterBlock sessionList jsf_filterView"
                                                            styleClass="btn btn-default #{taskViewBean.sessionSavedFilter ? 'active' : ''}"
                                                            oncomplete="buildFoo();"
                                                            style="width: 50%;">
@@ -419,14 +421,14 @@
                                     <div class="col-md-6 col-sm-6 no-padding inline" data-toggle="buttons">
                                         <h:form>
                                             <p:commandLink action="#{taskViewBean.changeInFilter()}"
-                                                           update="sessionFilterBlock sessionList"
+                                                           update="sessionFilterBlock sessionList jsf_filterView"
                                                            styleClass="btn btn-default #{taskViewBean.sessionInFilter ? 'active' : ''}"
                                                            oncomplete="buildFoo();"
                                                            style="width: 50%;">
                                                 Input
                                             </p:commandLink>
                                             <p:commandLink action="#{taskViewBean.changeOutFilter()}"
-                                                           update="sessionFilterBlock sessionList"
+                                                           update="sessionFilterBlock sessionList jsf_filterView"
                                                            styleClass="btn btn-default #{taskViewBean.sessionOutFilter ? 'active' : ''}"
                                                            oncomplete="buildFoo();"
                                                            style="width: 50%;">

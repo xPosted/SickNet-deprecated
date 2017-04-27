@@ -72,6 +72,15 @@ public class HostDao implements Serializable {
     }
 
     @Transactional
+    public void moveToSubnet(List<Long> hostsIds,Subnet net) {
+Query q = entityManager.createQuery("update Host h set h.subnet = :net where h.id IN :listIds");
+q.setParameter("net",net);
+q.setParameter("listIds", hostsIds);
+q.executeUpdate();
+
+    }
+
+    @Transactional
     public List<Host> selectBySubnetWithSessions(Subnet s) {
         Query q = entityManager.createQuery("select h from Host h left join h.sessionsInput sesIn left join h.sessionsOutput where h.subnet = :net");
         q.setParameter("net",s);

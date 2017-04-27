@@ -337,7 +337,7 @@ public class TaskViewBean implements Serializable, Observer {
 
     public void initTask(Long dbtaskId) {
         dbMode = true;
-        Branch b =  branchService.eagerSelectById(dbtaskId);
+        Branch b =  branchService.selectByIdWithNets(dbtaskId);
         blb = BeanEntityConverter.castToLightBean(null,b);
         currentTaskName = blb.getBib().getBranchName();
         categories.clear();
@@ -737,6 +737,7 @@ public class TaskViewBean implements Serializable, Observer {
     }
     public void changeActiveFilter() {
         this.sessionActiveFilter = !sessionActiveFilter;
+        refreshFilters();
   //      refreshFilter(null);
 
     }
@@ -822,6 +823,7 @@ if (dbMode) {
 
     public void changeInFilter() {
         this.sessionInFilter = !sessionInFilter;
+        refreshFilters();
     //    refreshFilter(null);
     }
 
@@ -831,6 +833,7 @@ if (dbMode) {
 
     public void changeOutFilter() {
         this.sessionOutFilter = !sessionOutFilter;
+        refreshFilters();
    //     refreshFilter(null);
     }
 
@@ -844,6 +847,7 @@ if (dbMode) {
 
     public void changeSavedFilter() {
         this.sessionSavedFilter = !sessionSavedFilter;
+        refreshFilters();
    //     refreshFilter(null);
     }
 
@@ -1087,12 +1091,13 @@ if (dbMode) {
             InetAddress addr = InetAddress.getByName(netAddr);
             int m = Integer.parseInt(mask);
 
-            branchService.addNet(addr,m,bb);
+            branchService.addNet(addr,m,bb.getBib().getDbid());
 
         }   catch(UnknownHostException ex) {
             ex.printStackTrace();
         }
-
+        Long dbTaskId = Long.parseLong(dbTaskIdStr);
+        initTask(dbTaskId);
     }
 
     @Override

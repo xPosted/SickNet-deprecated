@@ -38,7 +38,7 @@ public class BranchDao  {
     }
 
     @Transactional
-    public Branch eagerSelectById(Long id) {
+    public Branch selectByIdWithNets(Long id) {
         Branch b = entityManager.find(Branch.class,id);
         if (b != null) b.getSubntes().size();
         return b;

@@ -33,6 +33,8 @@ public class BranchService {
     @Inject
     private SubnetService subnetService;
 
+    @Inject HostService hostService;
+
     @Inject
     private NodeService nodeService;
 
@@ -50,8 +52,8 @@ public class BranchService {
         return branchDao.eagerSelectByIdWithWithSubsHostsSess(id);
     }
 
-    public Branch eagerSelectById(Long id) {
-        return branchDao.eagerSelectById(id);
+    public Branch selectByIdWithNets(Long id) {
+        return branchDao.selectByIdWithNets(id);
     }
 
     public Branch selectById(Long id) {
@@ -86,7 +88,7 @@ public class BranchService {
     }
 
     public Branch eagerSelectByIdWithWithSubsHosts(Long id) {
-        branchDao.eagerSelectByIdWithWithSubsHosts(id);
+        return branchDao.eagerSelectByIdWithWithSubsHosts(id);
     }
 
     public Branch selectByTimeAndNode(Date createionTime, Node node) {
@@ -136,6 +138,36 @@ public class BranchService {
         return b;
     }
 
+    public Branch prepareEntity(BranchLightBean bb) {
+        SessionEntitiesCreator sessionCreator = new SessionEntitiesCreator();
+        Timestamp creationTime = new Timestamp(bb.getBib().getTime().getTime());
+        Node node = nodeService.getNodeByUnid(bb.getBib().getNodeId());
+        User user = userService.getUserByNick(bb.getBib().getUserName());
+
+        deleteIfExist(bb.getBib().getTime(),node);
+
+        Branch b = new Branch();
+        b.setBranchName(bb.getBib().getBranchName());
+        b.setCreatetime(creationTime);
+        b.setDescription(bb.getBib().getDesc());
+        b.setIface(bb.getBib().getIface());
+        b.setFileName(bb.getBib().getFileName());
+        b.setFileSize(bb.getBib().getUploadSize());
+        b.setSubnet_count(bb.getBib().getSubnetCount());
+        b.setHosts_count(bb.getBib().getHostsCount());
+        b.setSessions_count(bb.getBib().getSessionsCount());
+
+        b.setNode(node);
+        b.setUser(user);
+
+        Set<Subnet> subnets = new HashSet<>();
+        for (SubnetLightBean sBean : bb.getSubnetsLight()) {
+            subnets.add(subnetService.prepareSubnetToPrsist(sBean,b,sessionCreator));
+        }
+        b.setSubntes(subnets);
+        return b;
+    }
+
 
 /*
     public List<HTTP>  combine(SessionBean sessionBean, List<HttpRequest> reqs, List<HttpResponse> resps) {
@@ -156,7 +188,7 @@ public class BranchService {
 */
     public SubnetLightBean addNet(InetAddress addr, int mask,Long id) {
         Branch be = eagerSelectByIdWithWithSubsHosts(id);
-        BranchLightBean blb = BeanEntityConverter.castToLightBean(null, be);
+        BranchLightBean blb = BeanEntityConverter.castToLightBeanWithHosts(null, be);
 
 
         SubnetLightBean notKnown =  blb.getSubnetByName("0.0.0.0");
@@ -164,13 +196,16 @@ public class BranchService {
         res.setSubnet(addr);
         res.setSubnetMask(mask);
 
-        Set<IPItemLightBean> ipToRemoveSet = new HashSet<>();
+        Set<IPItemLightBean> ipMoveSet = new HashSet<>();
+        List<Long> ipIdsMoveSet = new ArrayList<>();
+
         try {
             for (IPItemLightBean item : notKnown.getAllIpList()) {
                 InetAddress addrItem = InetAddress.getByName(item.getIp());
                 if (res.inSubnet(addrItem)) {
                     res.addIPmanualy(item);
-                    ipToRemoveSet.add(item);
+                    ipMoveSet.add(item);
+                    ipIdsMoveSet.add(item.getDbId());
 
                 }
 
@@ -179,14 +214,23 @@ public class BranchService {
             ex.printStackTrace();
         }
 
-        for (IPItemLightBean removeItem : ipToRemoveSet)
+        for (IPItemLightBean removeItem : ipMoveSet)
             notKnown.deleteIP(removeItem);
 
-        blb.addSubnet(res);
-        Node node = nodeService.getNodeByUnid(blb.getBib().getNodeId());
 
-        update(blb);
 
+         //   update netKnown !!!
+
+        Subnet notKnownEntity = subnetService.prepareSubnetEmptyHostsToPrsist(notKnown,be);
+        subnetService.updateStatData(notKnownEntity);
+        Subnet newSubnetEntity = subnetService.prepareSubnetEmptyHostsToPrsist(res,be);
+        newSubnetEntity = subnetService.insert(newSubnetEntity);
+        hostService.moveToSubnet(ipIdsMoveSet,newSubnetEntity);
+
+        //blb.addSubnet(res);
+       // Node node = nodeService.getNodeByUnid(blb.getBib().getNodeId());
+        //Branch b = prepareEntity(blb);
+        //update(b);
        // deleteIfExist(blb.getBib().getTime(),node);
        // persistBranch(blb);
         //	System.out.println("Net added");

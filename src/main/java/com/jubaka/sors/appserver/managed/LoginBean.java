@@ -100,11 +100,12 @@ public class LoginBean implements Serializable {
 
 
     public void logoutAction() throws IOException{
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         linked = false;
         user = null;
         login = "";
         pass = "";
-        FacesContext.getCurrentInstance().getExternalContext().redirect("landing.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("app/jsf/inspinia/content/landing.xhtml");
 
     }
 
