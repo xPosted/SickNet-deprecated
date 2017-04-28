@@ -196,6 +196,27 @@ public class BranchDao  {
 
     }
 
+    @Transactional
+    public void updateStatData(Branch b) {
+        Query q =entityManager.createQuery("update Branch b set b.branchName = :branchName, b.fileName = :fileName, " +
+                "b.fileSize = :fileSize, b.iface = :iface, b.createtime = :createtime, b.modifyTime = :modifyTime, " +
+                "b.description = :description, b.state = :state, b.subnet_count = :subnet_count, b.hosts_count = :hosts_count, " +
+                "b.sessions_count = :sessions_count where b.id = :id");
+        q.setParameter("branchName",b.getBranchName());
+        q.setParameter("fileName",b.getFileName());
+        q.setParameter("fileSize", b.getFileSize());
+        q.setParameter("iface", b.getIface());
+        q.setParameter("createtime", b.getCreatetime());
+        q.setParameter("modifyTime",b.getModifyTime());
+        q.setParameter("description",b.getDescription());
+        q.setParameter("state",b.getState());
+        q.setParameter("subnet_count",b.getSubnet_count());
+        q.setParameter("hosts_count",b.getHosts_count());
+        q.setParameter("sessions_count",b.getSessions_count());
+        q.setParameter("id",b.getDbid());
+        q.executeUpdate();
+    }
+
 
 
 

@@ -220,7 +220,8 @@ public class BranchService {
 
 
          //   update netKnown !!!
-
+        be.setSubnet_count(be.getSubnet_count()+1);
+        updateStatData(be);
         Subnet notKnownEntity = subnetService.prepareSubnetEmptyHostsToPrsist(notKnown,be);
         subnetService.updateStatData(notKnownEntity);
         Subnet newSubnetEntity = subnetService.prepareSubnetEmptyHostsToPrsist(res,be);
@@ -245,6 +246,9 @@ public class BranchService {
         return branchDao.selectByIdFullBranchNoPayloadv2(id);
     }
 
+    public void updateStatData(Branch b) {
+        branchDao.updateStatData(b);
+    }
 
 
 }
