@@ -129,8 +129,9 @@ public class BranchDao  {
         return br;
 
     }
+
     @Transactional
-    public void delete (Branch br)  {
+    public void delete(Branch br)  {
         entityManager.remove(br);
     }
 
