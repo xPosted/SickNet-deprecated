@@ -20,6 +20,10 @@ public class User {
     private String nickName;
     private String firstName;
     private String secondName;
+
+    @ManyToOne
+    @JoinColumn(name = "limitsId")
+    private UserLimits limits;
     private String phone;
     private String email;
     private String pass;
@@ -84,6 +88,14 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UserLimits getLimits() {
+        return limits;
+    }
+
+    public void setLimits(UserLimits limits) {
+        this.limits = limits;
     }
 
 }

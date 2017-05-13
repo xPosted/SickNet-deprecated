@@ -1,6 +1,7 @@
 package com.jubaka.sors.appserver.managed;
 
 import com.jubaka.sors.appserver.entities.User;
+import com.jubaka.sors.appserver.service.UserLimitsService;
 import com.jubaka.sors.appserver.service.UserService;
 
 import javax.enterprise.context.SessionScoped;
@@ -21,6 +22,9 @@ public class RegisterBean implements Serializable {
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private UserLimitsService userLimitsService;
 
     private int key = -1;
     private String nickName;
@@ -100,6 +104,7 @@ public class RegisterBean implements Serializable {
         u.setEmail(email);
         u.setPhone(phone);
         u.setJoinDate(new Date());
+        u.setLimits(userLimitsService.getDefaultLims());
         //u.setLastLogin(new Date());
       //  u.setImage(request.getParameter("imageff"));
         userService.addUser(u);
