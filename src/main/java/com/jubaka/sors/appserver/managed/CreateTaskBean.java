@@ -2,6 +2,7 @@ package com.jubaka.sors.appserver.managed;
 
 import com.jubaka.sors.appserver.serverSide.EndpointInterface;
 import com.jubaka.sors.appserver.serverSide.LocalNode;
+import com.jubaka.sors.appserver.servlet.Profile;
 import com.jubaka.sors.beans.branch.BranchBean;
 import com.jubaka.sors.desktop.factories.ClassFactory;
 import com.jubaka.sors.desktop.remote.BeanConstructor;
@@ -39,12 +40,14 @@ public class CreateTaskBean implements Serializable {
     @Inject
     private LoginBean loginBean;
     @Inject
+    private ProfileBaen profileBaen;
+    @Inject
     private BranchService branchService;
     private String taskName;
     private String nodeName;
     private Long nodeId;
     private UploadedFile upFilePart;
-    private String uploadedPcapPath = null;
+    private File uploadedPcap = null;
 
     public Long getNodeId() {
         return nodeId;
@@ -78,7 +81,7 @@ public class CreateTaskBean implements Serializable {
 
         this.upFilePart = upFilePart;
         LocalNode endpoint =  cHandler.getLocalNode();
-        uploadedPcapPath = endpoint.preparePcap(upFilePart);
+        uploadedPcap  = new File(endpoint.preparePcap(upFilePart));
 
     }
 
@@ -89,15 +92,16 @@ public class CreateTaskBean implements Serializable {
     public void handleFileUpload(FileUploadEvent event) {
         upFilePart = event.getFile();
         LocalNode endpoint =  cHandler.getLocalNode();
-        uploadedPcapPath = endpoint.preparePcap(upFilePart);
+        uploadedPcap = new File(endpoint.preparePcap(upFilePart));
     }
     private void createTask() {
 
         if (upFilePart == null | taskName == null) return;
         if (cHandler.getLocalNode() == null) return;
+        if (uploadedPcap.length() > profileBaen.getAvailableTaskSpace()) return;
 
         LocalNode endpoint =  cHandler.getLocalNode();
-        Integer newBrId =  endpoint.createBranch(uploadedPcapPath,loginBean.getLogin(),upFilePart.getFileName(),taskName);
+        Integer newBrId =  endpoint.createBranch(uploadedPcap.getAbsolutePath(),loginBean.getLogin(),upFilePart.getFileName(),taskName);
 
         endpoint.waitForCaptureOff(newBrId);
 
@@ -115,6 +119,7 @@ public class CreateTaskBean implements Serializable {
             Files.createDirectories(Paths.get(usersPcapPath));
             Files.copy(upFilePart.getInputStream(),Paths.get(dumpPath), StandardCopyOption.REPLACE_EXISTING);
             int branchId = fuckingFactory.createBranch(loginBean.getLogin(),taskName,dumpPath,null,null);
+
             Branch newBr = fuckingFactory.getBranch(branchId);
             newBr.startCapture(null);
             API api =  fuckingFactory.getAPIinstance(branchId);

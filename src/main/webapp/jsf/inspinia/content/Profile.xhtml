@@ -91,29 +91,36 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <table class="table small m-b-xs text-center">
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <strong>#{profileBaen.totalTasks}</strong> Tasks
-                                </td>
+                        <div class="col-md-8">
+                            <table class="table small m-b-xs text-center">
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <strong>#{profileBaen.totalTasksCount}</strong> Tasks
+                                    </td>
 
 
-                            </tr>
-                            <tr>
-                                <td>
-                                    <strong>#{profileBaen.getTotalHumanSize()}</strong> Total size
-                                </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>#{profileBaen.getTotalHumanSize()}</strong> Total size
+                                    </td>
 
-                            </tr>
-                            <tr>
-                                <td>
-                                    <strong>#{profileBaen.totalNetCount}/#{profileBaen.totalHostCount}/#{profileBaen.totalSesCount}</strong> NETs/HOSTs/SESSIONs
-                                </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>#{profileBaen.totalNetCount}/#{profileBaen.totalHostCount}/#{profileBaen.totalSesCount}</strong> NETs/HOSTs/SESSIONs
+                                    </td>
 
-                            </tr>
-                            </tbody>
-                        </table>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="col-md-4">
+                            <canvas id="availableSpaceChart" width="78" height="78"></canvas>
+                            <h5>#{profileBaen.getAvailableSpaceInHumanSize()} space <b>free</b></h5>
+                        </div>
 
                     </div>
 
@@ -158,7 +165,7 @@
             <div class="modal-dialog">
                 <div class="modal-content animated bounceInRight">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&amp;times;</span><span class="sr-only">Close</span></button>
                         <i class="fa fa-user modal-icon"></i>
                         <h4 class="modal-title">Change password</h4>
                     </div>
@@ -176,7 +183,7 @@
         </div>
         <div class="footer">
             <div class="pull-right">
-                10GB of <strong>250GB</strong> Free.
+                #{profileBaen.getAvailableSpaceInHumanSize()} of <strong>#{profileBaen.getTaskSizeUserLimitInHuman()}</strong> Free.
             </div>
             <div>
                 <strong>Copyright</strong> Example Company &amp;copy; 2014-2015
@@ -186,8 +193,6 @@
     </div>
 </div>
 
-
-
 <!-- Mainly scripts -->
 <script src="jsf/inspinia/js/bootstrap.js"></script>
 <script src="jsf/inspinia/js/plugins/metisMenu/jquery.metisMenu.js"></script>
@@ -196,8 +201,43 @@
 <!-- Custom and plugin javascript -->
 <script src="jsf/inspinia/js/inspinia.js"></script>
 <script src="jsf/inspinia/js/plugins/pace/pace.min.js"></script>
+    <!-- ChartJS-->
+    <script src="jsf/inspinia/js/plugins/chartJs/Chart.min.js"></script>
 
 <script>
+    $(function()  {
+
+        var doughnutData = [
+            {
+                value:  #{profileBaen.getTotalTaskLenInMb()},
+                color: "#a3e1d4",
+                highlight: "#1ab394",
+                label: ""
+            },
+            {
+                value: #{profileBaen.getAvailableSpaceInMb()},
+                color: "#A4CEE8",
+                highlight: "#1ab394",
+                label: ""
+            }
+        ];
+
+        var doughnutOptions = {
+            segmentShowStroke: true,
+            segmentStrokeColor: "#fff",
+            segmentStrokeWidth: 2,
+            percentageInnerCutout: 45, // This is 0 for Pie charts
+            animationSteps: 100,
+            animationEasing: "easeOutBounce",
+            animateRotate: true,
+            animateScale: false
+        };
+
+        var ctx = document.getElementById("availableSpaceChart").getContext("2d");
+        var DoughnutChart = new Chart(ctx).Doughnut(doughnutData, doughnutOptions);
+    });
+
+
     function toggleSaveBtn() {
         $('.saveBtn').fadeIn();
     }

@@ -21,7 +21,7 @@ public class User {
     private String firstName;
     private String secondName;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "limitsId")
     private UserLimits limits;
     private String phone;

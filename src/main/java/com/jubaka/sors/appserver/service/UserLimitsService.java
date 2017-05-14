@@ -1,7 +1,9 @@
 package com.jubaka.sors.appserver.service;
 
 import com.jubaka.sors.appserver.dao.UserLimitsDao;
+import com.jubaka.sors.appserver.entities.User;
 import com.jubaka.sors.appserver.entities.UserLimits;
+import com.jubaka.sors.appserver.serverSide.ConnectionHandler;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -43,5 +45,7 @@ public class UserLimitsService {
     public UserLimits getDefaultLims() {
         return defaultLims;
     }
+
+
 
 }

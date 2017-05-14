@@ -330,7 +330,7 @@
                                     <div class="modal_main__inputs modal_Border_bottom">
 
                                         <div class="spase_between nodesView_modal__buttom full-width border-bottom">
-                                                 <p:fileUpload id="file" fileUploadListener="#{createTaskBean.handleFileUpload}" fileLimit="1" multiple="false" styleClass="btn btn-file" update="uploadedContent create" mode="advanced" value="#{createTaskBean.upFilePart}">Select
+                                                 <p:fileUpload id="file" fileUploadListener="#{createTaskBean.handleFileUpload}" sizeLimit="#{profileBaen.availableTaskSpace}" fileLimit="1" multiple="false" styleClass="btn btn-file" update="uploadedContent create" mode="advanced" value="#{createTaskBean.upFilePart}">Select
                                                  </p:fileUpload>
                                         </div>
                                         <h:panelGroup layout="block" id="uploadedContent" class="panel panel-default">

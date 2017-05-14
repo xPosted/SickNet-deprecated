@@ -5,11 +5,9 @@ import com.jubaka.sors.appserver.entities.UserLimits;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
-import javax.persistence.Query;
+import javax.persistence.*;
 import javax.transaction.Transactional;
+import java.nio.file.attribute.UserPrincipalLookupService;
 
 /**
  * Created by root on 12.05.17.
@@ -38,11 +36,17 @@ public class UserLimitsDao {
 
     @Transactional
     public UserLimits getLimitsByValues(long totalTaskLen, long totalDataLen) {
+        UserLimits result = null;
+        try {
+            Query q = entityManager.createQuery("select lim from UserLimits lim where lim.totalTasksLen = :tasksLen and lim.totalDataLen = :dataLen");
+            q.setParameter("tasksLen",totalTaskLen);
+            q.setParameter("dataLen",totalDataLen);
+            result =  (UserLimits) q.getSingleResult();
+        } catch (NoResultException noRes) {
 
-        Query q = entityManager.createQuery("select lim from UserLimits lim where lim.totalTasksLen = :tasksLen and lim.totalDataLen = :dataLen");
-        q.setParameter("tasksLen",totalTaskLen);
-        q.setParameter("dataLen",totalDataLen);
-        return (UserLimits) q.getSingleResult();
+        }
+        return result;
+
     }
 
 }

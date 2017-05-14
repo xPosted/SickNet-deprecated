@@ -1,6 +1,7 @@
 package com.jubaka.sors.appserver.managed;
 
 import com.jubaka.sors.appserver.entities.Branch;
+import com.jubaka.sors.appserver.entities.User;
 import com.jubaka.sors.appserver.serverSide.ConnectionHandler;
 import com.jubaka.sors.appserver.service.BranchService;
 import com.jubaka.sors.beans.branch.BranchBean;
@@ -24,8 +25,8 @@ public class ProfileBaen {
     @Inject
     private BranchService branchService;
 
-
-    private int totalTasks = 0;
+        // this values left here becouse of request scoped bean makes smaller overload on db
+    private int totalTasksCount = 0;
     private long totalSize = 0;
     private int totalNetCount = 0;
     private int totalHostCount = 0;
@@ -35,22 +36,21 @@ public class ProfileBaen {
     public void init() {
         List<Branch> branchs = branchService.selectByCurrentUser();
         for (Branch b : branchs) {
-            totalTasks++;
+            totalTasksCount++;
             totalSize += b.getFileSize();
             totalNetCount+=b.getSubnet_count();
             totalHostCount+=b.getHosts_count();
             totalSesCount+=b.getSessions_count();
         }
 
-
     }
 
-    public int getTotalTasks() {
-        return totalTasks;
+    public int getTotalTasksCount() {
+        return totalTasksCount;
     }
 
-    public void setTotalTasks(int totalTasks) {
-        this.totalTasks = totalTasks;
+    public void setTotalTasksCount(int totalTasks) {
+        this.totalTasksCount = totalTasks;
     }
 
     public long getTotalSize() {
@@ -89,5 +89,29 @@ public class ProfileBaen {
         return ConnectionHandler.processSize(totalSize,1);
     }
 
+    public String getTaskSizeUserLimitInHuman() {
+        return ConnectionHandler.processSize(loginBean.getUser().getLimits().getTotalTasksLen(),1);
+    }
 
+    public long getAvailableTaskSpace() {
+        long maxTasksLen = loginBean.getUser().getLimits().getTotalTasksLen();
+        maxTasksLen = maxTasksLen - getTotalSize();
+        if (maxTasksLen<0) maxTasksLen = 0;
+        return maxTasksLen;
+
+    }
+
+    public String getAvailableSpaceInHumanSize() {
+        return ConnectionHandler.processSize(getAvailableTaskSpace(),0);
+    }
+
+    public String getAvailableSpaceInMb() {
+       Double sizeInMb = ConnectionHandler.processSize(getAvailableTaskSpace(),"b","mb");
+       return sizeInMb.toString();
+    }
+
+    public String getTotalTaskLenInMb() {
+        Double sizeInMb = ConnectionHandler.processSize(getTotalSize(),"b","mb");
+        return sizeInMb.toString();
+    }
 }
