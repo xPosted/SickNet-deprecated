@@ -15,6 +15,8 @@ import org.primefaces.model.UploadedFile;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.Part;
@@ -86,7 +88,11 @@ public class CreateTaskBean implements Serializable {
     }
 
     public void upload() {
+        FacesMessage msgCreate = new FacesMessage(FacesMessage.SEVERITY_INFO, "Task Info", "New task will be available in several minutes!");
+        FacesContext.getCurrentInstance().addMessage(null, msgCreate);
         createTask();
+        FacesMessage msgReady = new FacesMessage(FacesMessage.SEVERITY_INFO, "Task Info", "New Task is available for view!");
+        FacesContext.getCurrentInstance().addMessage(null, msgReady);
     }
 
     public void handleFileUpload(FileUploadEvent event) {

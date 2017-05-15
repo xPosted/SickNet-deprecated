@@ -101,6 +101,7 @@
     -webkit-align-items: flex-start;
     -ms-flex-align: start;
     align-items: flex-start;
+    margin-bottom: 10px;
 }
 .task_list_content > div{
     margin: 10px;
