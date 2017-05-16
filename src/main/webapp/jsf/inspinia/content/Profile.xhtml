@@ -169,15 +169,17 @@
                         <i class="fa fa-user modal-icon"></i>
                         <h4 class="modal-title">Change password</h4>
                     </div>
+                    <h:form>
                     <div class="modal-body">
                         <p><strong>Enter new user password</strong> </p>
-                        <div class="form-group"><input type="email" placeholder="Enter password" class="form-control"/></div>
-                        <div class="form-group"><input type="email" placeholder="Repeat password" class="form-control"/></div>
+                        <div class="form-group"><p:password feedback="true" value="#{loginBean.changePass}"  placeholder="Enter password" styleClass="form-control"/></div>
+                        <div class="form-group"><p:password feedback="false" value="#{loginBean.repeatChangePass}"  placeholder="Repeat password" class="form-control"/></div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <p:commandLink data-dismiss="modal" ajax="true" value="Change" action="#{loginBean.changePassword()}" oncomplete="" styleClass="btn btn-primary"/>
                     </div>
+                    </h:form>
                 </div>
             </div>
         </div>

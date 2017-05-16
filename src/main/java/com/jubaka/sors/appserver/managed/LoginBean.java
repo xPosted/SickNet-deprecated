@@ -3,6 +3,7 @@ package com.jubaka.sors.appserver.managed;
 
 import com.jubaka.sors.appserver.entities.User;
 import com.jubaka.sors.appserver.service.UserService;
+import org.apache.commons.mail.HtmlEmail;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -12,6 +13,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by root on 28.08.16.
@@ -24,6 +28,10 @@ public class LoginBean implements Serializable {
 
     private String login;
     private String pass;
+
+    private String changePass;
+    private String repeatChangePass;
+
     private boolean linked;
     private User user;
 
@@ -65,6 +73,23 @@ public class LoginBean implements Serializable {
         this.user = user;
     }
 
+    public String getChangePass() {
+        return changePass;
+    }
+
+    public void setChangePass(String changePass) {
+        this.changePass = changePass;
+    }
+
+    public String getRepeatChangePass() {
+        return repeatChangePass;
+    }
+
+    public void setRepeatChangePass(String repeatChangePass) {
+        this.repeatChangePass = repeatChangePass;
+    }
+
+
     @PostConstruct
     public void testConstruct() {
         System.out.println("test postconstruct in loginBean");
@@ -94,6 +119,7 @@ public class LoginBean implements Serializable {
         FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Account Info", "Your personal data had been updated!");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
+
     public void test() {
         System.out.println("niga");
     }
@@ -107,6 +133,72 @@ public class LoginBean implements Serializable {
         pass = "";
         FacesContext.getCurrentInstance().getExternalContext().redirect("app/jsf/inspinia/content/landing.xhtml");
 
+    }
+
+    public void resetPassword() {
+        if (login!= null) {
+            User u;
+            u = userService.getUserByEmail(login);
+            if (u == null) u = userService.getUserByNick(login);
+            if (u!=null) {
+                String uuid = UUID.randomUUID().toString();
+                String newRandomPass = uuid.substring(0,8);
+                String encNewRandomPass = PassEncoder.encode(newRandomPass);
+                u.setPass(encNewRandomPass);
+                userService.updateUser(u);
+                sendEmail("This is your new PASSWORD: "+newRandomPass, Arrays.asList(u.getEmail()));
+            }
+        }
+    }
+
+    public void changePassword() {
+        if (changePass != null & repeatChangePass!= null) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,"Security","Please enter all values!");
+            FacesContext.getCurrentInstance().addMessage(null,msg);
+            return;
+        }
+       if (changePass.equals(repeatChangePass)) {
+           FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,"Security","Passwords do not match!");
+           FacesContext.getCurrentInstance().addMessage(null,msg);
+           return;
+       }
+
+
+        if (user != null) {
+            String encPass = PassEncoder.encode(changePass);
+            user.setPass(encPass);
+            userService.updateUser(user);
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,"Security","Your password is changed!");
+            FacesContext.getCurrentInstance().addMessage(null,msg);
+        }
+    }
+
+    private void sendEmail(String content, List<String> sendTos) {
+        try {
+            // Create the email message
+            HtmlEmail email = new HtmlEmail();
+            email.setAuthentication("aleksandrzhupanov@gmail.com", "cogzvcmfryeuqyhw");
+            email.setHostName("smtp.gmail.com");
+            email.setCharset("UTF8");
+            email.setSmtpPort(587);
+            email.setStartTLSEnabled(true);
+            for (String sendTo : sendTos) {
+                email.addTo(sendTo, "");
+            }
+            email.setFrom("aleksandrzhupanov@gmail.com", "Sors");
+            email.setSubject("Sors notification");
+
+            // set the html message
+            email.setHtmlMsg(content);
+
+            // set the alternative message
+            email.setTextMsg("Your email client does not support HTML messages");
+
+            // send the email
+            email.send();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
