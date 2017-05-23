@@ -169,10 +169,14 @@
                         <i class="fa fa-user modal-icon"></i>
                         <h4 class="modal-title">Change password</h4>
                     </div>
-                    <h:form>
+                    <h:form id="changePassForm">
                     <div class="modal-body">
                         <p><strong>Enter new user password</strong> </p>
-                        <div class="form-group"><p:password feedback="true" value="#{loginBean.changePass}"  placeholder="Enter password" styleClass="form-control"/></div>
+                        <div class="form-group"><p:password id="newPass_0" feedback="true" value="#{loginBean.changePass}"  placeholder="Enter password" styleClass="form-control"/>
+                            <p:messages id="passmessage" for="newPass_0" closable="true" showDetail="true">
+                                <p:effect type="shake" event="load"/>
+                            </p:messages>
+                        </div>
                         <div class="form-group"><p:password feedback="false" value="#{loginBean.repeatChangePass}"  placeholder="Repeat password" class="form-control"/></div>
                     </div>
                     <div class="modal-footer">

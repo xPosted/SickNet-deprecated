@@ -136,10 +136,20 @@ public class LoginBean implements Serializable {
     }
 
     public void resetPassword() {
-        if (login!= null) {
+        //
+        if (login == null) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,"Security","Please enter login or email");
+            FacesContext.getCurrentInstance().addMessage("resetPassForm:loginInput",msg);
+            return;
+        }
             User u;
             u = userService.getUserByEmail(login);
             if (u == null) u = userService.getUserByNick(login);
+        if (u == null) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,"Security","User with this login or email not found!");
+            FacesContext.getCurrentInstance().addMessage("resetPassForm:loginInput",msg);
+            return;
+        }
             if (u!=null) {
                 String uuid = UUID.randomUUID().toString();
                 String newRandomPass = uuid.substring(0,8);
@@ -147,19 +157,21 @@ public class LoginBean implements Serializable {
                 u.setPass(encNewRandomPass);
                 userService.updateUser(u);
                 sendEmail("This is your new PASSWORD: "+newRandomPass, Arrays.asList(u.getEmail()));
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,"Security","Your password has been sent you by email!");
+                FacesContext.getCurrentInstance().addMessage(null,msg);
             }
-        }
+
     }
 
     public void changePassword() {
-        if (changePass != null & repeatChangePass!= null) {
+        if (changePass == null || repeatChangePass == null) {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,"Security","Please enter all values!");
-            FacesContext.getCurrentInstance().addMessage(null,msg);
+            FacesContext.getCurrentInstance().addMessage("changePassForm:newPass_0",msg);
             return;
         }
-       if (changePass.equals(repeatChangePass)) {
+       if ( !changePass.equals(repeatChangePass)) {
            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,"Security","Passwords do not match!");
-           FacesContext.getCurrentInstance().addMessage(null,msg);
+           FacesContext.getCurrentInstance().addMessage("changePassForm:newPass_0",msg);
            return;
        }
 

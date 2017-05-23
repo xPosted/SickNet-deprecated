@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
 
 <h:head>
 
@@ -22,7 +23,16 @@
 
 </h:head>
 
-<body class="gray-bg">
+<h:body class="gray-bg">
+<div class="row">
+    <div class="col-md-4 pull-right">
+        <p:messages id="servermessage" styleClass="pull-right" autoUpdate="true" globalOnly="true" closable="true" showDetail="true">
+            <p:effect type="shake" event="load"/>
+        </p:messages>
+    </div>
+
+</div>
+
 
 <div class="loginColumns animated fadeInDown">
     <div class="row">
@@ -61,7 +71,7 @@
                     </div>
                    <!-- <button type="submit" class="btn btn-primary block full-width m-b">Login</button> -->
                     <h:commandButton styleClass="btn btn-primary block full-width m-b" action="#{loginBean.loginAction()}" value="Login" />
-                    <a href="#">
+                    <a data-toggle="modal" href="#resetPassModal">
                         <small>Forgot password?</small>
                     </a>
 
@@ -88,6 +98,34 @@
     </div>
 </div>
 
-</body>
+<div class="modal inmodal" id="resetPassModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&amp;times;</span><span class="sr-only">Close</span></button>
+                <i class="fa fa-user modal-icon"></i>
+                <h4 class="modal-title">Change password</h4>
+            </div>
+            <h:form id="resetPassForm">
+                <div class="modal-body">
+                    <p><strong>New password will be send on your email</strong> </p>
+                    <div class="form-group"><p:inputText id="loginInput" feedback="true" value="#{loginBean.login}"  placeholder="Login or email" styleClass="form-control"/>
+                        <p:message id="passmessage" for="resetPassForm:loginInput" styleClass="pull-right" closable="true" showDetail="true">
+                            <p:effect type="shake" event="load"/>
+                        </p:message>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                    <p:commandLink data-dismiss="modal" type="button" value="Reset" action="#{loginBean.resetPassword()}" oncomplete="" styleClass="btn btn-primary"/>
+                </div>
+            </h:form>
+        </div>
+    </div>
+</div>
+
+<script src="jsf/inspinia/js/bootstrap.js"></script>
+</h:body>
 
 </html>
