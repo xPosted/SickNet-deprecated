@@ -30,7 +30,6 @@ public class LoginBean implements Serializable {
     private String pass;
 
     private String changePass;
-    private String repeatChangePass;
 
     private boolean linked;
     private User user;
@@ -80,15 +79,6 @@ public class LoginBean implements Serializable {
     public void setChangePass(String changePass) {
         this.changePass = changePass;
     }
-
-    public String getRepeatChangePass() {
-        return repeatChangePass;
-    }
-
-    public void setRepeatChangePass(String repeatChangePass) {
-        this.repeatChangePass = repeatChangePass;
-    }
-
 
     @PostConstruct
     public void testConstruct() {
@@ -164,17 +154,11 @@ public class LoginBean implements Serializable {
     }
 
     public void changePassword() {
-        if (changePass == null || repeatChangePass == null) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,"Security","Please enter all values!");
+        if (changePass == null) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN,"Security","Please enter all values!");
             FacesContext.getCurrentInstance().addMessage("changePassForm:newPass_0",msg);
             return;
         }
-       if ( !changePass.equals(repeatChangePass)) {
-           FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,"Security","Passwords do not match!");
-           FacesContext.getCurrentInstance().addMessage("changePassForm:newPass_0",msg);
-           return;
-       }
-
 
         if (user != null) {
             String encPass = PassEncoder.encode(changePass);

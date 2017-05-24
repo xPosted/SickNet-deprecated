@@ -110,7 +110,7 @@
                 <div class="modal-body">
                     <p><strong>New password will be send on your email</strong> </p>
                     <div class="form-group"><p:inputText id="loginInput" feedback="true" value="#{loginBean.login}"  placeholder="Login or email" styleClass="form-control"/>
-                        <p:message id="passmessage" for="resetPassForm:loginInput" styleClass="pull-right" closable="true" showDetail="true">
+                        <p:message id="passmessage" for="loginInput" style="height: 30px;"  closable="true" showDetail="true">
                             <p:effect type="shake" event="load"/>
                         </p:message>
                     </div>
@@ -118,7 +118,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <p:commandLink data-dismiss="modal" type="button" value="Reset" action="#{loginBean.resetPassword()}" oncomplete="" styleClass="btn btn-primary"/>
+                    <p:commandLink data-dismiss="modal" type="button" value="Reset" action="#{loginBean.resetPassword()}" update="resetPassForm" oncomplete="" styleClass="btn btn-primary"/>
                 </div>
             </h:form>
         </div>

@@ -33,7 +33,6 @@ public class RegisterBean implements Serializable {
     private String phone;
     private String email;
     private String pass;
-    private String pass2;
  //   private String image;
 
     public String getEmail() {
@@ -51,14 +50,6 @@ public class RegisterBean implements Serializable {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
-    }
-
-    public String getPass2() {
-        return pass2;
-    }
-
-    public void setPass2(String pass2) {
-        this.pass2 = pass2;
     }
 
     public String getPass() {
