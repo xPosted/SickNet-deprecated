@@ -370,11 +370,9 @@ public class TaskViewBean implements Serializable, Observer {
         return selectedSesBean;
     }
 
-    public void expandedViewOn(HTTP packet) {
+    public void prepareExpandedData(long sessionId,long selectedHttpSeq) {
 
-
-
-        com.jubaka.sors.appserver.entities.Session sesEntity = sessionService.selectByIdWithData(packet.getSessionId());
+        com.jubaka.sors.appserver.entities.Session sesEntity = sessionService.selectByIdWithData(sessionId);
         SessionBean sesBean = BeanEntityConverter.castToBean(sesEntity,true);
         setSelectedSesBean(sesBean);
         ByteArrayOutputStream baosPacket = new ByteArrayOutputStream();
@@ -390,7 +388,7 @@ public class TaskViewBean implements Serializable, Observer {
                     baosSrc.write(tcp.getPayload());
                 if (tcp.getSrcIP().equals((sesBean.getDstIP())))
                     baosDst.write(tcp.getPayload());
-                if (tcp.getSequence() == packet.getSequence())
+                if (tcp.getSequence() == selectedHttpSeq)
                     baosPacket.write(tcp.getPayload());
             } catch (IOException io) {
                 io.printStackTrace();
@@ -415,7 +413,14 @@ public class TaskViewBean implements Serializable, Observer {
             io.printStackTrace();
         }
 
+    }
 
+    public void expandedViewOn(SessionBean ses) {
+        prepareExpandedData(ses.getDbId(),-1);
+    }
+
+    public void expandedViewOn(HTTP packet) {
+        prepareExpandedData(packet.getSessionId(),packet.getSequence());
     }
 
     public static String decodeData (byte[] buf) {
