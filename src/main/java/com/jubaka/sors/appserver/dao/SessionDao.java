@@ -43,6 +43,10 @@ public class SessionDao  {
 
     }
 
+    public Session selectByDateAndBrid() {
+
+    }
+
     @Transactional
     public Session selectByIdWithData(Long id) {
       //  Session entity = entityManager.find(Session.class,id);

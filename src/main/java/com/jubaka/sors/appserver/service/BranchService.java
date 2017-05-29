@@ -126,6 +126,7 @@ public class BranchService {
         b.setSubnet_count(bb.getBib().getSubnetCount());
         b.setHosts_count(bb.getBib().getHostsCount());
         b.setSessions_count(bb.getBib().getSessionsCount());
+        b.setRecoveredDataPath(bb.getBib().getRecoveredDataPath());
 
         b.setNode(node);
         b.setUser(user);

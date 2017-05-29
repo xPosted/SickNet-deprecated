@@ -172,6 +172,19 @@ public class BeanConstructor {
         return sb;
     }
 
+    public FileListBean prepareFileListBean(BranchInfoBean bib, String sorsPath) {
+        FileListBean flb = new FileListBean();
+        File recoveredFileObj = new File(bib.getRecoveredDataPath());
+        flb.setSize(sizeOf(recoveredFileObj));
+        flb.setFileCount(getFileCount(recoveredFileObj));
+      //  flb.setDate(br.getLastRecovered());
+         flb.setDbid(bib.getDbid());
+        flb.setFilter(null);
+        flb.setMainDir(prepareDirectoryBean(sorsPath, br));
+        flb.setBranchName(br.getName());
+        return flb;
+    }
+
     public FileListBean prepareFileListBean(Branch br, String sorsPath) {
             String recoveredPath = br.getFactory().getRecoveredDataPath(
                     br.getId());
@@ -189,14 +202,17 @@ public class BeanConstructor {
             return flb;
 
     }
-    public FileBean prepareFileBean(File f, Branch br, String sorsPath) {
-        String branchPath = br.getFactory().getBranchPath(br.getId());
+
+
+
+    public FileBean prepareFileBean(File f, BranchInfoBean bib, String sorsPath) {
+
         FileBean fBean = new FileBean();
         fBean.setName(f.getName());
         fBean.setFullPath(sorsPath + "/" + f.getName());
         fBean.setSize(f.length());
         fBean.setLastModify(f.lastModified());
-        String rawDataFileName = getRawDataByRFileName(f.getName(), branchPath);
+        String rawDataFileName = getRawDataByRFileName(f.getName(), bib.getRecoveredDataPath());
         SessionBean sb = translateSessionToBean(getSessionByRawDataFile(br,
                 rawDataFileName));
         fBean.setSession(sb);
@@ -206,6 +222,30 @@ public class BeanConstructor {
             fBean.setTransmittedBySrc(false);
         return fBean;
     }
+
+    public DirectoryBean prepareDirectoryBean(BranchInfoBean bib, String sorsPath) {
+
+        String recoveredDataPath = bib.getRecoveredDataPath();
+        File f = new File(recoveredDataPath + "/" + sorsPath);
+        DirectoryBean dirBean = new DirectoryBean();
+        dirBean.setFullPath(sorsPath);
+        dirBean.setName(f.getName());
+
+        for (File item : f.listFiles()) {
+            if (item.isDirectory()) {
+                DirectoryBean subDir = prepareDirectoryBean(bib,sorsPath + "/"
+                        + item.getName());
+                subDir.setParent(dirBean);
+                dirBean.addDir(subDir);
+            }
+            if (item.isFile()) {
+                dirBean.addFile(prepareFileBean(item, br, sorsPath));
+            }
+        }
+        dirBean.setSize(sizeOf(f));
+        return dirBean;
+    }
+
 
     public DirectoryBean prepareDirectoryBean(String sorsPath, Branch br) {
         ClassFactory cl = br.getFactory();
@@ -218,7 +258,7 @@ public class BeanConstructor {
         for (File item : f.listFiles()) {
             if (item.isDirectory()) {
                 DirectoryBean subDir = prepareDirectoryBean(sorsPath + "/"
-                        + item.getName(), br);
+                        + item.getName(),br);
                 subDir.setParent(dirBean);
                 dirBean.addDir(subDir);
             }
@@ -228,7 +268,7 @@ public class BeanConstructor {
         }
         dirBean.setSize(sizeOf(f));
         return dirBean;
-
+      //  return prepareDirectoryBean(recoveredDataPath,sorsPath);
     }
 
 
@@ -437,6 +477,8 @@ public class BeanConstructor {
         bib.setSubnetCount(sApi.getSubnetCount());
         bib.setHostsCount(sApi.getIPsCount());
         bib.setSessionsCount(sApi.getSessionsCount());
+        if (br.getLastRecovered() != null)
+            bib.setRecoveredDataPath(currentFactory.getRecoveredDataPath(br.getId()));
         return bib;
     }
 
@@ -527,7 +569,26 @@ public class BeanConstructor {
         return null;
     }
 
+    public Session getSessionByRawDataFile(BranchInfoBean bib, String fileName) {
 
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM_HH:mm:ss");
+        String[] splitedFileName = fileName.split("/");
+        String directFileName = splitedFileName[splitedFileName.length - 1];
+        String[] splitedDirectFileName = directFileName.split("_");
+        String initDateStr = splitedDirectFileName[1] + "_"
+                + splitedDirectFileName[2];
+
+        long initTime = Long.parseLong(splitedDirectFileName[0]);
+        String IpPort = splitedDirectFileName[3];
+        String srcIpPort = IpPort.split("-")[0];
+        Integer lastDot = srcIpPort.lastIndexOf(".");
+        String ip = srcIpPort.substring(0, lastDot);
+
+
+
+    }
 
     public Session getSessionByRawDataFile(Branch br, String fileName) {
 

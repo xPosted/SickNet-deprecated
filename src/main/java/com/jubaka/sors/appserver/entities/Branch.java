@@ -25,6 +25,7 @@ public class Branch {
     private Integer subnet_count =0;
     private Integer hosts_count = 0;
     private Integer sessions_count =0;
+    private String  recoveredDataPath;
 
     @ManyToOne
     @JoinColumn(name = "nodeId")
@@ -160,6 +161,14 @@ public class Branch {
         this.subnet_count = subnet_count;
     }
 
+
+    public String getRecoveredDataPath() {
+        return recoveredDataPath;
+    }
+
+    public void setRecoveredDataPath(String recoveredDataPath) {
+        this.recoveredDataPath = recoveredDataPath;
+    }
 
 
 

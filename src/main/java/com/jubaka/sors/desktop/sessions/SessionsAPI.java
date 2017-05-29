@@ -554,7 +554,7 @@ public class SessionsAPI implements Observer, Serializable {
 		myFactory.getBranch(myBrId).setLastRecovered(new Date());
 		String rawDataPath = myFactory.getRawDataPath(myBrId);
 		String currentRecoveryDataPath = myFactory.getRecoveredDataPath(myBrId)
-				+ File.separator + (new Date().getTime()) + File.separator;
+				+ File.separator;
 		String resultDataPath = currentRecoveryDataPath + File.separator
 				+ "result" + File.separator;
 		try {
@@ -569,7 +569,7 @@ public class SessionsAPI implements Observer, Serializable {
 			e.printStackTrace();
 		}
 
-		String brPath = ClassFactory.getInstance().getBranchPath(myBrId);
+		String brPath = myFactory.getBranchPath(myBrId);
 		try {
 			File oldAudit = new File(resultDataPath + "audit.txt");
 			if (oldAudit.exists()) {

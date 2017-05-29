@@ -6,6 +6,7 @@ import com.jubaka.sors.desktop.factories.ClassFactory;
 import com.jubaka.sors.desktop.remote.BeanConstructor;
 import com.jubaka.sors.desktop.sessions.API;
 import com.jubaka.sors.desktop.sessions.Branch;
+import com.jubaka.sors.desktop.sessions.SessionsAPI;
 import org.jfree.data.time.TimeSeries;
 import org.primefaces.model.UploadedFile;
 
@@ -41,6 +42,11 @@ public class LocalNode implements EndpointInterface {
         api.waitForCaptureOff();
 
     }
+
+    public void removeFromMem(Integer brId) {
+        localFactory.removeFromMem(brId);
+    }
+
 
     @Override
     public SecPolicyBean getSecPolicyBean() {
@@ -101,6 +107,8 @@ public class LocalNode implements EndpointInterface {
 
     @Override
     public FileListBean getDir(Integer brId, String sorsPath) {
+
+
         return null;
     }
 
@@ -210,7 +218,9 @@ public class LocalNode implements EndpointInterface {
 
     @Override
     public boolean recoverSessionData(Integer brID) {
-        return false;
+        SessionsAPI sApi = localFactory.getSesionInstance(brID);
+        sApi.dataRecovering();
+        return true;
     }
 
     @Override

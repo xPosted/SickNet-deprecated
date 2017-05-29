@@ -12,6 +12,7 @@ public class FileListBean extends Bean implements Serializable{
 	Long size =(long) 0;
 	java.util.Date date = null;
 	Integer fileCount = 0;
+	long dbid =0;
 	
 	// set<dirBean>
 	// dirBean > map file - SessionBean
@@ -57,6 +58,12 @@ public class FileListBean extends Bean implements Serializable{
 	public void setFileCount(Integer fileCount) {
 		this.fileCount = fileCount;
 	}
-	
+	public long getDbid() {
+		return dbid;
+	}
+
+	public void setDbid(long dbid) {
+		this.dbid = dbid;
+	}
 	
 }

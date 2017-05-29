@@ -108,11 +108,11 @@ public class CreateTaskBean implements Serializable {
 
         LocalNode endpoint =  cHandler.getLocalNode();
         Integer newBrId =  endpoint.createBranch(uploadedPcap.getAbsolutePath(),loginBean.getLogin(),upFilePart.getFileName(),taskName);
-
         endpoint.waitForCaptureOff(newBrId);
-
+        endpoint.recoverSessionData(newBrId);
         BranchBean bb = endpoint.getBranch(newBrId);
         branchService.persistBranch(bb);
+        endpoint.removeFromMem(newBrId);
 
         /*
         BeanConstructor beanConstructor = new BeanConstructor();

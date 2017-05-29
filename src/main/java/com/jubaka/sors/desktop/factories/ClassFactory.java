@@ -305,9 +305,9 @@ public class ClassFactory extends Observable implements Serializable {
 	}
 
 	public void removeFromMem(Integer id) {
-		apiList.remove(id + 1);
-		sesApiList.remove(id + 1);
-		cntrList.remove(id + 1);
+		apiList.remove(id);
+		sesApiList.remove(id);
+		cntrList.remove(id);
 		branchList.remove(id);
 
 	}

@@ -23,6 +23,7 @@ public class BranchInfoBean extends Bean implements Serializable {
 	private Integer subnetCount =0;
 	private Integer hostsCount = 0;
 	private Integer sessionsCount =0;
+	private String recoveredDataPath;
 
 	
 	public Integer getId() {
@@ -138,4 +139,11 @@ public class BranchInfoBean extends Bean implements Serializable {
 	}
 
 
+	public String getRecoveredDataPath() {
+		return recoveredDataPath;
+	}
+
+	public void setRecoveredDataPath(String recoveredDataPath) {
+		this.recoveredDataPath = recoveredDataPath;
+	}
 }
