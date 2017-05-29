@@ -34,6 +34,7 @@ public class BeanEntityConverter {
         bib.setSubnetCount(b.getSubnet_count());
         bib.setHostsCount(b.getHosts_count());
         bib.setSessionsCount(b.getSessions_count());
+        bib.setRecoveredDataPath(b.getRecoveredDataPath());
 
         return bib;
     }

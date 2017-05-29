@@ -48,6 +48,8 @@ public class Session {
     @Fetch(value = FetchMode.SUBSELECT)
     private Set<TcpPacket> tcps;
 
+
+
     public Date getClosed() {
         return closed;
     }

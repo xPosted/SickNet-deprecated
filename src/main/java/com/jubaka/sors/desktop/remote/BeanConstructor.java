@@ -1,5 +1,6 @@
 package com.jubaka.sors.desktop.remote;
 
+import com.jubaka.sors.appserver.service.SessionService;
 import com.jubaka.sors.beans.*;
 import com.jubaka.sors.beans.branch.*;
 import com.jubaka.sors.desktop.factories.ClassFactory;
@@ -172,7 +173,7 @@ public class BeanConstructor {
         return sb;
     }
 
-    public FileListBean prepareFileListBean(BranchInfoBean bib, String sorsPath) {
+    public FileListBean prepareFileListBean(BranchInfoBean bib, String sorsPath, SessionService service) {
         FileListBean flb = new FileListBean();
         File recoveredFileObj = new File(bib.getRecoveredDataPath());
         flb.setSize(sizeOf(recoveredFileObj));
@@ -180,8 +181,8 @@ public class BeanConstructor {
       //  flb.setDate(br.getLastRecovered());
          flb.setDbid(bib.getDbid());
         flb.setFilter(null);
-        flb.setMainDir(prepareDirectoryBean(sorsPath, br));
-        flb.setBranchName(br.getName());
+        flb.setMainDir(prepareDirectoryBean( bib,sorsPath,service));
+        flb.setBranchName(bib.getBranchName());
         return flb;
     }
 
@@ -205,7 +206,7 @@ public class BeanConstructor {
 
 
 
-    public FileBean prepareFileBean(File f, BranchInfoBean bib, String sorsPath) {
+    public FileBean prepareFileBean(File f, BranchInfoBean bib, String sorsPath,SessionService service) {
 
         FileBean fBean = new FileBean();
         fBean.setName(f.getName());
@@ -213,6 +214,26 @@ public class BeanConstructor {
         fBean.setSize(f.length());
         fBean.setLastModify(f.lastModified());
         String rawDataFileName = getRawDataByRFileName(f.getName(), bib.getRecoveredDataPath());
+        if (rawDataFileName != null ){
+            SessionBean sb = getSessionByRawDataFile(service,bib,rawDataFileName);
+            fBean.setSession(sb);
+            if (rawDataFileName.endsWith("src"))
+                fBean.setTransmittedBySrc(true);
+            if (rawDataFileName.endsWith("dst"))
+                fBean.setTransmittedBySrc(false);
+        }
+
+        return fBean;
+    }
+
+    public FileBean prepareFileBean(File f, Branch br, String sorsPath) {
+
+        FileBean fBean = new FileBean();
+        fBean.setName(f.getName());
+        fBean.setFullPath(sorsPath + "/" + f.getName());
+        fBean.setSize(f.length());
+        fBean.setLastModify(f.lastModified());
+        String rawDataFileName = getRawDataByRFileName(f.getName(), br.getFactory().getRecoveredDataPath(br.getId()));
         SessionBean sb = translateSessionToBean(getSessionByRawDataFile(br,
                 rawDataFileName));
         fBean.setSession(sb);
@@ -223,7 +244,8 @@ public class BeanConstructor {
         return fBean;
     }
 
-    public DirectoryBean prepareDirectoryBean(BranchInfoBean bib, String sorsPath) {
+
+    public DirectoryBean prepareDirectoryBean(BranchInfoBean bib, String sorsPath,SessionService service) {
 
         String recoveredDataPath = bib.getRecoveredDataPath();
         File f = new File(recoveredDataPath + "/" + sorsPath);
@@ -234,12 +256,12 @@ public class BeanConstructor {
         for (File item : f.listFiles()) {
             if (item.isDirectory()) {
                 DirectoryBean subDir = prepareDirectoryBean(bib,sorsPath + "/"
-                        + item.getName());
+                        + item.getName(),service);
                 subDir.setParent(dirBean);
                 dirBean.addDir(subDir);
             }
             if (item.isFile()) {
-                dirBean.addFile(prepareFileBean(item, br, sorsPath));
+                dirBean.addFile(prepareFileBean(item, bib, sorsPath,service));
             }
         }
         dirBean.setSize(sizeOf(f));
@@ -539,8 +561,8 @@ public class BeanConstructor {
         return ib;
     }
 
-    public String getRawDataByRFileName(String name, String branchPath) {
-        File audit = new File(branchPath + "/" + "audit.txt");
+    public String getRawDataByRFileName(String name, String recoveredHome) {
+        File audit = new File(recoveredHome + "/" + "audit.txt");
         Scanner scan = null;
         try {
             scan = new Scanner(audit);
@@ -569,7 +591,7 @@ public class BeanConstructor {
         return null;
     }
 
-    public Session getSessionByRawDataFile(BranchInfoBean bib, String fileName) {
+    public SessionBean getSessionByRawDataFile(SessionService service,BranchInfoBean bib, String fileName) {
 
 
 
@@ -585,6 +607,15 @@ public class BeanConstructor {
         String srcIpPort = IpPort.split("-")[0];
         Integer lastDot = srcIpPort.lastIndexOf(".");
         String ip = srcIpPort.substring(0, lastDot);
+        List<SessionBean> resultList = service.getByTaskAndSrcHostAndTime(bib.getDbid(),ip,new Date(initTime));
+        if (resultList.size()>1) {
+            System.err.println("Received session array on single session search...");
+
+        }
+        if (resultList.size() == 1) {
+            return resultList.get(0);
+        }
+        return null;
 
 
 

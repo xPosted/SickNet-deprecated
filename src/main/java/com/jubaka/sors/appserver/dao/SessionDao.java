@@ -6,10 +6,7 @@ import com.jubaka.sors.desktop.protocol.tcp.TCP;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
-import javax.persistence.Query;
+import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.util.*;
 
@@ -40,10 +37,6 @@ public class SessionDao  {
         ses.setTcps(new ArrayList<>());
 
         return ses;
-
-    }
-
-    public Session selectByDateAndBrid() {
 
     }
 
@@ -138,6 +131,27 @@ public class SessionDao  {
             s.setTcps(new ArrayList<>());
         }
         return  resulstSet;
+    }
+
+    public List<Session> selectByTaskAndSrcHostAndTime(long taskId, String srcHost, Date est) {
+        Query q = entityManager.createQuery("select ses from Session ses where ses.established = :est");
+        q.setParameter("est",est);
+        List<Session> sessionList = null;
+        List<Session> resultList = new ArrayList<>();
+        try {
+            sessionList = q.getResultList();
+        } catch (NoResultException noRes) {
+            return null;
+        }
+        for (Session ses : sessionList) {
+
+            if (ses.getSrcHost().getIp().equals(srcHost)) {
+                if (ses.getSrcHost().getSubnet().getBranch().getDbid() == taskId) {
+                    resultList.add(ses);
+                }
+            }
+        }
+        return resultList;
     }
 
 

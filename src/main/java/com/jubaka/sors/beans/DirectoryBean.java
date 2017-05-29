@@ -1,13 +1,15 @@
 package com.jubaka.sors.beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class DirectoryBean extends Bean implements Serializable {
 	private String name=null;
 	private DirectoryBean parent = null;
-	private HashSet<DirectoryBean> dirs = new HashSet<DirectoryBean>();
-	private HashSet<FileBean> files = new HashSet<FileBean>();
+	private List<DirectoryBean> dirs = new ArrayList<>();
+	private List<FileBean> files = new ArrayList<>();
 	private Long size=null;
 	private String fullPath=null;
 	public String getName() {
@@ -41,16 +43,16 @@ public class DirectoryBean extends Bean implements Serializable {
 	public Integer getFileCount() {
 		return files.size();
 	}
-	public HashSet<DirectoryBean> getDirs() {
+	public List<DirectoryBean> getDirs() {
 		return dirs;
 	}
-	public void setDirs(HashSet<DirectoryBean> dirs) {
+	public void setDirs(List<DirectoryBean> dirs) {
 		this.dirs = dirs;
 	}
-	public HashSet<FileBean> getFiles() {
+	public List<FileBean> getFiles() {
 		return files;
 	}
-	public void setFiles(HashSet<FileBean> files) {
+	public void setFiles(List<FileBean> files) {
 		this.files = files;
 	}
 	public DirectoryBean getParent() {
