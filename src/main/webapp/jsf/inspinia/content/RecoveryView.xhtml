@@ -1,14 +1,222 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-<f:view>
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+>
+<h:head>
+    <base href="http://localhost:8080/Sors_JSFDeveloping-1.0-SNAPSHOT/"/>
     <f:metadata>
         <f:viewAction action="#{recoverViewBean.init}"/>
     </f:metadata>
-    <h:outputLabel value="#{recoverViewBean.mainDir.fullPath}"/>
-</f:view>
+    <link href="jsf/inspinia/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="jsf/inspinia/css/plugins/iCheck/custom.css"></link>
+    <link href="jsf/inspinia/font-awesome/css/font-awesome.css" rel="stylesheet"></link>
+    <link href="jsf/inspinia/css/animate.css" rel="stylesheet"></link>
+    <link href="jsf/inspinia/css/style.css" rel="stylesheet"></link>
+
+    <style>
+        .file-row {
+            border-bottom: 1px solid #E6E8EB;
+            border-top: 1px solid #E6E8EB;
+            align-items: center;
+            flex-direction: row;
+            display: flex;
+            height: 55px;
+
+        }
+        .file-name {
+            display: flex;
+            align-items: center;
+            left: -20px;
+        }
+        .title-font {
+            font-size: 12px;
+            color: #637282;
+            font-weight: 500;
+            font-family: AtlasGrotesk,sans-serif;
+        }
+        .row-checked {
+            background-color: #D6E8FA;
+        }
+        .file-control {
+            font-family: AtlasGrotesk,sans-serif;
+            font-weight: 400;
+            line-height: 18px;
+            font-size: 20px;
+            color: #0070E0;
+            text-decoration: none;
+            cursor: pointer;
+            padding: 5px 0px 5px 0px;
+        }
+        .file-row-checkbox {
+            width:32px;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            position: relative;
+            left: -32px;
+
+
+        }
+        #file-control-group {
+            padding-top: 75px;
+            padding-right: 20px;
+            display: none;
+        }
+
+        .pwd {
+            font-family: "Open Sans","lucida grande","Segoe UI",arial,verdana,"lucida sans unicode",tahoma,sans-serif;font-size: 22px;
+        }
+    </style>
+</h:head>
+<h:body styleClass="top-navigation">
+
+    <div id="wrapper">
+        <div id="page-wrapper" class="gray-bg">
+
+            <ui:include src="MenuTop.xhtml">
+                <ui:param name="dbid" value="#{taskViewBean.dbTaskIdStr}"></ui:param>
+            </ui:include>
+
+            <div class="row" style="padding-top: 20px;">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                    <div class="row" style="padding-bottom: 20px; height: 55px;">
+
+                        <div style="padding-left: 50px;" class="pull-left">
+                            <span class="pwd">SickTask/path/to</span>
+                        </div>
+                        <div class="pull-right">
+                            <div class="input-group"><input id="searchIn" onkeyup="mySearchFunc()" type="text"
+                                                            class="form-control"></input>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default">
+                                        <span class="fa fa-search"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="height: 15px; margin-bottom: 10px;">
+                        <ul style="display: block; list-style-type: none;" class="title-font">
+
+                            <li class="col-md-7"><span>Name</span></li>
+                            <li class="col-md-2"><span>Type</span></li>
+                            <li class="col-md-2"><span>Size</span></li>
+                        </ul>
+                    </div>
+                    <div><ul style="list-style-type: none; display: block;">
+                        <ui:repeat value="#{recoverViewBean.mainDir.dirs}" var="folder">
+
+                            <li class="file-row" onmouseenter="onfileSelectCheckbox(this)" onmouseleave="offfileSelectCheckbox(this)">
+                                <div class="file-row-checkbox" onmouseleave="offfileSelectCheckbox(this)"
+                                     onmouseenter="onfileSelectCheckbox(this)">
+                                    <input style="margin: 0px;" type="checkbox" class="i-checks"></input>
+                                </div>
+
+                                <div class="col-lg-7 file-name">
+                                    <div class="col-lg-1" >
+                                        <span style="font-size: 24px;" class="glyphicon glyphicon-folder-close"></span>
+                                    </div>
+                                    <div class="col-lg-11" style="padding-left: 0px;">
+                                        <a style="text-decoration: none; cursor: pointer;">
+                                            <span style="display: block;">#{folder.name}</span>
+                                        </a>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-2"><span>folder</span></div>
+                                <div class="col-lg-2"><span>#{folder.size}</span></div>
+                            </li>
+
+                        </ui:repeat>
+
+                        <ui:repeat value="#{recoverViewBean.mainDir.files}" var="file">
+
+                            <li class="file-row" onmouseenter="onfileSelectCheckbox(this)" onmouseleave="offfileSelectCheckbox(this)">
+                                <div class="file-row-checkbox" onmouseleave="offfileSelectCheckbox(this)"
+                                     onmouseenter="onfileSelectCheckbox(this)">
+                                    <input style="margin: 0px;" type="checkbox" class="i-checks"></input>
+                                </div>
+
+                                <div class="col-lg-7 file-name">
+                                    <div class="col-lg-1" >
+                                        <span style="font-size: 24px;" class="glyphicon glyphicon-folder-close"></span>
+                                    </div>
+                                    <div class="col-lg-11" style="padding-left: 0px;">
+                                        <a style="text-decoration: none; cursor: pointer;">
+                                            <span style="display: block;">#{folder.name}</span>
+                                        </a>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-2"><span>folder</span></div>
+                                <div class="col-lg-2"><span>#{folder.size}</span></div>
+                            </li>
+
+                        </ui:repeat>
+
+
+                    </ul></div>
+                </div>
+                <div class="col-lg-2" id="file-control-group">
+                    <ul style="list-style-type: none; display: block; border-top: 1px solid #e8e8e8;">
+                        <li>
+                            <a class="btn file-control" href="#"><span class="glyphicon glyphicon-download"></span><span>Download</span></a>
+                        </li>
+                        <li>
+                            <a class="btn file-control" href="#"><span class="glyphicon glyphicon-trash"></span><span>Delete</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+    <script src="jsf/inspinia/js/bootstrap.min.js"></script>
+    <script src="jsf/inspinia/js/plugins/metisMenu/jquery.metisMenu.js" type="text/javascript"></script>
+    <script src="jsf/inspinia/js/plugins/iCheck/icheck.min.js"></script>
+    <script src="jsf/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="jsf/inspinia/js/inspinia.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+            $('.i-checks').on('ifChecked', function(event){
+                $(event.currentTarget).parents('li').addClass('row-checked');
+                $('.icheckbox_square-green').css('display','block');
+                if ($('#file-control-group').css('display') == 'none') {
+                    $('#file-control-group').slideToggle();
+                }
+
+            });
+            $('.i-checks').on('ifUnchecked', function(event){
+                $(event.currentTarget).parents('li').removeClass('row-checked');
+                if ($('.row-checked').length==0) {
+                    $('.icheckbox_square-green').css('display','none');
+                    $('#file-control-group').slideToggle();
+                }
+            });
+
+            $('.icheckbox_square-green').css('display','none');
+
+        });
+        function onfileSelectCheckbox(obj) {
+            $(obj).find('.icheckbox_square-green').css('display','block');
+        }
+        function offfileSelectCheckbox(obj) {
+            if ($('.row-checked').length==0)
+                $(obj).find('.icheckbox_square-green').css('display','none');
+        }
+    </script>
+</h:body>
 </html>
