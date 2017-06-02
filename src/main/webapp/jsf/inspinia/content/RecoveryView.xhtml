@@ -90,7 +90,7 @@
                             <span class="pwd">SickTask/path/to</span>
                         </div>
                         <div class="pull-right">
-                            <div class="input-group"><input id="searchIn" onkeyup="mySearchFunc()" type="text"
+                            <div style="max-width: 300px;" class="input-group"><input id="searchIn" onkeyup="mySearchFunc()" type="text"
                                                             class="form-control"></input>
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default">
@@ -123,7 +123,7 @@
                                         <span style="font-size: 24px;" class="glyphicon glyphicon-folder-close"></span>
                                     </div>
                                     <div class="col-lg-11" style="padding-left: 0px;">
-                                        <a style="text-decoration: none; cursor: pointer;">
+                                        <a href="app/jsf/inspinia/content/RecoveryView.xhtml?dbid=#{recoverViewBean.currentDbId}&amp;path=#{folder.fullPath}" style="text-decoration: none; cursor: pointer;">
                                             <span style="display: block;">#{folder.name}</span>
                                         </a>
                                     </div>
@@ -145,17 +145,19 @@
 
                                 <div class="col-lg-7 file-name">
                                     <div class="col-lg-1" >
-                                        <span style="font-size: 24px;" class="glyphicon glyphicon-folder-close"></span>
+                                        <span style="font-size: 24px;" class="glyphicon glyphicon-file"></span>
                                     </div>
                                     <div class="col-lg-11" style="padding-left: 0px;">
-                                        <a style="text-decoration: none; cursor: pointer;">
-                                            <span style="display: block;">#{folder.name}</span>
-                                        </a>
+                                        <h:form id="fileDownload">
+                                            <p:commandLink styleClass="text-decoration: none; cursor: pointer;" ajax="false" action="#{recoverViewBean.fileDownload(file)}">
+                                                <span style="display: block;">#{file.name}</span>
+                                            </p:commandLink>
+                                        </h:form>
                                     </div>
 
                                 </div>
-                                <div class="col-lg-2"><span>folder</span></div>
-                                <div class="col-lg-2"><span>#{folder.size}</span></div>
+                                <div class="col-lg-2"><span>file</span></div>
+                                <div class="col-lg-2"><span>#{file.size}</span></div>
                             </li>
 
                         </ui:repeat>
