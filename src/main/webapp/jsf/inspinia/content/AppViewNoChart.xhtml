@@ -592,6 +592,9 @@
                                         <p:commandLink styleClass="btn btn-default pull-left   #{taskViewBean.isHttpViewMode() ? 'active' : ''}"
                                                        action="#{taskViewBean.setHttpViewMode()}" value="HTTP mode"
                                                        update="ses_http_view sessionHttpMode" oncomplete="buildFoo();"></p:commandLink>
+                                        <p:commandLink styleClass="btn btn-default pull-left"
+                                                       value="Next HTTP page"
+                                                       update="ses_http_view sessionHttpMode" oncomplete="buildFoo();"></p:commandLink>
                                     </h:form>
                                 </div>
                                 <div class="col-sm-6 col-md-6 pull-right">

@@ -2,8 +2,13 @@ package com.jubaka.sors.appserver.entities;
 
 import com.jubaka.sors.desktop.sessions.IPaddr;
 import org.hibernate.LazyInitializationException;
+import org.hibernate.annotations.*;
+import org.hibernate.id.enhanced.OptimizerFactory;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Parameter;
 
 /**
  * Created by root on 10.04.17.

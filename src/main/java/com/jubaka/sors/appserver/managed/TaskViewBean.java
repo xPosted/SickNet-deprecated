@@ -14,6 +14,7 @@ import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.TimeSeries;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -57,6 +58,8 @@ public class TaskViewBean implements Serializable, Observer {
 
     @Inject
     private PortServiceService portService;
+    @Inject
+    private CreateTaskBean createTaskBean;
 
     private BranchLightBean blb = null;
     private SubnetLightBean sbl = null;
@@ -65,6 +68,10 @@ public class TaskViewBean implements Serializable, Observer {
     private List<?> allIps = new ArrayList<>();
     private List<SessionBean> sessionList = new ArrayList<>();
     private List<HTTP> httpList = new ArrayList<>();
+    private ItemPager sessionListPager;
+    private ItemPager httpListPager;
+    private Integer itemsPerPage = 100;
+
 
     private List<Category> newCategories = new ArrayList<>();
   //  private List<SessionBean> newSessions = new ArrayList<>();
@@ -103,6 +110,7 @@ public class TaskViewBean implements Serializable, Observer {
 
     private String currentTaskName = "";
     private String dbTaskIdStr = null;
+    private String localidStr = null;
     private String subnet = null;
     private String ipStr = null;
 
@@ -116,8 +124,14 @@ public class TaskViewBean implements Serializable, Observer {
     private String mask="";
 
     private boolean dbMode = false;
+    private boolean tmpLocalMode = false;
+    private boolean liveNodeMode =  false;
 
 
+    @PreDestroy
+    public void clean() {
+
+    }
 
     @PostConstruct
     public void postContruct() {
@@ -133,6 +147,7 @@ public class TaskViewBean implements Serializable, Observer {
         String nodeIdStr = params.get("nodeId");
         String taskIdStr = params.get("taskId");
         String dbTaskIdStr = params.get("dbid");
+        localidStr = params.get("localid");
         String subnet = params.get("net");
         String ipStr = params.get("host");
 
@@ -144,11 +159,16 @@ public class TaskViewBean implements Serializable, Observer {
             Long nodeUnid = Long.parseLong(nodeIdStr);
             Integer taskId = Integer.parseInt(taskIdStr);
             initTask(nodeUnid,taskId);
-        }
+        } else
         if (dbTaskIdStr != null) {
             this.dbTaskIdStr = dbTaskIdStr;
             Long dbTaskId = Long.parseLong(dbTaskIdStr);
             initTask(dbTaskId);
+        } else
+        if (localidStr!=null) {
+            Integer localid = Integer.parseInt(localidStr);
+            init(localid);
+
         }
 
         filters.add(new HostSessionFilter());
@@ -157,6 +177,19 @@ public class TaskViewBean implements Serializable, Observer {
 
     }
 
+    public void init(Integer localid) {
+        dbMode = false;
+        tmpLocalMode = true;
+        liveNodeMode = false;
+
+        blb = createTaskBean.viewNotReadyPersistedTask(localid);
+        ipBean = null;
+        sbl = null;
+
+        onlineIps.clear();
+        allIps.clear();
+
+    }
 
 /*
 
@@ -240,7 +273,9 @@ public class TaskViewBean implements Serializable, Observer {
         return false;
     }
    public void initTask(Long nodeUnid, Integer taskId) {
-       dbMode = false;
+        tmpLocalMode = false;
+        liveNodeMode = true;
+        dbMode = false;
        if (nodeServerEndpoint != null) {
            if (nodeServerEndpoint.getUnid().equals(nodeUnid)) {
                if (blb.getBib().getId().equals(taskId))
@@ -276,7 +311,7 @@ public class TaskViewBean implements Serializable, Observer {
 
     public void selectSubnet(String subnet) {
 
-        if ( ! dbMode) {
+        if (liveNodeMode) {
             if (sbl != null) {
                 nodeServerEndpoint.removeObserver(blb.getBib().getId(),sbl.getSubnet().getHostAddress());
             }
@@ -284,48 +319,68 @@ public class TaskViewBean implements Serializable, Observer {
             onlineIps = new ArrayList<>(sbl.getLightLiveIps());
             allIps = new ArrayList<>(sbl.getLightIps());
             nodeServerEndpoint.addObserver(this);
-        } else {
-            if (blb instanceof BranchBean){
-                BranchBean bb = (BranchBean) blb;
-                SubnetBean sb = bb.getSubnetByName(subnet);
-                sbl = sb;
-                onlineIps = sb.getLiveIps();
-                allIps = sb.getIps();
-            } else {
-                SubnetLightBean subnetLightBean = blb.getSubnetByName(subnet);
-                sbl = subnetLightBean;
-                if (sbl.getAllIpList().size() == 0) {
-                    Subnet subEnt = subnetService.eagerSelectById(sbl.getDbId());
-                    sbl = BeanEntityConverter.castToLightBean(null,subEnt);
+        } else
+        if (dbMode) {
+                if (blb instanceof BranchBean){
+                    BranchBean bb = (BranchBean) blb;
+                    SubnetBean sb = bb.getSubnetByName(subnet);
+                    sbl = sb;
+                    onlineIps = sb.getLiveIps();
+                    allIps = sb.getIps();
+                } else {
+                    SubnetLightBean subnetLightBean = blb.getSubnetByName(subnet);
+                    sbl = subnetLightBean;
+                    if (sbl.getAllIpList().size() == 0) {
+                        Subnet subEnt = subnetService.eagerSelectById(sbl.getDbId());
+                        sbl = BeanEntityConverter.castToLightBean(null,subEnt);
+                    }
+                    onlineIps = sbl.getLightLiveIps();
+                    allIps = sbl.getLightIps();
                 }
-                onlineIps = sbl.getLightLiveIps();
-                allIps = sbl.getLightIps();
+        } else
+            if (tmpLocalMode) {
+                if (blb instanceof BranchBean){
+                    BranchBean bb = (BranchBean) blb;
+                    SubnetBean sb = bb.getSubnetByName(subnet);
+                    sbl = sb;
+                    onlineIps = sb.getLiveIps();
+                    allIps = sb.getIps();
+                }
             }
-        }
 
-        if (sbl == null) return;
+
+
+       // if (sbl == null) return;
     }
 
     public void selectIp(String address) {
-        if ( ! dbMode)  {
+        if (liveNodeMode)  {
             if (ipBean!=null) {
                 nodeServerEndpoint.removeObserver(blb.getBib().getId(),ipBean.getIp());
             }
             ipBean =  nodeServerEndpoint.getIpItemBean(blb.getBib().getId(),address,true);
             nodeServerEndpoint.addObserver(this);
-        } else {
-            if (sbl instanceof SubnetBean) {
-                SubnetBean sb = (SubnetBean) sbl;
-                IPItemBean fullBean = sb.getIpByName(address);
-                ipBean = fullBean;
-            } else {
-               IPItemLightBean ipBeanLight = sbl.getIpByName(address);
-                Host h = hostService.selectByIdWithSesWithHttpv2(ipBeanLight.getDbId());    ////////////////////////////////////////////////
-              //  Host h = hostService.selectByIdWithSesWithHttp(ipBeanLight.getDbId());
-                ipBean = BeanEntityConverter.castToBean(h,false);
-            }
+        } else
+            if (dbMode) {
+                if (sbl instanceof SubnetBean) {
+                    SubnetBean sb = (SubnetBean) sbl;
+                    IPItemBean fullBean = sb.getIpByName(address);
+                    ipBean = fullBean;
+                } else {
+                    IPItemLightBean ipBeanLight = sbl.getIpByName(address);
+                    Host h = hostService.selectByIdWithSesWithHttpv2(ipBeanLight.getDbId());    ////////////////////////////////////////////////
+                    //  Host h = hostService.selectByIdWithSesWithHttp(ipBeanLight.getDbId());
+                    ipBean = BeanEntityConverter.castToBean(h,false);
+                }
+            } else
+                if (tmpLocalMode) {
+                    if (sbl instanceof SubnetBean) {
+                        SubnetBean sb = (SubnetBean) sbl;
+                        IPItemBean fullBean = sb.getIpByName(address);
+                        ipBean = fullBean;
+                    }
+                }
 
-        }
         refreshFilters();
     }
 
@@ -337,6 +392,10 @@ public class TaskViewBean implements Serializable, Observer {
 
     public void initTask(Long dbtaskId) {
         dbMode = true;
+        tmpLocalMode = false;
+        liveNodeMode = false;
+
+
         Branch b =  branchService.selectByIdWithNets(dbtaskId);
         blb = BeanEntityConverter.castToLightBean(null,b);
         currentTaskName = blb.getBib().getBranchName();
@@ -370,23 +429,20 @@ public class TaskViewBean implements Serializable, Observer {
         return selectedSesBean;
     }
 
-    public void prepareExpandedData(long sessionId,long selectedHttpSeq) {
-
-        com.jubaka.sors.appserver.entities.Session sesEntity = sessionService.selectByIdWithData(sessionId);
-        SessionBean sesBean = BeanEntityConverter.castToBean(sesEntity,true);
-        setSelectedSesBean(sesBean);
+    public void prepareExpandedData(SessionBean fullBean,int selectedHttpSeq) {
+        setSelectedSesBean(fullBean);
         ByteArrayOutputStream baosPacket = new ByteArrayOutputStream();
         ByteArrayOutputStream baosSrc = new ByteArrayOutputStream();
         ByteArrayOutputStream baosDst = new ByteArrayOutputStream();
         ByteArrayOutputStream baosAll = new ByteArrayOutputStream();
         byte[] targetPacketByte = null;
 
-        for (TCP tcp : sesBean.getTcpBuf()) {
+        for (TCP tcp : fullBean.getTcpBuf()) {
             try {
                 baosAll.write(tcp.getPayload());
-                if (tcp.getSrcIP().equals(sesBean.getSrcIP()))
+                if (tcp.getSrcIP().equals(fullBean.getSrcIP()))
                     baosSrc.write(tcp.getPayload());
-                if (tcp.getSrcIP().equals((sesBean.getDstIP())))
+                if (tcp.getSrcIP().equals((fullBean.getDstIP())))
                     baosDst.write(tcp.getPayload());
                 if (tcp.getSequence() == selectedHttpSeq)
                     baosPacket.write(tcp.getPayload());
@@ -412,15 +468,37 @@ public class TaskViewBean implements Serializable, Observer {
         }   catch (IOException io) {
             io.printStackTrace();
         }
+    }
+
+    public void prepareExpandedData(long sessionId,int selectedHttpSeq) {
+
+        com.jubaka.sors.appserver.entities.Session sesEntity = sessionService.selectByIdWithData(sessionId);
+        SessionBean sesBean = BeanEntityConverter.castToBean(sesEntity,true);
+        prepareExpandedData(sesBean,selectedHttpSeq);
 
     }
 
     public void expandedViewOn(SessionBean ses) {
-        prepareExpandedData(ses.getDbId(),-1);
+
+        if (tmpLocalMode) {
+            prepareExpandedData(ses,-1);
+        }
+        if (dbMode) {
+            prepareExpandedData(ses.getDbId(),-1);
+        }
+
     }
 
     public void expandedViewOn(HTTP packet) {
-        prepareExpandedData(packet.getSessionId(),packet.getSequence());
+        if (tmpLocalMode) {
+            for (SessionBean ses : sessionList) {
+                if (ses.getHttpBuf().contains(packet)){
+                    prepareExpandedData(ses,packet.getSequence());
+                }
+            }
+        }
+        if (dbMode)
+            prepareExpandedData(packet.getSessionId(),packet.getSequence());
     }
 
     public static String decodeData (byte[] buf) {
@@ -571,12 +649,17 @@ public class TaskViewBean implements Serializable, Observer {
         return filters;
     }
 
+    public List<HTTP> getHttpListPage() {
+        return httpListPager.nextPage();
+    }
+
     public List<HTTP> getHttpList() {
         return httpList;
     }
 
     public void setHttpList(List<HTTP> httpList) {
         this.httpList = httpList;
+      httpListPager = new ItemPager(itemsPerPage,this.httpList);
     }
 
     public String getNetAddr() {
@@ -772,7 +855,7 @@ public class TaskViewBean implements Serializable, Observer {
         TimeSeries tsDst;
         TimeSeries tsSrc;
         if (selectedSesBean==null) return "";
-if (dbMode) {
+if (dbMode || tmpLocalMode) {
     tsDst = StatisticLogic.createSessionDstTS(selectedSesBean);
     tsSrc = StatisticLogic.createSessionSrcTS(selectedSesBean);
 } else {
@@ -1180,5 +1263,29 @@ if (dbMode) {
             }
         }
 
+    }
+
+    class ItemPager<T> {
+
+        private Integer pointer = 0;
+        private Integer itemCount = 100;
+        private List<T> items = null;
+
+        public ItemPager(Integer itemCount, List<T> items) {
+            this.itemCount = itemCount;
+            this.items = items;
+        }
+
+
+
+        public List<T> previousPage() {
+            pointer-=itemCount;
+            return items.subList(pointer-itemCount,pointer);
+        }
+
+        public List<T> nextPage() {
+            pointer+=itemCount;
+            return items.subList(pointer-itemCount, pointer);
+        }
     }
 }

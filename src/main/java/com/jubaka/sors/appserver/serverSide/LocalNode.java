@@ -47,6 +47,22 @@ public class LocalNode implements EndpointInterface {
         localFactory.removeFromMem(brId);
     }
 
+    public void deleteRawData(Integer id) {
+        String rawPath = localFactory.getRawDataPath(id);
+        deleteDir(new File(rawPath));
+    }
+
+    public static void deleteDir(File dir) {
+        if (dir.isDirectory()) {
+            for (File item : dir.listFiles()) {
+                if (item.isDirectory())
+                    deleteDir(item);
+                if (item.isFile())
+                    item.delete();
+            }
+        }
+        dir.delete();
+    }
 
     @Override
     public SecPolicyBean getSecPolicyBean() {

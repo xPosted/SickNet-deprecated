@@ -60,17 +60,18 @@
         <div class="col-md-6">
             <div class="ibox-content">
              <!--   <form class="m-t" role="form" action="index.html">  -->
-                <h:form>
+                <h:form id="loginForm">
                     <div class="form-group">
                       <!--  <input type="email" class="form-control" placeholder="Username" required=""/> -->
                         <h:inputText value="#{loginBean.login}" a:placeholder="Username" styleClass="form-control"/>
                     </div>
                     <div class="form-group">
                      <!--   <input type="password" class="form-control" placeholder="Password" required=""/> -->
-                        <h:inputSecret value="#{loginBean.pass}" a:placeholder="Password" styleClass="form-control"/>
+                        <h:inputSecret id="passField" value="#{loginBean.pass}" a:placeholder="Password" styleClass="form-control"/>
+                        <p:message id="passFieldMsg" redisplay="false" showSummary="true"  for="passField" showDetail="true"></p:message>
                     </div>
                    <!-- <button type="submit" class="btn btn-primary block full-width m-b">Login</button> -->
-                    <h:commandButton styleClass="btn btn-primary block full-width m-b" action="#{loginBean.loginAction()}" value="Login" />
+                    <p:commandButton styleClass="btn btn-primary block full-width m-b" action="#{loginBean.loginAction()}" value="Login" update="loginForm"/>
                     <a data-toggle="modal" href="#resetPassModal">
                         <small>Forgot password?</small>
                     </a>

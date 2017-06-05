@@ -62,11 +62,13 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-top-links navbar-right">
-                    <li>
-                        <p:commandLink action="#{loginBean.logoutAction()}">
-                            <i class="fa fa-sign-out"></i> Log out
-                        </p:commandLink>
-                    </li>
+                    <h:form>
+                        <li>
+                            <p:commandLink action="#{loginBean.logoutAction()}">
+                                <i class="fa fa-sign-out"></i> Log out
+                            </p:commandLink>
+                        </li>
+                    </h:form>
                 </ul>
             </div>
         </nav>

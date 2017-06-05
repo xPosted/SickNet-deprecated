@@ -52,10 +52,6 @@ public class SessionService {
         }
         return resultBeans;
     }
-
-
-
-
 }
 
 

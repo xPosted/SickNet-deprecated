@@ -41,7 +41,7 @@ public class HttpResponse {
 
     private String Expires;
 
-    @Column(length = 1024)
+    @Column(length = 2048)
     private String RequestUrl;
 
     private String RequestVersion;

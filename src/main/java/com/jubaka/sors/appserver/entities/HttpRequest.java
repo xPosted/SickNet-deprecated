@@ -51,18 +51,19 @@ public class HttpRequest {
 
     private String Proxy_Connection;
 
+    @Column(length = 2048)
     private String Referer;
 
     private String RequestMethod;
 
-    @Column(length = 1024)
+    @Column(length = 2048)
     private String RequestUrl;
 
     private String RequestVersion;
 
     private String UA_CPU;
 
-    @Column(length = 1024)
+    @Column(length = 2048)
     private String User_Agent;
 
     private int payloadOffset;

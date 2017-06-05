@@ -23,7 +23,7 @@ public class TCP {
 
 
 
-    protected Long sessionId;
+    protected Long sessionId = null;
 
 //    protected SessionBean sessionBean;
 

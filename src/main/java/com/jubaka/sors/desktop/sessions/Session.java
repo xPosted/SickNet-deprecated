@@ -87,6 +87,7 @@ public class Session extends Observable implements Serializable, CustomObserver 
             packet = tcpObj;
         }
         packetList.add(packet);
+        packet.setSequence(packetList.indexOf(packet));
 
 
     }

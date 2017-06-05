@@ -87,16 +87,21 @@ public class LoginBean implements Serializable {
 
     public void loginAction() throws IOException {
         if (user != null)  {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("TaskList_tmp.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("app/jsf/inspinia/content/TaskList_tmp.xhtml");
             return;
         }
         if (pass!=null & login!= null) {
             pass = PassEncoder.encode(pass);
             user = userService.checkUser(login, pass);
-        }
-        if (user != null) {
-            linked = true;
-            FacesContext.getCurrentInstance().getExternalContext().redirect("TaskList_tmp.xhtml");
+            login = null;
+            pass = null;
+            if (user != null) {
+                linked = true;
+                FacesContext.getCurrentInstance().getExternalContext().redirect("app/jsf/inspinia/content/TaskList_tmp.xhtml");
+            } else {
+                FacesContext fcontext = FacesContext.getCurrentInstance();
+                fcontext.addMessage("loginForm:passField",new FacesMessage(FacesMessage.SEVERITY_ERROR,"Invalid login or password",""));
+            }
         }
 
     }
