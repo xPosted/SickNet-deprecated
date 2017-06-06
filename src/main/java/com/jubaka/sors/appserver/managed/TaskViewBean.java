@@ -70,6 +70,10 @@ public class TaskViewBean implements Serializable, Observer {
     private List<HTTP> httpList = new ArrayList<>();
     private ItemPager sessionListPager;
     private ItemPager httpListPager;
+    private List<SessionBean> sessionListPage = new ArrayList<>();
+    private List<HTTP> httpListPage = new ArrayList<>();
+
+
     private Integer itemsPerPage = 100;
 
 
@@ -650,7 +654,19 @@ public class TaskViewBean implements Serializable, Observer {
     }
 
     public List<HTTP> getHttpListPage() {
-        return httpListPager.nextPage();
+        return httpListPage;
+    }
+
+    public List<SessionBean> getSessionListPage() {
+        return sessionListPage;
+    }
+
+    public void setSessionListPage(List<SessionBean> sessionListPage) {
+        this.sessionListPage = sessionListPage;
+    }
+
+    public void setHttpListPage(List<HTTP> httpListPage) {
+        this.httpListPage = httpListPage;
     }
 
     public List<HTTP> getHttpList() {
@@ -658,6 +674,7 @@ public class TaskViewBean implements Serializable, Observer {
     }
 
     public void setHttpList(List<HTTP> httpList) {
+      this.httpList.clear();
         this.httpList = httpList;
       httpListPager = new ItemPager(itemsPerPage,this.httpList);
     }
@@ -724,6 +741,24 @@ public class TaskViewBean implements Serializable, Observer {
 
     public String getSelectedPacSessionData() {
         return selectedPacSessionData;
+    }
+
+    public void prepareNexPage() {
+      if (sessionViewMode) {
+          sessionListPage = sessionListPager.nextPage();
+      }
+      if (httpViewMode) {
+          httpListPage = httpListPager.nextPage();
+      }
+    }
+
+    public void preparePreviousPage() {
+        if (sessionViewMode) {
+            sessionListPage = sessionListPager.previousPage();
+        }
+        if (httpViewMode) {
+            httpListPage = httpListPager.previousPage();
+        }
     }
 
     public void setSelectedPacSessionData(String selectedPacSessionData) {
@@ -986,7 +1021,9 @@ if (dbMode || tmpLocalMode) {
     }
 
     public void setSessionList(List<SessionBean> sessionList) {
+      this.sessionList.clear();
         this.sessionList = sessionList;
+        sessionListPager = new ItemPager(itemsPerPage,this.sessionList);
     }
 
     public String longToStr(Long size) {
@@ -999,21 +1036,24 @@ if (dbMode || tmpLocalMode) {
     }
 
     public void refreshFiltersNew(String selectedIp, List<Category> categories, SmartFilter filter) {
+      List<SessionBean> sessions = new ArrayList<>();
+      List<HTTP> https = new ArrayList<>();
+
         this.categories.clear();
         Integer currentIndexofFilter = filters.indexOf(filter);
         if (categories == null) {
-            sessionList.clear();
-            if (sessionActiveFilter & sessionInFilter) sessionList.addAll(ipBean.getActiveInSes());
-            if (sessionActiveFilter & sessionOutFilter) sessionList.addAll(ipBean.getActiveOutSes());
-            if (sessionSavedFilter & sessionInFilter) sessionList.addAll(ipBean.getStoredInSes());
-            if (sessionSavedFilter & sessionOutFilter) sessionList.addAll(ipBean.getStoredOutSes());
+
+            if (sessionActiveFilter & sessionInFilter) sessions.addAll(ipBean.getActiveInSes());
+            if (sessionActiveFilter & sessionOutFilter) sessions.addAll(ipBean.getActiveOutSes());
+            if (sessionSavedFilter & sessionInFilter) sessions.addAll(ipBean.getStoredInSes());
+            if (sessionSavedFilter & sessionOutFilter) sessions.addAll(ipBean.getStoredOutSes());
             /// gather protocol from sessions
-            httpList.clear();
-            for (SessionBean sesBean : sessionList) {
-                httpList.addAll(sesBean.getHttpBuf());
+
+            for (SessionBean sesBean : sessions) {
+                https.addAll(sesBean.getHttpBuf());
             }
             ///
-            categories = filter.sort(selectedIp,sessionList);
+            categories = filter.sort(selectedIp,sessions);
             if (currentIndexofFilter < (filters.size()-1)) {
                 SmartFilter nextFilter = filters.get(currentIndexofFilter+1);
                 refreshFiltersNew(selectedIp,categories,nextFilter);
@@ -1030,6 +1070,9 @@ if (dbMode || tmpLocalMode) {
                 }
             }
         }
+
+       setHttpList(https);
+        setSessionList(sessions);
     }
 
     public List<Category> categorise(String selectedIp, List<SessionBean> sessions, List<SmartFilter> filters, SmartFilter currentFilter) {
@@ -1279,13 +1322,26 @@ if (dbMode || tmpLocalMode) {
 
 
         public List<T> previousPage() {
-            pointer-=itemCount;
-            return items.subList(pointer-itemCount,pointer);
+            List<T> result;
+
+
+            int newPointer  = pointer-itemCount;
+            if (newPointer<0) newPointer = 0;
+            int beginIndex = newPointer - itemCount;
+            if (beginIndex<0) beginIndex=0;
+
+            result = items.subList(beginIndex,newPointer);
+            pointer = newPointer;
+            return result;
         }
 
         public List<T> nextPage() {
-            pointer+=itemCount;
-            return items.subList(pointer-itemCount, pointer);
+            List<T> result;
+            int newPointer = pointer + itemCount;
+            if (newPointer > items.size()) newPointer = items.size();
+            result = items.subList(pointer, newPointer);
+            pointer=newPointer;
+            return result;
         }
     }
 }

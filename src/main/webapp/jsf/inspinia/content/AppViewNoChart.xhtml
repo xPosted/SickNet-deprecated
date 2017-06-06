@@ -593,8 +593,11 @@
                                                        action="#{taskViewBean.setHttpViewMode()}" value="HTTP mode"
                                                        update="ses_http_view sessionHttpMode" oncomplete="buildFoo();"></p:commandLink>
                                         <p:commandLink styleClass="btn btn-default pull-left"
-                                                       value="Next HTTP page"
-                                                       update="ses_http_view sessionHttpMode" oncomplete="buildFoo();"></p:commandLink>
+                                                       value="Next page"
+                                                       update="ses_http_view sessionHttpMode" action="#{taskViewBean.prepareNexPage()}" oncomplete="buildFoo();"></p:commandLink>
+                                        <p:commandLink styleClass="btn btn-default pull-left"
+                                                       value="Previous page"
+                                                       update="ses_http_view sessionHttpMode" action="#{taskViewBean.preparePreviousPage}" oncomplete="buildFoo();"></p:commandLink>
                                     </h:form>
                                 </div>
                                 <div class="col-sm-6 col-md-6 pull-right">
@@ -636,7 +639,7 @@
                                             <tbody>
 
                                             <c:if test="#{taskViewBean.ipBean != null}">
-                                                <ui:repeat value="#{taskViewBean.sessionList}" var="sessionBean">
+                                                <ui:repeat value="#{taskViewBean.sessionListPage}" var="sessionBean">
                                                     <tr>
                                                         <td>
                                                             #{sessionBean.getEstablishedWebStr()}
@@ -714,7 +717,7 @@
                                             <tbody>
 
                                             <c:if test="#{taskViewBean.ipBean != null}">
-                                                <ui:repeat value="#{taskViewBean.sessionList}" var="sessionBean">
+                                                <ui:repeat value="#{taskViewBean.sessionListPage}" var="sessionBean">
                                                     <tr>
                                                         <td>
                                                             #{sessionBean.getEstablishedWebStr()}
@@ -805,7 +808,7 @@
 
                                         </thead>
                                         <tbody class="inline col-md-12 no-padding">
-                                        <ui:repeat value="#{taskViewBean.httpList}" var="http">
+                                        <ui:repeat value="#{taskViewBean.httpListPage}" var="http">
                                             <ui:fragment rendered="#{http.isRequest()}">
                                                 <c:set var="httpRequest" value="#{http.castToRequest()}"></c:set>
                                                 <tr class="inlineable col-md-12 no-padding">
