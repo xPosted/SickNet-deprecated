@@ -229,13 +229,13 @@
 
 
                                     <form action="#" class="search_by_name">
-                                        <input type="text" class="form-control task_list_search_form__input"></input>
+                                        <input type="text" class="form-control task_list_search_form__input" id="searchIn" onchange="mySearchFunc();"></input>
                                         <button type="submit" class="btn btn-default fa fa-search task_list_search_form__button"></button>
                                     </form>
                                 </div>
                                 <h:form id="mainTableForm">
                                 <h:panelGroup layout="block" id="tableBody" class="ibox-content main_table">
-                                    <table class="table table-hover">
+                                    <table class="table table-hover" id="tasksTable" >
                                         <thead>
                                         <tr>
                                             <td>Name</td>

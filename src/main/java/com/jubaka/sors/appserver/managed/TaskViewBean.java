@@ -64,17 +64,17 @@ public class TaskViewBean implements Serializable, Observer {
     private BranchLightBean blb = null;
     private SubnetLightBean sbl = null;
     private IPItemBean ipBean = null;
-    private List<?> onlineIps = new ArrayList<>();
-    private List<?> allIps = new ArrayList<>();
-    private List<SessionBean> sessionList = new ArrayList<>();
-    private List<HTTP> httpList = new ArrayList<>();
+    private List<?> onlineIps = Collections.synchronizedList(new ArrayList<>());
+    private List<?> allIps = Collections.synchronizedList(new ArrayList<>());
+    private List<SessionBean> sessionList = Collections.synchronizedList(new ArrayList<>());
+    private List<HTTP> httpList = Collections.synchronizedList(new ArrayList<>());
     private ItemPager sessionListPager;
     private ItemPager httpListPager;
-    private List<SessionBean> sessionListPage = new ArrayList<>();
-    private List<HTTP> httpListPage = new ArrayList<>();
+    private List<SessionBean> sessionListPage = Collections.synchronizedList(new ArrayList<>());
+    private List<HTTP> httpListPage = Collections.synchronizedList(new ArrayList<>());
 
 
-    private Integer itemsPerPage = 100;
+    private Integer itemsPerPage = 50;
 
 
     private List<Category> newCategories = new ArrayList<>();
@@ -195,6 +195,29 @@ public class TaskViewBean implements Serializable, Observer {
 
     }
 
+    public void initTask(Long dbtaskId) {
+        dbMode = true;
+        tmpLocalMode = false;
+        liveNodeMode = false;
+
+
+        Branch b =  branchService.selectByIdWithNets(dbtaskId);
+        blb = BeanEntityConverter.castToLightBean(null,b);
+        currentTaskName = blb.getBib().getBranchName();
+       // categories.clear();
+      //  httpList.clear();
+      //  httpListPage.clear();
+      //  sessionList.clear();
+      //  sessionListPage.clear();
+
+
+       // ipBean = null;
+       // sbl = null;
+       // onlineIps.clear();
+       // allIps.clear();
+    }
+
+
 /*
 
     public void initBeans() {
@@ -241,8 +264,8 @@ public class TaskViewBean implements Serializable, Observer {
 
     public void setSelectedCat(Category selectedCat) {
         this.selectedCat = selectedCat;
-      sessionList = selectedCat.getSessionList();
-      httpList = selectedCat.getHttpList();
+      setSessionList(selectedCat.getSessionList());
+      setHttpList(selectedCat.getHttpList());
         System.out.println("select cat - " + selectedCat.getName());
        /// / refreshFilter(selectedCat);
     }
@@ -394,22 +417,6 @@ public class TaskViewBean implements Serializable, Observer {
     }
 
 
-    public void initTask(Long dbtaskId) {
-        dbMode = true;
-        tmpLocalMode = false;
-        liveNodeMode = false;
-
-
-        Branch b =  branchService.selectByIdWithNets(dbtaskId);
-        blb = BeanEntityConverter.castToLightBean(null,b);
-        currentTaskName = blb.getBib().getBranchName();
-        categories.clear();
-        httpList.clear();
-        ipBean = null;
-        sbl = null;
-        onlineIps.clear();
-        allIps.clear();
-    }
 
     public boolean isTaskViewReady() {
         if (dbMode) {
@@ -653,11 +660,11 @@ public class TaskViewBean implements Serializable, Observer {
         return filters;
     }
 
-    public List<HTTP> getHttpListPage() {
+    public synchronized List<HTTP> getHttpListPage() {
         return httpListPage;
     }
 
-    public List<SessionBean> getSessionListPage() {
+    public synchronized List<SessionBean> getSessionListPage() {
         return sessionListPage;
     }
 
@@ -669,14 +676,15 @@ public class TaskViewBean implements Serializable, Observer {
         this.httpListPage = httpListPage;
     }
 
-    public List<HTTP> getHttpList() {
+    public  List<HTTP> getHttpList() {
         return httpList;
     }
 
-    public void setHttpList(List<HTTP> httpList) {
+    public  void setHttpList(List<HTTP> httpList) {
       this.httpList.clear();
         this.httpList = httpList;
-      httpListPager = new ItemPager(itemsPerPage,this.httpList);
+        httpListPager = new ItemPager(itemsPerPage,this.httpList);
+        this.httpListPage = httpListPager.loadMore(0);
     }
 
     public String getNetAddr() {
@@ -743,13 +751,22 @@ public class TaskViewBean implements Serializable, Observer {
         return selectedPacSessionData;
     }
 
-    public void prepareNexPage() {
+    public  void prepareNexPage() {
       if (sessionViewMode) {
           sessionListPage = sessionListPager.nextPage();
       }
       if (httpViewMode) {
           httpListPage = httpListPager.nextPage();
       }
+    }
+
+    public  void loadMore() {
+        if (sessionViewMode) {
+            sessionListPage = sessionListPager.loadMore(sessionListPage.size());
+        }
+        if (httpViewMode) {
+            httpListPage = httpListPager.loadMore(httpListPage.size());
+        }
     }
 
     public void preparePreviousPage() {
@@ -867,11 +884,13 @@ public class TaskViewBean implements Serializable, Observer {
     public void setHttpViewMode() {
       httpViewMode = true;
       sessionViewMode = false;
+
     }
 
     public void setSessionViewMode() {
       sessionViewMode = true;
       httpViewMode = false;
+
     }
 
     public String getChartDataStr() {
@@ -1016,14 +1035,16 @@ if (dbMode || tmpLocalMode) {
         this.onlineIps = onlineIps;
     }
 
-    public List<SessionBean> getSessionList() {
+    public  List<SessionBean> getSessionList() {
         return sessionList;
     }
 
-    public void setSessionList(List<SessionBean> sessionList) {
+    public  void setSessionList(List<SessionBean> sessionList) {
       this.sessionList.clear();
-        this.sessionList = sessionList;
-        sessionListPager = new ItemPager(itemsPerPage,this.sessionList);
+      this.sessionList = sessionList;
+
+      sessionListPager = new ItemPager(itemsPerPage,this.sessionList);
+      this.sessionListPage = sessionListPager.loadMore(0);
     }
 
     public String longToStr(Long size) {
@@ -1035,9 +1056,9 @@ if (dbMode || tmpLocalMode) {
 
     }
 
-    public void refreshFiltersNew(String selectedIp, List<Category> categories, SmartFilter filter) {
-      List<SessionBean> sessions = new ArrayList<>();
-      List<HTTP> https = new ArrayList<>();
+    public  void refreshFiltersNew(String selectedIp, List<Category> categories, SmartFilter filter) {
+      List<SessionBean> sessions = Collections.synchronizedList(new ArrayList<>());
+      List<HTTP> https = Collections.synchronizedList(new ArrayList<>());
 
         this.categories.clear();
         Integer currentIndexofFilter = filters.indexOf(filter);
@@ -1060,6 +1081,10 @@ if (dbMode || tmpLocalMode) {
             }
             this.categories.addAll(categories);
 
+            setHttpList(https);
+            setSessionList(sessions);
+
+
         } else {
             for (Category cat : categories) {
                 cat.setSubCategories(filter.sort(selectedIp, cat.getSessionList()));
@@ -1071,8 +1096,7 @@ if (dbMode || tmpLocalMode) {
             }
         }
 
-       setHttpList(https);
-        setSessionList(sessions);
+
     }
 
     public List<Category> categorise(String selectedIp, List<SessionBean> sessions, List<SmartFilter> filters, SmartFilter currentFilter) {
@@ -1339,8 +1363,16 @@ if (dbMode || tmpLocalMode) {
             List<T> result;
             int newPointer = pointer + itemCount;
             if (newPointer > items.size()) newPointer = items.size();
-            result = items.subList(pointer, newPointer);
+            result = Collections.synchronizedList(items.subList(pointer, newPointer));
             pointer=newPointer;
+            return result;
+        }
+
+        public List<T> loadMore(int currentSize) {
+            List<T> result;
+            int endPointer = pointer + currentSize + itemCount;
+            if (endPointer > items.size()) endPointer = items.size();
+            result = Collections.synchronizedList(items.subList(pointer, endPointer));
             return result;
         }
     }

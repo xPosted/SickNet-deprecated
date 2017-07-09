@@ -253,7 +253,8 @@
                                                                 actionListener="#{taskViewBean.selectIp(ipBean.ip)}"
                                                                 styleClass="text-center btn btn-default full-width full-height"
                                                                 update="ipInfo ipInfoHeader sessionList jsf_filterView"
-                                                                oncomplete="updateEventListeners(); buildFoo();">
+                                                                onclick="loaderOn();"
+                                                                oncomplete="updateEventListeners(); buildFoo(); loaderOff();">
                                                             <span class="filter_button_ip pull-left">#{ipBean.getIp()}</span>                <!-- pull-left jubaka -->
                                                             <div class="filter_ip_info_clors pull-right">
                                                                 <span>#{taskViewBean.longToStr(ipBean.dataUp)} / #{taskViewBean.longToStr(ipBean.dataDown)}</span>
@@ -285,7 +286,8 @@
                                                                 actionListener="#{taskViewBean.selectIp(ipBean.ip)}"
                                                                 styleClass="text-center btn btn-default full-width full-height"
                                                                 update="ipInfo ipInfoHeader sessionList jsf_filterView"
-                                                                oncomplete="updateEventListeners(); buildFoo();">
+                                                                onclick="loaderOn();"
+                                                                oncomplete="updateEventListeners(); buildFoo(); loaderOff();">
                                                             <span class="filter_button_ip pull-left">#{ipBean.getIp()}</span>                <!-- pull-left jubaka -->
                                                             <div class="filter_ip_info_clors pull-right">
                                                                 <span>#{taskViewBean.longToStr(ipBean.dataUp)} / #{taskViewBean.longToStr(ipBean.dataDown)}</span>
@@ -405,14 +407,16 @@
                                             <p:commandLink action="#{taskViewBean.changeActiveFilter()}"
                                                            update="sessionFilterBlock sessionList jsf_filterView"
                                                            styleClass="btn btn-default #{taskViewBean.sessionActiveFilter ? 'active' : ''}"
-                                                           oncomplete="buildFoo();"
+                                                           onclick="loaderOn();"
+                                                           oncomplete="buildFoo(); loaderOff();"
                                                            style="width: 50%;">
                                                 Active
                                             </p:commandLink>
                                             <p:commandLink action="#{taskViewBean.changeSavedFilter()}"
                                                            update="sessionFilterBlock sessionList jsf_filterView"
                                                            styleClass="btn btn-default #{taskViewBean.sessionSavedFilter ? 'active' : ''}"
-                                                           oncomplete="buildFoo();"
+                                                           onclick="loaderOn();"
+                                                           oncomplete="buildFoo(); loaderOff();"
                                                            style="width: 50%;">
                                                 Saved
                                             </p:commandLink>
@@ -423,14 +427,16 @@
                                             <p:commandLink action="#{taskViewBean.changeInFilter()}"
                                                            update="sessionFilterBlock sessionList jsf_filterView"
                                                            styleClass="btn btn-default #{taskViewBean.sessionInFilter ? 'active' : ''}"
-                                                           oncomplete="buildFoo();"
+                                                           onclick="loaderOn();"
+                                                           oncomplete="buildFoo(); loaderOff();"
                                                            style="width: 50%;">
                                                 Input
                                             </p:commandLink>
                                             <p:commandLink action="#{taskViewBean.changeOutFilter()}"
                                                            update="sessionFilterBlock sessionList jsf_filterView"
                                                            styleClass="btn btn-default #{taskViewBean.sessionOutFilter ? 'active' : ''}"
-                                                           oncomplete="buildFoo();"
+                                                           onclick="loaderOn();"
+                                                           oncomplete="buildFoo(); loaderOff();"
                                                            style="width: 50%;">
                                                 Output
                                             </p:commandLink>
@@ -446,23 +452,7 @@
 
 
                     <div class="ibox">
-                        <div class="ibox-tools">
-                            <a id="sort_ip_collapse">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="fa fa-wrench"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-user">
-                                <li><a href="#">Config option 1</a>
-                                </li>
-                                <li><a href="#">Config option 2</a>
-                                </li>
-                            </ul>
-                            <a class="close-link">
-                                <i class="fa fa-times"></i>
-                            </a>
-                        </div>
+
                         <div id="sort_ip_body_collapse" class="ibox-content sort_ip">
                             <div class="title_sort">
                                 <span>Сортировать по:</span>
@@ -472,14 +462,16 @@
                                                 styleClass="btn btn-default buttons_sort #{taskViewBean.isHostCategorised() ? 'active' : ''}"
                                                 action="#{taskViewBean.setHostPortCategorised()}"
                                                 update="jsf_filterView sessionFilterbtns"
-                                                oncomplete="updateEventListeners(); buildFoo();">
+                                                onclick="loaderOn();"
+                                                oncomplete="updateEventListeners(); buildFoo(); loaderOff();">
                                             Хостам
                                         </p:commandLink>
                                         <p:commandLink
                                                 styleClass="btn btn-default buttons_sort #{taskViewBean.isPortCategorised() ? 'active' : ''}"
                                                 action="#{taskViewBean.setPortHostCategorised()}"
                                                 update="jsf_filterView sessionFilterbtns"
-                                                oncomplete="updateEventListeners(); buildFoo();">
+                                                onclick="loaderOn();"
+                                                oncomplete="updateEventListeners(); buildFoo(); loaderOff();">
                                             Портам
                                         </p:commandLink>
                                     </h:form>
@@ -507,7 +499,8 @@
                                                     </div>
                                                 </a>
                                                 <p:commandLink action="#{taskViewBean.setSelectedCat(category)}"
-                                                               update="sessionList" oncomplete="buildFoo();">
+                                                               update="sessionList" oncomplete="buildFoo(); loaderOff();"
+                                                                onclick="loaderOn();">
 
                                                     <div style="padding: 2px;"
                                                          class="col-md-11 ibox-title no-borders no-padding btn-default">
@@ -532,7 +525,8 @@
                                                     <div style="display: none;" class="ibox-content gray-bg no-padding">
                                                         <p:commandLink styleClass="ibox filter_view__dDown_info"
                                                                        actionListener="#{taskViewBean.setSelectedCat(subCat)}"
-                                                                       update="sessionList" oncomplete="buildFoo();">
+                                                                       onclick="loaderOn();"
+                                                                       update="sessionList" oncomplete="buildFoo(); loaderOff();">
 
                                                             <div class="filter_view">
                                                                 <span class="filter_button_ip">#{subCat.name}</span>
@@ -592,12 +586,12 @@
                                         <p:commandLink styleClass="btn btn-default pull-left   #{taskViewBean.isHttpViewMode() ? 'active' : ''}"
                                                        action="#{taskViewBean.setHttpViewMode()}" value="HTTP mode"
                                                        update="ses_http_view sessionHttpMode" oncomplete="buildFoo();"></p:commandLink>
-                                        <p:commandLink styleClass="btn btn-default pull-left"
-                                                       value="Next page"
-                                                       update="ses_http_view sessionHttpMode" action="#{taskViewBean.prepareNexPage()}" oncomplete="buildFoo();"></p:commandLink>
+                                        <!--
                                         <p:commandLink styleClass="btn btn-default pull-left"
                                                        value="Previous page"
                                                        update="ses_http_view sessionHttpMode" action="#{taskViewBean.preparePreviousPage}" oncomplete="buildFoo();"></p:commandLink>
+
+                                        -->
                                     </h:form>
                                 </div>
                                 <div class="col-sm-6 col-md-6 pull-right">
@@ -755,7 +749,7 @@
                                                             #{sessionBean.getDstIP()}  Dns: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getDstIP())}
                                                         </td>
                                                         <td>
-                                                            <div class="full-width">5 sec
+                                                            <div class="full-width">? sec
                                                                 <p:commandLink action="#{taskViewBean.expandedViewOn(sessionBean)}"
                                                                                styleClass="btn btn-default" update="expandedModal chartDataForm"
                                                                                oncomplete="buildFooModal(); $('#sessionDataModal').modal('toggle'); drawChart(); updateEventListeners();"
@@ -788,7 +782,7 @@
                                         <thead class="inline col-md-12 no-padding">
                                         <tr class="inline col-md-12 no-padding">
                                             <th class="col-md-1 inline no-borders" data-toggle="true">Type</th>
-                                            <th class="col-md-6 inline no-borders">Resource</th>
+                                            <th class="col-md-5 inline no-borders">Resource</th>
                                             <th class="col-md-5 inline no-borders">User-Agent</th>
                                             <th data-hide="all"></th>
                                             <th data-hide="all"></th>
@@ -1098,7 +1092,18 @@
 
                                 </c:if>
 
+                                <div>
+                                    <c:if test="#{taskViewBean.httpViewMode}">
+                                        <span>Viewing #{taskViewBean.httpListPage.size()} from #{taskViewBean.httpList.size()}</span>
+                                    </c:if>
+                                    <c:if test="#{taskViewBean.sessionViewMode}">
+                                        <span>Viewing #{taskViewBean.sessionListPage.size()} from #{taskViewBean.sessionList.size()}</span>
+                                    </c:if>
 
+                                    <p:commandLink styleClass="btn btn-default pull-left"
+                                                   value="Load more"
+                                                   update="ses_http_view sessionHttpMode" action="#{taskViewBean.loadMore()}" oncomplete="buildFoo();"></p:commandLink>
+                                </div>
                             </h:panelGroup>
 
 
