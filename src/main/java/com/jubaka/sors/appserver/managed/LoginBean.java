@@ -93,7 +93,7 @@ public class LoginBean implements Serializable {
         login = "";
         pass = "";
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("login_v2.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/app/jsf/inspinia/content/login_v2.xhtml");
         } catch (IOException io) {
             io.printStackTrace();
         }
@@ -102,7 +102,7 @@ public class LoginBean implements Serializable {
 
     public void loginAction() throws IOException {
         if (user != null)  {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("app/jsf/inspinia/content/TaskList_tmp.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/app/jsf/inspinia/content/TaskList_tmp.xhtml");
             return;
         }
         if (pass!=null & login!= null) {
@@ -112,7 +112,7 @@ public class LoginBean implements Serializable {
             pass = null;
             if (user != null) {
                 linked = true;
-                FacesContext.getCurrentInstance().getExternalContext().redirect("app/jsf/inspinia/content/TaskList_tmp.xhtml");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/app/jsf/inspinia/content/TaskList_tmp.xhtml");
             } else {
                 FacesContext fcontext = FacesContext.getCurrentInstance();
                 fcontext.addMessage("loginForm:passField",new FacesMessage(FacesMessage.SEVERITY_ERROR,"Invalid login or password",""));
@@ -141,7 +141,7 @@ public class LoginBean implements Serializable {
         user = null;
         login = "";
         pass = "";
-        FacesContext.getCurrentInstance().getExternalContext().redirect("app/jsf/inspinia/content/landing.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/app/jsf/inspinia/content/landing.xhtml");
 
     }
 

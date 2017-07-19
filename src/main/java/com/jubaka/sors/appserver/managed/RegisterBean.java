@@ -102,7 +102,8 @@ public class RegisterBean implements Serializable {
 
 
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("landing.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/app/jsf/inspinia/content/landing.xhtml");
+
         } catch (IOException io) {
             io.printStackTrace();
             return false;

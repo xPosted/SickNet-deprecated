@@ -22,4 +22,7 @@
         <param-value>true</param-value>
     </context-param>
 
+    <welcome-file-list>
+        <welcome-file>app/jsf/inspinia/content/login_v2.xhtml</welcome-file>
+    </welcome-file-list>
 </web-app>
