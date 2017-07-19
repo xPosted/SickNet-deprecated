@@ -223,13 +223,13 @@
                                             Found <span class="badge">#{taskListBean.databaseCount}</span> tasks
                                         </div>
                                         <div style="display: inline-block;" class="pull-left">
-                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Create Task</button>
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Создать задание</button>
                                         </div>
                                     </div>
 
 
                                     <form action="#" class="search_by_name">
-                                        <input type="text" class="form-control task_list_search_form__input" id="searchIn" onchange="mySearchFunc();"></input>
+                                        <input type="text" class="form-control task_list_search_form__input" id="searchIn" onkeyup="mySearchFunc();"></input>
                                         <button type="submit" class="btn btn-default fa fa-search task_list_search_form__button"></button>
                                     </form>
                                 </div>
@@ -238,11 +238,11 @@
                                     <table class="table table-hover" id="tasksTable" >
                                         <thead>
                                         <tr>
-                                            <td>Name</td>
-                                            <td>NET/HOSTS/SES</td>
-                                            <td>Pcap size</td>
-                                            <td>Created</td>
-                                            <td>Action</td>
+                                            <td>Название</td>
+                                            <td>Сети/Хосты/Сессии</td>
+                                            <td>Размер pcap-файла</td>
+                                            <td>Создано</td>
+                                            <td></td>
 
                                         </tr>
                                         </thead>
@@ -273,7 +273,7 @@
                                                 </td>
                                                 <td>#{taskListBean.sizeToStr(bib.uploadSize,2)}</td>
                                                 <td>#{bib.getTime()}</td>
-                                                <td>Some text</td>
+                                                <td> <p:commandLink styleClass="btn btn-w-m btn-danger" actionListener="#{taskListBean.deleteById(bib.getDbid())}" update="mainTableForm:tableBody"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </p:commandLink> </td>
 
                                             </tr>
                                         </ui:repeat>

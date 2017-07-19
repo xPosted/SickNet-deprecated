@@ -75,6 +75,11 @@ public class IPItemLightBean extends Bean implements Serializable {
     public synchronized void setIp(String ip) {
         this.ip = ip;
     }
+
+    public synchronized String getDnsNameIfNotEquals() {
+        if ( ! dnsName.equals(ip)) return dnsName;
+        return "";
+    }
     public synchronized String getDnsName() {
         return dnsName;
     }

@@ -145,6 +145,7 @@ public class CreateTaskBean implements Serializable {
         if (upFilePart == null | taskName == null) return null;
         if (cHandler.getLocalNode() == null) return null;
         if (uploadedPcap.length() > profileBaen.getAvailableTaskSpace()) return null;
+        if (taskName.equals("")) taskName = uploadedPcap.getName();
 
         LocalNode endpoint =  cHandler.getLocalNode();
         Integer newBrId =  endpoint.createBranch(uploadedPcap.getAbsolutePath(),loginBean.getUser().getNickName(),upFilePart.getFileName(),taskName);

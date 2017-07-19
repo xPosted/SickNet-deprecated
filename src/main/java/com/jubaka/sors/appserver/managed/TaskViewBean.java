@@ -99,10 +99,10 @@ public class TaskViewBean implements Serializable, Observer {
 
     private NodeServerEndpoint nodeServerEndpoint = null;
 
-    private boolean sessionInFilter = false;
+    private boolean sessionInFilter = true;
     private boolean sessionOutFilter = true;
     private boolean sessionActiveFilter = true;
-    private boolean sessionSavedFilter = false;
+    private boolean sessionSavedFilter = true;
 
 
             /// VIEW MODE
@@ -130,7 +130,7 @@ public class TaskViewBean implements Serializable, Observer {
     private boolean dbMode = false;
     private boolean tmpLocalMode = false;
     private boolean liveNodeMode =  false;
-
+    private String pcapFilter = "";
 
     @PreDestroy
     public void clean() {
@@ -146,6 +146,11 @@ public class TaskViewBean implements Serializable, Observer {
 
     // this method is calling from xhtml page becouse request params are not available in postConstruct
     public void init() {
+        if (loginBean.getUser() == null) {
+            loginBean.redirectToLogIn();
+        }
+
+
         ExternalContext externalContext =  FacesContext.getCurrentInstance().getExternalContext();
         Map<String,String> params = externalContext.getRequestParameterMap();
         String nodeIdStr = params.get("nodeId");
@@ -165,9 +170,13 @@ public class TaskViewBean implements Serializable, Observer {
             initTask(nodeUnid,taskId);
         } else
         if (dbTaskIdStr != null) {
+            boolean clearData = false;
+            if (this.dbTaskIdStr != null & dbTaskIdStr != null)
+                if  ( ! this.dbTaskIdStr.equals(dbTaskIdStr))
+                    clearData = true;
             this.dbTaskIdStr = dbTaskIdStr;
             Long dbTaskId = Long.parseLong(dbTaskIdStr);
-            initTask(dbTaskId);
+            initTask(dbTaskId,clearData);
         } else
         if (localidStr!=null) {
             Integer localid = Integer.parseInt(localidStr);
@@ -195,7 +204,7 @@ public class TaskViewBean implements Serializable, Observer {
 
     }
 
-    public void initTask(Long dbtaskId) {
+    public void initTask(Long dbtaskId, boolean clearData) {
         dbMode = true;
         tmpLocalMode = false;
         liveNodeMode = false;
@@ -204,17 +213,20 @@ public class TaskViewBean implements Serializable, Observer {
         Branch b =  branchService.selectByIdWithNets(dbtaskId);
         blb = BeanEntityConverter.castToLightBean(null,b);
         currentTaskName = blb.getBib().getBranchName();
-       // categories.clear();
-      //  httpList.clear();
-      //  httpListPage.clear();
-      //  sessionList.clear();
-      //  sessionListPage.clear();
+        if (clearData) {
+            categories.clear();
+            httpList.clear();
+            httpListPage.clear();
+            sessionList.clear();
+            sessionListPage.clear();
 
 
-       // ipBean = null;
-       // sbl = null;
-       // onlineIps.clear();
-       // allIps.clear();
+            ipBean = null;
+            sbl = null;
+            onlineIps.clear();
+            allIps.clear();
+        }
+
     }
 
 
@@ -267,6 +279,7 @@ public class TaskViewBean implements Serializable, Observer {
       setSessionList(selectedCat.getSessionList());
       setHttpList(selectedCat.getHttpList());
         System.out.println("select cat - " + selectedCat.getName());
+        updatePcapFilter();
        /// / refreshFilter(selectedCat);
     }
 
@@ -409,6 +422,7 @@ public class TaskViewBean implements Serializable, Observer {
                 }
 
         refreshFilters();
+        updatePcapFilter();
     }
 
     public void refreshFilters() {
@@ -682,7 +696,7 @@ public class TaskViewBean implements Serializable, Observer {
 
     public  void setHttpList(List<HTTP> httpList) {
       this.httpList.clear();
-        this.httpList = httpList;
+        this.httpList = new ArrayList<>(httpList);
         httpListPager = new ItemPager(itemsPerPage,this.httpList);
         this.httpListPage = httpListPager.loadMore(0);
     }
@@ -749,6 +763,14 @@ public class TaskViewBean implements Serializable, Observer {
 
     public String getSelectedPacSessionData() {
         return selectedPacSessionData;
+    }
+
+    public String getPcapFilter() {
+        return pcapFilter;
+    }
+
+    public void setPcapFilter(String pcapFilter) {
+        this.pcapFilter = pcapFilter;
     }
 
     public  void prepareNexPage() {
@@ -1041,7 +1063,7 @@ if (dbMode || tmpLocalMode) {
 
     public  void setSessionList(List<SessionBean> sessionList) {
       this.sessionList.clear();
-      this.sessionList = sessionList;
+      this.sessionList =  new ArrayList<>(sessionList);
 
       sessionListPager = new ItemPager(itemsPerPage,this.sessionList);
       this.sessionListPage = sessionListPager.loadMore(0);
@@ -1252,7 +1274,7 @@ if (dbMode || tmpLocalMode) {
             ex.printStackTrace();
         }
         Long dbTaskId = Long.parseLong(dbTaskIdStr);
-        initTask(dbTaskId);
+        initTask(dbTaskId,false);
     }
 
     @Override
@@ -1375,5 +1397,28 @@ if (dbMode || tmpLocalMode) {
             result = Collections.synchronizedList(items.subList(pointer, endPointer));
             return result;
         }
+    }
+
+    public void updatePcapFilter() {
+
+        String filter = "";
+        if (ipBean != null) {
+            if (sessionInFilter & !sessionOutFilter) filter = filter + "dst ";
+            if (sessionOutFilter & ! sessionInFilter) filter = filter + "src ";
+            filter = "host "+ipBean.getIp();
+            if (selectedCat != null) {
+                if (selectedCat.getParent() != null) {
+                    Category parent = selectedCat.getParent();
+                    if (parent.getParentType() instanceof PortSessionFilter) filter = filter+ " and tcp port "+parent.getName();
+                    if (parent.getParentType() instanceof HostSessionFilter) filter = filter+ " and host "+parent.getName();
+                }
+                if (selectedCat.getParentType() instanceof PortSessionFilter) filter = filter+ " and tcp port "+selectedCat.getName();
+                if (selectedCat.getParentType() instanceof HostSessionFilter) filter = filter+ " and host "+selectedCat.getName();
+
+            }
+        }
+        setPcapFilter(filter);
+
+
     }
 }

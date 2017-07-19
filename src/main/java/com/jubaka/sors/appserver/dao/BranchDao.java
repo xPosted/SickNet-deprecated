@@ -135,6 +135,12 @@ public class BranchDao  {
         entityManager.remove(br);
     }
 
+    @Transactional
+    public void deleteById(long id) {
+        Branch branchToDelete = selectById(id);
+        delete(branchToDelete);
+    }
+
     public List<Branch> selectByUser(User user) {
         List<Branch> branchs = null;
         Query q = entityManager.createQuery("select branch from Branch branch where branch.user = :user");

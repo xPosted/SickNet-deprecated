@@ -252,4 +252,9 @@ public class BranchService {
     }
 
 
+    public void deleteById(Long id) {
+       branchDao.deleteById(id);
+    }
+
+
 }

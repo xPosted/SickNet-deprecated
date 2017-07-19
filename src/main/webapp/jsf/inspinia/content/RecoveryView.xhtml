@@ -130,7 +130,7 @@
 
                                 </div>
                                 <div class="col-lg-2"><span>folder</span></div>
-                                <div class="col-lg-2"><span>#{folder.size}</span></div>
+                                <div class="col-lg-2"><span>#{recoverViewBean.longToStr(folder.size)}</span></div>
                             </li>
 
                         </ui:repeat>
@@ -157,7 +157,7 @@
 
                                 </div>
                                 <div class="col-lg-2"><span>file</span></div>
-                                <div class="col-lg-2"><span>#{file.size}</span></div>
+                                <div class="col-lg-2"><span>#{recoverViewBean.longToStr(file.size)}</span></div>
                             </li>
 
                         </ui:repeat>
@@ -168,10 +168,10 @@
                 <div class="col-lg-2" id="file-control-group">
                     <ul style="list-style-type: none; display: block; border-top: 1px solid #e8e8e8;">
                         <li>
-                            <a class="btn file-control" href="#"><span class="glyphicon glyphicon-download"></span><span>Download</span></a>
+                            <a class="btn file-control" ><span class="glyphicon glyphicon-download"></span><span>Download</span></a>
                         </li>
                         <li>
-                            <a class="btn file-control" href="#"><span class="glyphicon glyphicon-trash"></span><span>Delete</span></a>
+                            <a class="btn file-control" ><span class="glyphicon glyphicon-trash"></span><span>Delete</span></a>
                         </li>
                     </ul>
                 </div>

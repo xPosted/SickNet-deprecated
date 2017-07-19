@@ -269,7 +269,7 @@ public class StatisticLogic {
 			StatSmartIpItem statSmartIp = tableLogic.get(ipRow);
 
 			row[0] = ipRow;
-			row[1] = "no logic to do this...";
+			row[1] = statSmartIp.getDnsName();
 			row[2] = Controller.processSize(statSmartIp.getDataDown(), 2);
 			row[3] = Controller.processSize(statSmartIp.getDataUp(), 2);
 			row[4] = statSmartIp.getInputActiveCount() + "/" + statSmartIp.getInputCount();
@@ -330,7 +330,7 @@ public class StatisticLogic {
 
 }
 
-class StatSmartIpItem {
+class StatSmartIpItem  {
 
 	private IPItemBean ipMain;
 	private String ipItem;
@@ -393,6 +393,10 @@ class StatSmartIpItem {
 
 	private void incOutputActiveCount() {
 		this.outputActiveCount++;
+	}
+
+	public String getDnsName() {
+		return ipMain.getDnsNameIfNotEquals();
 	}
 
 	public void processSession(SessionBean ses) {

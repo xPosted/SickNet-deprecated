@@ -1,6 +1,7 @@
 package com.jubaka.sors.appserver.managed;
 
 import com.jubaka.sors.appserver.entities.Branch;
+import com.jubaka.sors.appserver.serverSide.ConnectionHandler;
 import com.jubaka.sors.appserver.service.BeanEntityConverter;
 import com.jubaka.sors.appserver.service.BranchService;
 import com.jubaka.sors.appserver.service.SessionService;
@@ -35,6 +36,9 @@ public class RecoverViewBean implements Serializable {
     private BranchService branchService;
     @Inject
     private SessionService sessionService;
+    @Inject
+    private LoginBean loginBean;
+
 
     private DirectoryBean mainDir;
 
@@ -47,6 +51,11 @@ public class RecoverViewBean implements Serializable {
 
 
     public void init() {
+        if (loginBean.getUser() == null) {
+            loginBean.redirectToLogIn();
+        }
+
+
         ExternalContext externalContext =  FacesContext.getCurrentInstance().getExternalContext();
         Map<String,String> params = externalContext.getRequestParameterMap();
         String dbIdStr = params.get("dbid");
@@ -106,6 +115,10 @@ public class RecoverViewBean implements Serializable {
 
     public void setCurrentDbId(long currentDbId) {
         this.currentDbId = currentDbId;
+    }
+
+    public String longToStr(Long size) {
+        return ConnectionHandler.processSize(size,1);
     }
 
 }

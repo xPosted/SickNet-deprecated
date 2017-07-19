@@ -85,6 +85,21 @@ public class LoginBean implements Serializable {
         System.out.println("test postconstruct in loginBean");
     }
 
+
+    public void redirectToLogIn() {
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        linked = false;
+        user = null;
+        login = "";
+        pass = "";
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("login_v2.xhtml");
+        } catch (IOException io) {
+            io.printStackTrace();
+        }
+
+    }
+
     public void loginAction() throws IOException {
         if (user != null)  {
             FacesContext.getCurrentInstance().getExternalContext().redirect("app/jsf/inspinia/content/TaskList_tmp.xhtml");
@@ -152,7 +167,7 @@ public class LoginBean implements Serializable {
                 u.setPass(encNewRandomPass);
                 userService.updateUser(u);
                 sendEmail("This is your new PASSWORD: "+newRandomPass, Arrays.asList(u.getEmail()));
-                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,"Security","Your password has been sent you by email!");
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,"Security","Your password has been sent to you by email!");
                 FacesContext.getCurrentInstance().addMessage(null,msg);
             }
 
@@ -187,7 +202,7 @@ public class LoginBean implements Serializable {
                 email.addTo(sendTo, "");
             }
             email.setFrom("aleksandrzhupanov@gmail.com", "Sors");
-            email.setSubject("Sors notification");
+            email.setSubject("SickNET notification");
 
             // set the html message
             email.setHtmlMsg(content);

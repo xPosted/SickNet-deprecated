@@ -12,10 +12,7 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by root on 28.08.16.
@@ -46,7 +43,11 @@ public class TaskListBean {
     @PostConstruct
     public void init() {
 
-        tasks = new HashSet<BranchInfoBean>();
+        if (loginBean.getUser() == null) {
+            loginBean.redirectToLogIn();
+        }
+
+        tasks =Collections.synchronizedSet(new HashSet<BranchInfoBean>());
         String user = loginBean.getUser().getNickName();
 
         List<NodeServerEndpoint> nodeServerEndpoints = nodeService.getConnectedNodeEndPointsByUser();
@@ -62,7 +63,7 @@ public class TaskListBean {
             }
 
         }
-        dbTasks = new ArrayList<>();
+        dbTasks = Collections.synchronizedList( new ArrayList<>());
         List<Branch> dbBranchs = branchService.selectByCurrentUser();
         for (Branch b : dbBranchs) {
             BranchInfoBean bib = BeanEntityConverter.castToInfoBean(b);
@@ -143,5 +144,25 @@ public class TaskListBean {
     public void setDatabaseCount(Integer databaseCount) {
         this.databaseCount = databaseCount;
     }
+
+    public void deleteById(long id) {
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                branchService.deleteById(id);
+            }
+        };
+        Thread th = new Thread(r);
+        th.start();
+        for (BranchInfoBean bib : dbTasks) {
+            if (bib.getDbid() == id) {
+                dbTasks.remove(bib);
+                break;
+            }
+
+        }
+
+    }
+
 
 }

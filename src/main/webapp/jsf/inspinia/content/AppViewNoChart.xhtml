@@ -15,7 +15,7 @@
     </f:metadata>
 
 
-    <title>INSPINIA | Dashboard v.3</title>
+    <title>SickNET | #{taskViewBean.currentTaskName}</title>
 
     <link href="jsf/inspinia/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="jsf/inspinia/font-awesome/css/font-awesome.css" rel="stylesheet"/>
@@ -67,7 +67,7 @@
     <!-- ChartJS-->
     <script src="jsf/inspinia/js/plugins/chartJs/Chart.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
- <!--   <script src="jsf/inspinia/js/loader.js"></script> -->
+    <!--   <script src="jsf/inspinia/js/loader.js"></script> -->
 </h:head>
 <h:body styleClass="top-navigation">
     <h:inputHidden id="sessionId" value="#{taskViewBean.sessionId}"/>
@@ -99,24 +99,12 @@
                             <a id="subnetExpander">
                                 <i class="fa fa-chevron-up"></i>
                             </a>
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="fa fa-wrench"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-user">
-                                <li><a href="#">Config option 1</a>
-                                </li>
-                                <li><a href="#">Config option 2</a>
-                                </li>
-                            </ul>
-                            <a class="close-link">
-                                <i class="fa fa-times"></i>
-                            </a>
                         </div>
                         <div style="background-color: #e6e6e6;" id="subnetInfoTitle" class="ibox-title border_1 clearfix">
                             <h:form id="subnetPanHeader">
                                 <div>
                                     <span class="col-md-4 text-left large_ip">#{taskViewBean.selectedSubnetAddr}</span>
-                                    <div class="text-right col-md-4 col-md-offset-4">
+                                    <div class="text-right col-md-4 col-md-offset-4 no-padding" >
                                         <div class="ip_in_out">
                                             <span class="text-center large_numbers">#{taskViewBean.getSelectedNetDataDown()}</span>
                                             <small> In</small>
@@ -136,6 +124,9 @@
                                     <div class="form-group">
                                         <div style="background-color: #e6e6e6;"
                                              class="select_ip">                    <!-- jubaka -->
+                                            <div style="padding-left: 10px; margin-top: -12px; height: 10px; width: 100%;">
+                                                <span style="display: block; text-align: left;"><small>Subnet</small> </span>
+                                            </div>
                                             <h:panelGroup id="selectedSubnetAddr">
                                                 <span>#{taskViewBean.selectedSubnetAddr}</span>
                                             </h:panelGroup>
@@ -161,15 +152,15 @@
                                         <hr class="no-margins"/>
                                         <div class="full-width fa-border">
                                             <h:form>
-                                                <p:inputText style="width: 50%"
+                                                <p:inputText style="width: 45%"
                                                              value="#{taskViewBean.netAddr}"></p:inputText>
                                                 /
-                                                <p:inputText style="width: 20%"
+                                                <p:inputText style="width: 15%"
                                                              value="#{taskViewBean.mask}"></p:inputText>
-                                                <p:commandLink style="width: 25%; padding: 2px 12px; margin-left: 10px;" styleClass="btn btn-primary"
-                                                                 action="#{taskViewBean.addNetwork()}"
-                                                                 value="add NET"
-                                                                update="subnetListForm selectedSubnetAddr subnetPanHeader subnetInfo filterView sessionList jsf_filterView"></p:commandLink>
+                                                <p:commandLink style="width: 25%; padding: 2px; margin-left: 10px;" styleClass="btn btn-primary"
+                                                               action="#{taskViewBean.addNetwork()}"
+                                                               value="Добавить сеть"
+                                                               update="subnetListForm selectedSubnetAddr subnetPanHeader subnetInfo filterView sessionList jsf_filterView"></p:commandLink>
                                             </h:form>
 
                                         </div>
@@ -180,39 +171,39 @@
                                             <tbody>
                                             <tr>
                                                 <td class="no-top-border">
-                                                    <span class="pull-right"><small>Sessions</small></span>
+                                                    <span class="pull-right"><small>TCP сессии</small></span>
                                                 </td>
                                                 <td class="no-top-border">
                                                     <span class="text-center large_numbers">#{taskViewBean.getNetworkSessionsAllCount()}</span>
-                                                    <small>all</small>
+                                                    <small>все</small>
                                                     <span class="text-center large_numbers">#{taskViewBean.getNetworkSessionsActiveCount()}</span>
-                                                    <small>active</small>
+                                                    <small>активные</small>
 
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <span class="pull-right"><small>Addresses</small></span>
+                                                    <span class="pull-right"><small>IP адреса</small></span>
                                                 </td>
                                                 <td>
                                                     <span class="text-center large_numbers">#{taskViewBean.getNetworkAddrsAllCount()}</span>
-                                                    <small>all</small>
+                                                    <small>все</small>
                                                     <span class="text-center large_numbers"> #{taskViewBean.getNetworkAddrsActiveCount()}</span>
-                                                    <small>active</small>
+                                                    <small>активные</small>
 
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <span class="pull-right"><small>Traffic</small></span>
+                                                    <span class="pull-right"><small>Трафик</small></span>
                                                 </td>
                                                 <td>
 
                                                     <span class="text-center large_numbers">#{taskViewBean.getSelectedNetDataDown()}</span>
-                                                    <small> download</small>
+                                                    <small> загружено</small>
                                                     <br/>
                                                     <span class="text-center large_numbers"> #{taskViewBean.getSelectedNetDataUp()}  </span>
-                                                    <small> upload</small>
+                                                    <small> выгружено</small>
 
                                                 </td>
                                             </tr>
@@ -232,17 +223,24 @@
                         <div class="tabs-container ibox-content no-padding">
 
                             <ul id="hostsTabHeader" class="nav nav-tabs">
-                                <li class="active">
-                                    <a data-toggle="tab" href="#onlineIpList">Online</a>
-                                </li>
                                 <li>
-                                    <a data-toggle="tab" href="#allIpList">All</a>
+                                    <a data-toggle="tab" href="#onlineIpList">Онлайн</a>
+                                </li>
+                                <li class="active">
+                                    <a data-toggle="tab" href="#allIpList">Все</a>
                                 </li>
                             </ul>
                             <div id="hostListBlock" class="tab-content" style="overflow: auto;">
                                 <div id="onlineIpList" class="tab-pane active">
 
-                                    <ul class="list-group fa-border">
+                                    <div style="padding-bottom: 7px;" class="input-group search_ip__form">
+                                        <input type="text" class="form-control" placeholder="Search" id="hostOnlinePatternInput" onkeyup="hostOnlineSearchFunc();"/>
+                                        <div class="input-group-addon to_search_ip">
+                                            <button class="btn btn-default fa fa-search"></button>
+                                        </div>
+                                    </div>
+
+                                    <ul id="onlineIpUl" class="list-group fa-border">
 
                                         <c:if test="#{taskViewBean.sb != null}">
                                             <ui:repeat value="#{taskViewBean.onlineIps}"
@@ -252,7 +250,7 @@
                                                         <p:commandLink
                                                                 actionListener="#{taskViewBean.selectIp(ipBean.ip)}"
                                                                 styleClass="text-center btn btn-default full-width full-height"
-                                                                update="ipInfo ipInfoHeader sessionList jsf_filterView"
+                                                                update="ipInfo ipInfoHeader sessionList jsf_filterView pcapFilter"
                                                                 onclick="loaderOn();"
                                                                 oncomplete="updateEventListeners(); buildFoo(); loaderOff();">
                                                             <span class="filter_button_ip pull-left">#{ipBean.getIp()}</span>                <!-- pull-left jubaka -->
@@ -275,8 +273,20 @@
 
                                 <div id="allIpList" class="tab-pane">
 
+                                    <div style="padding-bottom: 7px;" class="input-group search_ip__form">
+                                        <input type="text" class="form-control" placeholder="Search" id="hostAllPatternInput" onkeyup="hostAllSearchFunc();"/>
+                                        <div class="input-group-addon to_search_ip">
+                                            <button class="btn btn-default fa fa-search"></button>
+                                        </div>
+                                    </div>
 
-                                    <ul class="list-group fa-border">
+
+
+
+
+
+
+                                    <ul id="allIpUl" class="list-group fa-border">
                                         <c:if test="#{taskViewBean.sb != null}">
                                             <ui:repeat value="#{taskViewBean.allIps}"
                                                        var="ipBean">
@@ -285,7 +295,7 @@
                                                         <p:commandLink
                                                                 actionListener="#{taskViewBean.selectIp(ipBean.ip)}"
                                                                 styleClass="text-center btn btn-default full-width full-height"
-                                                                update="ipInfo ipInfoHeader sessionList jsf_filterView"
+                                                                update="ipInfo ipInfoHeader sessionList jsf_filterView pcapFilter"
                                                                 onclick="loaderOn();"
                                                                 oncomplete="updateEventListeners(); buildFoo(); loaderOff();">
                                                             <span class="filter_button_ip pull-left">#{ipBean.getIp()}</span>                <!-- pull-left jubaka -->
@@ -324,23 +334,12 @@
                                 <a id="ipExpander">
                                     <i class="fa fa-chevron-up"></i>
                                 </a>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-wrench"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user">
-                                    <li><a href="#">Config option 1</a>
-                                    </li>
-                                    <li><a href="#">Config option 2</a>
-                                    </li>
-                                </ul>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
+
                             </div>
                             <div style="background-color: #e6e6e6;" id="ipInfoTitle" class="ibox-title border_1 clearfix">
                                 <h:form id="ipInfoHeader">
                                     <span class="col-md-7 large_ip">#{taskViewBean.selectedIp}</span>
-                                    <span class="col-md-5 smal text-right ipInfo_title_in_out">
+                                    <span class="col-md-5 smal text-right ipInfo_title_in_out no-padding">
                                     <span class="large_numbers"> #{taskViewBean.selectedIpDataDown} /  #{taskViewBean.selectedIpDataUp}</span>
                                 </span>
                                 </h:form>
@@ -349,8 +348,11 @@
                                 <h:panelGroup layout="block" styleClass="row" id="ipInfo">
                                     <div class="col-md-12 smallerColPadding">
                                         <div style="background-color: #e6e6e6;" class="text-center ip_and_adress">
+                                            <div style="padding-left: 10px; margin-top: -12px; height: 10px; width: 100%;">
+                                                <span style="display: block; text-align: left;"><small>Host</small> </span>
+                                            </div>
                                             <h2 class="no-padding no-margins large_ip">#{taskViewBean.selectedIp}</h2>
-                                            <h3 class="no-padding no-margins large_numbers">#{taskViewBean.ipBean.dnsName}</h3>
+                                            <h3 class="no-padding no-margins large_numbers">#{taskViewBean.ipBean.dnsNameIfNotEquals}</h3>
                                         </div>
                                         <div>
                                             <table class="table info_body__table_nochart">
@@ -358,7 +360,7 @@
                                                 <tr>
                                                     <td class="no-top-border">
                                                     <span class="pull-right">                   <!-- jubaka -->
-                                                        <small>data down/up (kb)</small>
+                                                        <small>Трафик заг./выг. (kb)</small>
                                                     </span>
 
                                                     </td>
@@ -370,7 +372,7 @@
                                                 <tr>
                                                     <td>
                                                     <span class="pull-right">                   <!-- jubaka -->
-                                                        <small> ses (act/svd)  </small>
+                                                        <small> Сессии (акт./завер.)  </small>
                                                     </span>
 
                                                     </td>
@@ -381,7 +383,7 @@
                                                 <tr>
                                                     <td>
                                                     <span class="pull-right">                   <!-- jubaka -->
-                                                        <small> conn-s (in/out) </small>
+                                                        <small> Сессии (вход./исход.) </small>
                                                     </span>
 
                                                     </td>
@@ -410,7 +412,7 @@
                                                            onclick="loaderOn();"
                                                            oncomplete="buildFoo(); loaderOff();"
                                                            style="width: 50%;">
-                                                Active
+                                                Акт
                                             </p:commandLink>
                                             <p:commandLink action="#{taskViewBean.changeSavedFilter()}"
                                                            update="sessionFilterBlock sessionList jsf_filterView"
@@ -418,7 +420,7 @@
                                                            onclick="loaderOn();"
                                                            oncomplete="buildFoo(); loaderOff();"
                                                            style="width: 50%;">
-                                                Saved
+                                                Заверш.
                                             </p:commandLink>
                                         </h:form>
                                     </div>
@@ -430,7 +432,7 @@
                                                            onclick="loaderOn();"
                                                            oncomplete="buildFoo(); loaderOff();"
                                                            style="width: 50%;">
-                                                Input
+                                                Вход
                                             </p:commandLink>
                                             <p:commandLink action="#{taskViewBean.changeOutFilter()}"
                                                            update="sessionFilterBlock sessionList jsf_filterView"
@@ -438,12 +440,13 @@
                                                            onclick="loaderOn();"
                                                            oncomplete="buildFoo(); loaderOff();"
                                                            style="width: 50%;">
-                                                Output
+                                                Исход
                                             </p:commandLink>
                                         </h:form>
                                     </div>
 
                                 </h:panelGroup>
+                                <div style="width: 100%; text-align: center;"><span>Фильтр сессий</span></div>
 
                             </div>
 
@@ -491,7 +494,7 @@
                                     <h:form id="jsf_filterView">
                                         <ui:repeat id="catsBlock" value="#{taskViewBean.categories}" var="category">
 
-                                            <div style="margin-bottom: 10px;" class="ibox no-padding fa-border">
+                                            <div style="margin-bottom: 10px; max-height: none;" class="ibox no-padding fa-border">
                                                 <a class="collapse-link">
                                                     <div class="col-md-1 no-padding"
                                                          style="text-align: center; font-size: 20px;">
@@ -499,8 +502,8 @@
                                                     </div>
                                                 </a>
                                                 <p:commandLink action="#{taskViewBean.setSelectedCat(category)}"
-                                                               update="sessionList" oncomplete="buildFoo(); loaderOff();"
-                                                                onclick="loaderOn();">
+                                                               update="sessionList pcapFilter" oncomplete="buildFoo(); loaderOff();"
+                                                               onclick="loaderOn();">
 
                                                     <div style="padding: 2px;"
                                                          class="col-md-11 ibox-title no-borders no-padding btn-default">
@@ -512,35 +515,37 @@
 
                                                             </div>
                                                             <div class="full-width text-right filter_view__site"
-                                                                 style="">#{category.categoryDesc}.com
+                                                                 style="">#{category.categoryDesc}
                                                             </div>
                                                         </div>
                                                     </div>
 
                                                 </p:commandLink>
 
+                                                <div style="display: none; max-height: none;" class="ibox-content no-padding">
+                                                    <ui:repeat value="#{category.subCategories}" var="subCat">
 
-                                                <ui:repeat value="#{category.subCategories}" var="subCat">
+                                                        <div style="" class="gray-bg no-padding">
+                                                            <p:commandLink styleClass="ibox filter_view__dDown_info"
+                                                                           actionListener="#{taskViewBean.setSelectedCat(subCat)}"
+                                                                           onclick="loaderOn();"
+                                                                           update="sessionList pcapFilter" oncomplete="buildFoo(); loaderOff();">
 
-                                                    <div style="display: none;" class="ibox-content gray-bg no-padding">
-                                                        <p:commandLink styleClass="ibox filter_view__dDown_info"
-                                                                       actionListener="#{taskViewBean.setSelectedCat(subCat)}"
-                                                                       onclick="loaderOn();"
-                                                                       update="sessionList" oncomplete="buildFoo(); loaderOff();">
+                                                                <div class="filter_view">
+                                                                    <span class="filter_button_ip">#{subCat.name}</span>
+                                                                    <div class="filter_ip_info_clors">
+                                                                        <span>#{subCat.sendToStr} / #{subCat.receivedFromStr}</span>
+                                                                        <span>#{subCat.sesTo} / #{subCat.sesFrom}</span>
 
-                                                            <div class="filter_view">
-                                                                <span class="filter_button_ip">#{subCat.name}</span>
-                                                                <div class="filter_ip_info_clors">
-                                                                    <span>#{subCat.sendToStr} / #{subCat.receivedFromStr}</span>
-                                                                    <span>#{subCat.sesTo} / #{subCat.sesFrom}</span>
-
+                                                                    </div>
+                                                                    <div class="full-width text-right filter_view__site"
+                                                                         style="">#{subCat.categoryDesc}</div>
                                                                 </div>
-                                                                <div class="full-width text-right filter_view__site"
-                                                                     style="">#{subCat.categoryDesc}</div>
-                                                            </div>
-                                                        </p:commandLink>
-                                                    </div>
-                                                </ui:repeat>
+                                                            </p:commandLink>
+                                                        </div>
+                                                    </ui:repeat>
+                                                </div>
+
 
                                             </div>
 
@@ -561,30 +566,18 @@
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
                             </a>
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="fa fa-wrench"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-user">
-                                <li><a href="#">Config option 1</a>
-                                </li>
-                                <li><a href="#">Config option 2</a>
-                                </li>
-                            </ul>
-                            <a class="close-link">
-                                <i class="fa fa-times"></i>
-                            </a>
                         </div>
 
                         <div id="box_with_buttons" class="ibox-content vertical_center smallerColPadding">
 
-                            <div class="row full-width">
+                            <div style="margin-bottom: 4px;" class="row full-width">
                                 <div class="col-sm-6 col-md-6 border-bottom pull-left">
                                     <h:form id="sessionHttpMode">
                                         <p:commandLink styleClass="btn btn-default pull-left #{taskViewBean.isSessionViewMode() ? 'active' : ''}"
-                                                       action="#{taskViewBean.setSessionViewMode()}" value="Session mode"
+                                                       action="#{taskViewBean.setSessionViewMode()}" value="Режим Сессий"
                                                        update="ses_http_view sessionHttpMode" oncomplete="buildFoo();"></p:commandLink>
                                         <p:commandLink styleClass="btn btn-default pull-left   #{taskViewBean.isHttpViewMode() ? 'active' : ''}"
-                                                       action="#{taskViewBean.setHttpViewMode()}" value="HTTP mode"
+                                                       action="#{taskViewBean.setHttpViewMode()}" value="Режим HTTP"
                                                        update="ses_http_view sessionHttpMode" oncomplete="buildFoo();"></p:commandLink>
                                         <!--
                                         <p:commandLink styleClass="btn btn-default pull-left"
@@ -613,20 +606,19 @@
 
                                 <c:if test="#{taskViewBean.isSessionViewMode()}">
                                     <c:if test="#{taskViewBean.isHostCategorised()}">
-                                        <table  id="fooTable" class="footable table table-stripped toggle-arrow-tiny"
-                                               data-page-size="11" data-filter='#filter'>
+                                        <table  id="fooTable" class="footable table table-stripped toggle-arrow-tiny no-margins"
+                                                data-page-size="11" data-filter='#filter'>
                                             <thead>
                                             <tr>
-                                                <th data-toggle="true">Time start</th>
-                                                <th>Time end</th>
-                                                <th>Src port</th>
-                                                <th>Dst port</th>
-                                                <th>Src data</th>
-                                                <th>Dst data</th>
+                                                <th data-toggle="true">Начало</th>
+                                                <th>TCP src port</th>
+                                                <th>TCP dst port</th>
+                                                <th>Src out</th>
+                                                <th>Dst out</th>
                                                 <th>HTTP</th>
-                                                <th data-hide="all">SRC host</th>
-                                                <th data-hide="all">DST host</th>
-                                                <th data-hide="all">Duration</th>
+                                                <th data-hide="all">Хост инициатор</th>
+                                                <th data-hide="all">Хост назначения</th>
+                                                <th data-hide="all">Продолжительность</th>
                                                 <th data-hide="all"></th>
                                             </tr>
                                             </thead>
@@ -638,9 +630,7 @@
                                                         <td>
                                                             #{sessionBean.getEstablishedWebStr()}
                                                         </td>
-                                                        <td>
-                                                            #{sessionBean.getClosedWebStr()}
-                                                        </td>
+
                                                         <td>
                                                             #{sessionBean.getSrcP()}
                                                         </td>
@@ -661,11 +651,11 @@
                                                             #{sessionBean.getDstIP()} Dns: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getDstIP())}
                                                         </td>
                                                         <td>
-                                                            <div class="full-width">5 sec
+                                                            <div class="full-width"> #{sessionBean.humanDuration}
                                                                 <p:commandLink action="#{taskViewBean.expandedViewOn(sessionBean)}"
                                                                                styleClass="btn btn-default" update="expandedModal chartDataForm"
                                                                                oncomplete="buildFooModal(); $('#sessionDataModal').modal('toggle'); drawChart(); updateEventListeners();"
-                                                                               value="Expanded view">
+                                                                               value="Развернуть">
 
                                                                 </p:commandLink>
                                                             </div>
@@ -688,23 +678,23 @@
 
                                     <c:if test="#{taskViewBean.isPortCategorised()}">
 
-                                        <table id="fooTable" class="footable table table-stripped toggle-arrow-tiny"
+                                        <table id="fooTable" class="footable table table-stripped toggle-arrow-tiny no-margins"
                                                data-page-size="11" data-filter='#filter'>
                                             <thead>
                                             <tr>
-                                                <th data-toggle="true">Time start</th>
-                                                <th>Time end</th>
-                                                <th>SRC host</th>
-                                                <th>DST host</th>
-                                                <th>Src data</th>
-                                                <th>Dst data</th>
+                                                <th data-toggle="true">Начаало</th>
+
+                                                <th>Src host</th>
+                                                <th>Dst host</th>
+                                                <th>Src host out</th>
+                                                <th>Dst host out</th>
                                                 <th>HTTP</th>
 
-                                                <th data-hide="all">Src port</th>
-                                                <th data-hide="all">Dst port</th>
-                                                <th data-hide="all">SRC host</th>
-                                                <th data-hide="all">DST host</th>
-                                                <th data-hide="all">Duration</th>
+                                                <th data-hide="all">Иход. порт</th>
+                                                <th data-hide="all">Порт Назнач.</th>
+                                                <th data-hide="all">Хост иниц.</th>
+                                                <th data-hide="all">Хост Назнач.</th>
+                                                <th data-hide="all">Продолжительность</th>
                                                 <th data-hide="all"></th>
                                             </tr>
                                             </thead>
@@ -715,9 +705,6 @@
                                                     <tr>
                                                         <td>
                                                             #{sessionBean.getEstablishedWebStr()}
-                                                        </td>
-                                                        <td>
-                                                            #{sessionBean.getClosedWebStr()}
                                                         </td>
 
                                                         <td>
@@ -749,7 +736,7 @@
                                                             #{sessionBean.getDstIP()}  Dns: #{taskViewBean.getDnsNameIfNotEquals(sessionBean.getDstIP())}
                                                         </td>
                                                         <td>
-                                                            <div class="full-width">? sec
+                                                            <div class="full-width"> #{sessionBean.humanDuration}
                                                                 <p:commandLink action="#{taskViewBean.expandedViewOn(sessionBean)}"
                                                                                styleClass="btn btn-default" update="expandedModal chartDataForm"
                                                                                oncomplete="buildFooModal(); $('#sessionDataModal').modal('toggle'); drawChart(); updateEventListeners();"
@@ -777,13 +764,13 @@
                                 </c:if>
 
                                 <c:if test="#{taskViewBean.isHttpViewMode()}">
-                                    <table id="http_foo_view" class="footable table table-stripped toggle-arrow-tiny inline col-md-12 no-padding"
+                                    <table id="http_foo_view" class="footable table table-stripped toggle-arrow-tiny inline col-md-12 no-padding no-margins"
                                            data-page-size="11" data-filter='#filter'>
                                         <thead class="inline col-md-12 no-padding">
                                         <tr class="inline col-md-12 no-padding">
-                                            <th class="col-md-1 inline no-borders" data-toggle="true">Type</th>
-                                            <th class="col-md-5 inline no-borders">Resource</th>
-                                            <th class="col-md-5 inline no-borders">User-Agent</th>
+                                            <th class="col-md-1 inline no-borders" data-toggle="true">Тип</th>
+                                            <th class="col-md-6 inline no-borders">Ресурс</th>
+                                            <th class="col-md-4 inline no-borders">User-Agent</th>
                                             <th data-hide="all"></th>
                                             <th data-hide="all"></th>
                                             <th data-hide="all"></th>
@@ -819,9 +806,9 @@
                                                         </div>
                                                     </td>
                                                     <ui:fragment rendered="#{httpRequest.getHost().length()>0}">
-                                                    <td><span style="white-space: nowrap;"><span
-                                                            class="httpHeader">Host: </span>#{httpRequest.getHost()} </span>
-                                                    </td>
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">Host: </span>#{httpRequest.getHost()} </span>
+                                                        </td>
                                                     </ui:fragment>
 
                                                     <ui:fragment rendered="#{httpRequest.getRequestUrl().length()>0}">
@@ -831,14 +818,14 @@
                                                     </ui:fragment>
 
                                                     <ui:fragment rendered="#{httpRequest.getUser_Agent().length()>0}">
-                                                    <td><span style="white-space: nowrap;"><span
-                                                            class="httpHeader">User-Agent: </span>#{httpRequest.getUser_Agent()}</span>
-                                                    </td>
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">User-Agent: </span>#{httpRequest.getUser_Agent()}</span>
+                                                        </td>
                                                     </ui:fragment>
                                                     <ui:fragment rendered="#{httpRequest.getRequestVersion().length()>0}">
-                                                    <td><span style="white-space: nowrap;"><span
-                                                            class="httpHeader">RequestVersion: </span>#{httpRequest.getRequestVersion()}</span>
-                                                    </td>
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">RequestVersion: </span>#{httpRequest.getRequestVersion()}</span>
+                                                        </td>
                                                     </ui:fragment>
                                                     <ui:fragment rendered="#{httpRequest.getAccept_Charset().length()>0}">
                                                         <td>
@@ -854,9 +841,9 @@
                                                         </td>
                                                     </ui:fragment>
                                                     <ui:fragment rendered="#{httpRequest.getCookie().length()>0}">
-                                                    <td><span style="white-space: nowrap;"><span
-                                                            class="httpHeader">Cookie: </span>#{httpRequest.getCookie()}</span>
-                                                    </td>
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">Cookie: </span>#{httpRequest.getCookie()}</span>
+                                                        </td>
                                                     </ui:fragment>
                                                     <ui:fragment rendered="#{httpRequest.getDate().length()>0}">
                                                         <td><span style="white-space: nowrap;"><span
@@ -864,9 +851,9 @@
                                                         </td>
                                                     </ui:fragment>
                                                     <ui:fragment rendered="#{httpRequest.getReferer().length()>0}">
-                                                    <td><span style="white-space: nowrap;"><span
-                                                            class="httpHeader">Referer: </span>#{httpRequest.getReferer()}</span>
-                                                    </td>
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">Referer: </span>#{httpRequest.getReferer()}</span>
+                                                        </td>
                                                     </ui:fragment>
 
                                                     <ui:fragment rendered="#{httpRequest.getAccept_Ranges().length()>0}">
@@ -947,6 +934,474 @@
                                             </ui:fragment>
                                             <ui:fragment rendered="#{http.isResponse()}">
                                                 <c:set var="httpResponse" value="#{http.castToResponse()}"></c:set>
+                                                <tr class="inlineable col-md-12 no-padding">
+                                                    <td style="padding: 8px;"
+                                                        class="col-md-1 inline">RESP</td>
+                                                    <td style="padding: 8px;" class="col-md-4 inline">
+                                                        <div style="overflow: hidden; text-overflow: ellipsis;"><span
+                                                                style="white-space: nowrap;">#{httpResponse.getResponseCode()}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td style="padding: 8px;" class="col-md-6 inline">
+                                                        <div style="overflow: hidden; text-overflow: ellipsis;"><span
+                                                                style="white-space: nowrap;">#{httpResponse.getRequestUrl()} </span>
+                                                        </div>
+                                                    </td>
+
+                                                    <ui:fragment rendered="#{httpResponse.getAccept_Ranges().length()>0}">
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">Accept_Ranges: </span>#{httpResponse.getAccept_Ranges()}</span>
+                                                        </td>
+                                                    </ui:fragment>
+                                                    <ui:fragment rendered="#{httpResponse.getAge().length()>0}">
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">Age: </span>#{httpResponse.getAge()}</span>
+                                                        </td>
+                                                    </ui:fragment>
+
+                                                    <ui:fragment rendered="#{httpResponse.getAllow().length()>0}">
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">Allow: </span>#{httpResponse.getAllow()}</span>
+                                                        </td>
+                                                    </ui:fragment>
+
+                                                    <ui:fragment rendered="#{httpResponse.getCache_Control().length()>0}">
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">Cache_Control: </span>#{httpResponse.getCache_Control()}</span>
+                                                        </td>
+                                                    </ui:fragment>
+
+                                                    <ui:fragment rendered="#{httpResponse.getContent_Disposition().length()>0}">
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">Content_Disposition: </span>#{httpResponse.getContent_Disposition()}</span>
+                                                        </td>
+                                                    </ui:fragment>
+
+                                                    <ui:fragment rendered="#{httpResponse.getContent_Encoding().length()>0}">
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">Content_Encoding: </span>#{httpResponse.getContent_Encoding()}</span>
+                                                        </td>
+                                                    </ui:fragment>
+
+                                                    <ui:fragment rendered="#{httpResponse.getContent_Length().length()>0}">
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">Content_Length: </span>#{httpResponse.getContent_Length()}</span>
+                                                        </td>
+                                                    </ui:fragment>
+
+                                                    <ui:fragment rendered="#{httpResponse.getContent_Location().length()>0}">
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">Content_Location: </span>#{httpResponse.getContent_Location()}</span>
+                                                        </td>
+                                                    </ui:fragment>
+
+                                                    <ui:fragment rendered="#{httpResponse.getContent_MD5().length()>0}">
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">Content_MD5: </span>#{httpResponse.getContent_MD5()}</span>
+                                                        </td>
+                                                    </ui:fragment>
+
+                                                    <ui:fragment rendered="#{httpResponse.getContent_Range().length()>0}">
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">Content_Range: </span>#{httpResponse.getContent_Range()}</span>
+                                                        </td>
+                                                    </ui:fragment>
+
+                                                    <ui:fragment rendered="#{httpResponse.getContent_Type().length()>0}">
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">Content_Type: </span>#{httpResponse.getContent_Type()}</span>
+                                                        </td>
+                                                    </ui:fragment>
+
+                                                    <ui:fragment rendered="#{httpResponse.getExpires().length()>0}">
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">Expires: </span>#{httpResponse.getExpires()}</span>
+                                                        </td>
+                                                    </ui:fragment>
+
+                                                    <ui:fragment rendered="#{httpResponse.getRequestUrl().length()>0}">
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">RequestUrl: </span>#{httpResponse.getRequestUrl()}</span>
+                                                        </td>
+                                                    </ui:fragment>
+
+                                                    <ui:fragment rendered="#{httpResponse.getRequestVersion().length()>0}">
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">RequestVersion: </span>#{httpResponse.getRequestVersion()}</span>
+                                                        </td>
+                                                    </ui:fragment>
+
+                                                    <ui:fragment rendered="#{httpResponse.getResponseCode().length()>0}">
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">ResponseCode: </span>#{httpResponse.getResponseCode()}</span>
+                                                        </td>
+                                                    </ui:fragment>
+
+                                                    <ui:fragment rendered="#{httpResponse.getResponseCodeMsg().length()>0}">
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">ResponseCodeMsg: </span>#{httpResponse.getResponseCodeMsg()}</span>
+                                                        </td>
+                                                    </ui:fragment>
+
+                                                    <ui:fragment rendered="#{httpResponse.getServer().length()>0}">
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">Server: </span>#{httpResponse.getServer()}</span>
+                                                        </td>
+                                                    </ui:fragment>
+
+                                                    <ui:fragment rendered="#{httpResponse.getSet_Cookie().length()>0}">
+                                                        <td><span style="white-space: nowrap;"><span
+                                                                class="httpHeader">Set_Cookie: </span>#{httpResponse.getSet_Cookie()}</span>
+                                                        </td>
+                                                    </ui:fragment>
+                                                    <td>
+                                                        <p:commandLink action="#{taskViewBean.expandedViewOn(httpResponse)}"
+                                                                       styleClass="btn btn-default" update="expandedModal chartDataForm"
+                                                                       oncomplete="$('#sessionDataModal').modal('toggle'); drawChart(); updateEventListeners();"
+                                                                       value="Expanded view">
+
+                                                        </p:commandLink>
+                                                    </td>
+                                                </tr>
+
+                                            </ui:fragment>
+                                        </ui:repeat>
+
+                                        </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <td colspan="7">
+                                                <ul class="pagination pull-right"></ul>
+                                            </td>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+
+                                </c:if>
+
+                                <div style="height:35px; margin-top: 0px;">
+                                    <c:if test="#{taskViewBean.httpViewMode}">
+                                        <span style="display: inline-block; padding: 6px;">Отображается  #{taskViewBean.httpListPage.size()} из #{taskViewBean.httpList.size()}</span>
+                                    </c:if>
+                                    <c:if test="#{taskViewBean.sessionViewMode}">
+                                        <span style="display: inline-block; padding: 6px;">Отображается #{taskViewBean.sessionListPage.size()} из #{taskViewBean.sessionList.size()}</span>
+                                    </c:if>
+
+                                    <p:commandLink styleClass="btn btn-default pull-left"
+                                                   value="Загрузить ещо"
+                                                   update="ses_http_view sessionHttpMode" action="#{taskViewBean.loadMore()}" oncomplete="buildFoo();"></p:commandLink>
+                                </div>
+                            </h:panelGroup>
+
+
+                        </div>
+
+                    </div>
+                </h:panelGroup>
+
+            </div>
+            <div class="footer">
+                <div class="pull-right">
+                    10GB of <strong>250GB</strong> Free.
+                </div>
+
+                    <h:panelGroup id="pcapFilter" layout="block">
+                               <strong>LibPcap filter:</strong> #{taskViewBean.pcapFilter}
+                    </h:panelGroup>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="sessionDataModal" class="modal inmodal" tabindex="-1" aria-hidden="true" role="dialog">
+        <h:panelGroup layout="block" id="expandedModal" styleClass="modal-dialog modal-lg">
+            <div class="modal-content animated fadeIn">
+                <div class="modal-header">
+                    <span style="font-size: medium;">Информация о сессии</span>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"></span><span
+                            class="sr-only">Close</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="tabs-container">
+                        <ul class="nav nav-tabs">
+                            <!--   <li class="active"><a data-toggle="tab" href="#tabHttp">HTTP</a></li>   -->
+                            <li><a data-toggle="tab" href="#tabChart" onmouseup="drawChart();">График</a></li>
+                            <li><a data-toggle="tab" href="#tabRawSrc">Данные инициатора</a></li>
+                            <li><a data-toggle="tab" href="#tabRawDst">Данные к инициатору</a></li>
+                            <c:if test="#{taskViewBean.isHttpViewMode()}">
+                                <li><a data-toggle="tab" href="#tabSelectedPacket">Данные в пакете</a></li>
+                            </c:if>
+                            <c:if test="#{taskViewBean.isSessionViewMode()}">
+                                <li><a data-toggle="tab" href="#sessionHttpView">HTTP</a></li>
+                            </c:if>
+
+
+                            <li><a data-toggle="tab" href="#tabSessionRawData">Данные последовательно</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane" id="tabHttp">
+                                <div class="panel-body">
+                                    <div class="ibox clearfix">
+                                        <div class="ibox-title">
+                                            <a class="collapse-link">
+                                                <div class="inline col-lg-11 no-padding">
+                                                    <div class="col-md-1 no-padding"><span
+                                                            style="display: inline-block; font-family: Verdana; font-size: 12pt; color: #ebebed; background-color: #0a6aa1; padding: 2px  5px  2px 5px;">GET</span>
+                                                    </div>
+                                                    <div id="content" class="col-md-11"
+                                                         style="overflow: hidden; text-overflow: ellipsis;"><span
+                                                            style="font-size: 12pt; font-style: inherit; ">binupdate.mail.ru/updater/version.xmlfgfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff </span>
+                                                    </div>
+
+                                                </div>
+                                            </a>
+                                            <div class="text-right ibox-tools inline col-lg-1">
+
+                                                <a id="copy-button" data-clipboard-target="#content"
+                                                   class="copy-text dropdown-toggle">
+                                                    <i class="fa fa-wrench"></i>
+                                                </a>
+
+                                            </div>
+
+
+                                        </div>
+                                        <table class="table table-hover modal__table">
+                                            <tbody>
+                                            <tr>
+                                                <td class="text-center border-right">HOST</td>
+                                                <td>amazon.comnmazonamazonamazonamaznamazonamaznamazonamazonamazonamdfdfdfdfdfdfdfdfdfdfdfddfazonamazonamazonamazonamazon amazonamazonamazon</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center border-right">HOST</td>
+                                                <td style="overflow: auto;">amazon.com</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center border-right">HOST</td>
+                                                <td>amazon.com</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane active" id="tabChart">
+                                <div class="panel-body">
+                                    <div id="sessionModalChart" class="full-width full-height"></div>
+
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tabRawSrc">
+                                <div class="panel-body">
+                                    <p:inputTextarea id="dstDataArea" autoResize="true" readonly="true" style="overflow: scroll; height: 500px;" styleClass="full-width full-height"  value="#{taskViewBean.selectedSesSrcData}"></p:inputTextarea>
+                                    <!--   <div class="tabs-container">
+                                           <ul class="nav nav-tabs">
+                                               <li class="active"><a data-toggle="tab" href="#Source">Source</a></li>
+                                               <li><a data-toggle="tab" href="#Destination">Destination</a></li>
+                                           </ul>
+                                           <div class="tab-content">
+                                               <div class="tab-pane active" id="Source">
+                                                   <p:inputTextarea autoResize="true" readonly="true" value="#{taskViewBean.selectedSesSrcData}"></p:inputTextarea>
+                                               </div>
+                                               <div class="tab-pane" id="Destination">
+                                                   <p:inputTextarea autoResize="true" readonly="true" value="#{taskViewBean.selectedSesDstData}"></p:inputTextarea>
+                                               </div>
+                                           </div>
+                                       </div>
+                                       -->
+
+                                </div>
+
+                            </div>
+                            <div class="tab-pane" id="tabRawDst">
+                                <div class="panel-body">
+                                    <p:inputTextarea id="srcDataArea" autoResize="true"  readonly="true" style="overflow: scroll; height: 500px;" styleClass="full-width full-height"  value="#{taskViewBean.selectedSesDstData}"></p:inputTextarea>
+                                </div>
+                            </div>
+                            <c:if test="#{taskViewBean.isHttpViewMode()}">
+                                <div class="tab-pane" id="tabSelectedPacket">
+                                    <div class="panel-body">
+                                        <p:inputTextarea id="packetArea" autoResize="true"  readonly="true" style="overflow: scroll; height: 500px;" styleClass="full-width full-height"  value="#{taskViewBean.selectedPacketData}"></p:inputTextarea>
+                                    </div>
+                                </div>
+                            </c:if>
+                            <div class="tab-pane" id="tabSessionRawData">
+                                <div class="panel-body">
+                                    <p:inputTextarea id="sesArea" autoResize="true"  readonly="true" style="overflow: scroll; height: 500px;" styleClass="full-width full-height"  value="#{taskViewBean.selectedPacSessionData}"></p:inputTextarea>
+                                </div>
+                            </div>
+
+                            <c:if test="#{taskViewBean.isSessionViewMode()}">
+                                <div class="tab-pane" id="sessionHttpView">
+                                    <div class="panel-body" style="overflow: auto;">
+
+                                        <table id="http_foo_view" class="fooModal table table-stripped toggle-arrow-tiny inline col-md-12 no-padding"
+                                               data-page-size="11" data-filter='#filter'>
+                                            <thead class="inline col-md-12 no-padding">
+                                            <tr class="inline col-md-12 no-padding">
+                                                <th class="col-md-1 inline no-borders" data-toggle="true">Тип</th>
+                                                <th class="col-md-11 inline no-borders">Ресурс</th>
+
+                                                <th data-hide="all"></th>
+                                                <th data-hide="all"></th>
+                                                <th data-hide="all"></th>
+                                                <th data-hide="all"></th>
+                                                <th data-hide="all"></th>
+                                                <th data-hide="all"></th>
+                                                <th data-hide="all"></th>
+                                                <th data-hide="all"></th>
+                                                <th data-hide="all"></th>
+                                                <th data-hide="all"></th>
+                                                <th data-hide="all"></th>
+                                                <th data-hide="all"></th>
+                                                <th data-hide="all"></th>
+                                                <th data-hide="all"></th>
+                                            </tr>
+
+                                            </thead>
+                                            <tbody class="inline col-md-12 no-padding">
+                                            <ui:repeat value="#{taskViewBean.selectedSesBean.getHttpBuf()}" var="http">
+                                                <ui:fragment rendered="#{http.isRequest()}">
+                                                    <c:set var="httpRequest" value="#{http.castToRequest()}"></c:set>
+                                                    <tr class="inlineable col-md-12 no-padding">
+                                                        <td style="padding: 8px;"
+                                                            class="col-md-1 inline">#{httpRequest.getRequestMethod()}</td>
+                                                        <td style="padding: 8px;" class="col-md-6 inline">
+                                                            <div style="overflow: hidden; text-overflow: ellipsis;"><span
+                                                                    style="white-space: nowrap;">#{httpRequest.getFullRequestUrl()}</span>
+                                                            </div>
+                                                        </td>
+
+
+                                                        <ui:fragment rendered="#{httpRequest.getHost().length()>0}">
+                                                            <td><span style="white-space: nowrap;"><span
+                                                                    class="httpHeader">Host: </span>#{httpRequest.getHost()} </span>
+                                                            </td>
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="#{httpRequest.getRequestUrl().length()>0}">
+                                                            <td><span style="white-space: nowrap;"><span
+                                                                    class="httpHeader">RequestUrl: </span>#{httpRequest.getRequestUrl()}</span>
+                                                            </td>
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="#{httpRequest.getUser_Agent().length()>0}">
+                                                            <td><span style="white-space: nowrap;"><span
+                                                                    class="httpHeader">User-Agent: </span>#{httpRequest.getUser_Agent()}</span>
+                                                            </td>
+                                                        </ui:fragment>
+                                                        <ui:fragment rendered="#{httpRequest.getRequestVersion().length()>0}">
+                                                            <td><span style="white-space: nowrap;"><span
+                                                                    class="httpHeader">RequestVersion: </span>#{httpRequest.getRequestVersion()}</span>
+                                                            </td>
+                                                        </ui:fragment>
+                                                        <ui:fragment rendered="#{httpRequest.getAccept_Charset().length()>0}">
+                                                            <td>
+                                                            <span style="white-space: nowrap;"><span
+                                                                    class="httpHeader">Accept_Charset: </span>#{httpRequest.getAccept_Charset()}</span>
+                                                            </td>
+                                                        </ui:fragment>
+                                                        <ui:fragment
+                                                                rendered="#{httpRequest.getAccept_Encoding().length()>0}">
+                                                            <td>
+                                                            <span style="white-space: nowrap;"><span
+                                                                    class="httpHeader">Accept_Encoding: </span>#{httpRequest.getAccept_Encoding()}</span>
+                                                            </td>
+                                                        </ui:fragment>
+                                                        <ui:fragment rendered="#{httpRequest.getCookie().length()>0}">
+                                                            <td><span style="white-space: nowrap;"><span
+                                                                    class="httpHeader">Cookie: </span>#{httpRequest.getCookie()}</span>
+                                                            </td>
+                                                        </ui:fragment>
+                                                        <ui:fragment rendered="#{httpRequest.getDate().length()>0}">
+                                                            <td><span style="white-space: nowrap;"><span
+                                                                    class="httpHeader">Date: </span>#{httpRequest.getDate()}</span>
+                                                            </td>
+                                                        </ui:fragment>
+                                                        <ui:fragment rendered="#{httpRequest.getReferer().length()>0}">
+                                                            <td><span style="white-space: nowrap;"><span
+                                                                    class="httpHeader">Referer: </span>#{httpRequest.getReferer()}</span>
+                                                            </td>
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="#{httpRequest.getAccept_Ranges().length()>0}">
+                                                            <td><span style="white-space: nowrap;"><span
+                                                                    class="httpHeader">Accept_Ranges: </span>#{httpRequest.getAccept_Ranges()}</span>
+                                                            </td>
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="#{httpRequest.getAuthorization().length()>0}">
+                                                            <td><span style="white-space: nowrap;"><span
+                                                                    class="httpHeader">Authorization: </span>#{httpRequest.getAuthorization()}</span>
+                                                            </td>
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="#{httpRequest.getCache_Control().length()>0}">
+                                                            <td><span style="white-space: nowrap;"><span
+                                                                    class="httpHeader">Cache_Control: </span>#{httpRequest.getCache_Control()}</span>
+                                                            </td>
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="#{httpRequest.getConnection().length()>0}">
+                                                            <td><span style="white-space: nowrap;"><span
+                                                                    class="httpHeader">Connection: </span>#{httpRequest.getConnection()}</span>
+                                                            </td>
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="#{httpRequest.getContent_Length().length()>0}">
+                                                            <td><span style="white-space: nowrap;"><span
+                                                                    class="httpHeader">Content_Length: </span>#{httpRequest.getContent_Length()}</span>
+                                                            </td>
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="#{httpRequest.getContent_Type().length()>0}">
+                                                            <td><span style="white-space: nowrap;"><span
+                                                                    class="httpHeader">Content_Type: </span>#{httpRequest.getContent_Type()}</span>
+                                                            </td>
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="#{httpRequest.getIf_Modified_Since().length()>0}">
+                                                            <td><span style="white-space: nowrap;"><span
+                                                                    class="httpHeader">If_Modified_Since: </span>#{httpRequest.getIf_Modified_Since()}</span>
+                                                            </td>
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="#{httpRequest.getIf_None_Match().length()>0}">
+                                                            <td><span style="white-space: nowrap;"><span
+                                                                    class="httpHeader">If_None_Match: </span>#{httpRequest.getIf_None_Match()}</span>
+                                                            </td>
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="#{httpRequest.getProxy_Connection().length()>0}">
+                                                            <td><span style="white-space: nowrap;"><span
+                                                                    class="httpHeader">Proxy_Connection: </span>#{httpRequest.getProxy_Connection()}</span>
+                                                            </td>
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="#{httpRequest.getRequestMethod().length()>0}">
+                                                            <td><span style="white-space: nowrap;"><span
+                                                                    class="httpHeader">RequestMethod: </span>#{httpRequest.getRequestMethod()}</span>
+                                                            </td>
+                                                        </ui:fragment>
+
+                                                        <ui:fragment rendered="#{httpRequest.getUA_CPU().length()>0}">
+                                                            <td><span style="white-space: nowrap;"><span
+                                                                    class="httpHeader">UA_CPU: </span>#{httpRequest.getUA_CPU()}</span>
+                                                            </td>
+                                                        </ui:fragment>
+                                                        <td>
+                                                            <p:commandLink action="#{taskViewBean.expandedViewOn(httpRequest)}"
+                                                                           styleClass="btn btn-default" update="expandedModal chartDataForm"
+                                                                           oncomplete="$('#sessionDataModal').modal('toggle'); drawChart(); updateEventListeners();"
+                                                                           value="Expanded view">
+
+                                                            </p:commandLink>
+                                                        </td>
+
+                                                    </tr>
+                                                </ui:fragment>
+                                                <ui:fragment rendered="#{http.isResponse()}">
+                                                    <c:set var="httpResponse" value="#{http.castToResponse()}"></c:set>
                                                     <tr class="inlineable col-md-12 no-padding">
                                                         <td style="padding: 8px;"
                                                             class="col-md-1 inline">RESP</td>
@@ -1077,479 +1532,18 @@
                                                         </td>
                                                     </tr>
 
-                                            </ui:fragment>
-                                        </ui:repeat>
+                                                </ui:fragment>
+                                            </ui:repeat>
 
-                                        </tbody>
-                                        <tfoot>
-                                        <tr>
-                                            <td colspan="7">
-                                                <ul class="pagination pull-right"></ul>
-                                            </td>
-                                        </tr>
-                                        </tfoot>
-                                    </table>
-
-                                </c:if>
-
-                                <div>
-                                    <c:if test="#{taskViewBean.httpViewMode}">
-                                        <span>Viewing #{taskViewBean.httpListPage.size()} from #{taskViewBean.httpList.size()}</span>
-                                    </c:if>
-                                    <c:if test="#{taskViewBean.sessionViewMode}">
-                                        <span>Viewing #{taskViewBean.sessionListPage.size()} from #{taskViewBean.sessionList.size()}</span>
-                                    </c:if>
-
-                                    <p:commandLink styleClass="btn btn-default pull-left"
-                                                   value="Load more"
-                                                   update="ses_http_view sessionHttpMode" action="#{taskViewBean.loadMore()}" oncomplete="buildFoo();"></p:commandLink>
-                                </div>
-                            </h:panelGroup>
-
-
-                        </div>
-
-                    </div>
-                </h:panelGroup>
-
-            </div>
-
-        </div>
-    </div>
-
-
-    <div id="sessionDataModal" class="modal inmodal" tabindex="-1" aria-hidden="true" role="dialog">
-        <h:panelGroup layout="block" id="expandedModal" styleClass="modal-dialog modal-lg">
-            <div class="modal-content animated fadeIn">
-                <div class="modal-header">
-                    <span style="font-size: medium;">Session Info</span>
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&amp;times;</span><span
-                            class="sr-only">Close</span></button>
-                </div>
-                <div class="modal-body">
-                    <span>Session Data</span>
-                    <div class="tabs-container">
-                        <ul class="nav nav-tabs">
-                         <!--   <li class="active"><a data-toggle="tab" href="#tabHttp">HTTP</a></li>   -->
-                            <li><a data-toggle="tab" href="#tabChart" onmouseup="drawChart();">Chart</a></li>
-                            <li><a data-toggle="tab" href="#tabRawSrc">Raw Src data</a></li>
-                            <li><a data-toggle="tab" href="#tabRawDst">Raw Dst data</a></li>
-                            <c:if test="#{taskViewBean.isHttpViewMode()}">
-                                <li><a data-toggle="tab" href="#tabSelectedPacket">SelectedPacket</a></li>
-                            </c:if>
-                            <c:if test="#{taskViewBean.isSessionViewMode()}">
-                                <li><a data-toggle="tab" href="#sessionHttpView">HTTP</a></li>
-                            </c:if>
-
-
-                            <li><a data-toggle="tab" href="#tabSessionRawData">Raw data</a></li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="tabHttp">
-                                <div class="panel-body">
-                                    <div class="ibox clearfix">
-                                        <div class="ibox-title">
-                                            <a class="collapse-link">
-                                                <div class="inline col-lg-11 no-padding">
-                                                    <div class="col-md-1 no-padding"><span
-                                                            style="display: inline-block; font-family: Verdana; font-size: 12pt; color: #ebebed; background-color: #0a6aa1; padding: 2px  5px  2px 5px;">GET</span>
-                                                    </div>
-                                                    <div id="content" class="col-md-11"
-                                                         style="overflow: hidden; text-overflow: ellipsis;"><span
-                                                            style="font-size: 12pt; font-style: inherit; ">binupdate.mail.ru/updater/version.xmlfgfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff </span>
-                                                    </div>
-
-                                                </div>
-                                            </a>
-                                            <div class="text-right ibox-tools inline col-lg-1">
-
-                                                <a id="copy-button" data-clipboard-target="#content"
-                                                   class="copy-text dropdown-toggle">
-                                                    <i class="fa fa-wrench"></i>
-                                                </a>
-
-                                            </div>
-
-
-                                        </div>
-                                        <table class="table table-hover modal__table">
-                                            <tbody>
-                                            <tr>
-                                                <td class="text-center border-right">HOST</td>
-                                                <td>amazon.comnmazonamazonamazonamaznamazonamaznamazonamazonamazonamdfdfdfdfdfdfdfdfdfdfdfddfazonamazonamazonamazonamazon amazonamazonamazon</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center border-right">HOST</td>
-                                                <td style="overflow: auto;">amazon.com</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center border-right">HOST</td>
-                                                <td>amazon.com</td>
-                                            </tr>
                                             </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <td colspan="7">
+                                                    <ul class="pagination pull-right"></ul>
+                                                </td>
+                                            </tr>
+                                            </tfoot>
                                         </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="tabChart">
-                                <div class="panel-body">
-                                    <div id="sessionModalChart" class="full-width full-height"></div>
-
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="tabRawSrc">
-                                <div class="panel-body">
-                                    <p:inputTextarea id="dstDataArea" autoResize="true" readonly="true" style="overflow: scroll; height: 500px;" styleClass="full-width full-height"  value="#{taskViewBean.selectedSesSrcData}"></p:inputTextarea>
-                                 <!--   <div class="tabs-container">
-                                        <ul class="nav nav-tabs">
-                                            <li class="active"><a data-toggle="tab" href="#Source">Source</a></li>
-                                            <li><a data-toggle="tab" href="#Destination">Destination</a></li>
-                                        </ul>
-                                        <div class="tab-content">
-                                            <div class="tab-pane active" id="Source">
-                                                <p:inputTextarea autoResize="true" readonly="true" value="#{taskViewBean.selectedSesSrcData}"></p:inputTextarea>
-                                            </div>
-                                            <div class="tab-pane" id="Destination">
-                                                <p:inputTextarea autoResize="true" readonly="true" value="#{taskViewBean.selectedSesDstData}"></p:inputTextarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    -->
-
-                                </div>
-
-                            </div>
-                            <div class="tab-pane" id="tabRawDst">
-                                <div class="panel-body">
-                                    <p:inputTextarea id="srcDataArea" autoResize="true"  readonly="true" style="overflow: scroll; height: 500px;" styleClass="full-width full-height"  value="#{taskViewBean.selectedSesDstData}"></p:inputTextarea>
-                                </div>
-                            </div>
-                            <c:if test="#{taskViewBean.isHttpViewMode()}">
-                                <div class="tab-pane" id="tabSelectedPacket">
-                                    <div class="panel-body">
-                                        <p:inputTextarea id="packetArea" autoResize="true"  readonly="true" style="overflow: scroll; height: 500px;" styleClass="full-width full-height"  value="#{taskViewBean.selectedPacketData}"></p:inputTextarea>
-                                    </div>
-                                </div>
-                            </c:if>
-                            <div class="tab-pane" id="tabSessionRawData">
-                                <div class="panel-body">
-                                    <p:inputTextarea id="sesArea" autoResize="true"  readonly="true" style="overflow: scroll; height: 500px;" styleClass="full-width full-height"  value="#{taskViewBean.selectedPacSessionData}"></p:inputTextarea>
-                                </div>
-                            </div>
-
-                            <c:if test="#{taskViewBean.isSessionViewMode()}">
-                                <div class="tab-pane" id="sessionHttpView">
-                                    <div class="panel-body" style="overflow: auto;">
-
-                                            <table id="http_foo_view" class="fooModal table table-stripped toggle-arrow-tiny inline col-md-12 no-padding"
-                                                   data-page-size="11" data-filter='#filter'>
-                                                <thead class="inline col-md-12 no-padding">
-                                                <tr class="inline col-md-12 no-padding">
-                                                    <th class="col-md-1 inline no-borders" data-toggle="true">Type</th>
-                                                    <th class="col-md-11 inline no-borders">Resource</th>
-
-                                                    <th data-hide="all"></th>
-                                                    <th data-hide="all"></th>
-                                                    <th data-hide="all"></th>
-                                                    <th data-hide="all"></th>
-                                                    <th data-hide="all"></th>
-                                                    <th data-hide="all"></th>
-                                                    <th data-hide="all"></th>
-                                                    <th data-hide="all"></th>
-                                                    <th data-hide="all"></th>
-                                                    <th data-hide="all"></th>
-                                                    <th data-hide="all"></th>
-                                                    <th data-hide="all"></th>
-                                                    <th data-hide="all"></th>
-                                                    <th data-hide="all"></th>
-                                                </tr>
-
-                                                </thead>
-                                                <tbody class="inline col-md-12 no-padding">
-                                                <ui:repeat value="#{taskViewBean.selectedSesBean.getHttpBuf()}" var="http">
-                                                    <ui:fragment rendered="#{http.isRequest()}">
-                                                        <c:set var="httpRequest" value="#{http.castToRequest()}"></c:set>
-                                                        <tr class="inlineable col-md-12 no-padding">
-                                                            <td style="padding: 8px;"
-                                                                class="col-md-1 inline">#{httpRequest.getRequestMethod()}</td>
-                                                            <td style="padding: 8px;" class="col-md-6 inline">
-                                                                <div style="overflow: hidden; text-overflow: ellipsis;"><span
-                                                                        style="white-space: nowrap;">#{httpRequest.getFullRequestUrl()}</span>
-                                                                </div>
-                                                            </td>
-
-
-                                                            <ui:fragment rendered="#{httpRequest.getHost().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Host: </span>#{httpRequest.getHost()} </span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpRequest.getRequestUrl().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">RequestUrl: </span>#{httpRequest.getRequestUrl()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpRequest.getUser_Agent().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">User-Agent: </span>#{httpRequest.getUser_Agent()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-                                                            <ui:fragment rendered="#{httpRequest.getRequestVersion().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">RequestVersion: </span>#{httpRequest.getRequestVersion()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-                                                            <ui:fragment rendered="#{httpRequest.getAccept_Charset().length()>0}">
-                                                                <td>
-                                                            <span style="white-space: nowrap;"><span
-                                                                    class="httpHeader">Accept_Charset: </span>#{httpRequest.getAccept_Charset()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-                                                            <ui:fragment
-                                                                    rendered="#{httpRequest.getAccept_Encoding().length()>0}">
-                                                                <td>
-                                                            <span style="white-space: nowrap;"><span
-                                                                    class="httpHeader">Accept_Encoding: </span>#{httpRequest.getAccept_Encoding()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-                                                            <ui:fragment rendered="#{httpRequest.getCookie().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Cookie: </span>#{httpRequest.getCookie()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-                                                            <ui:fragment rendered="#{httpRequest.getDate().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Date: </span>#{httpRequest.getDate()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-                                                            <ui:fragment rendered="#{httpRequest.getReferer().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Referer: </span>#{httpRequest.getReferer()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpRequest.getAccept_Ranges().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Accept_Ranges: </span>#{httpRequest.getAccept_Ranges()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpRequest.getAuthorization().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Authorization: </span>#{httpRequest.getAuthorization()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpRequest.getCache_Control().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Cache_Control: </span>#{httpRequest.getCache_Control()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpRequest.getConnection().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Connection: </span>#{httpRequest.getConnection()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpRequest.getContent_Length().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Content_Length: </span>#{httpRequest.getContent_Length()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpRequest.getContent_Type().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Content_Type: </span>#{httpRequest.getContent_Type()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpRequest.getIf_Modified_Since().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">If_Modified_Since: </span>#{httpRequest.getIf_Modified_Since()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpRequest.getIf_None_Match().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">If_None_Match: </span>#{httpRequest.getIf_None_Match()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpRequest.getProxy_Connection().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Proxy_Connection: </span>#{httpRequest.getProxy_Connection()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpRequest.getRequestMethod().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">RequestMethod: </span>#{httpRequest.getRequestMethod()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpRequest.getUA_CPU().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">UA_CPU: </span>#{httpRequest.getUA_CPU()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-                                                            <td>
-                                                                <p:commandLink action="#{taskViewBean.expandedViewOn(httpRequest)}"
-                                                                               styleClass="btn btn-default" update="expandedModal chartDataForm"
-                                                                               oncomplete="$('#sessionDataModal').modal('toggle'); drawChart(); updateEventListeners();"
-                                                                               value="Expanded view">
-
-                                                                </p:commandLink>
-                                                            </td>
-
-                                                        </tr>
-                                                    </ui:fragment>
-                                                    <ui:fragment rendered="#{http.isResponse()}">
-                                                        <c:set var="httpResponse" value="#{http.castToResponse()}"></c:set>
-                                                        <tr class="inlineable col-md-12 no-padding">
-                                                            <td style="padding: 8px;"
-                                                                class="col-md-1 inline">RESP</td>
-                                                            <td style="padding: 8px;" class="col-md-4 inline">
-                                                                <div style="overflow: hidden; text-overflow: ellipsis;"><span
-                                                                        style="white-space: nowrap;">#{httpResponse.getResponseCode()}</span>
-                                                                </div>
-                                                            </td>
-                                                            <td style="padding: 8px;" class="col-md-6 inline">
-                                                                <div style="overflow: hidden; text-overflow: ellipsis;"><span
-                                                                        style="white-space: nowrap;">#{httpResponse.getRequestUrl()} </span>
-                                                                </div>
-                                                            </td>
-
-                                                            <ui:fragment rendered="#{httpResponse.getAccept_Ranges().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Accept_Ranges: </span>#{httpResponse.getAccept_Ranges()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-                                                            <ui:fragment rendered="#{httpResponse.getAge().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Age: </span>#{httpResponse.getAge()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpResponse.getAllow().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Allow: </span>#{httpResponse.getAllow()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpResponse.getCache_Control().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Cache_Control: </span>#{httpResponse.getCache_Control()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpResponse.getContent_Disposition().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Content_Disposition: </span>#{httpResponse.getContent_Disposition()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpResponse.getContent_Encoding().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Content_Encoding: </span>#{httpResponse.getContent_Encoding()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpResponse.getContent_Length().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Content_Length: </span>#{httpResponse.getContent_Length()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpResponse.getContent_Location().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Content_Location: </span>#{httpResponse.getContent_Location()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpResponse.getContent_MD5().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Content_MD5: </span>#{httpResponse.getContent_MD5()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpResponse.getContent_Range().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Content_Range: </span>#{httpResponse.getContent_Range()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpResponse.getContent_Type().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Content_Type: </span>#{httpResponse.getContent_Type()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpResponse.getExpires().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Expires: </span>#{httpResponse.getExpires()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpResponse.getRequestUrl().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">RequestUrl: </span>#{httpResponse.getRequestUrl()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpResponse.getRequestVersion().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">RequestVersion: </span>#{httpResponse.getRequestVersion()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpResponse.getResponseCode().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">ResponseCode: </span>#{httpResponse.getResponseCode()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpResponse.getResponseCodeMsg().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">ResponseCodeMsg: </span>#{httpResponse.getResponseCodeMsg()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpResponse.getServer().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Server: </span>#{httpResponse.getServer()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-
-                                                            <ui:fragment rendered="#{httpResponse.getSet_Cookie().length()>0}">
-                                                                <td><span style="white-space: nowrap;"><span
-                                                                        class="httpHeader">Set_Cookie: </span>#{httpResponse.getSet_Cookie()}</span>
-                                                                </td>
-                                                            </ui:fragment>
-                                                            <td>
-                                                                <p:commandLink action="#{taskViewBean.expandedViewOn(httpResponse)}"
-                                                                               styleClass="btn btn-default" update="expandedModal chartDataForm"
-                                                                               oncomplete="$('#sessionDataModal').modal('toggle'); drawChart(); updateEventListeners();"
-                                                                               value="Expanded view">
-
-                                                                </p:commandLink>
-                                                            </td>
-                                                        </tr>
-
-                                                    </ui:fragment>
-                                                </ui:repeat>
-
-                                                </tbody>
-                                                <tfoot>
-                                                <tr>
-                                                    <td colspan="7">
-                                                        <ul class="pagination pull-right"></ul>
-                                                    </td>
-                                                </tr>
-                                                </tfoot>
-                                            </table>
 
 
                                     </div>
@@ -1573,9 +1567,9 @@
     </h:form>
 
     <script src="jsf/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
- <!-- <script src="jsf/inspinia/js/plugins/footable/footable.all.min.js"></script>  -->
+    <!-- <script src="jsf/inspinia/js/plugins/footable/footable.all.min.js"></script>  -->
     <script src="jsf/inspinia/js/AppView.js"></script>
-   <!-- <script src="jsf/inspinia/js/foomy.js"></script>  -->
+    <!-- <script src="jsf/inspinia/js/foomy.js"></script>  -->
 
 
     <script src="jsf/inspinia/js/foov2/foomy.js"></script>
@@ -1587,9 +1581,14 @@
 
     <script>
         $(document).ready(function () {
+
             buildFoo();
         });
         function buildFoo() {
+            var fooRowCount = ($('body').height() - 300)/36;
+            fooRowCount = Math.floor(fooRowCount);
+            $('#http_foo_view').attr('data-page-size',fooRowCount);
+            $('#fooTable').attr('data-page-size',fooRowCount);
             $('.footable').footable();
         }
         function buildFooModal() {

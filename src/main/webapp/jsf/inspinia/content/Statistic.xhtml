@@ -60,12 +60,12 @@
 
         function drawChart() {
             var dataModel = new google.visualization.DataTable();
-            dataModel.addColumn('number', 'Time');
-            dataModel.addColumn('number', 'Data IN');
-            dataModel.addColumn('number', 'Data OUT');
+            dataModel.addColumn('number', 'Время');
+            dataModel.addColumn('number', 'Принято');
+            dataModel.addColumn('number', 'Передано');
 
             var data = google.visualization.arrayToDataTable([
-                ['Year', 'Data IN', 'Data OUT'],
+                ['Время', 'Принято', 'Передано'],
 
                 #{statisticBean.chartDataStr}
 
@@ -73,12 +73,12 @@
 
 
             var options = {
-                title: 'Company Performance',
+                title: 'Трафик',
                 hAxis: {
-                    title: 'Time'
+                    title: 'время'
                 },
                 vAxis: {
-                    title: 'Popularity',
+                    title: 'объем',
                     ticks: [#{statisticBean.humanValues}]
 
                 },
@@ -86,7 +86,6 @@
             };
             var chart = new google.visualization.LineChart(document.getElementById('chartDiv'));
             chart.draw(data, options);
-
 
         }
 
@@ -266,7 +265,7 @@
 
                     <ui:repeat value="#{statisticBean.tableData}" var="row">
 
-                        <tr onclick="openSubView(this);" class="tableRow clickable-row" data-href='Nodes'>
+                        <tr onclick="openSubView(this);" style="cursor: pointer;" class="tableRow clickable-row" data-href='Nodes'>
                             <ui:repeat value="#{row}" var="item">
                                 <td>#{item}</td>
                             </ui:repeat>
@@ -284,7 +283,7 @@
                     10GB of <strong>250GB</strong> Free.
                 </div>
                 <div>
-                    <strong>Copyright</strong> Example Company 2014-2015
+                    <strong>Copyright</strong> SickNET 2017
                 </div>
             </div>
 

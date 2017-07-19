@@ -3,13 +3,6 @@ $(function () {
     google.charts.load('current', {packages: ['corechart']});
 });
 
-
-$(function(){
-
-    new Clipboard('.copy-text');
-});
-
-
 function drawChart() {
 
     var chartData = $(".chartData").val();
@@ -96,7 +89,7 @@ $(document).ready(function() {
     var chartObj =  $('.line');
     if (chartObj !== null && chartObj !== 'undefined') chartObj.peity('line',{height: 30, width: 100, fill: '#5791BC'});
     //heightAndScroll();
-    resizeBodyHandler();
+
 
     frame_ipInfoResizeNotifier.onresize = function(){
         onIpInfoResize();
@@ -105,6 +98,9 @@ $(document).ready(function() {
         onSubnetInfoResize();
     }
 
+    onIpInfoResize();
+    onSubnetInfoResize();
+    resizeBodyHandler();
 
 
 
@@ -408,6 +404,78 @@ function mySearchFunc() {
         } else {
             tr[i].style.cssText = 'display: none !important';
             console.log('niga off >>>'+tr[i].innerHTML);
+        }
+
+
+
+    }
+}
+
+
+function hostAllSearchFunc() {
+    // Declare variables
+    console.log('niga')
+    var input, filter, list, li,spans, span, i, j, show;
+    input = document.getElementById("hostAllPatternInput");
+    filter = input.value.toUpperCase();
+    list = document.getElementById("allIpUl");
+    li = list.getElementsByTagName("li");
+
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (i = 0; i < li.length; i++) {
+
+        show = false;
+        spans = li[i].getElementsByClassName("filter_button_ip");
+        for (j = 0; j<spans.length; j++) {
+            span=spans[j];
+            if (span) {
+                if (span.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    show = true;
+                }
+            }
+        }
+        if (show) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.cssText = 'display: none !important';
+            console.log('niga off >>>'+li[i].innerHTML);
+        }
+
+
+
+    }
+}
+
+
+function hostOnlineSearchFunc() {
+    // Declare variables
+    console.log('niga')
+    var input, filter, list, li,spans, span, i, j, show;
+    input = document.getElementById("hostOnlinePatternInput");
+    filter = input.value.toUpperCase();
+    list = document.getElementById("onlineIpUl");
+    li = list.getElementsByTagName("li");
+
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (i = 0; i < li.length; i++) {
+
+        show = false;
+        spans = li[i].getElementsByClassName("filter_button_ip");
+        for (j = 0; j<spans.length; j++) {
+            span=spans[j];
+            if (span) {
+                if (span.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    show = true;
+                }
+            }
+        }
+        if (show) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.cssText = 'display: none !important';
+            console.log('niga off >>>'+li[i].innerHTML);
         }
 
 

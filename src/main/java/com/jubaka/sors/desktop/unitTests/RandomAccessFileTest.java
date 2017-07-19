@@ -2,9 +2,11 @@ package com.jubaka.sors.desktop.unitTests;
 
 import com.jubaka.sors.appserver.serverSide.HostSessionFilter;
 import com.jubaka.sors.appserver.serverSide.SmartFilter;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**

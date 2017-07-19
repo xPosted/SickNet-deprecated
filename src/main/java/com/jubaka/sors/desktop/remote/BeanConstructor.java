@@ -500,7 +500,7 @@ public class BeanConstructor {
         bib.setHostsCount(sApi.getIPsCount());
         bib.setSessionsCount(sApi.getSessionsCount());
         if (br.getLastRecovered() != null)
-            bib.setRecoveredDataPath(currentFactory.getRecoveredDataPath(br.getId()));
+            bib.setRecoveredDataPath(currentFactory.getRecoveredDataPath(br.getId())+"result/");
         return bib;
     }
 
@@ -562,7 +562,7 @@ public class BeanConstructor {
     }
 
     public String getRawDataByRFileName(String name, String recoveredHome) {
-        File audit = new File(recoveredHome + "/" + "audit.txt");
+        File audit = new File(recoveredHome + "/../" + "audit.txt");
         Scanner scan = null;
         try {
             scan = new Scanner(audit);

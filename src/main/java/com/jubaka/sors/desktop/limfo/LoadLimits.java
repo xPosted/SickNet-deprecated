@@ -54,7 +54,7 @@ public class LoadLimits {
 		if (homeDir.list().length != 0) {
 			int res = -1;
 			if (silent)
-				res = 0;
+				res = -1;
 			else
 				res = JOptionPane.showConfirmDialog(null,
 					"Your home directory is not empty, clear it?");

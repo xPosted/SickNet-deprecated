@@ -34,6 +34,11 @@ public class ProfileBaen {
 
     @PostConstruct
     public void init() {
+        if (loginBean.getUser() == null) {
+                loginBean.redirectToLogIn();
+        }
+
+
         List<Branch> branchs = branchService.selectByCurrentUser();
         for (Branch b : branchs) {
             totalTasksCount++;

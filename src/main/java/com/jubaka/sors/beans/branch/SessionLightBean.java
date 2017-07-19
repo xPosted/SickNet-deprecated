@@ -1,6 +1,7 @@
 package com.jubaka.sors.beans.branch;
 
 import com.jubaka.sors.beans.Bean;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -129,5 +130,18 @@ public class SessionLightBean extends Bean implements Serializable {
     public String getClosedWebStr() {
         if (closed == null) return "Online";
         return sdf.format(closed);
+    }
+
+    public String getHumanDuration() {
+        if (closed != null) {
+            long duration = closed.getTime() - established.getTime();
+            duration = duration / 1000;
+            int min = (int)(duration / 60);
+            int sec = (int)(duration % 60);
+            return min+" min "+sec+"sec";
+
+        }
+        else return "alive";
+
     }
 }

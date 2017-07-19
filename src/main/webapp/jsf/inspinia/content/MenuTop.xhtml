@@ -18,7 +18,7 @@
                         data-toggle="collapse" class="navbar-toggle collapsed" type="button">
                     <i class="fa fa-reorder"></i>
                 </button>
-                <a href="app/jsf/inspinia/content/landing.xhtml" class="navbar-brand">Landing</a>
+                <a href="app/jsf/inspinia/content/landing.xhtml" class="navbar-brand">SickNET</a>
             </div>
             <div class="navbar-collapse collapse" id="navbar">
                 <ul class="nav navbar-nav">
@@ -26,7 +26,7 @@
                         <a role="button" href="layouts.html"> Back to main Layout page</a>
                     </li>
                     <li >
-                        <a  role="button" href="app/jsf/inspinia/content/Profile.xhtml"> Profile </a>
+                        <a  role="button" href="app/jsf/inspinia/content/Profile.xhtml"> Профиль </a>
                       <!--  <ul role="menu" class="dropdown-menu">
                             <li><a href="">Menu item</a></li>
                             <li><a href="">Menu item</a></li>
@@ -35,7 +35,7 @@
                         </ul>   -->
                     </li>
                     <li >
-                        <a  role="button" href="app/jsf/inspinia/content/TaskList_tmp.xhtml"> Task List </a>
+                        <a  role="button" href="app/jsf/inspinia/content/TaskList_tmp.xhtml"> Задачи </a>
                       <!--  <ul role="menu" class="dropdown-menu">
                             <li><a href="">Menu item</a></li>
                             <li><a href="">Menu item</a></li>
@@ -52,9 +52,9 @@
                         <ui:fragment rendered="#{taskViewBean.isTaskViewReady()}">
                             <a aria-expanded="false" class="dropdown-toggle" data-toggle="dropdown"  role="button"> #{taskViewBean.currentTaskName} </a>
                             <ul role="menu" class="dropdown-menu">
-                                <li><a href="app/jsf/inspinia/content/AppViewNoChart.xhtml">View</a></li>
-                                <li><a href="app/jsf/inspinia/content/Statistic.xhtml?dbid=#{dbid}">Statistic</a></li>
-                                <li><a href="app/jsf/inspinia/content/RecoveryView.xhtml?dbid=#{dbid}&amp;path=/"> Recovered files</a></li>
+                                <li><a href="app/jsf/inspinia/content/AppViewNoChart.xhtml">Смотреть</a></li>
+                                <li><a href="app/jsf/inspinia/content/Statistic.xhtml?dbid=#{dbid}">Статистика</a></li>
+                                <li><a href="app/jsf/inspinia/content/RecoveryView.xhtml?dbid=#{dbid}&amp;path=/">Востанновленные файлы</a></li>
 
                             </ul>
                         </ui:fragment>
@@ -87,7 +87,7 @@
                         <li>
                             <h:form>
                             <p:commandLink action="#{loginBean.logoutAction()}">
-                                <i class="fa fa-sign-out"></i> Log out
+                                <i class="fa fa-sign-out"></i> Выход
                             </p:commandLink>
                             </h:form>
                         </li>

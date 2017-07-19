@@ -29,8 +29,10 @@ public class Category {
     private List<Category> subCategories = new ArrayList<>();
     private List<SessionBean> sessionList;
     private List<HTTP> httpList = new ArrayList<>();
+    private Category parent =null;
 
     public Category(SmartFilter parentType) {
+
         this.parentType = parentType;
     }
 
@@ -134,8 +136,20 @@ public class Category {
         return subCategories;
     }
 
+    public Category getParent() {
+        return parent;
+    }
+
+    public void setParent(Category parent) {
+        this.parent = parent;
+    }
+
     public void setSubCategories(List<Category> subCategories) {
         this.subCategories = Collections.synchronizedList(subCategories);
+        for (Category subCat : subCategories) {
+            subCat.setParent(this);
+        }
+
     }
     public List<HTTP> getHttpList() {
         return httpList;
