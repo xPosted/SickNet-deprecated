@@ -635,7 +635,7 @@
                                                             #{sessionBean.getSrcP()}
                                                         </td>
                                                         <td>
-                                                            #{sessionBean.getDstP()} (???)
+                                                            #{sessionBean.getDstP()} (#{portServiceService.getServiceName(sessionBean.getDstP())})
                                                         </td>
                                                         <td>
                                                             #{taskViewBean.sizeToStr(sessionBean.getSrcDataLen(),2)}
@@ -723,10 +723,10 @@
                                                         <td>#{sessionBean.httpBuf.size()}</td>
 
                                                         <td>
-                                                            #{sessionBean.getSrcP()} (???)
+                                                            #{sessionBean.getSrcP()}
                                                         </td>
                                                         <td>
-                                                            #{sessionBean.getDstP()} (???)
+                                                            #{sessionBean.getDstP()} (#{portServiceService.getServiceName(sessionBean.getDstP())})
                                                         </td>
 
                                                         <td>

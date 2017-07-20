@@ -60,6 +60,7 @@ public class RecoverViewBean implements Serializable {
         Map<String,String> params = externalContext.getRequestParameterMap();
         String dbIdStr = params.get("dbid");
         String path = params.get("path");
+        //path = path.replaceAll("","/");
         long dbId = Long.parseLong(dbIdStr);
         currentDbId = dbId;
         Branch brEntity = branchService.selectByIdWithNets(dbId);

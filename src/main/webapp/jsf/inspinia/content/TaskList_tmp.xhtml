@@ -273,7 +273,7 @@
                                                 </td>
                                                 <td>#{taskListBean.sizeToStr(bib.uploadSize,2)}</td>
                                                 <td>#{bib.getTime()}</td>
-                                                <td> <p:commandLink styleClass="btn btn-w-m btn-danger" actionListener="#{taskListBean.deleteById(bib.getDbid())}" update="mainTableForm:tableBody"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </p:commandLink> </td>
+                                                <td> <p:commandLink styleClass="btn btn-w-m btn-danger"  disabled="true" actionListener="#{taskListBean.deleteById(bib.getDbid())}" update="mainTableForm:tableBody"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> </p:commandLink> </td>
 
                                             </tr>
                                         </ui:repeat>
@@ -348,7 +348,7 @@
             </div>
 
 
-            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+            <div id="createModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <h2 class="text-center nodesView_modal__heading">Create Task</h2>
@@ -370,7 +370,7 @@
                                         <h:panelGroup style="display: none;" layout="block" id="uploadedContent" class="panel panel-default">
                                             <div class="col-md-12">
                                                 <div style="padding: 10px;">
-                                                    <span>#{createTaskBean.getUploadedFileName()}</span>
+                                                    <span> <strong>#{createTaskBean.getUploadedFileName()}</strong></span>
                                                 </div>
                                                 <p:inputText disabled="#{ ! createTaskBean.isUploaded()}" styleClass="nodesView_modal__buttom form-control NodesView_control" value="#{createTaskBean.taskName}" placeholder="Task name"> </p:inputText>
 
@@ -385,7 +385,7 @@
 
                                 <div class="modal_footer">
                                     <div class="spase_between">
-                                        <p:commandButton id="create" data-dismiss="modal" ajax="true" styleClass="btn btn-primary" disabled="#{ ! createTaskBean.isUploaded()}" action="#{createTaskBean.upload()}" value="Create" update="mainTableForm:tableBody"></p:commandButton>
+                                        <p:commandButton id="create" data-dismiss="modal" ajax="true" styleClass="btn btn-primary" disabled="#{ ! createTaskBean.isUploaded()}" action="#{createTaskBean.upload()}" oncomplete="$('#createModal').modal('hide');" value="Create" update="mainTableForm:tableBody"></p:commandButton>
                                         <button id="cancel" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                     </div>
                                 </div>
