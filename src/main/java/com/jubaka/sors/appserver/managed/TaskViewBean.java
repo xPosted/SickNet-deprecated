@@ -220,6 +220,8 @@ public class TaskViewBean implements Serializable, Observer {
            // httpListPage.clear();     subList should not be cleared
             sessionList.clear();
           //  sessionListPage.clear();   subList should not be cleared
+            httpListPage = new ArrayList<>();
+            sessionListPage = new ArrayList<>();
 
 
             ipBean = null;
