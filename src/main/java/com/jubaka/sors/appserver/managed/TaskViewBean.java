@@ -196,6 +196,7 @@ public class TaskViewBean implements Serializable, Observer {
         liveNodeMode = false;
 
         blb = createTaskBean.viewNotReadyPersistedTask(localid);
+        currentTaskName = blb.getBib().getBranchName();
         ipBean = null;
         sbl = null;
 
@@ -436,6 +437,9 @@ public class TaskViewBean implements Serializable, Observer {
         if (dbMode) {
             if (dbTaskIdStr != null)
                 if (Long.parseLong(dbTaskIdStr)>=0) return true;
+        }
+        if (tmpLocalMode) {
+            if (currentTaskName != null) return true;
         }
         return false;
     }

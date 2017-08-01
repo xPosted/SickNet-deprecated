@@ -2,6 +2,6 @@
         <server-args>
 
             <port>443</port>
-            <uploadPath>/var/sorsTmp/</uploadPath>
+            <uploadPath>/home/sanny/sors/</uploadPath>
 
         </server-args>
