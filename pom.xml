@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>Sors</groupId>
-    <artifactId>Sors_JSFDeveloping</artifactId>
+    <groupId>com.sicknet</groupId>
+    <artifactId>portal</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
@@ -20,15 +20,15 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <plugin>
+          <!--  <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.6</version>
                 <configuration>
 
-                    <packagingExcludes>WEB-INF/lib/jsf-impl-2.2.8-01.jar,WEB-INF/lib/jsf-api-2.2.8-01.jar</packagingExcludes>
+                   <packagingExcludes>WEB-INF/lib/jsf-impl-2.2.8-01.jar,WEB-INF/lib/jsf-api-2.2.8-01.jar</packagingExcludes>
 
                 </configuration>
-            </plugin>
+            </plugin>  -->
         </plugins>
 
     </build>
@@ -36,13 +36,24 @@
 
     <dependencies>
         <dependency>
+            <groupId>local.jnetpcap</groupId>
+            <artifactId>jnetpcap</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
             <groupId>org.ocpsoft.prettytime</groupId>
             <artifactId>prettytime</artifactId>
             <version>3.2.7.Final</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
-        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
         <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>8.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+      <!--  <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
@@ -63,10 +74,10 @@
             <groupId>javax.websocket</groupId>
             <artifactId>javax.websocket-api</artifactId>
             <version>1.1</version>
-        </dependency>
+        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/javax.enterprise/cdi-api -->
-        <dependency>
+      <!--  <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>
             <version>1.2</version>
@@ -78,11 +89,14 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.34</version>
         </dependency>
+       -->
+       <!--
         <dependency>
             <groupId>jnetpcap</groupId>
             <artifactId>jnetpcap</artifactId>
             <version>1.4.r1425-1f</version>
         </dependency>
+        -->
         <!--
        <dependency>
             <groupId>jnetpcap</groupId>
@@ -109,11 +123,6 @@
             <version>6.0.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
-        </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -154,8 +163,11 @@
             <artifactId>oshi-core</artifactId>
             <version>LATEST</version>
         </dependency>
-
-
+        <dependency>
+            <groupId>local.idea.redist</groupId>
+            <artifactId>forms_rt</artifactId>
+            <version>1</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-email</artifactId>
